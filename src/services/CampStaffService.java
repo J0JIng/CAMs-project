@@ -62,13 +62,15 @@ public class CampStaffService {
         System.out.println("Added " + newCamp.getCampInformation().getCampName());
 	}
 	
-	public void deleteCamp(Camp campToDelete) {
-		boolean result = CampServiceController.camps.remove(campToDelete);
-        if (result) {
-            System.out.println("Deleted " + campToDelete.getCampInformation().getCampName());
-        } else {
-            System.out.println("Error deleting " + campToDelete.getCampInformation().getCampName());
+	public void deleteCamp(String campName) {
+		for (Camp c : CampServiceController.camps) {
+			if (c.getCampInformation().getCampName().equalsIgnoreCase(campName)) {
+                CampServiceController.camps.remove(c);
+                System.out.println("Deleted " + campName);
+                return;
+            }
         }
+        System.out.println("Error deleting " + campName);
 	}
 	
 	public void setVisibility(String campName, boolean b) {

@@ -15,14 +15,16 @@ public class StaffController {
 	    
 	    while (true) {
             System.out.println("----------------------------");
-            System.out.println("|       Welcome "+ CAMs.currentUser.getName() + "    |");
+            System.out.println("      Welcome "+ CAMs.currentUser.getName());
+            System.out.println("----------------------------");
             System.out.println("|        Staff Menu        |");
             System.out.println("----------------------------");
             System.out.println("1. Create Camp");
             System.out.println("2. View All Camps");
             System.out.println("3. View Created Camps");
             System.out.println("4. Set Visibility");
-            System.out.println("5. Logout");
+            System.out.println("5. Delete Camp");
+            System.out.println("6. Logout");
             System.out.println("----------------------------");
             System.out.print("Select an option: ");
 
@@ -49,6 +51,12 @@ public class StaffController {
                 	System.out.print("Enter Visibility: ");
                 	boolean b = scanner.nextBoolean();
                 	controller.campStaffService.setVisibility(s, b);
+                	break;
+                case 5:
+                	scanner.nextLine();
+                	System.out.print("Enter Camp Name: ");
+                	String del = scanner.nextLine();
+                	controller.campStaffService.deleteCamp(del);
                 	break;
                 default: return;
             }

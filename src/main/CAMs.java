@@ -41,9 +41,10 @@ public class CAMs {
                 	System.out.print("Enter Password: ");
                 	String pwd = scanner.nextLine();
                 	
+                	boolean found = false;
                 	for (Entry<String, Map<String, String>> entry : AuthStore.staffMap.entrySet()) {
                         Map<String, String> detailsMap = entry.getValue();
-
+                        found = true;
                         // Check if input is a staff
                         if (detailsMap.containsValue(inputUserID.concat("@ntu.edu.sg")) && pwd.equals("password")) {
                             String key = entry.getKey();
@@ -58,14 +59,15 @@ public class CAMs {
                             break;
                         }
                     }
-                	System.out.println("Invalid Staff Email or Password");
-                    break;
+                	if (!found) System.out.println("Invalid Staff Email or Password"); break;
                 case 2:
                 	currentUser = studentBob;
                     studentC.start();
                     break;
                 default:
-                    System.out.println("---- Thank you for using CAMs ----"); return;
+                	System.out.println("----------------------------");
+                    System.out.println("| Thank you for using CAMs |"); 
+                    System.out.println("----------------------------");return;
             }
             
         }
