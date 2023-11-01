@@ -32,7 +32,6 @@ public class CampStudentService {
 	            System.out.println("Committee Slots: " + campInfo.getCampCommitteeSlots());
 	            System.out.println("Description: " + campInfo.getCampDescription());
 	            System.out.println("Staff In Charge: " + campInfo.getCampStaffInCharge());
-	            System.out.println("Camp Visibility: " + CampServiceController.camps.get(i).getVisibility());
 				i++;
 			}
 		}

@@ -8,8 +8,6 @@ import models.*;
 
 public class StaffController {
     //Camp uocCamp = new Camp(new CampInformation("UOC CAMP", "12-DEC-2023", "12-NOV-23", "NTU", "THE WAVE", 50, 10, "Ultimate UOC Camp 2023", CAMs.currentUser.getName()));
-
-    //List<Camp> campList = new ArrayList<>();
     
     public void start() {
     	Scanner scanner = new Scanner(System.in);
@@ -17,6 +15,7 @@ public class StaffController {
 	    
 	    while (true) {
             System.out.println("----------------------------");
+            System.out.println("|       Welcome "+ CAMs.currentUser.getName() + "    |");
             System.out.println("|        Staff Menu        |");
             System.out.println("----------------------------");
             System.out.println("1. Create Camp");
