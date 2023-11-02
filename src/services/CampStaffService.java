@@ -162,7 +162,7 @@ public class CampStaffService {
         for (Camp c : CampServiceController.camps) {
 			if (c.getCampInformation().getCampName().equalsIgnoreCase(campName)) {
 				Student s;
-				if (c.getRegisteredStudents() != null) {
+				if (c.getRegisteredStudents().size() != 0) {
 					for (int i = 1; i <= c.getRegisteredStudents().size(); i++) {
 						s = c.getRegisteredStudents().get(i);
 						System.out.println(i + s.getName());

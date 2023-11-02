@@ -17,9 +17,16 @@ public class CampStudentService {
     	String campName = scanner.nextLine();
 		for (Camp c : CampServiceController.camps) {
 			if (c.getCampInformation().getCampName().equalsIgnoreCase(campName)) {
-				c.getRegisteredStudents().remove((Student)(CAMs.currentUser));
-		        // Check if already registered
-				System.out.println("Withdrawn from " + c.getCampInformation().getCampName());
+				if (c.getRegisteredStudents().contains((Student)(CAMs.currentUser))) {
+					// registered, proceed to withdraw student
+					c.getRegisteredStudents().remove((Student)(CAMs.currentUser));
+			        // Check if already registered
+					System.out.println("Withdrawn from " + c.getCampInformation().getCampName());
+				} else {
+					// Not registered in camp
+					System.out.println("You have not registered for this camp");
+				}
+				
                 return;
             }
         }
@@ -33,9 +40,14 @@ public class CampStudentService {
 		for (Camp c : CampServiceController.camps) {
 			if (c.getCampInformation().getCampName().equalsIgnoreCase(campName)) {
 				// Need to check if any slots available
-				c.getRegisteredStudents().add((Student)(CAMs.currentUser));
-		        
-				System.out.println("Registered for " + c.getCampInformation().getCampName());
+				if (c.getCampInformation().getCampTotalSlots()-c.getRegisteredStudents().size() > 0) {
+					// Need to check is student is registered to prevent double registration, havent added
+					c.getRegisteredStudents().add((Student)(CAMs.currentUser));
+			        
+					System.out.println("Registered for " + c.getCampInformation().getCampName());
+				} else {
+					System.out.println("No slots available");
+				}
                 return;
             }
         }
@@ -74,7 +86,7 @@ public class CampStudentService {
     	String campName = scanner.nextLine();
 		for (Camp c : CampServiceController.camps) {
 			if (c.getCampInformation().getCampName().equalsIgnoreCase(campName)) {
-				if (c.getRegisteredStudents() != null) {
+				if (c.getRegisteredStudents().size() != 0) {
 					System.out.println((c.getCampInformation().getCampTotalSlots()-c.getRegisteredStudents().size()) + " remaining slots" );
 				} else {System.out.println("No students registered");}
                 return;

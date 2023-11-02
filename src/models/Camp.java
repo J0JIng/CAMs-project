@@ -1,10 +1,11 @@
 package models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Camp {
     private CampInformation campInformation;
-    private List<Student> campRegisteredStudents;
+    private List<Student> campRegisteredStudents = new ArrayList<>();
     private boolean campVisibility;
     
     public Camp(CampInformation info) {this.campInformation = info;}
