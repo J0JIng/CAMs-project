@@ -1,14 +1,51 @@
 package services;
 
+import java.util.Scanner;
 import controllers.CampServiceController;
 import models.Camp;
 import models.CampInformation;
+import models.Student;
 import main.CAMs;
 
 public class CampStaffService {
-	public void editCamp(Camp camp, CampInformation info) {
-		camp.setCampInformation(info);
-		System.out.println("Edited " + camp.getCampInformation().getCampName());
+	Scanner scanner = new Scanner(System.in);
+	
+	public void editCamp() {
+		scanner.nextLine();
+    	System.out.print("Enter Camp Name: ");
+    	String campName = scanner.nextLine();
+		for (Camp c : CampServiceController.camps) {
+			if (c.getCampInformation().getCampName().equalsIgnoreCase(campName)) {
+				System.out.print("Enter new camp name: ");
+		        String newCampName = scanner.nextLine();
+
+		        System.out.print("Enter camp date: ");
+		        String campDate = scanner.nextLine();
+
+		        System.out.print("Enter registration closing date: ");
+		        String campRegistrationClosingDate = scanner.nextLine();
+
+		        System.out.print("Enter user group: ");
+		        String campUserGroup = scanner.nextLine();
+
+		        System.out.print("Enter camp location: ");
+		        String campLocation = scanner.nextLine();
+
+		        System.out.print("Enter camp description: ");
+		        String campDescription = scanner.nextLine();
+
+		        System.out.print("Enter total slots: ");
+		        int campTotalSlots = scanner.nextInt();
+
+		        System.out.print("Enter committee slots: ");
+		        int campCommitteeSlots = scanner.nextInt();
+		        
+				c.setCampInformation(new CampInformation(newCampName, campDate, campRegistrationClosingDate, campUserGroup, campLocation, campTotalSlots, campCommitteeSlots, campDescription, CAMs.currentUser.getName()));
+				System.out.println("Edited " + c.getCampInformation().getCampName());
+                return;
+            }
+        }
+		System.out.println("Cannot find " + campName);
 	}
 	
 	public void viewCreatedCamps() {
@@ -57,12 +94,41 @@ public class CampStaffService {
         if (CampServiceController.camps.size() == 0) {System.out.println("No camps");}
 	}
 	
-	public void createCamp(Camp newCamp) {
-		CampServiceController.camps.add(newCamp);
-        System.out.println("Added " + newCamp.getCampInformation().getCampName());
+	public void createCamp() {
+		
+		System.out.print("Enter camp name: ");
+        String campName = scanner.nextLine();
+
+        System.out.print("Enter camp date: ");
+        String campDate = scanner.nextLine();
+
+        System.out.print("Enter registration closing date: ");
+        String campRegistrationClosingDate = scanner.nextLine();
+
+        System.out.print("Enter user group: ");
+        String campUserGroup = scanner.nextLine();
+
+        System.out.print("Enter camp location: ");
+        String campLocation = scanner.nextLine();
+
+        System.out.print("Enter camp description: ");
+        String campDescription = scanner.nextLine();
+
+        System.out.print("Enter total slots: ");
+        int campTotalSlots = scanner.nextInt();
+
+        System.out.print("Enter committee slots: ");
+        int campCommitteeSlots = scanner.nextInt();
+        
+		Camp c = new Camp(new CampInformation(campName, campDate, campRegistrationClosingDate, campUserGroup, campLocation, campTotalSlots, campCommitteeSlots, campDescription, CAMs.currentUser.getName()));
+		CampServiceController.camps.add(c);
+        System.out.println("Created " + c.getCampInformation().getCampName());
 	}
 	
-	public void deleteCamp(String campName) {
+	public void deleteCamp() {
+		scanner.nextLine();
+    	System.out.print("Enter Camp Name: ");
+    	String campName = scanner.nextLine();
 		for (Camp c : CampServiceController.camps) {
 			if (c.getCampInformation().getCampName().equalsIgnoreCase(campName)) {
                 CampServiceController.camps.remove(c);
@@ -73,7 +139,12 @@ public class CampStaffService {
         System.out.println("Error deleting " + campName);
 	}
 	
-	public void setVisibility(String campName, boolean b) {
+	public void setVisibility() {
+		scanner.nextLine();
+    	System.out.print("Enter Camp Name: ");
+    	String campName = scanner.nextLine();
+    	System.out.print("Enter Visibility: ");
+    	boolean b = scanner.nextBoolean();
         for (Camp c : CampServiceController.camps) {
 			if (c.getCampInformation().getCampName().equalsIgnoreCase(campName)) {
                 c.setVisibility(b);
@@ -83,7 +154,24 @@ public class CampStaffService {
         }
         System.out.println("Cannot find camp " + campName);
 	}
-
-	public void viewRemainingSlots(Camp camp) {}
+	
+	public void viewStudentList() {
+		scanner.nextLine();
+    	System.out.print("Enter Camp Name: ");
+    	String campName = scanner.nextLine();
+        for (Camp c : CampServiceController.camps) {
+			if (c.getCampInformation().getCampName().equalsIgnoreCase(campName)) {
+				Student s;
+				if (c.getRegisteredStudents() != null) {
+					for (int i = 1; i <= c.getRegisteredStudents().size(); i++) {
+						s = c.getRegisteredStudents().get(i);
+						System.out.println(i + s.getName());
+					}
+				} else {System.out.println("No students registered");}
+                return;
+            }
+        }
+        System.out.println("Cannot find camp " + campName);
+	}
 }
 

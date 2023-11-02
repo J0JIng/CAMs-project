@@ -24,7 +24,7 @@ public class CAMs {
         
         while (true) {
             System.out.println("----------------------------");
-            System.out.println("|        Login Screen      |");
+            System.out.println("|       Login Screen       |");
             System.out.println("----------------------------");
             System.out.println("| 1. Login as Staff        |");
             System.out.println("| 2. Login as Student Bob  |");
@@ -67,7 +67,8 @@ public class CAMs {
                 default:
                 	System.out.println("----------------------------");
                     System.out.println("| Thank you for using CAMs |"); 
-                    System.out.println("----------------------------");return;
+                    System.out.println("----------------------------");
+                    return;
             }
             
         }

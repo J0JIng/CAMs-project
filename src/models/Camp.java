@@ -12,4 +12,5 @@ public class Camp {
     public void setVisibility(boolean bool) {this.campVisibility = bool;}
     public CampInformation getCampInformation() {return this.campInformation;}
     public void setCampInformation(CampInformation info) {this.campInformation = info;}
+    public List<Student> getRegisteredStudents() {return this.campRegisteredStudents;}
 }

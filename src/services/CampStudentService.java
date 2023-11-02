@@ -1,16 +1,45 @@
 package services;
 
+import java.util.Scanner;
+
 import controllers.CampServiceController;
+import main.CAMs;
 import models.Camp;
 import models.CampInformation;
+import models.Student;
 
 public class CampStudentService {
-	public void withdrawCamp(Camp camp) {
-		
+	Scanner scanner = new Scanner(System.in);
+	
+	public void withdrawCamp() {
+		scanner.nextLine();
+    	System.out.print("Enter Camp Name: ");
+    	String campName = scanner.nextLine();
+		for (Camp c : CampServiceController.camps) {
+			if (c.getCampInformation().getCampName().equalsIgnoreCase(campName)) {
+				c.getRegisteredStudents().remove((Student)(CAMs.currentUser));
+		        // Check if already registered
+				System.out.println("Withdrawn from " + c.getCampInformation().getCampName());
+                return;
+            }
+        }
+		System.out.println("Cannot find " + campName);
 	}
 	
-	public void registerCamp(Camp camp) {
-		
+	public void registerCamp() {
+		scanner.nextLine();
+    	System.out.print("Enter Camp Name: ");
+    	String campName = scanner.nextLine();
+		for (Camp c : CampServiceController.camps) {
+			if (c.getCampInformation().getCampName().equalsIgnoreCase(campName)) {
+				// Need to check if any slots available
+				c.getRegisteredStudents().add((Student)(CAMs.currentUser));
+		        
+				System.out.println("Registered for " + c.getCampInformation().getCampName());
+                return;
+            }
+        }
+		System.out.println("Cannot find " + campName);
 	}
 	
 	public void viewCamps() {
@@ -37,5 +66,20 @@ public class CampStudentService {
 		}
         System.out.println("----------------------------");
         if (CampServiceController.camps.size() == 0) {System.out.println("No camps");}
+	}
+	
+	public void viewRemainingSlots() {
+		scanner.nextLine();
+    	System.out.print("Enter Camp Name: ");
+    	String campName = scanner.nextLine();
+		for (Camp c : CampServiceController.camps) {
+			if (c.getCampInformation().getCampName().equalsIgnoreCase(campName)) {
+				if (c.getRegisteredStudents() != null) {
+					System.out.println((c.getCampInformation().getCampTotalSlots()-c.getRegisteredStudents().size()) + " remaining slots" );
+				} else {System.out.println("No students registered");}
+                return;
+            }
+        }
+		System.out.println("Cannot find " + campName);
 	}
 }
