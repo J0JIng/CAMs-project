@@ -6,6 +6,8 @@ import models.*;
 import controllers.StaffController;
 import controllers.StudentController;
 import stores.AuthStore;
+import views.AuthView;
+
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -23,14 +25,8 @@ public class CAMs {
         AuthStore.initStaffUsers();
         
         while (true) {
-            System.out.println("----------------------------");
-            System.out.println("|       Login Screen       |");
-            System.out.println("----------------------------");
-            System.out.println("| 1. Login as Staff        |");
-            System.out.println("| 2. Login as Student Bob  |");
-            System.out.println("| 3. Quit                  |");
-            System.out.println("----------------------------");
-            System.out.print("Select an option: ");
+            AuthView authView = new AuthView();
+            authView.displayMenuView();
 
             int choice = scanner.nextInt();
             switch (choice) {
