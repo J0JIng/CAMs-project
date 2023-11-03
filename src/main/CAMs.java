@@ -40,9 +40,10 @@ public class CAMs {
                 	boolean found = false;
                 	for (Entry<String, Map<String, String>> entry : AuthStore.staffMap.entrySet()) {
                         Map<String, String> detailsMap = entry.getValue();
-                        found = true;
+                        
                         // Check if input is a staff
                         if (detailsMap.containsValue(inputUserID.concat("@ntu.edu.sg")) && pwd.equals("password")) {
+                        	found = true;
                             String key = entry.getKey();
 
                             // Access details

@@ -8,9 +8,8 @@ public class StaffView implements IMenuView{
 	@Override
 	public void displayMenuView() {
 		System.out.println("----------------------------");
-        System.out.println(String.format("|      Welcome %-11s |", CAMs.currentUser.getName()));
-        //System.out.println("      Welcome "+ CAMs.currentUser.getName());
-        System.out.println("----------------------------");
+		System.out.println(String.format("|%34s|", "Welcome " + CAMs.currentUser.getName()));
+		//System.out.println(String.format("|      Welcome %-11s |", CAMs.currentUser.getName()));
         System.out.println("|        Staff Menu        |");
         System.out.println("----------------------------");
         System.out.println("|  1. Create Camp          |");
