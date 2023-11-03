@@ -62,9 +62,9 @@ public class CAMs {
                     studentC.start();
                     break;
                 default:
-                	System.out.println("----------------------------");
-                    System.out.println("| Thank you for using CAMs |"); 
-                    System.out.println("----------------------------");
+                	System.out.println("-----------------------------------");
+                    System.out.println("|     Thank you for using CAMs    |"); 
+                    System.out.println("-----------------------------------");
                     return;
             }
             
