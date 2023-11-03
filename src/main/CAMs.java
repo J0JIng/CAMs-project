@@ -23,9 +23,10 @@ public class CAMs {
         StudentController studentC = new StudentController();
         
         AuthStore.initStaffUsers();
+        AuthView authView = new AuthView();
         
         while (true) {
-            AuthView authView = new AuthView();
+            
             authView.displayMenuView();
 
             int choice = scanner.nextInt();
