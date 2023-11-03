@@ -12,15 +12,19 @@ public class CampStudentService {
 	Scanner scanner = new Scanner(System.in);
 	
 	public void withdrawCamp() {
+		Student student = (Student) CAMs.currentUser;
 		scanner.nextLine();
     	System.out.print("Enter Camp Name: ");
     	String campName = scanner.nextLine();
 		for (Camp c : CampServiceController.camps) {
 			if (c.getCampInformation().getCampName().equalsIgnoreCase(campName)) {
-				if (c.getRegisteredStudents().contains((Student)(CAMs.currentUser))) {
+				// Check if already registered
+				if (c.getRegisteredStudents().contains(student)) {
 					// registered, proceed to withdraw student
-					c.getRegisteredStudents().remove((Student)(CAMs.currentUser));
-			        // Check if already registered
+					// Step 1: Remove the camp from the student's list of registered camps
+    				student.getRegisteredCamps().remove(camp);
+    				// Step 2: Remove the student from the camp's list of registered students
+					c.getRegisteredStudents().remove(student);
 					System.out.println("Withdrawn from " + c.getCampInformation().getCampName());
 				} else {
 					// Not registered in camp
@@ -34,6 +38,7 @@ public class CampStudentService {
 	}
 	
 	public void registerCamp() {
+		Student student = (Student) CAMs.currentUser;
 		scanner.nextLine();
     	System.out.print("Enter Camp Name: ");
     	String campName = scanner.nextLine();
@@ -41,10 +46,16 @@ public class CampStudentService {
 			if (c.getCampInformation().getCampName().equalsIgnoreCase(campName)) {
 				// Need to check if any slots available
 				if (c.getCampInformation().getCampTotalSlots()-c.getRegisteredStudents().size() > 0) {
-					// Need to check is student is registered to prevent double registration, havent added
-					c.getRegisteredStudents().add((Student)(CAMs.currentUser));
-			        
-					System.out.println("Registered for " + c.getCampInformation().getCampName());
+					// Need to check is student is registered to prevent double registration
+					if (c.getRegisteredStudents().contains(student)){
+						System.out.println("Already Registered!");
+					} else {
+						// Step 1: Add the camp to the student's list of registered camps
+						student.getRegisteredCamps().add(camp);
+						// Step 2: Add the student to the camp's list of registered students
+						c.getRegisteredStudents().add(student);
+						System.out.println("Registered for " + c.getCampInformation().getCampName());
+					}
 				} else {
 					System.out.println("No slots available");
 				}
@@ -53,8 +64,95 @@ public class CampStudentService {
         }
 		System.out.println("Cannot find " + campName);
 	}
+
+	public void registerAsCommittee(){
+		Student student = (Student) CAMs.currentUser;
+		//Checks whether student is already a committee member
+		if (student.getCommitteeStatus() != null){
+			System.out.println(student.getName() + " is already a committee member for " + student.getCommitteeStatus().getCampInformation().getCampName());
+        	return;
+		} else {
+			scanner.nextLine();
+        	System.out.print("Enter Camp Name: ");
+        	String campName = scanner.nextLine();
+        	for (Camp camp : student.getRegisteredCamps()) {
+            	if (camp.getCampInformation().getCampName().equalsIgnoreCase(campName)) {
+                	if (camp.getCommitteeMembers().contains(student)) {
+                    	System.out.println(student.getName() + " is already a committee member for " + campName);
+                    	return;
+                }
+                if (camp.getCommitteeMembers().size() < camp.getCampInformation().getCampCommitteeSlots()) {
+                    // Register student as a committee member for the selected camp
+                    camp.getCommitteeMembers().add(student);
+                    student.setCommitteeStatus(camp);
+                    System.out.println(student.getName() + " registered as a committee member for " + campName);
+                } else {
+                    System.out.println("No committee slots available for " + campName);
+                }
+                	return;
+            	}
+        	}
+        	System.out.println("Cannot find " + campName + " in your registered camps.");
+			return;
+    	}
+	}
+
+	public void withdrawFromCommittee(){
+		Student student = (Student) CAMs.currentUser;
+		//Checks whether student is a committee member
+		if (student.getCommitteeStatus() == null){
+			System.out.println(student.getName() + " is not a committee member for any camp.");
+        	return;
+		} else {
+        	String campName = student.getCommitteeStatus();
+			student.getCommitteeStatus().getCommitteeMembers().remove(student);
+			student.setCommitteeStatus(null);
+			System.out.println("You are no longer a committee member.");
+        }
+    }
+
+	public void viewRegisteredCamps() {
+        Student student = (Student) CAMs.currentUser;
+
+        if (student.getRegisteredCamps().isEmpty()) {
+            System.out.println("You are not registered in a camp.");
+            return;
+        }
+
+        System.out.println("----------------------------");
+        System.out.println("|          Camps           |");
+        System.out.println("----------------------------");
+
+        boolean committeeCampPrinted = false;
+
+        for (Camp camp : student.getRegisteredCamps()) {
+            if (camp == student.getCommitteeStatus() && !committeeCampPrinted) {
+                System.out.println("Committee Camp: " + camp.getCampInformation().getCampName());
+                System.out.println("------------------------------");
+                committeeCampPrinted = true;
+            } else {
+                if (!committeeCampPrinted) {
+                    System.out.println("Committee Camp: None");
+                    System.out.println("------------------------------");
+                    committeeCampPrinted = true;
+                }
+            }
+
+            if (camp != student.getCommitteeStatus()) {
+                if (!committeeCampPrinted) {
+                    System.out.println("Committee Camp: None");
+                    System.out.println("------------------------------");
+                    committeeCampPrinted = true;
+                }
+                System.out.println("Other registered camps:");
+                System.out.println("Camp: " + camp.getCampInformation().getCampName());
+            }
+        }
+	}
+
+
 	
-	public void viewCamps() {
+	public void viewAllCamps() {
 		System.out.println("----------------------------");
         System.out.println("|          Camps           |");
         System.out.println("----------------------------");
