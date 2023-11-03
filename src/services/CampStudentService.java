@@ -1,5 +1,7 @@
 package services;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 
 import controllers.CampServiceController;
@@ -13,6 +15,7 @@ public class CampStudentService {
 	
 	public void withdrawCamp() {
 		Student student = (Student) CAMs.currentUser;
+		//But the student is not allowed to register the same camp again.
 		scanner.nextLine();
     	System.out.print("Enter Camp Name: ");
     	String campName = scanner.nextLine();
@@ -38,31 +41,55 @@ public class CampStudentService {
 	}
 	
 	public void registerCamp() {
+		
 		Student student = (Student) CAMs.currentUser;
 		scanner.nextLine();
     	System.out.print("Enter Camp Name: ");
     	String campName = scanner.nextLine();
+		Date currentDate = new Date(); // Get the current date and time
 		for (Camp c : CampServiceController.camps) {
 			if (c.getCampInformation().getCampName().equalsIgnoreCase(campName)) {
-				// Need to check if any slots available
-				if (c.getCampInformation().getCampTotalSlots()-c.getRegisteredStudents().size() > 0) {
-					// Need to check is student is registered to prevent double registration
-					if (c.getRegisteredStudents().contains(student)){
-						System.out.println("Already Registered!");
-					} else {
-						// Step 1: Add the camp to the student's list of registered camps
-						student.getRegisteredCamps().add(camp);
-						// Step 2: Add the student to the camp's list of registered students
-						c.getRegisteredStudents().add(student);
-						System.out.println("Registered for " + c.getCampInformation().getCampName());
-					}
+				Date campDate = c.getCampInformation().getCampDate();
+				// Check if the student is already registered for another camp with a date clash
+            	if (hasDateClash(student, campDate)) {
+                	System.out.println("You are already registered for a camp with a date clash.");
+                	return;
+            	}
+				// Check if the current date is after the closing date
+				if (currentDate.after(c.getCampInformation().getCampRegistrationClosingDate())) {
+    				System.out.println("Camp registration has closed.");
 				} else {
+					// Need to check if any slots available
+					if (c.getCampInformation().getCampTotalSlots()-c.getRegisteredStudents().size() > 0) {
+						// Need to check is student is registered to prevent double registration
+						if (c.getRegisteredStudents().contains(student)){
+							System.out.println("Already Registered!");
+						} else {
+							// Step 1: Add the camp to the student's list of registered camps
+							student.getRegisteredCamps().add(camp);
+							// Step 2: Add the student to the camp's list of registered students
+							c.getRegisteredStudents().add(student);
+							System.out.println("Registered for " + c.getCampInformation().getCampName());
+						}
+					} else {
 					System.out.println("No slots available");
+					}
 				}
                 return;
             }
         }
 		System.out.println("Cannot find " + campName);
+	}
+
+	private boolean hasDateClash(Student student, Date campDate) {
+    	// Check if the student is already registered for another camp with a date clash
+    	for (Camp registeredCamp : student.getRegisteredCamps()) {
+        	Date registeredCampDate = registeredCamp.getCampInformation().getCampDate();
+        	if (registeredCampDate.equals(campDate)) {
+            	return true; // There's a date clash
+        	}
+    	}
+    	return false; // No date clash found
 	}
 
 	public void registerAsCommittee(){

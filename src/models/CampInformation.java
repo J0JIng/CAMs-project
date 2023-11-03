@@ -1,9 +1,11 @@
 package models;
+import java.util.Date;
 
 public class CampInformation {
-    private String campName, campDate, campRegistrationClosingDate, campUserGroup, campLocation, campDescription, campStaffInCharge;
+    private String campName, campUserGroup, campLocation, campDescription, campStaffInCharge;
+    private Date campDate, campRegistrationClosingDate;
     private int campTotalSlots, campCommitteeSlots;
-    public CampInformation( String campName, String campDate, String campRegistrationClosingDate, 
+    public CampInformation( String campName, Date campDate, Date campRegistrationClosingDate, 
                             String campUserGroup, String campLocation, int campTotalSlots, int campCommitteeSlots, 
                             String campDescription, String campStaffInCharge) {
         this.campName = campName;
@@ -17,8 +19,8 @@ public class CampInformation {
         this.campStaffInCharge = campStaffInCharge;
     }
     public String getCampName() { return this.campName; }
-    public String getCampDate() { return this.campDate; }
-    public String getCampRegistrationClosingDate() { return this.campRegistrationClosingDate; }
+    public Date getCampDate() { return this.campDate; }
+    public Date getCampRegistrationClosingDate() { return this.campRegistrationClosingDate; }
     public String getCampUserGroup() { return this.campUserGroup; }
     public String getCampLocation() { return this.campLocation; }
     public int getCampTotalSlots() { return this.campTotalSlots; }

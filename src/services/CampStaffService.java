@@ -1,5 +1,7 @@
 package services;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 import controllers.CampServiceController;
 import models.Camp;
@@ -20,10 +22,26 @@ public class CampStaffService {
 		        String newCampName = scanner.nextLine();
 
 		        System.out.print("Enter camp date: ");
-		        String campDate = scanner.nextLine();
+		        String DateOfCamp = scanner.nextLine();
+				SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    			Date campDate = null;
+    			try {
+        			campDate = dateFormat.parse(DateOfCamp);
+    			} catch (Exception e) {
+        			System.out.println("Invalid date format for camp.");
+        			return;
+    			}
 
-		        System.out.print("Enter registration closing date: ");
-		        String campRegistrationClosingDate = scanner.nextLine();
+		        System.out.print("Enter registration closing date (dd/MM/yyyy): ");
+		        String closingDate = scanner.nextLine();
+				SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    			Date campRegistrationClosingDate = null;
+    			try {
+        			campRegistrationClosingDate = dateFormat.parse(closingDate);
+    			} catch (Exception e) {
+        			System.out.println("Invalid date format for camp closing date.");
+        			return;
+    			}
 
 		        System.out.print("Enter user group: ");
 		        String campUserGroup = scanner.nextLine();
@@ -100,10 +118,26 @@ public class CampStaffService {
         String campName = scanner.nextLine();
 
         System.out.print("Enter camp date: ");
-        String campDate = scanner.nextLine();
+        String DateOfCamp = scanner.nextLine();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    	Date campDate = null;
+    	try {
+        	campDate = dateFormat.parse(DateOfCamp);
+    	} catch (Exception e) {
+        	System.out.println("Invalid date format for camp.");
+        	return;
+    	}
 
         System.out.print("Enter registration closing date: ");
-        String campRegistrationClosingDate = scanner.nextLine();
+        String closingDate = scanner.nextLine();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    	Date campRegistrationClosingDate = null;
+    	try {
+        	campRegistrationClosingDate = dateFormat.parse(closingDate);
+    	} catch (Exception e) {
+        	System.out.println("Invalid date format for camp closing date.");
+        	return;
+    	}
 
         System.out.print("Enter user group: ");
         String campUserGroup = scanner.nextLine();
