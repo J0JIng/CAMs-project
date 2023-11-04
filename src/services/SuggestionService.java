@@ -44,7 +44,11 @@ public class SuggestionService {
         return false;
     }
 
-  /*  public Map<Integer, Suggestion> viewCampSuggestions(String campName) { */
+    /*  public Map<Integer, Suggestion> viewCampSuggestions(String campName) {
+        return suggestionData.values().stream()
+                .filter(suggestion -> suggestion.getCampName().equals(campName))
+                .collect(Collectors.toMap(Suggestion::getSuggestionID, suggestion -> suggestion));
+    } */
 
     public boolean reviewSuggestion(int suggestionID, MessageStatus suggestionStatus) {
         Suggestion suggestion = suggestionData.get(suggestionID);
