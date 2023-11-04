@@ -95,6 +95,6 @@ public class DataStore {
         return suggestionData;
 
   	public static void setSuggestionData(Map<Integer, Suggestion> suggestionData) {
-        DataStore.suggestionData = suggestionData;
+        DataStore.suggestionData = suggestionData; 
     }    
 }
