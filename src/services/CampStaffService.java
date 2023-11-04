@@ -18,30 +18,54 @@ public class CampStaffService {
     	String campName = scanner.nextLine();
 		for (Camp c : CampServiceController.camps) {
 			if (c.getCampInformation().getCampName().equalsIgnoreCase(campName)) {
-				System.out.print("Enter new camp name: ");
-		        String newCampName = scanner.nextLine();
+				String newCampName = null;
+            	boolean isUniqueName = false;
 
-		        System.out.print("Enter camp date: ");
-		        String DateOfCamp = scanner.nextLine();
+            	while (!isUniqueName) {
+                	System.out.print("Enter new camp name: ");
+                	newCampName = scanner.nextLine();
+                	isUniqueName = CampServiceController.camps.stream().noneMatch(existingCamp -> existingCamp.getCampInformation().getCampName().equalsIgnoreCase(newCampName));
+
+                	if (!isUniqueName) {
+                    	System.out.println("Camp name is not unique. Please choose a different name.");
+                	}
+            	}
+
 				SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-    			Date campDate = null;
-    			try {
-        			campDate = dateFormat.parse(DateOfCamp);
-    			} catch (Exception e) {
-        			System.out.println("Invalid date format for camp.");
-        			return;
-    			}
+    			Date campStartDate = null;
+    			while (campStartDate == null) {
+    				System.out.print("Enter camp start date (dd/MM/yyyy): ");
+    				String StartDateOfCamp = scanner.nextLine();
+    				try {
+        				campStartDate = dateFormat.parse(StartDateOfCamp);
+    				} catch (Exception e) {
+        				System.out.println("Invalid date format for camp start date. Please try again.");
+    				}
+				}
 
-		        System.out.print("Enter registration closing date (dd/MM/yyyy): ");
-		        String closingDate = scanner.nextLine();
+				SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    			Date campEndDate = null;
+    			while (campEndDate == null) {
+    				System.out.print("Enter camp end date (dd/MM/yyyy): ");
+    				String EndDateOfCamp = scanner.nextLine();
+    				try {
+        				campEndDate = dateFormat.parse(EndDateOfCamp);
+    				} catch (Exception e) {
+        				System.out.println("Invalid date format for camp end date. Please try again.");
+    				}
+				}
+
 				SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     			Date campRegistrationClosingDate = null;
-    			try {
-        			campRegistrationClosingDate = dateFormat.parse(closingDate);
-    			} catch (Exception e) {
-        			System.out.println("Invalid date format for camp closing date.");
-        			return;
-    			}
+    			while (campRegistrationClosingDate == null) {
+    				System.out.print("Enter registration closing date (dd/MM/yyyy): ");
+    				String closingDate = scanner.nextLine();
+    				try {
+        				campRegistrationClosingDate = dateFormat.parse(closingDate);
+    				} catch (Exception e) {
+        				System.out.println("Invalid date format for camp closing date. Please try again.");
+    				}
+				}
 
 		        System.out.print("Enter user group: ");
 		        String campUserGroup = scanner.nextLine();
@@ -113,31 +137,58 @@ public class CampStaffService {
 	}
 	
 	public void createCamp() {
+		boolean isUniqueName = false;
+    	String campName = "";
 		
-		System.out.print("Enter camp name: ");
-        String campName = scanner.nextLine();
+		while (!isUniqueName) {
+        	System.out.print("Enter camp name: ");
+        	campName = scanner.nextLine();
 
-        System.out.print("Enter camp date: ");
-        String DateOfCamp = scanner.nextLine();
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-    	Date campDate = null;
-    	try {
-        	campDate = dateFormat.parse(DateOfCamp);
-    	} catch (Exception e) {
-        	System.out.println("Invalid date format for camp.");
-        	return;
+        	// Check if a camp with the same name already exists
+        	boolean nameExists = CampServiceController.camps.stream().anyMatch(existingCamp -> existingCamp.getCampInformation().getCampName().equalsIgnoreCase(campName));
+
+        	if (!nameExists) {
+            	isUniqueName = true;
+        	} else {
+            	System.out.println("Camp with the same name already exists. Please choose a different name.");
+        	}
     	}
 
-        System.out.print("Enter registration closing date: ");
-        String closingDate = scanner.nextLine();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    	Date campStartDate = null;
+    	while (campStartDate == null) {
+    		System.out.print("Enter camp start date (dd/MM/yyyy): ");
+    		String StartDateOfCamp = scanner.nextLine();
+    		try {
+        		campStartDate = dateFormat.parse(StartDateOfCamp);
+    		} catch (Exception e) {
+        		System.out.println("Invalid date format for camp start date. Please try again.");
+    		}
+		}
+
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    	Date campEndDate = null;
+    	while (campEndDate == null) {
+    		System.out.print("Enter camp end date (dd/MM/yyyy): ");
+    		String EndDateOfCamp = scanner.nextLine();
+    		try {
+        		campEndDate = dateFormat.parse(EndDateOfCamp);
+    		} catch (Exception e) {
+        		System.out.println("Invalid date format for camp end date. Please try again.");
+    		}
+		}
+
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     	Date campRegistrationClosingDate = null;
-    	try {
-        	campRegistrationClosingDate = dateFormat.parse(closingDate);
-    	} catch (Exception e) {
-        	System.out.println("Invalid date format for camp closing date.");
-        	return;
-    	}
+    	while (campRegistrationClosingDate == null) {
+    		System.out.print("Enter registration closing date (dd/MM/yyyy): ");
+    		String closingDate = scanner.nextLine();
+    		try {
+        		campRegistrationClosingDate = dateFormat.parse(closingDate);
+    		} catch (Exception e) {
+        		System.out.println("Invalid date format for camp closing date. Please try again.");
+    		}
+		}
 
         System.out.print("Enter user group: ");
         String campUserGroup = scanner.nextLine();
@@ -154,7 +205,7 @@ public class CampStaffService {
         System.out.print("Enter committee slots: ");
         int campCommitteeSlots = scanner.nextInt();
         
-		Camp c = new Camp(new CampInformation(campName, campDate, campRegistrationClosingDate, campUserGroup, campLocation, campTotalSlots, campCommitteeSlots, campDescription, CAMs.currentUser.getName()));
+		Camp c = new Camp(new CampInformation(campName, campStartDate, campEndDate, campRegistrationClosingDate, campUserGroup, campLocation, campTotalSlots, campCommitteeSlots, campDescription, CAMs.currentUser.getName()));
 		CampServiceController.camps.add(c);
         System.out.println("Created " + c.getCampInformation().getCampName());
 	}

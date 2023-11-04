@@ -15,7 +15,6 @@ public class CampStudentService {
 	
 	public void withdrawCamp() {
 		Student student = (Student) CAMs.currentUser;
-		//But the student is not allowed to register the same camp again.
 		scanner.nextLine();
     	System.out.print("Enter Camp Name: ");
     	String campName = scanner.nextLine();
@@ -24,6 +23,13 @@ public class CampStudentService {
 				// Check if already registered
 				if (c.getRegisteredStudents().contains(student)) {
 					// registered, proceed to withdraw student
+					//Committee member cannot withdraw
+					if (c.getCommitteeMembers().contains(student)){
+						System.out.println("Committee members are not allowed to withdraw");
+						return;
+					}
+					// The student is not allowed to register the same camp again
+					student.getWithdrawnCamps().add(camp);
 					// Step 1: Remove the camp from the student's list of registered camps
     				student.getRegisteredCamps().remove(camp);
     				// Step 2: Remove the student from the camp's list of registered students
@@ -50,9 +56,14 @@ public class CampStudentService {
 		for (Camp c : CampServiceController.camps) {
 			if (c.getCampInformation().getCampName().equalsIgnoreCase(campName)) {
 				Date campDate = c.getCampInformation().getCampDate();
+				//Check if the student previously withdraw from this camp
+				if (student.getWithdrawnCamps().getCampInformation().getCampName().equalsIgnoreCase(campName)){
+					System.out.println("You have previously withdrawn from this camp and not allowed to register again.");
+					return;
+				}
 				// Check if the student is already registered for another camp with a date clash
-            	if (hasDateClash(student, campDate)) {
-                	System.out.println("You are already registered for a camp with a date clash.");
+            	if (hasDateClash(student, c)) {
+                	System.out.println("Date clash with another registered camp!");
                 	return;
             	}
 				// Check if the current date is after the closing date
@@ -81,15 +92,25 @@ public class CampStudentService {
 		System.out.println("Cannot find " + campName);
 	}
 
-	private boolean hasDateClash(Student student, Date campDate) {
-    	// Check if the student is already registered for another camp with a date clash
-    	for (Camp registeredCamp : student.getRegisteredCamps()) {
-        	Date registeredCampDate = registeredCamp.getCampInformation().getCampDate();
-        	if (registeredCampDate.equals(campDate)) {
-            	return true; // There's a date clash
+	// Helper function to check for date clashes with other registered camps
+	private boolean hasDateClash(Student student, Camp newCamp) {
+    	for (Camp camp : student.getRegisteredCamps()) {
+        	if (dateClashExists(camp, newCamp)) {
+            	return true;
         	}
     	}
-    	return false; // No date clash found
+    	return false;
+	}
+
+	// Helper function to check if there's a date clash between two camps
+	private boolean dateClashExists(Camp camp1, Camp camp2) {
+    	Date camp1StartDate = camp1.getCampInformation().getCampStartDate();
+    	Date camp1EndDate = camp1.getCampInformation().getCampEndDate();
+    	Date camp2StartDate = camp2.getCampInformation().getCampStartDate();
+    	Date camp2EndDate = camp2.getCampInformation().getCampEndDate();
+
+    	// Check if camp1 ends before camp2 starts or camp1 starts after camp2 ends
+    	return camp1StartDate.before(camp2EndDate) && camp1EndDate.after(camp2StartDate);
 	}
 
 	public void registerAsCommittee(){
