@@ -90,10 +90,9 @@ public class DataStore {
         DataStore.enquiryData = enquiryData;
     }
 
-
   	public static Map<Integer, Suggestion> getSuggestionData() {
         return suggestionData;
-
+    }
   	public static void setSuggestionData(Map<Integer, Suggestion> suggestionData) {
         DataStore.suggestionData = suggestionData; 
     }    
