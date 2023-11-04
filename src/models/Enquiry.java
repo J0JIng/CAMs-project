@@ -17,8 +17,8 @@ public class Enquiry {
         this.senderID = senderID;
         this.enquiryMessage = message;
         this.enquiryStatus = MessageStatus.DRAFT;
-        this.enquiryResponse = null; //no response yet 
-        this.responderID = null; //no response yet 
+        this.enquiryResponse = null;  
+        this.responderID = null;  
 
         public int getEnquiryID() {
             return enquiryID;
