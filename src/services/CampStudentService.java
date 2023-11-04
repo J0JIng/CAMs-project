@@ -29,9 +29,9 @@ public class CampStudentService {
 						return;
 					}
 					// The student is not allowed to register the same camp again
-					student.getWithdrawnCamps().add(camp);
+					student.getWithdrawnCamps().add(c);
 					// Step 1: Remove the camp from the student's list of registered camps
-    				student.getRegisteredCamps().remove(camp);
+    				student.getRegisteredCamps().remove(c);
     				// Step 2: Remove the student from the camp's list of registered students
 					c.getRegisteredStudents().remove(student);
 					System.out.println("Withdrawn from " + c.getCampInformation().getCampName());
@@ -55,7 +55,7 @@ public class CampStudentService {
 		Date currentDate = new Date(); // Get the current date and time
 		for (Camp c : CampServiceController.camps) {
 			if (c.getCampInformation().getCampName().equalsIgnoreCase(campName)) {
-				Date campDate = c.getCampInformation().getCampDate();
+				Date campDate = c.getCampInformation().getCampStartDate();
 				//Check if the student previously withdraw from this camp
 				if (student.getWithdrawnCamps().getCampInformation().getCampName().equalsIgnoreCase(campName)){
 					System.out.println("You have previously withdrawn from this camp and not allowed to register again.");
@@ -77,7 +77,7 @@ public class CampStudentService {
 							System.out.println("Already Registered!");
 						} else {
 							// Step 1: Add the camp to the student's list of registered camps
-							student.getRegisteredCamps().add(camp);
+							student.getRegisteredCamps().add(c);
 							// Step 2: Add the student to the camp's list of registered students
 							c.getRegisteredStudents().add(student);
 							System.out.println("Registered for " + c.getCampInformation().getCampName());
@@ -197,8 +197,6 @@ public class CampStudentService {
             }
         }
 	}
-
-
 	
 	public void viewAllCamps() {
 		System.out.println("----------------------------");
@@ -211,7 +209,7 @@ public class CampStudentService {
 				System.out.println("----------------------------");
 	            System.out.println("Camp " + (i) + ":");
 	            System.out.println("Name: " + campInfo.getCampName());
-	            System.out.println("Date: " + campInfo.getCampDate());
+	            System.out.println("Date: " + campInfo.getCampStartDate());
 	            System.out.println("Registration Closing Date: " + campInfo.getCampRegistrationClosingDate());
 	            System.out.println("User Group: " + campInfo.getCampUserGroup());
 	            System.out.println("Location: " + campInfo.getCampLocation());

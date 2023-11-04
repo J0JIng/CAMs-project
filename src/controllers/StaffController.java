@@ -1,10 +1,6 @@
 package controllers;
 
 import java.util.Scanner;
-import java.util.ArrayList;
-import java.util.List;
-import main.CAMs;
-import models.*;
 import views.StaffView;
 
 public class StaffController {

@@ -16,7 +16,7 @@ public class StudentController {
 
             switch (choice) {
                 case 1:
-                    controller.campStudentService.viewCamps();
+                    controller.campStudentService.viewAllCamps();
                     break;
                 case 2:
                 	controller.campStudentService.registerCamp();
