@@ -9,6 +9,7 @@ import main.CAMs;
 import models.Camp;
 import models.CampInformation;
 import models.Student;
+import models.Enquiry;
 
 public class CampStudentService {
 	Scanner scanner = new Scanner(System.in);
@@ -240,4 +241,98 @@ public class CampStudentService {
         }
 		System.out.println("Cannot find " + campName);
 	}
+	
+	public void submitEnquiry() {
+        // Initialize an instance of EnquiryService
+        EnquiryService enquiryService = new EnquiryService();
+
+        Student student = (Student) CAMs.currentUser;
+        scanner.nextLine();
+
+        System.out.print("Enter Camp Name: ");
+        String campName = scanner.nextLine();
+		
+		for (Camp c : CampServiceController.camps) {
+			if (c.getCampInformation().getCampName().equalsIgnoreCase(campName) && c.getVisibility() == true){
+				// Gather the necessary information for the enquiry
+        		System.out.print("Enter your enquiry message: ");
+        		String enquiryMessage = scanner.nextLine();
+				// Call the submitEnquiry method of EnquiryService
+        		System.out.print("Do you want to save this enquiry as a draft? (yes/no): ");
+    			String saveAsDraft = scanner.nextLine().toLowerCase();
+
+    			boolean isDraft = saveAsDraft.equals("yes");
+
+    			EnquiryService enquiryService = new EnquiryService();
+    			int enquiryID = enquiryService.createEnquiry(student.getId(), campName, enquiryMessage, isDraft);
+
+    			if (enquiryID != 0) {
+        			if (isDraft) {
+            			System.out.println("Enquiry saved as a draft with ID: " + enquiryID);
+        			} else {
+            			System.out.println("Enquiry submitted successfully with ID: " + enquiryID);
+        			}
+    			} else {
+       			 	System.out.println("Failed to create the enquiry.");
+    			}
+			} else {
+				System.out.println("No such camp found or it's not avaliable to you.");
+			}
+    	}
+	}
+
+	public void viewEnquiries() {
+    	Student student = (Student) CAMs.currentUser;
+    	EnquiryService enquiryService = new EnquiryService();
+
+    	List<Enquiry> studentEnquiries = enquiryService.getStudentEnquiries(student.getId());
+
+    	if (studentEnquiries.isEmpty()) {
+        	System.out.println("You have no enquiries to display.");
+    	} else {
+        	System.out.println("Your Enquiries:");
+        	for (Enquiry enquiry : studentEnquiries) {
+				System.out.println("----------------------------");
+            	System.out.println("Enquiry ID: " + enquiry.getEnquiryID());
+            	System.out.println("Camp Name: " + enquiry.getCampName());
+            	System.out.println("Status: " + enquiry.getEnquiryStatus());
+            	System.out.println("Message: " + enquiry.getEnquiryMessage());
+            	System.out.println("Response: " + enquiry.getEnquiryResponse());
+            	System.out.println();
+        	}
+			System.out.println("----------------------------");
+    	}
+	}
+
+	public void editEnquiry() {
+    	Student student = (Student) CAMs.currentUser;
+    	scanner.nextLine();
+    	System.out.print("Enter the Enquiry ID to edit: ");
+    	int enquiryID = scanner.nextInt();
+
+    	EnquiryService enquiryService = new EnquiryService();
+
+    	if (enquiryService.editEnquiry(enquiryID, student.getId())) {
+        	System.out.println("Enquiry edited successfully.");
+    	} else {
+       	System.out.println("Failed to edit the enquiry. Ensure it's your enquiry and it's in DRAFT status (not yet processed).");
+    	}
+	}
+
+	public void deleteEnquiry() {
+    	Student student = (Student) CAMs.currentUser;
+    	scanner.nextLine();
+    	System.out.print("Enter the Enquiry ID to delete: ");
+    	int enquiryID = scanner.nextInt();
+
+    	EnquiryService enquiryService = new EnquiryService();
+
+    	if (enquiryService.deleteEnquiry(enquiryID, student.getId())) {
+        	System.out.println("Enquiry deleted successfully.");
+    	} else {
+        	System.out.println("Failed to delete the enquiry. Ensure it's your enquiry and it's in DRAFT status (not yet processed).");
+    	}
+	}
+
+
 }

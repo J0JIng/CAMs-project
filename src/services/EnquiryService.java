@@ -12,17 +12,31 @@ public class EnquiryService {
     private Map<Integer, Enquiry> enquiryData;
 
     public EnquiryService(){
-         enquiryData = DataStore.getEnquiryData(); 
+        enquiryData = DataStore.getEnquiryData(); 
+    }
 
-
-    public boolean submitEnquiry(String senderID, String campName, String enquiryMessage) {
+    public int createEnquiry(String senderID, String campName, String enquiryMessage, boolean isDraft) {
         int enquiryID = UUID.randomUUID().hashCode();
-        Enquiry enquiry = new Enquiry(enquiryID, senderID, campName, enquiryMessage); 
-        enquiry.setEnquiryStatus(MessageStatus.PENDING); 
+        Enquiry enquiry = new Enquiry(enquiryID, senderID, campName, enquiryMessage);
+        if (isDraft) {
+            enquiry.setEnquiryStatus(MessageStatus.DRAFT);
+        } else {
+            // Set other status for non-draft enquiries (e.g., PENDING)
+            enquiry.setEnquiryStatus(MessageStatus.PENDING);
+        }
         enquiryData.put(enquiryID, enquiry);
         DataStore.setEnquiryData(enquiryData);
-         return true;
-        }
+        return enquiryID;
+    }
+
+    // public boolean submitEnquiry(String senderID, String campName, String enquiryMessage) {
+    //     int enquiryID = UUID.randomUUID().hashCode();
+    //     Enquiry enquiry = new Enquiry(enquiryID, senderID, campName, enquiryMessage); 
+    //     enquiry.setEnquiryStatus(MessageStatus.PENDING); 
+    //     enquiryData.put(enquiryID, enquiry);
+    //     DataStore.setEnquiryData(enquiryData);
+    //      return true;
+    //     }
     
     public Map<Integer, Enquiry> viewDraftEnquiries(String studentID) {
          return enquiryData.values().stream()
@@ -76,4 +90,5 @@ public class EnquiryService {
     
 
 
-    }
+}
+
