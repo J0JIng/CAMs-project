@@ -43,7 +43,6 @@ public class CampStaffService {
     				}
 				}
 
-				SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     			Date campEndDate = null;
     			while (campEndDate == null) {
     				System.out.print("Enter camp end date (dd/MM/yyyy): ");
@@ -55,7 +54,6 @@ public class CampStaffService {
     				}
 				}
 
-				SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     			Date campRegistrationClosingDate = null;
     			while (campRegistrationClosingDate == null) {
     				System.out.print("Enter registration closing date (dd/MM/yyyy): ");
@@ -82,7 +80,7 @@ public class CampStaffService {
 		        System.out.print("Enter committee slots: ");
 		        int campCommitteeSlots = scanner.nextInt();
 		        
-				c.setCampInformation(new CampInformation(newCampName, campDate, campRegistrationClosingDate, campUserGroup, campLocation, campTotalSlots, campCommitteeSlots, campDescription, CAMs.currentUser.getName()));
+				c.setCampInformation(new CampInformation(newCampName, campStartDate, campEndDate, campRegistrationClosingDate, campUserGroup, campLocation, campTotalSlots, campCommitteeSlots, campDescription, CAMs.currentUser.getName()));
 				System.out.println("Edited " + c.getCampInformation().getCampName());
                 return;
             }
@@ -99,7 +97,7 @@ public class CampStaffService {
             if (campInfo.getCampStaffInCharge() == CAMs.currentUser.getName()) {
 	            System.out.println("----------------------------");
 	            System.out.println("Name: " + campInfo.getCampName());
-	            System.out.println("Date: " + campInfo.getCampDate());
+	            System.out.println("Date: " + campInfo.getCampStartDate());
 	            System.out.println("Registration Closing Date: " + campInfo.getCampRegistrationClosingDate());
 	            System.out.println("User Group: " + campInfo.getCampUserGroup());
 	            System.out.println("Location: " + campInfo.getCampLocation());
@@ -122,7 +120,7 @@ public class CampStaffService {
             System.out.println("----------------------------");
             System.out.println("Camp " + (i+1) + ":");
             System.out.println("Name: " + campInfo.getCampName());
-            System.out.println("Date: " + campInfo.getCampDate());
+            System.out.println("Date: " + campInfo.getCampStartDate());
             System.out.println("Registration Closing Date: " + campInfo.getCampRegistrationClosingDate());
             System.out.println("User Group: " + campInfo.getCampUserGroup());
             System.out.println("Location: " + campInfo.getCampLocation());
@@ -166,7 +164,6 @@ public class CampStaffService {
     		}
 		}
 
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     	Date campEndDate = null;
     	while (campEndDate == null) {
     		System.out.print("Enter camp end date (dd/MM/yyyy): ");
@@ -178,7 +175,6 @@ public class CampStaffService {
     		}
 		}
 
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     	Date campRegistrationClosingDate = null;
     	while (campRegistrationClosingDate == null) {
     		System.out.print("Enter registration closing date (dd/MM/yyyy): ");
