@@ -2,10 +2,13 @@ package services;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 
 import controllers.CampServiceController;
 import main.CAMs;
+import stores.AuthStore;
+
 import models.Camp;
 import models.CampInformation;
 import models.Student;
@@ -15,7 +18,7 @@ public class CampStudentService {
 	Scanner scanner = new Scanner(System.in);
 	
 	public void withdrawCamp() {
-		Student student = (Student) CAMs.currentUser;
+		Student student = (Student) AuthStore.getCurrentUser();
 		scanner.nextLine();
     	System.out.print("Enter Camp Name: ");
     	String campName = scanner.nextLine();
@@ -49,7 +52,7 @@ public class CampStudentService {
 	
 	public void registerCamp() {
 		
-		Student student = (Student) CAMs.currentUser;
+		Student student = (Student) AuthStore.getCurrentUser();
 		scanner.nextLine();
     	System.out.print("Enter Camp Name: ");
     	String campName = scanner.nextLine();
@@ -115,7 +118,7 @@ public class CampStudentService {
 	}
 
 	public void registerAsCommittee(){
-		Student student = (Student) CAMs.currentUser;
+		Student student = (Student) AuthStore.getCurrentUser();
 		//Checks whether student is already a committee member
 		if (student.getCommitteeStatus() != null){
 			System.out.println(student.getName() + " is already a committee member for " + student.getCommitteeStatus().getCampInformation().getCampName());
@@ -147,7 +150,7 @@ public class CampStudentService {
 	}
 
 	public void withdrawFromCommittee(){
-		Student student = (Student) CAMs.currentUser;
+		Student student = (Student) AuthStore.getCurrentUser();
 		//Checks whether student is a committee member
 		if (student.getCommitteeStatus() == null){
 			System.out.println(student.getName() + " is not a committee member for any camp.");
@@ -161,7 +164,7 @@ public class CampStudentService {
     }
 
 	public void viewRegisteredCamps() {
-        Student student = (Student) CAMs.currentUser;
+        Student student = (Student) AuthStore.getCurrentUser();
 
         if (student.getRegisteredCamps().isEmpty()) {
             System.out.println("You are not registered in a camp.");
@@ -280,7 +283,7 @@ public class CampStudentService {
 	}
 
 	public void viewEnquiries() {
-    	Student student = (Student) CAMs.currentUser;
+    	Student student = (Student) AuthStore.getCurrentUser();
     	EnquiryService enquiryService = new EnquiryService();
 
     	List<Enquiry> studentEnquiries = enquiryService.getStudentEnquiries(student.getId());
@@ -303,7 +306,7 @@ public class CampStudentService {
 	}
 
 	public void editEnquiry() {
-    	Student student = (Student) CAMs.currentUser;
+    	Student student = (Student) AuthStore.getCurrentUser();
     	scanner.nextLine();
     	System.out.print("Enter the Enquiry ID to edit: ");
     	int enquiryID = scanner.nextInt();
@@ -318,7 +321,7 @@ public class CampStudentService {
 	}
 
 	public void deleteEnquiry() {
-    	Student student = (Student) CAMs.currentUser;
+    	Student student = (Student) AuthStore.getCurrentUser();
     	scanner.nextLine();
     	System.out.print("Enter the Enquiry ID to delete: ");
     	int enquiryID = scanner.nextInt();

@@ -1,14 +1,14 @@
 package views;
 
 import interfaces.IMenuView;
-import main.CAMs;
+import stores.AuthStore;
 
 public class StudentView implements IMenuView{
 
 	@Override
 	public void displayMenuView() {
 		System.out.println("-----------------------------------");
-		String welcomeMessage = "Welcome " + CAMs.currentUser.getName();
+		String welcomeMessage = "Welcome " + AuthStore.getCurrentUser().getName();
 		int totalLength = welcomeMessage.length();
 		int spaces = (33 - totalLength) / 2;
 

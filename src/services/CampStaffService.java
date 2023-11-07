@@ -7,7 +7,7 @@ import controllers.CampServiceController;
 import models.Camp;
 import models.CampInformation;
 import models.Student;
-import main.CAMs;
+import stores.AuthStore;
 
 public class CampStaffService {
 	Scanner scanner = new Scanner(System.in);
@@ -90,11 +90,11 @@ public class CampStaffService {
 	
 	public void viewCreatedCamps() {
 		System.out.println("----------------------------");
-        System.out.println("|    Camps under " + CAMs.currentUser.getName() + "    |");
+        System.out.println("|    Camps under " + AuthStore.getCurrentUser().getName() + "    |");
         System.out.println("----------------------------");
         for (int i = 0; i < CampServiceController.camps.size(); i++) {
             CampInformation campInfo = CampServiceController.camps.get(i).getCampInformation();
-            if (campInfo.getCampStaffInCharge() == CAMs.currentUser.getName()) {
+            if (campInfo.getCampStaffInCharge() == AuthStore.getCurrentUser().getName()) {
 	            System.out.println("----------------------------");
 	            System.out.println("Name: " + campInfo.getCampName());
 	            System.out.println("Date: " + campInfo.getCampStartDate());
