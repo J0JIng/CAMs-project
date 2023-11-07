@@ -1,7 +1,9 @@
 package services;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -311,7 +313,7 @@ public class CampStudentService {
         // Initialize an instance of EnquiryService
         EnquiryService enquiryService = new EnquiryService();
 
-        Student student = (Student) CAMs.currentUser;
+        Student student = (Student) AuthStore.getCurrentUser();
         scanner.nextLine();
 
         System.out.print("Enter Camp Name: ");
@@ -328,8 +330,7 @@ public class CampStudentService {
 
     			boolean isDraft = saveAsDraft.equals("yes");
 
-    			EnquiryService enquiryService = new EnquiryService();
-    			int enquiryID = enquiryService.createEnquiry(student.getId(), campName, enquiryMessage, isDraft);
+    			int enquiryID = enquiryService.createEnquiry(student.getStudentID(), campName, enquiryMessage, isDraft);
 
     			if (enquiryID != 0) {
         			if (isDraft) {
@@ -350,7 +351,7 @@ public class CampStudentService {
     	Student student = (Student) AuthStore.getCurrentUser();
     	EnquiryService enquiryService = new EnquiryService();
 
-    	List<Enquiry> studentEnquiries = enquiryService.getStudentEnquiries(student.getId());
+    	List<Enquiry> studentEnquiries = enquiryService.getStudentEnquiries(student.getStudentID());
 
     	if (studentEnquiries.isEmpty()) {
         	System.out.println("You have no enquiries to display.");
@@ -377,7 +378,7 @@ public class CampStudentService {
 
     	EnquiryService enquiryService = new EnquiryService();
 
-    	if (enquiryService.editEnquiry(enquiryID, student.getId())) {
+    	if (enquiryService.editEnquiry(enquiryID, student.getStudentID())) {
         	System.out.println("Enquiry edited successfully.");
     	} else {
        	System.out.println("Failed to edit the enquiry. Ensure it's your enquiry and it's in DRAFT status (not yet processed).");
@@ -392,7 +393,7 @@ public class CampStudentService {
 
     	EnquiryService enquiryService = new EnquiryService();
 
-    	if (enquiryService.deleteEnquiry(enquiryID, student.getId())) {
+    	if (enquiryService.deleteEnquiry(enquiryID, student.getStudentID())) {
         	System.out.println("Enquiry deleted successfully.");
     	} else {
         	System.out.println("Failed to delete the enquiry. Ensure it's your enquiry and it's in DRAFT status (not yet processed).");

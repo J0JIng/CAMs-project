@@ -5,7 +5,9 @@ import stores.DataStore;
 import enums.MessageStatus;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 public class EnquiryService {
@@ -13,6 +15,18 @@ public class EnquiryService {
 
     public EnquiryService(){
         enquiryData = DataStore.getEnquiryData(); 
+    }
+    
+    public boolean editEnquiry(int enquiryID, String studentID) {
+    	return false;
+    }
+    
+    public boolean deleteEnquiry(int enquiryID, String studentID) {
+    	return false;
+    }
+    
+    public List<Enquiry> getStudentEnquiries(String studentID) {
+    	return null;
     }
 
     public int createEnquiry(String senderID, String campName, String enquiryMessage, boolean isDraft) {

@@ -1,3 +1,9 @@
+/controllers/
+/interfaces/
+/main/
 /models/
 /services/
-/controllers/
+/stores/
+/utility/
+/views/
+/enums/

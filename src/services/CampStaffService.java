@@ -1,7 +1,11 @@
 package services;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 import controllers.CampServiceController;
 import models.Camp;
@@ -80,7 +84,7 @@ public class CampStaffService {
 		        System.out.print("Enter committee slots: ");
 		        int campCommitteeSlots = scanner.nextInt();
 		        
-				c.setCampInformation(new CampInformation(newCampName, campStartDate, campEndDate, campRegistrationClosingDate, campUserGroup, campLocation, campTotalSlots, campCommitteeSlots, campDescription, CAMs.currentUser.getName()));
+				c.setCampInformation(new CampInformation(newCampName, campStartDate, campEndDate, campRegistrationClosingDate, campUserGroup, campLocation, campTotalSlots, campCommitteeSlots, campDescription, AuthStore.getCurrentUser().getName()));
 				System.out.println("Edited " + c.getCampInformation().getCampName());
                 return;
             }
@@ -197,7 +201,7 @@ public class CampStaffService {
             	System.out.println("Committee Slots: " + campInfo.getCampCommitteeSlots());
             	System.out.println("Description: " + campInfo.getCampDescription());
             	System.out.println("Staff In Charge: " + campInfo.getCampStaffInCharge());
-				System.out.println("Camp Visibility: " + campInfo.getVisibility());
+				System.out.println("Camp Visibility: " + c.getVisibility());
             	i++;
         	}
     	}
@@ -270,7 +274,7 @@ public class CampStaffService {
         System.out.print("Enter committee slots: ");
         int campCommitteeSlots = scanner.nextInt();
         
-		Camp c = new Camp(new CampInformation(campName, campStartDate, campEndDate, campRegistrationClosingDate, campUserGroup, campLocation, campTotalSlots, campCommitteeSlots, campDescription, CAMs.currentUser.getName()));
+		Camp c = new Camp(new CampInformation(campName, campStartDate, campEndDate, campRegistrationClosingDate, campUserGroup, campLocation, campTotalSlots, campCommitteeSlots, campDescription, AuthStore.getCurrentUser().getName()));
 		CampServiceController.camps.add(c);
         System.out.println("Created " + c.getCampInformation().getCampName());
 	}

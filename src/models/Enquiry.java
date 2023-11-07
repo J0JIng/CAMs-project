@@ -35,7 +35,7 @@ public class Enquiry {
     public void setSenderID(String senderID) {
         this.senderID = senderID;
     }
-    public String getcampName() {
+    public String getCampName() {
         return this.campName;
     }
 

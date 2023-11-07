@@ -16,8 +16,8 @@ public class SuggestionService {
     }
 
     public boolean submitSuggestion(String senderID, String campName, String suggestionDetails) {
-        int suggestionID = UUID.randomUUID().hashCode(); 
-        Suggestion suggestion = new Suggestion(suggestionID, senderID, campName, suggestionDetails);
+        int suggestionID = UUID.randomUUID().hashCode();
+        Suggestion suggestion = new Suggestion(suggestionID, campName, senderID, MessageStatus.PENDING, suggestionDetails);
         suggestion.setSuggestionStatus(MessageStatus.PENDING);
         suggestionData.put(suggestionID, suggestion);
         DataStore.setSuggestionData(suggestionData);
