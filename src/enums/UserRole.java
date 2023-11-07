@@ -1,3 +1,3 @@
 package enums;
 
-public enum UserRole {Student,Staff}
+public enum UserRole {STUDENT,COMMITTEE,STAFF}

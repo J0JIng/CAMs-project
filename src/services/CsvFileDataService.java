@@ -241,7 +241,7 @@ public class CsvFileDataService implements IFileDataService {
 		for (String[] userRow : usersRows) {
 			Map<String, String> userInfoMap = parseUserRow(userRow);
 			String role = userInfoMap.get("role");
-			if (!role.equals("Staff"))
+			if (!role.equals("STAFF"))
 				continue;
 			
 			String name = userInfoMap.get("name");
@@ -278,7 +278,8 @@ public class CsvFileDataService implements IFileDataService {
 					userInfoMap.get("password"),
 					userInfoMap.get("faculty"),
 					userInfoMap.get("role"));
-			if (userInfoMap.get("role").equals("Staff")) {
+					
+			if (userInfoMap.get("role").equals("STAFF")) {
 				Staff Staff = StaffMap.get(userInfoMap.get("userID"));
 				userLine = String.format("%s,%s,%s,%s,%s",
 						Staff.getName(),
