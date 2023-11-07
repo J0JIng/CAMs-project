@@ -80,7 +80,7 @@ public class CampStaffService {
 		        System.out.print("Enter committee slots: ");
 		        int campCommitteeSlots = scanner.nextInt();
 		        
-				c.setCampInformation(new CampInformation(newCampName, campStartDate, campEndDate, campRegistrationClosingDate, campUserGroup, campLocation, campTotalSlots, campCommitteeSlots, campDescription, CAMs.currentUser.getName()));
+				c.setCampInformation(new CampInformation(newCampName, campStartDate, campEndDate, campRegistrationClosingDate, campUserGroup, campLocation, campTotalSlots, campCommitteeSlots, campDescription, AuthStore.getCurrentUser().getName()));
 				System.out.println("Edited " + c.getCampInformation().getCampName());
                 return;
             }
@@ -201,7 +201,7 @@ public class CampStaffService {
         System.out.print("Enter committee slots: ");
         int campCommitteeSlots = scanner.nextInt();
         
-		Camp c = new Camp(new CampInformation(campName, campStartDate, campEndDate, campRegistrationClosingDate, campUserGroup, campLocation, campTotalSlots, campCommitteeSlots, campDescription, CAMs.currentUser.getName()));
+		Camp c = new Camp(new CampInformation(campName, campStartDate, campEndDate, campRegistrationClosingDate, campUserGroup, campLocation, campTotalSlots, campCommitteeSlots, campDescription, AuthStore.getCurrentUser().getName()));
 		CampServiceController.camps.add(c);
         System.out.println("Created " + c.getCampInformation().getCampName());
 	}
