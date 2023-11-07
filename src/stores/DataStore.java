@@ -18,7 +18,7 @@ public class DataStore {
 	private static Map<String, Staff> StaffData = new HashMap<String, Staff>();
 	private static Map<Integer, Camp> CampData = new HashMap<Integer, Camp>();
 	private static Map<Integer, Enquiry> EnquiryData = new HashMap<Integer, Enquiry>(); 
-        private static Map<Integer, Suggestion> SuggestionData = new HashMap<Integer, Suggestion>(); 
+    private static Map<Integer, Suggestion> SuggestionData = new HashMap<Integer, Suggestion>(); 
 
 	/**
 	 * Private constructor to prevent instantiation of the class.
@@ -83,17 +83,17 @@ public class DataStore {
 	}
 
 	public static Map<Integer, Enquiry> getEnquiryData() {
-        return enquiryData;
+        return EnquiryData;
     }
 
    	public static void setEnquiryData(Map<Integer, Enquiry> enquiryData) {
-        DataStore.enquiryData = enquiryData;
+        DataStore.EnquiryData = enquiryData;
     }
 
   	public static Map<Integer, Suggestion> getSuggestionData() {
-        return suggestionData;
+        return SuggestionData;
     }
   	public static void setSuggestionData(Map<Integer, Suggestion> suggestionData) {
-        DataStore.suggestionData = suggestionData; 
+        DataStore.SuggestionData = suggestionData; 
     }    
 }
