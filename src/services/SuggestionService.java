@@ -15,13 +15,18 @@ public class SuggestionService {
         suggestionData = DataStore.getSuggestionData(); 
     }
 
-    public boolean submitSuggestion(String senderID, String campName, String suggestionDetails) {
+    public int submitSuggestion(String senderID, String campName, String suggestionDetails, boolean isDraft) {
         int suggestionID = UUID.randomUUID().hashCode();
-        Suggestion suggestion = new Suggestion(suggestionID, campName, senderID, MessageStatus.PENDING, suggestionDetails);
-        suggestion.setSuggestionStatus(MessageStatus.PENDING);
+        Suggestion suggestion = new Suggestion(suggestionID, campName, senderID, suggestionDetails);
+        if (isDraft) {
+            suggestion.setSuggestionStatus(MessageStatus.DRAFT);
+        } else {
+            // Set other status for non-draft enquiries (e.g., PENDING)
+            suggestion.setSuggestionStatus(MessageStatus.PENDING);
+        }
         suggestionData.put(suggestionID, suggestion);
         DataStore.setSuggestionData(suggestionData);
-        return true;
+        return suggestionID;
     }
 
     public boolean editSuggestion(int suggestionID, String senderID, String newDetails) {

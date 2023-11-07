@@ -187,6 +187,15 @@ public class CampStudentService {
     	for (Camp camp : student.getRegisteredCamps()) {
         	if (camp.getCampInformation().getCampName() == student.getCommitteeStatus() && !committeeCampPrinted) {
             	System.out.println("Committee Camp: " + camp.getCampInformation().getCampName());
+				System.out.println("Start Date: " + camp.getCampInformation().getCampStartDate());
+				System.out.println("End Date: " + camp.getCampInformation().getCampEndDate());
+            	System.out.println("Registration Closing Date: " + camp.getCampInformation().getCampRegistrationClosingDate());
+            	System.out.println("User Group: " + camp.getCampInformation().getCampUserGroup());
+            	System.out.println("Location: " + camp.getCampInformation().getCampLocation());
+            	System.out.println("Total Slots: " + camp.getCampInformation().getCampTotalSlots());
+            	System.out.println("Committee Slots: " + camp.getCampInformation().getCampCommitteeSlots());
+            	System.out.println("Description: " + camp.getCampInformation().getCampDescription());
+            	System.out.println("Staff In Charge: " + camp.getCampInformation().getCampStaffInCharge());
             	System.out.println("------------------------------");
             	committeeCampPrinted = true;
         	} else {
@@ -202,7 +211,7 @@ public class CampStudentService {
     	// Sort the otherCampNames list alphabetically
     	Collections.sort(otherCampNames);
 
-    	System.out.println("Other registered camps:");
+    	System.out.println("Registered camps as an attendee:");
     	for (String campName : otherCampNames) {
         	System.out.println("Camp: " + campName);
     	}
@@ -286,7 +295,8 @@ public class CampStudentService {
             	System.out.println("----------------------------");
             	System.out.println("Camp " + (i) + ":");
             	System.out.println("Name: " + campInfo.getCampName());
-            	System.out.println("Date: " + campInfo.getCampStartDate());
+            	System.out.println("Start Date: " + campInfo.getCampStartDate());
+				System.out.println("End Date: " + campInfo.getCampEndDate());
             	System.out.println("Registration Closing Date: " + campInfo.getCampRegistrationClosingDate());
             	System.out.println("User Group: " + campInfo.getCampUserGroup());
             	System.out.println("Location: " + campInfo.getCampLocation());
@@ -402,6 +412,84 @@ public class CampStudentService {
         	System.out.println("Enquiry deleted successfully.");
     	} else {
         	System.out.println("Failed to delete the enquiry. Ensure it's your enquiry and it's in DRAFT status (not yet processed).");
+    	}
+	}
+
+	public void viewEnquiriesForCamp() {
+    	Camp camp = student.getCommitteeStatus();
+    	if (camp == null) {
+        	System.out.println("Only committee members or staff can view enquiries.");
+        	return;
+    	}
+    	// Retrieve and display enquiries for the camp
+    	List<Enquiry> enquiries = EnquiryService.getEnquiriesForCamp(camp);
+
+    	if (enquiries.isEmpty()) {
+        	System.out.println("No enquiries for this camp.");
+    	} else {
+        	System.out.println("Enquiries for Camp: " + campName);
+        	for (Enquiry enquiry : enquiries) {
+            	System.out.println("Enquiry ID: " + enquiry.getEnquiryID());
+            	System.out.println("Student Name: " + enquiry.getStudentName());
+            	System.out.println("Enquiry Date: " + enquiry.getEnquiryDate());
+            	System.out.println("Enquiry Message: " + enquiry.getMessage());
+            	System.out.println("Enquiry Status: " + enquiry.getEnquiryStatus());
+            	System.out.println("Response: " + enquiry.getEnquiryResponse());
+            	System.out.println("-----------------------");
+        	}
+    	}
+	}
+
+	public boolean respondToEnquiry(int enquiryID) {
+    	Camp camp = student.getCommitteeStatus();
+    	if (camp == null) {
+        	System.out.println("Only committee members or staff can view enquiries.");
+        	return false;
+    	}
+    	// Check if the enquiry belongs to the camp
+    	Enquiry enquiry = EnquiryService.getEnquiry(enquiryID);
+    	if (enquiry == null || !enquiry.getCampName().equalsIgnoreCase(camp.getCampInformation().getCampName())) {
+        	System.out.println("Enquiry not found or does not belong to the camp.");
+        	return false;
+    	}
+    	System.out.print("Enter your response to the enquiry: ");
+    	scanner.nextLine(); // Consume the newline character
+    	String response = scanner.nextLine();
+    	boolean responseResult = EnquiryService.respondToEnquiry(enquiryID, AuthStore.getCurrentUser().getName(), MessageStatus.ACCEPTED, response);
+    	if (responseResult) {
+        	System.out.println("Enquiry response sent successfully.");
+    	} else {
+        	System.println("Failed to send the response.");
+    	}
+
+    	return responseResult;
+	}
+
+	public void submitSuggestion() {
+        // Initialize an instance of SuggestionService
+        SuggestionService suggestionService = new SuggestionService();
+        Student student = (Student) AuthStore.getCurrentUser();
+		Camp camp = student.getCommitteeStatus();
+		if (camp == null){
+			System.out.println("Only committee members can submit suggestions.");
+			return;
+		}
+        scanner.nextLine();
+
+		System.out.print("Enter your suggestion: ");
+		String suggestionNote = scanner.nextLine();
+		System.out.print("Do you want to save this suggestion as a draft? (yes/no): ");
+    	String saveAsDraft = scanner.nextLine().toLowerCase();
+		boolean isDraft = saveAsDraft.equals("yes");
+		int suggestionID = suggestionService.submitSuggestion(student.getStudentID(), campName, suggestionNote, isDraft);
+    	if (suggestionID != 0) {
+        	if (isDraft) {
+            	System.out.println("Suggestion saved as a draft with ID: " + suggestionID);
+        	} else {
+            	System.out.println("Suggestion submitted successfully with ID: " + suggestionID);
+        	}
+    	} else {
+       		System.out.println("Failed to submit the suggestion.");
     	}
 	}
 
