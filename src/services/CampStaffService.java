@@ -27,8 +27,9 @@ public class CampStaffService {
 
             	while (!isUniqueName) {
                 	System.out.print("Enter new camp name: ");
-                	newCampName = scanner.nextLine();
-                	isUniqueName = CampServiceController.camps.stream().noneMatch(existingCamp -> existingCamp.getCampInformation().getCampName().equalsIgnoreCase(newCampName));
+                	String newCampNameCheck = scanner.nextLine(); // Created for checking if camp name is already chosen
+                	newCampName = newCampNameCheck;
+                	isUniqueName = CampServiceController.camps.stream().noneMatch(existingCamp -> existingCamp.getCampInformation().getCampName().equalsIgnoreCase(newCampNameCheck));
 
                 	if (!isUniqueName) {
                     	System.out.println("Camp name is not unique. Please choose a different name.");
@@ -213,10 +214,10 @@ public class CampStaffService {
 		
 		while (!isUniqueName) {
         	System.out.print("Enter camp name: ");
-        	campName = scanner.nextLine();
-
+        	String campNameCheck = scanner.nextLine();
+        	campName = campNameCheck; // Created for checking if camp name is already chosen
         	// Check if a camp with the same name already exists
-        	boolean nameExists = CampServiceController.camps.stream().anyMatch(existingCamp -> existingCamp.getCampInformation().getCampName().equalsIgnoreCase(campName));
+        	boolean nameExists = CampServiceController.camps.stream().anyMatch(existingCamp -> existingCamp.getCampInformation().getCampName().equalsIgnoreCase(campNameCheck));
 
         	if (!nameExists) {
             	isUniqueName = true;

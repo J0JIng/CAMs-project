@@ -124,7 +124,7 @@ public class CampStudentService {
 		Student student = (Student) AuthStore.getCurrentUser();
 		//Checks whether student is already a committee member
 		if (student.getCommitteeStatus() != null){
-			System.out.println(student.getName() + " is already a committee member for " + student.getCommitteeStatus().getCampInformation().getCampName());
+			System.out.println(student.getName() + " is already a committee member for " + student.getCommitteeStatus());
         	return;
 		} else {
 			scanner.nextLine();
@@ -160,9 +160,14 @@ public class CampStudentService {
         	return;
 		} else {
         	String campName = student.getCommitteeStatus();
-			student.getCommitteeStatus().getCommitteeMembers().remove(student);
-			student.setCommitteeStatus(null);
-			System.out.println("You are no longer a committee member.");
+        	for (Camp camp : student.getRegisteredCamps()) {
+            	if (camp.getCampInformation().getCampName().equalsIgnoreCase(campName) && camp.getCommitteeMembers().contains(student)) {
+						camp.getCommitteeMembers().remove(student);
+						student.setCommitteeStatus(null);
+						System.out.println("You are no longer a committee member.");
+						return;
+            	}
+        	}
         }
     }
 
@@ -180,7 +185,7 @@ public class CampStudentService {
     	List<String> otherCampNames = new ArrayList<>();
 
     	for (Camp camp : student.getRegisteredCamps()) {
-        	if (camp == student.getCommitteeStatus() && !committeeCampPrinted) {
+        	if (camp.getCampInformation().getCampName() == student.getCommitteeStatus() && !committeeCampPrinted) {
             	System.out.println("Committee Camp: " + camp.getCampInformation().getCampName());
             	System.out.println("------------------------------");
             	committeeCampPrinted = true;

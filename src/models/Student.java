@@ -10,7 +10,7 @@ import enums.UserRole;
 public class Student extends User {
 
     private String studentID;
-    private Camp committeeStatus;
+    private String committeeStatus;
     private List<Camp> registeredCamps = new ArrayList<>();
     private List<Camp> withdrawnCamps = new ArrayList<>();
     private List<Enquiry> enquiries= new ArrayList<>();
@@ -21,12 +21,17 @@ public class Student extends User {
         super.setRole(UserRole.STUDENT);
     }
     
-    public Camp getCommitteeStatus() {
+    public String getCommitteeStatus() {
         return this.committeeStatus;
     }
 
     public void setCommitteeStatus(Camp camp) {
-        this.committeeStatus = camp;
+    	if (camp == null) {
+    		this.committeeStatus = null;
+    	} else {
+    		this.committeeStatus = camp.getCampInformation().getCampName();
+    
+    	}
     }
 
     public String getStudentID() {
