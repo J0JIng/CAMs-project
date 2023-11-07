@@ -28,15 +28,6 @@ public class EnquiryService {
         DataStore.setEnquiryData(enquiryData);
         return enquiryID;
     }
-
-    // public boolean submitEnquiry(String senderID, String campName, String enquiryMessage) {
-    //     int enquiryID = UUID.randomUUID().hashCode();
-    //     Enquiry enquiry = new Enquiry(enquiryID, senderID, campName, enquiryMessage); 
-    //     enquiry.setEnquiryStatus(MessageStatus.PENDING); 
-    //     enquiryData.put(enquiryID, enquiry);
-    //     DataStore.setEnquiryData(enquiryData);
-    //      return true;
-    //     }
     
     public Map<Integer, Enquiry> viewDraftEnquiries(String studentID) {
          return enquiryData.values().stream()
@@ -67,13 +58,6 @@ public class EnquiryService {
             }
             return false;
         }
-
-
-
-  /*   public Map<Integer, Enquiry> viewCampEnquiries(String campName, String staffID) */
-      
-          
-
    
      public boolean respondToEnquiry(int enquiryID, String responderID, MessageStatus status, String response) {
         if (enquiryData.containsKey(enquiryID)) {
