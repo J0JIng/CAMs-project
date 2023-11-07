@@ -39,6 +39,21 @@ public class SuggestionService {
         return false;
     }
 
+    // public boolean confirmSuggestion(int suggestionID, String senderID, String campName, String suggestionDetails, boolean isDraft) {
+    //     if (suggestionData.containsKey(suggestionID)) {
+    //         Suggestion enquiry = Suggestion(suggestionID, senderID, campName, enquiryMessage);
+    //         if (isDraft) {
+    //             enquiry.setEnquiryStatus(MessageStatus.DRAFT);
+    //         } else {
+    //             enquiry.setEnquiryStatus(MessageStatus.PENDING);
+    //         }
+    //         enquiryData.put(enquiryID, enquiry);
+    //         DataStore.setEnquiryData(enquiryData);
+    //         return true;
+    //     }
+    //     return false;
+    // }
+
     public boolean deleteSuggestion(int suggestionID, String senderID) {
         Suggestion suggestion = suggestionData.get(suggestionID);
         if (suggestion != null && suggestion.getSenderID().equals(senderID) && suggestion.getSuggestionStatus() == MessageStatus.DRAFT) {

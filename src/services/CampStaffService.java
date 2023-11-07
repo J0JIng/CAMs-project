@@ -154,13 +154,13 @@ public class CampStaffService {
                 	System.out.println("Invalid date format. Please enter a date in the format dd/MM/yyyy.");
             	}
         	}
-        	viewAllCamps("date", filterDate);
+			viewAllCamps("date", filterDate, null); 
     	} else if (option == 2) {
         	System.out.print("Enter the location to filter by: ");
         	String locationFilter = scanner.nextLine();
-        	viewAllCamps("location", locationFilter); // Pass the location filter
+        	viewAllCamps("location", null, locationFilter); // Pass the location filter
     	} else if (option == 3) {
-        	viewAllCamps("name", null); // Sort by alphabetical order
+        	viewAllCamps(null, null, null); // Sort by alphabetical order
     	} else {
         	System.out.println("Invalid option.");
     	}

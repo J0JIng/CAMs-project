@@ -42,6 +42,21 @@ public class EnquiryService {
         DataStore.setEnquiryData(enquiryData);
         return enquiryID;
     }
+
+    public boolean submitEnquiry(int enquiryID, String senderID, String campName, String enquiryMessage, boolean isDraft) {
+        if (enquiryData.containsKey(enquiryID)) {
+            Enquiry enquiry = Enquiry(enquiryID, senderID, campName, enquiryMessage);
+            if (isDraft) {
+                enquiry.setEnquiryStatus(MessageStatus.DRAFT);
+            } else {
+                enquiry.setEnquiryStatus(MessageStatus.PENDING);
+            }
+            enquiryData.put(enquiryID, enquiry);
+            DataStore.setEnquiryData(enquiryData);
+            return true;
+        }
+        return false;
+    }
     
     public Map<Integer, Enquiry> viewDraftEnquiries(String studentID) {
          return enquiryData.values().stream()

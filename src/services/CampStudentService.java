@@ -392,9 +392,23 @@ public class CampStudentService {
     	int enquiryID = scanner.nextInt();
 
     	EnquiryService enquiryService = new EnquiryService();
+		System.out.print("Enter your new enquiry message: ");
+        String newEnquiry = scanner.nextLine();
 
-    	if (enquiryService.editEnquiry(enquiryID, student.getStudentID())) {
-        	System.out.println("Enquiry edited successfully.");
+    	if (enquiryService.editDraftEnquiry(enquiryID, student.getStudentID(), newEnquiry)) {
+        	System.out.println("Enquiry edited successfully. Still save as draft? (yes/no): ");
+			String saveAsDraft = scanner.nextLine().toLowerCase();
+			boolean isDraft = saveAsDraft.equals("yes");
+			nextStep = enquiryService.submitEnquiry(enquiryID, student.getStudentID(), campName, newEnquiry, isDraft);
+    			if (nextStep) {
+        			if (isDraft) {
+            			System.out.println("Enquiry saved as a draft");
+        			} else {
+            			System.out.println("Enquiry submitted successfully with new ID: " + newEnquiryID);
+        			}
+    			} else {
+       			 	System.out.println("Failed to edit the enquiry. Ensure it's your enquiry and it's in DRAFT status (not yet processed).");
+    			}
     	} else {
        	System.out.println("Failed to edit the enquiry. Ensure it's your enquiry and it's in DRAFT status (not yet processed).");
     	}
@@ -408,7 +422,7 @@ public class CampStudentService {
 
     	EnquiryService enquiryService = new EnquiryService();
 
-    	if (enquiryService.deleteEnquiry(enquiryID, student.getStudentID())) {
+    	if (enquiryService.deleteDraftEnquiry(enquiryID, student.getStudentID())) {
         	System.out.println("Enquiry deleted successfully.");
     	} else {
         	System.out.println("Failed to delete the enquiry. Ensure it's your enquiry and it's in DRAFT status (not yet processed).");
@@ -416,12 +430,17 @@ public class CampStudentService {
 	}
 
 	public void viewEnquiriesForCamp() {
-    	Camp camp = student.getCommitteeStatus();
-    	if (camp == null) {
+    	String campName = student.getCommitteeStatus();
+    	if (campName == null) {
         	System.out.println("Only committee members or staff can view enquiries.");
         	return;
     	}
     	// Retrieve and display enquiries for the camp
+		for (Camp c : CampServiceController.camps) {
+			if (c.getCampInformation().getCampName().equalsIgnoreCase(campName)) {
+				Camp camp = c;
+			}
+		}
     	List<Enquiry> enquiries = EnquiryService.getEnquiriesForCamp(camp);
 
     	if (enquiries.isEmpty()) {
@@ -441,8 +460,8 @@ public class CampStudentService {
 	}
 
 	public boolean respondToEnquiry(int enquiryID) {
-    	Camp camp = student.getCommitteeStatus();
-    	if (camp == null) {
+    	String campName = student.getCommitteeStatus();
+    	if (campName == null) {
         	System.out.println("Only committee members or staff can view enquiries.");
         	return false;
     	}
@@ -469,8 +488,8 @@ public class CampStudentService {
         // Initialize an instance of SuggestionService
         SuggestionService suggestionService = new SuggestionService();
         Student student = (Student) AuthStore.getCurrentUser();
-		Camp camp = student.getCommitteeStatus();
-		if (camp == null){
+		String campName = student.getCommitteeStatus();
+		if (campName == null){
 			System.out.println("Only committee members can submit suggestions.");
 			return;
 		}
@@ -492,6 +511,40 @@ public class CampStudentService {
        		System.out.println("Failed to submit the suggestion.");
     	}
 	}
+
+	// public void editSuggestion() {
+    // 	Student student = (Student) AuthStore.getCurrentUser();
+    // 	scanner.nextLine();
+    // 	System.out.print("Enter the Suggestion ID to edit: ");
+    // 	int enquiryID = scanner.nextInt();
+
+    // 	SuggestionService suggestionService = new SuggestionService();
+	// 	System.out.print("Enter your new suggestion: ");
+    //     String newSuggestion = scanner.nextLine();
+	// 	if (suggestionService.editSuggestion(suggestionID, student.getStudentID(), newSuggestion)) {
+    //     	System.out.println("Suggestion edited successfully. Still save as draft? (yes/no): ");
+	// 		String saveAsDraft = scanner.nextLine().toLowerCase();
+	// 		boolean isDraft = saveAsDraft.equals("yes");
+	// 		nextStep = enquiryService.confirmSuggestion(enquiryID, student.getStudentID(), campName, newEnquiry, isDraft);
+    // 			if (nextStep) {
+    //     			if (isDraft) {
+    //         			System.out.println("Enquiry saved as a draft");
+    //     			} else {
+    //         			System.out.println("Enquiry submitted successfully with new ID: " + newEnquiryID);
+    //     			}
+    // 			} else {
+    //    			 	System.out.println("Failed to edit the enquiry. Ensure it's your enquiry and it's in DRAFT status (not yet processed).");
+    // 			}
+    // 	} else {
+    //    	System.out.println("Failed to edit the enquiry. Ensure it's your enquiry and it's in DRAFT status (not yet processed).");
+    // 	}
+
+    // 	if (suggestionService.editSuggestion(suggestionID, student.getStudentID(), newSuggestion)) {
+    //     	System.out.println("Suggestion updated successfully.");
+    // 	} else {
+    //    	System.out.println("Failed to edit the suggestion. Ensure it's your enquiry and it's in DRAFT status (not yet processed).");
+    // 	}
+	// }
 
 
 }
