@@ -27,7 +27,7 @@ public class SuggestionService {
     public boolean editSuggestion(int suggestionID, String senderID, String newDetails) {
         Suggestion suggestion = suggestionData.get(suggestionID);
         if (suggestion != null && suggestion.getSenderID().equals(senderID) && suggestion.getSuggestionStatus() == MessageStatus.DRAFT) {
-            suggestion.setSuggestionDetails(newDetails);
+            suggestion.setSuggestionMessage(newDetails);
             DataStore.setSuggestionData(suggestionData);
             return true;
         }
