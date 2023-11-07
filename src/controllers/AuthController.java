@@ -34,10 +34,10 @@ public class AuthController {
         do {
 
             while (true) {
-                System.out.println("<Enter 0 to shutdown system>\n");
+                System.out.println("<Enter 0 to EXIT>\n");
                 System.out.println("Login as:");
                 System.out.println("1. Student");
-                System.out.println("2. Supervisor");
+                System.out.println("2. Staff");
 
                 String input = sc.nextLine();
 

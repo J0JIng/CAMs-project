@@ -40,7 +40,7 @@ public class CAMs {
 				DataStore.initDataStore(new CsvFileDataService(), FilePathsUtility.csvFilePaths());
 
 				// Display Splash Screen
-				// Boundary.printSplashScreen(); //TODO
+				// Boundary.printSplashScreen(); //@TODO
 
 				// Authentication - Log In
 				AuthController.startSession();

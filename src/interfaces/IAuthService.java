@@ -1,7 +1,7 @@
 package interfaces;
 
 /**
- * The {@link IAuthService} interface defines a contract for managing
+ * The IAuthService interface defines a contract for managing
  * authentication services, such as login and logout.
  */
 public interface IAuthService {
