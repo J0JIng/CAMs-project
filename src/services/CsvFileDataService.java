@@ -143,8 +143,37 @@ public class CsvFileDataService implements IFileDataService {
 		return userInfoMap;
 	}
 
+
+
+
+	// Placeholder statment 
+
+	@Override
+	public Map<String, Student> importStudentData(String usersFilePath, String studentsFilePath){
+		Map<String, Student> studentsMap = new HashMap<String, Student>();
+		return studentsMap;
+	}
+
+	@Override
+	public boolean exportStudentData(String usersFilePath, String studentsFilePath, Map<String, Student> studentMap) {
+		return true ;
+	}
+
+	@Override
+	public Map<Integer, Camp> importCampData(String campFilePath, String usersFilePath,String studentsFilePath, String StaffsFilePath) {
+		Map<Integer, Camp> campsMap = new HashMap<Integer, Camp>();
+		return campsMap;
+	}
+
+	@Override
+	public boolean exportCampData(String campsFilePath, Map<Integer, Camp> campMap) {
+		return true;
+	}
+
+
 	// ---------- Interface method implementation ---------- //
 	// Student
+
 	/* 
 	@Override
 	public Map<String, Student> importStudentData(String usersFilePath, String studentsFilePath) {
