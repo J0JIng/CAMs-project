@@ -42,21 +42,6 @@ public class EnquiryService {
         DataStore.setEnquiryData(enquiryData);
         return enquiryID;
     }
-
-    public boolean submitEnquiry(int enquiryID, String senderID, String campName, String enquiryMessage, boolean isDraft) {
-        if (enquiryData.containsKey(enquiryID)) {
-            Enquiry enquiry = Enquiry(enquiryID, senderID, campName, enquiryMessage);
-            if (isDraft) {
-                enquiry.setEnquiryStatus(MessageStatus.DRAFT);
-            } else {
-                enquiry.setEnquiryStatus(MessageStatus.PENDING);
-            }
-            enquiryData.put(enquiryID, enquiry);
-            DataStore.setEnquiryData(enquiryData);
-            return true;
-        }
-        return false;
-    }
     
     public Map<Integer, Enquiry> viewDraftEnquiries(String studentID) {
          return enquiryData.values().stream()
@@ -64,11 +49,20 @@ public class EnquiryService {
                  .collect(Collectors.toMap(Enquiry::getEnquiryID, enquiry -> enquiry));
         }
 
-    public boolean editDraftEnquiry(int enquiryID, String studentID, String newMessage) {
+    public Map<Integer, Enquiry> viewRespondedEnquiries(String studentID) {
+         return enquiryData.values().stream()
+                 .filter(enquiry -> enquiry.getSenderID().equals(studentID) && enquiry.getEnquiryStatus() == MessageStatus.ACCEPTED)
+                 .collect(Collectors.toMap(Enquiry::getEnquiryID, enquiry -> enquiry));
+        }
+
+    public boolean editDraftEnquiry(int enquiryID, String studentID, String newMessage, boolean isDraft) {
             if (enquiryData.containsKey(enquiryID)) {
                 Enquiry enquiry = enquiryData.get(enquiryID);
                 if (enquiry.getSenderID().equals(studentID) && enquiry.getEnquiryStatus() == MessageStatus.DRAFT) {
                     enquiry.setEnquiryMessage(newMessage);
+                    if (!isDraft) {
+                        enquiry.setEnquiryStatus(MessageStatus.PENDING);
+                    }
                     DataStore.setEnquiryData(enquiryData);
                     return true;
                 }

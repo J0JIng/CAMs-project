@@ -241,13 +241,13 @@ public class CampStudentService {
                 	System.out.println("Invalid date format. Please enter a date in the format dd/MM/yyyy.");
             	}
         	}
-        	viewAllCamps("date", filterDate);
+			viewAllCamps("date", filterDate, null);
     	} else if (option == 2) {
         	System.out.print("Enter the location to filter by: ");
         	String locationFilter = scanner.nextLine();
-        	viewAllCamps("location", locationFilter); // Pass the location filter
+        	viewAllCamps("location", null, locationFilter); // Pass the location filter
     	} else if (option == 3) {
-        	viewAllCamps("name", null); // Sort by alphabetical order
+        	viewAllCamps(null, null, null);  // Sort by alphabetical order
     	} else {
         	System.out.println("Invalid option.");
     	}
@@ -327,10 +327,8 @@ public class CampStudentService {
 	public void submitEnquiry() {
         // Initialize an instance of EnquiryService
         EnquiryService enquiryService = new EnquiryService();
-
         Student student = (Student) AuthStore.getCurrentUser();
         scanner.nextLine();
-
         System.out.print("Enter Camp Name: ");
         String campName = scanner.nextLine();
 		
@@ -365,23 +363,35 @@ public class CampStudentService {
 	public void viewEnquiries() {
     	Student student = (Student) AuthStore.getCurrentUser();
     	EnquiryService enquiryService = new EnquiryService();
-
-    	List<Enquiry> studentEnquiries = enquiryService.getStudentEnquiries(student.getStudentID());
-
-    	if (studentEnquiries.isEmpty()) {
+    	Map<Integer, Enquiry> draftEnquiries = enquiryService.viewDraftEnquiries(student.getStudentID());
+		Map<Integer, Enquiry> respondedEnquiries = enquiryService.viewRespondedEnquiries(student.getStudentID());
+    	if (draftEnquiries.isEmpty() && respondedEnquiries.isEmpty()) {
         	System.out.println("You have no enquiries to display.");
     	} else {
-        	System.out.println("Your Enquiries:");
-        	for (Enquiry enquiry : studentEnquiries) {
-				System.out.println("----------------------------");
-            	System.out.println("Enquiry ID: " + enquiry.getEnquiryID());
-            	System.out.println("Camp Name: " + enquiry.getCampName());
-            	System.out.println("Status: " + enquiry.getEnquiryStatus());
-            	System.out.println("Message: " + enquiry.getEnquiryMessage());
-            	System.out.println("Response: " + enquiry.getEnquiryResponse());
-            	System.out.println();
-        	}
-			System.out.println("----------------------------");
+			if (!respondedEnquiries.isEmpty()){
+				System.out.println("Your Responded Enquiries:");
+        		for (Enquiry enquiry : respondedEnquiries.values()) {
+            		System.out.println("----------------------------");
+            		System.out.println("Enquiry ID: " + enquiry.getEnquiryID());
+            		System.out.println("Camp Name: " + enquiry.getCampName());
+            		System.out.println("Message: " + enquiry.getEnquiryMessage());
+					System.out.println("Response: " + enquiry.getEnquiryResponse());
+            		System.out.println();
+        		}
+        		System.out.println("----------------------------");
+			}
+			if (!draftEnquiries.isEmpty()){
+				System.out.println("Your Draft Enquiries:");
+        		for (Enquiry enquiry : draftEnquiries.values()) {
+            		System.out.println("----------------------------");
+            		System.out.println("Enquiry ID: " + enquiry.getEnquiryID());
+            		System.out.println("Camp Name: " + enquiry.getCampName());
+            		System.out.println("Message: " + enquiry.getEnquiryMessage());
+            		System.out.println();
+        		}
+        		System.out.println("----------------------------");
+			}
+        	
     	}
 	}
 
@@ -390,25 +400,19 @@ public class CampStudentService {
     	scanner.nextLine();
     	System.out.print("Enter the Enquiry ID to edit: ");
     	int enquiryID = scanner.nextInt();
-
     	EnquiryService enquiryService = new EnquiryService();
 		System.out.print("Enter your new enquiry message: ");
         String newEnquiry = scanner.nextLine();
+		System.out.println("Enquiry edited. Still save as draft? (yes/no): ");
+		String saveAsDraft = scanner.nextLine().toLowerCase();
+		boolean isDraft = saveAsDraft.equals("yes");
 
-    	if (enquiryService.editDraftEnquiry(enquiryID, student.getStudentID(), newEnquiry)) {
-        	System.out.println("Enquiry edited successfully. Still save as draft? (yes/no): ");
-			String saveAsDraft = scanner.nextLine().toLowerCase();
-			boolean isDraft = saveAsDraft.equals("yes");
-			nextStep = enquiryService.submitEnquiry(enquiryID, student.getStudentID(), campName, newEnquiry, isDraft);
-    			if (nextStep) {
-        			if (isDraft) {
-            			System.out.println("Enquiry saved as a draft");
-        			} else {
-            			System.out.println("Enquiry submitted successfully with new ID: " + newEnquiryID);
-        			}
-    			} else {
-       			 	System.out.println("Failed to edit the enquiry. Ensure it's your enquiry and it's in DRAFT status (not yet processed).");
-    			}
+    	if (enquiryService.editDraftEnquiry(enquiryID, student.getStudentID(), newEnquiry, isDraft)) {
+        	if (isDraft) {
+            		System.out.println("Enquiry saved as a draft");
+        		} else {
+            		System.out.println("Enquiry submitted successfully");
+        		}
     	} else {
        	System.out.println("Failed to edit the enquiry. Ensure it's your enquiry and it's in DRAFT status (not yet processed).");
     	}
@@ -435,13 +439,16 @@ public class CampStudentService {
         	System.out.println("Only committee members or staff can view enquiries.");
         	return;
     	}
+		EnquiryService enquiryService = new EnquiryService();
     	// Retrieve and display enquiries for the camp
+		Camp camp = null;
 		for (Camp c : CampServiceController.camps) {
 			if (c.getCampInformation().getCampName().equalsIgnoreCase(campName)) {
-				Camp camp = c;
+				camp = c;
+				break;
 			}
 		}
-    	List<Enquiry> enquiries = EnquiryService.getEnquiriesForCamp(camp);
+    	List<Enquiry> enquiries = enquiryService.getEnquiriesForCamp(camp);
 
     	if (enquiries.isEmpty()) {
         	System.out.println("No enquiries for this camp.");
@@ -462,11 +469,12 @@ public class CampStudentService {
 	public boolean respondToEnquiry(int enquiryID) {
     	String campName = student.getCommitteeStatus();
     	if (campName == null) {
-        	System.out.println("Only committee members or staff can view enquiries.");
+        	System.out.println("Only committee members or staff can respond to enquiries.");
         	return false;
     	}
     	// Check if the enquiry belongs to the camp
-    	Enquiry enquiry = EnquiryService.getEnquiry(enquiryID);
+		EnquiryService enquiryService = new EnquiryService();
+    	Enquiry enquiry = enquiryService.getEnquiry(enquiryID);
     	if (enquiry == null || !enquiry.getCampName().equalsIgnoreCase(camp.getCampInformation().getCampName())) {
         	System.out.println("Enquiry not found or does not belong to the camp.");
         	return false;
@@ -474,13 +482,12 @@ public class CampStudentService {
     	System.out.print("Enter your response to the enquiry: ");
     	scanner.nextLine(); // Consume the newline character
     	String response = scanner.nextLine();
-    	boolean responseResult = EnquiryService.respondToEnquiry(enquiryID, AuthStore.getCurrentUser().getName(), MessageStatus.ACCEPTED, response);
+    	boolean responseResult = enquiryService.respondToEnquiry(enquiryID, AuthStore.getCurrentUser().getName(), MessageStatus.ACCEPTED, response);
     	if (responseResult) {
         	System.out.println("Enquiry response sent successfully.");
     	} else {
         	System.println("Failed to send the response.");
     	}
-
     	return responseResult;
 	}
 
