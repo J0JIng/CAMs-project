@@ -14,6 +14,12 @@ public class StaffController {
             
             view.displayMenuView();
             
+            // Checks for invalid inputs
+            while (!scanner.hasNextInt()) {
+                System.out.println("Invalid input!! ");
+                scanner.next();
+                System.out.print("Select an option: ");
+            }
             int choice = scanner.nextInt();
 
             switch (choice) {

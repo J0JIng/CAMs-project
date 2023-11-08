@@ -11,7 +11,13 @@ public class StudentController {
 	    StudentView view = new StudentView();
 	    while (true) {
             view.displayMenuView();
-
+            
+            // Checks for invalid inputs
+            while (!scanner.hasNextInt()) {
+                System.out.println("Invalid input!! ");
+                scanner.next();
+                System.out.print("Select an option: ");
+            }
             int choice = scanner.nextInt();
 
             switch (choice) {
