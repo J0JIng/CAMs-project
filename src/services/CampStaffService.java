@@ -8,8 +8,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 import controllers.CampServiceController;
+import enums.MessageStatus;
 import models.Camp;
 import models.CampInformation;
+import models.Enquiry;
 import models.Student;
 import stores.AuthStore;
 
@@ -125,7 +127,7 @@ public class CampStaffService {
         	System.out.println("Committee Slots: " + campInfo.getCampCommitteeSlots());
         	System.out.println("Description: " + campInfo.getCampDescription());
         	System.out.println("Staff In Charge: " + campInfo.getCampStaffInCharge());
-        	System.out.println("Camp Visibility: " + CampServiceController.camps.get(i).getVisibility());
+        	System.out.println("Camp Visibility: " + camp.getVisibility());
 			}
 		System.out.println("----------------------------");
     }
@@ -344,7 +346,9 @@ public class CampStaffService {
         System.out.println("Cannot find camp " + campName);
 	}
 
-	public void viewEnquiriesForCamp(String campName) {
+	public void viewEnquiriesForCamp() {
+		System.out.print("Enter Camp Name: ");
+    	String campName = scanner.nextLine();
     	// Get the camp object by campName
     	Camp camp = null;
     	for (Camp c : CampServiceController.camps) {
@@ -368,7 +372,7 @@ public class CampStaffService {
             	System.out.println("Enquiry ID: " + enquiry.getEnquiryID());
             	System.out.println("Student Name: " + enquiry.getStudentName());
             	System.out.println("Enquiry Date: " + enquiry.getEnquiryDate());
-            	System.out.println("Enquiry Message: " + enquiry.getMessage());
+            	System.out.println("Enquiry Message: " + enquiry.getEnquiryMessage());
             	System.out.println("Enquiry Status: " + enquiry.getEnquiryStatus());
             	System.out.println("Response: " + enquiry.getEnquiryResponse());
             	System.out.println("-----------------------");
@@ -376,7 +380,9 @@ public class CampStaffService {
     	}
 	}
 
-	public boolean respondToEnquiry(int enquiryID) {
+	public boolean respondToEnquiry() {
+		System.out.print("Enter EnquiryID: ");
+    	int enquiryID = scanner.nextInt();
     	// Check if the current user is the staff in charge of the camp
     	// if (!AuthStore.getCurrentUser().getRole().equals("staff")) {
         // 	System.out.println("You must be a staff member to respond to enquiries.");
@@ -406,12 +412,11 @@ public class CampStaffService {
     	if (responseResult) {
         	System.out.println("Enquiry response sent successfully.");
     	} else {
-        	System.println("Failed to send the response.");
+        	System.out.println("Failed to send the response.");
     	}
 
     	return responseResult;
 	}
-
 
 }
 

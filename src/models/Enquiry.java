@@ -39,7 +39,7 @@ public class Enquiry {
         return this.campName;
     }
 
-    public void setcampName(String campName) {
+    public void setCampName(String campName) {
         this.campName= campName;
     }
 

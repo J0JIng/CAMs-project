@@ -70,32 +70,30 @@ public class EnquiryService {
             return false;
         }
     
-        public boolean deleteDraftEnquiry(int enquiryID, String studentID) {
-            if (enquiryData.containsKey(enquiryID)) {
-                Enquiry enquiry = enquiryData.get(enquiryID);
-                if (enquiry.getSenderID().equals(studentID) && enquiry.getEnquiryStatus() == MessageStatus.DRAFT) {
-                    enquiryData.remove(enquiryID);
-                    DataStore.setEnquiryData(enquiryData);
-                    return true;
-                }
-            }
-            return false;
-        }
-   
-     public boolean respondToEnquiry(int enquiryID, String responderID, MessageStatus status, String response) {
+    public boolean deleteDraftEnquiry(int enquiryID, String studentID) {
         if (enquiryData.containsKey(enquiryID)) {
             Enquiry enquiry = enquiryData.get(enquiryID);
-            enquiry.setResponderID(responderID);
-            enquiry.setEnquiryResponse(response);
-            enquiry.setEnquiryStatus(status);
-            DataStore.setEnquiryData(enquiryData);
-            return true;
+            if (enquiry.getSenderID().equals(studentID) && enquiry.getEnquiryStatus() == MessageStatus.DRAFT) {
+                enquiryData.remove(enquiryID);
+                DataStore.setEnquiryData(enquiryData);
+                return true;
             }
-            return false;
         }
+        return false;
+    }
+   
+	public boolean respondToEnquiry(int enquiryID, String responderID, MessageStatus status, String response) {
+	    if (enquiryData.containsKey(enquiryID)) {
+	        Enquiry enquiry = enquiryData.get(enquiryID);
+	        enquiry.setResponderID(responderID);
+	        enquiry.setEnquiryResponse(response);
+	        enquiry.setEnquiryStatus(status);
+	        DataStore.setEnquiryData(enquiryData);
+	        return true;
+	    }
+	    return false;
+	}
     
     
-
-
 }
 

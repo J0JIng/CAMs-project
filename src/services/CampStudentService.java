@@ -6,9 +6,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import controllers.CampServiceController;
+import enums.MessageStatus;
 import main.CAMs;
 import stores.AuthStore;
 
@@ -458,7 +460,7 @@ public class CampStudentService {
             	System.out.println("Enquiry ID: " + enquiry.getEnquiryID());
             	System.out.println("Student Name: " + enquiry.getStudentName());
             	System.out.println("Enquiry Date: " + enquiry.getEnquiryDate());
-            	System.out.println("Enquiry Message: " + enquiry.getMessage());
+            	System.out.println("Enquiry Message: " + enquiry.getEnquiryMessage());
             	System.out.println("Enquiry Status: " + enquiry.getEnquiryStatus());
             	System.out.println("Response: " + enquiry.getEnquiryResponse());
             	System.out.println("-----------------------");
@@ -486,7 +488,7 @@ public class CampStudentService {
     	if (responseResult) {
         	System.out.println("Enquiry response sent successfully.");
     	} else {
-        	System.println("Failed to send the response.");
+        	System.out.println("Failed to send the response.");
     	}
     	return responseResult;
 	}

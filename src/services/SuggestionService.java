@@ -17,7 +17,7 @@ public class SuggestionService {
 
     public int submitSuggestion(String senderID, String campName, String suggestionDetails, boolean isDraft) {
         int suggestionID = UUID.randomUUID().hashCode();
-        Suggestion suggestion = new Suggestion(suggestionID, campName, senderID, suggestionDetails);
+        Suggestion suggestion = new Suggestion(suggestionID, campName, senderID, MessageStatus.DRAFT, suggestionDetails);
         if (isDraft) {
             suggestion.setSuggestionStatus(MessageStatus.DRAFT);
         } else {
