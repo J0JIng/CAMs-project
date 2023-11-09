@@ -9,10 +9,17 @@ import models.Camp;
 
 /* The campController */
 public class CampServiceController {
+
+    public CampServiceController(){
+    }
+
     public static List<Camp> camps = new ArrayList<>();
+
     public CampServiceController(List<Camp> camps) {
         CampServiceController.camps = camps;
     }
+    
     public CampStaffService campStaffService = new CampStaffService();
+
     public CampStudentService campStudentService = new CampStudentService();
 }

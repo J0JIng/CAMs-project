@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import interfaces.IFileDataService;
+import enums.FacultyGroups;
 import enums.UserRole;
 
 import models.Camp;
@@ -20,7 +21,7 @@ import models.Staff;
 //import models.Enquiry;
 
 /**
- * The {@link CsvDataService} class implements the {@link IFileDataService}
+ * The CsvDataService} class implements the IFileDataService
  * interface and provides
  * methods for reading and writing data from/to CSV files.
  */
@@ -46,7 +47,7 @@ public class CsvFileDataService implements IFileDataService {
 	private static List<String> campCsvHeaders = new ArrayList<String>();
 
 	/**
-	 * Constructs an instance of the {@link CsvFileDataService} class.
+	 * Constructs an instance of the CsvFileDataService class.
 	 */
     public CsvFileDataService() {}
 
@@ -143,9 +144,6 @@ public class CsvFileDataService implements IFileDataService {
 		return userInfoMap;
 	}
 
-
-
-
 	// Placeholder statment 
 
 	@Override
@@ -160,21 +158,95 @@ public class CsvFileDataService implements IFileDataService {
 	}
 
 	@Override
-	public Map<Integer, Camp> importCampData(String campFilePath, String usersFilePath,String studentsFilePath, String StaffsFilePath) {
-		Map<Integer, Camp> campsMap = new HashMap<Integer, Camp>();
+	public Map<String, Camp> importCampData(String campFilePath, String usersFilePath,String studentsFilePath, String StaffsFilePath) {
+		Map<String, Camp> campsMap = new HashMap<String, Camp>();
 		return campsMap;
 	}
 
 	@Override
-	public boolean exportCampData(String campsFilePath, Map<Integer, Camp> campMap) {
+	public boolean exportCampData(String campsFilePath, Map<String, Camp> campMap) {
 		return true;
 	}
 
 
 	// ---------- Interface method implementation ---------- //
-	// Student
+	// Staff
+	@Override
+	public Map<String, Staff> importStaffData(String usersFilePath, String staffsFilePath) {
+		Map<String, Staff> StaffsMap = new HashMap<String, Staff>();
+		List<String[]> usersRows = this.readCsvFile(usersFilePath, userCsvHeaders);
+		List<String[]> StaffsRows = this.readCsvFile(staffsFilePath, staffCsvHeaders);
+
+		for (String[] userRow : usersRows) {
+			Map<String, String> userInfoMap = parseUserRow(userRow);
+			String role = userInfoMap.get("role");
+			if (!role.equals("STAFF"))
+				continue;
+			
+			String name = userInfoMap.get("name");
+			String userID = userInfoMap.get("userID");
+			String email = userInfoMap.get("email");
+			String facultyString = userInfoMap.get("faculty");
+			FacultyGroups faculty = FacultyGroups.valueOf(facultyString.toUpperCase());
+			String password = userInfoMap.get("password");
+			
+			// get the associated Staff data
+			int numOfCampsManaged = 0;
+			for (String[] StaffRow : StaffsRows) {
+				if (!StaffRow[0].equals(userID))
+					continue;
+				numOfCampsManaged = Integer.parseInt(StaffRow[1]);
+			}
+			Staff Staff = new Staff(name, userID, email, faculty, password, numOfCampsManaged);
+			StaffsMap.put(userID, Staff);
+		}
+		return StaffsMap;
+	}
+
+	@Override
+	public boolean exportStaffData(String usersFilePath, String staffsFilePath, Map<String, Staff> StaffMap) {
+		List<String> StaffLines = new ArrayList<String>();
+		List<String> userLines = new ArrayList<String>();
+		// User
+		List<String[]> usersRows = this.readCsvFile(usersFilePath, userCsvHeaders);
+		for (String[] userRow : usersRows) {
+			Map<String, String> userInfoMap = parseUserRow(userRow);
+			String userLine = String.format("%s,%s,%s,%s,%s",
+					userInfoMap.get("name"),
+					userInfoMap.get("userID"),
+					userInfoMap.get("email"),
+					userInfoMap.get("password"),
+					userInfoMap.get("faculty"),
+					userInfoMap.get("role"));
+					
+			if (userInfoMap.get("role").equals("STAFF")) {
+				Staff Staff = StaffMap.get(userInfoMap.get("userID"));
+				userLine = String.format("%s,%s,%s,%s,%s",
+						Staff.getName(),
+						Staff.getUserID(),
+						Staff.getEmail(),
+						Staff.getPassword(),
+						Staff.getFaculty(),
+						"Staff" // role
+						);
+			}
+			userLines.add(userLine);
+		}
+		// Staff
+		for (Staff Staff : StaffMap.values()) {
+			String StaffLine = String.format("%s,%d",
+					Staff.getStaffID(),
+					Staff.getNumOfCampsManaged());
+			StaffLines.add(StaffLine);
+		}
+		// Write to CSV
+		boolean success1 = this.writeCsvFile(usersFilePath, userCsvHeaders, userLines);
+		boolean success2 = this.writeCsvFile(staffsFilePath, staffCsvHeaders, StaffLines);
+		return success1 && success2;
+	}
 
 	/* 
+	// Student
 	@Override
 	public Map<String, Student> importStudentData(String usersFilePath, String studentsFilePath) {
 		Map<String, Student> studentsMap = new HashMap<String, Student>();
@@ -257,82 +329,6 @@ public class CsvFileDataService implements IFileDataService {
 		return success1 && success2;
 	}
 	*/
-
-	// Staff
-	
-	// Staff
-	@Override
-	public Map<String, Staff> importStaffData(String usersFilePath, String staffsFilePath) {
-		Map<String, Staff> StaffsMap = new HashMap<String, Staff>();
-		List<String[]> usersRows = this.readCsvFile(usersFilePath, userCsvHeaders);
-		List<String[]> StaffsRows = this.readCsvFile(staffsFilePath, staffCsvHeaders);
-
-		for (String[] userRow : usersRows) {
-			Map<String, String> userInfoMap = parseUserRow(userRow);
-			String role = userInfoMap.get("role");
-			if (!role.equals("STAFF"))
-				continue;
-			
-			String name = userInfoMap.get("name");
-			String userID = userInfoMap.get("userID");
-			String email = userInfoMap.get("email");
-			String faculty = userInfoMap.get("faculty");
-			String password = userInfoMap.get("password");
-			
-			// get the associated Staff data
-			int numOfCampsManaged = 0;
-			for (String[] StaffRow : StaffsRows) {
-				if (!StaffRow[0].equals(userID))
-					continue;
-				numOfCampsManaged = Integer.parseInt(StaffRow[1]);
-			}
-			Staff Staff = new Staff(name, userID, email, faculty, password, numOfCampsManaged);
-			StaffsMap.put(userID, Staff);
-		}
-		return StaffsMap;
-	}
-
-	@Override
-	public boolean exportStaffData(String usersFilePath, String staffsFilePath, Map<String, Staff> StaffMap) {
-		List<String> StaffLines = new ArrayList<String>();
-		List<String> userLines = new ArrayList<String>();
-		// User
-		List<String[]> usersRows = this.readCsvFile(usersFilePath, userCsvHeaders);
-		for (String[] userRow : usersRows) {
-			Map<String, String> userInfoMap = parseUserRow(userRow);
-			String userLine = String.format("%s,%s,%s,%s,%s",
-					userInfoMap.get("name"),
-					userInfoMap.get("userID"),
-					userInfoMap.get("email"),
-					userInfoMap.get("password"),
-					userInfoMap.get("faculty"),
-					userInfoMap.get("role"));
-					
-			if (userInfoMap.get("role").equals("STAFF")) {
-				Staff Staff = StaffMap.get(userInfoMap.get("userID"));
-				userLine = String.format("%s,%s,%s,%s,%s",
-						Staff.getName(),
-						Staff.getUserID(),
-						Staff.getEmail(),
-						Staff.getPassword(),
-						Staff.getFaculty(),
-						"Staff" // role
-						);
-			}
-			userLines.add(userLine);
-		}
-		// Staff
-		for (Staff Staff : StaffMap.values()) {
-			String StaffLine = String.format("%s,%d",
-					Staff.getStaffID(),
-					Staff.getNumOfCampsManaged());
-			StaffLines.add(StaffLine);
-		}
-		// Write to CSV
-		boolean success1 = this.writeCsvFile(usersFilePath, userCsvHeaders, userLines);
-		boolean success2 = this.writeCsvFile(staffsFilePath, staffCsvHeaders, StaffLines);
-		return success1 && success2;
-	}
 
 	/* 
 	// Camp

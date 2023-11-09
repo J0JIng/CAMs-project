@@ -2,10 +2,8 @@ package models;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import enums.AccessLevel;
-import enums.StudentRole;
 import enums.UserRole;
+import enums.FacultyGroups;
 
 public class Student extends User {
 
@@ -15,7 +13,7 @@ public class Student extends User {
     private List<Camp> withdrawnCamps = new ArrayList<>();
     private List<Enquiry> enquiries= new ArrayList<>();
 
-    public Student (String name, String userID, String email, String faculty, String password, StudentRole studentRole) {
+    public Student (String name, String userID, String email, FacultyGroups faculty, String password) {
         super(name, userID, email, faculty, password);
         this.studentID = userID;
         super.setRole(UserRole.STUDENT);
@@ -33,7 +31,6 @@ public class Student extends User {
     
     	}
     }
-
     public String getStudentID() {
         return this.studentID;
     }

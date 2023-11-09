@@ -8,24 +8,159 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import controllers.CampServiceController;
+//import controllers.CampServiceController;
+//import controllers.CampServiceController;
+
+import interfaces.ICampStudentService;
+import utility.InputSelectionUtility;
+
 import enums.MessageStatus;
-import main.CAMs;
+import enums.FacultyGroups;
+import enums.UserRole;
+
 import stores.AuthStore;
+import stores.DataStore;
 
 import models.Camp;
 import models.CampInformation;
 import models.Student;
+import models.User;
 import models.Enquiry;
 
-public class CampStudentService {
-	Scanner scanner = new Scanner(System.in);
-	
+public class CampStudentService implements ICampStudentService {
+	/**
+	 * Constructs an instance of the CampStudentService class.
+	 */
+	public CampStudentService(){
+	}
+
+	// ---------- Helper Function ---------- //
+
+	// Helper function to check for date clashes with other registered camps
+	private boolean hasDateClash(Student student, Camp newCamp) {
+    	for (Camp camp : student.getRegisteredCamps()) {
+        	if (dateClashExists(camp, newCamp)) {
+            	return true;
+        	}
+    	}
+    	return false;
+	}
+
+	// Helper function to check if there's a date clash between two camps
+	private boolean dateClashExists(Camp camp1, Camp camp2) {
+    	Date camp1StartDate = camp1.getCampInformation().getCampStartDate();
+    	Date camp1EndDate = camp1.getCampInformation().getCampEndDate();
+    	Date camp2StartDate = camp2.getCampInformation().getCampStartDate();
+    	Date camp2EndDate = camp2.getCampInformation().getCampEndDate();
+
+    	// Check if camp1 ends before camp2 starts or camp1 starts after camp2 ends
+    	return camp1StartDate.before(camp2EndDate) && camp1EndDate.after(camp2StartDate);
+	}
+
+	// Helper function to check if camp is over
+	private boolean isCampOver(Date currentDate ,Camp camp) {
+		if(currentDate.after(camp.getCampInformation().getCampRegistrationClosingDate())) return true;
+		return false;
+	}
+
+	// Helper function to check if student previously withdraw from this camp
+	private boolean isUserWithdrawnFromCamp(Map<String, List<String>> withdrawnCampsData, Camp camp) {
+		User user = AuthStore.getCurrentUser();
+		List<String> withdrawnCampsForUser = withdrawnCampsData.getOrDefault(user.getUserID(), new ArrayList<>());
+		return withdrawnCampsForUser.contains(camp.getCampInformation().getCampName());
+	}
+
+	// Helper function to check if Camp is Full 
+	private boolean isCampFull(Camp camp){
+		if(camp.getCampInformation().getCampTotalSlots() - camp.getRegisteredStudents().size() > 0) return true ;
+		return false;
+	}
+
+	@Override
+	public List<Camp> getAvailableCamps(){
+		Student student = (Student) AuthStore.getCurrentUser();
+		Map<String, Camp> campsData = DataStore.getCampData();
+		Map<String, List<String>> withdrawnCampsData = DataStore.getWithdrawnCampData();
+		Date currentDate = new Date();
+
+
+		List<Camp> availableCamps = campsData.values().stream()
+		.filter(camp -> camp.getCampInformation().getFacultyGroup() == student.getFaculty()
+					  ||camp.getCampInformation().getFacultyGroup() == FacultyGroups.ALL
+					  &&camp.getVisibility() == true
+					  &&!isCampFull(camp)
+					  &&!isUserWithdrawnFromCamp(withdrawnCampsData, camp)
+					  &&!isCampOver(currentDate,camp)
+					  &&!hasDateClash(student, camp))
+		.collect(Collectors.toCollection(ArrayList::new));
+
+		return availableCamps;		
+	}
+
+	// ---------- Service method implementation ---------- //
+
+	// Register for Camp
+	public boolean registerCamp() {
+
+		Student student = (Student) AuthStore.getCurrentUser();
+		List<Camp> availableCamps = getAvailableCamps();
+		student.getRegisteredCamps().add(c);
+		
+
+		/* 
+
+		for (Camp c : CampServiceController.camps) {
+			if (c.getCampInformation().getCampName().equalsIgnoreCase(campName)) {
+
+				Date campDate = c.getCampInformation().getCampStartDate();
+				//Check if the student previously withdraw from this camp
+				if (student.getWithdrawnCamps().getCampInformation().getCampName().equalsIgnoreCase(campName)){
+					System.out.println("You have previously withdrawn from this camp and not allowed to register again.");
+					return;
+				}
+				
+				// Check if the student is already registered for another camp with a date clash
+            	if (hasDateClash(student, c)) {
+                	System.out.println("Date clash with another registered camp!");
+                	return;
+            	}
+				
+				// Check if the current date is after the closing date
+				if (currentDate.after(c.getCampInformation().getCampRegistrationClosingDate())) {
+    				System.out.println("Camp registration has closed.");
+				} else {
+					// Need to check if any slots available
+					if (c.getCampInformation().getCampTotalSlots() - c.getRegisteredStudents().size() > 0) {
+						// Need to check is student is registered to prevent double registration
+						if (c.getRegisteredStudents().contains(student)){
+							System.out.println("Already Registered!");
+						} else {
+							// Step 1: Add the camp to the student's list of registered camps
+							student.getRegisteredCamps().add(c);
+							// Step 2: Add the student to the camp's list of registered students
+							c.getRegisteredStudents().add(student);
+							System.out.println("Registered for " + c.getCampInformation().getCampName());
+						}
+					} else {
+					System.out.println("No slots available");
+					}
+				}
+                return;
+            }
+        }
+		System.out.println("Cannot find " + campName);
+		*/
+	}
+
+	// Withdraw From Camp
 	public void withdrawCamp() {
+		Scanner scanner = new Scanner(System.in);
 		Student student = (Student) AuthStore.getCurrentUser();
 		scanner.nextLine();
-    	System.out.print("Enter Camp Name: ");
+    	System.out.print("Enter Camp Name to Withdraw from: ");
     	String campName = scanner.nextLine();
 		for (Camp c : CampServiceController.camps) {
 			if (c.getCampInformation().getCampName().equalsIgnoreCase(campName)) {
@@ -54,75 +189,9 @@ public class CampStudentService {
         }
 		System.out.println("Cannot find " + campName);
 	}
-	
-	public void registerCamp() {
-		
-		Student student = (Student) AuthStore.getCurrentUser();
-		scanner.nextLine();
-    	System.out.print("Enter Camp Name: ");
-    	String campName = scanner.nextLine();
-		Date currentDate = new Date(); // Get the current date and time
-		for (Camp c : CampServiceController.camps) {
-			if (c.getCampInformation().getCampName().equalsIgnoreCase(campName)) {
-				Date campDate = c.getCampInformation().getCampStartDate();
-				//Check if the student previously withdraw from this camp
-				if (student.getWithdrawnCamps().getCampInformation().getCampName().equalsIgnoreCase(campName)){
-					System.out.println("You have previously withdrawn from this camp and not allowed to register again.");
-					return;
-				}
-				// Check if the student is already registered for another camp with a date clash
-            	if (hasDateClash(student, c)) {
-                	System.out.println("Date clash with another registered camp!");
-                	return;
-            	}
-				// Check if the current date is after the closing date
-				if (currentDate.after(c.getCampInformation().getCampRegistrationClosingDate())) {
-    				System.out.println("Camp registration has closed.");
-				} else {
-					// Need to check if any slots available
-					if (c.getCampInformation().getCampTotalSlots()-c.getRegisteredStudents().size() > 0) {
-						// Need to check is student is registered to prevent double registration
-						if (c.getRegisteredStudents().contains(student)){
-							System.out.println("Already Registered!");
-						} else {
-							// Step 1: Add the camp to the student's list of registered camps
-							student.getRegisteredCamps().add(c);
-							// Step 2: Add the student to the camp's list of registered students
-							c.getRegisteredStudents().add(student);
-							System.out.println("Registered for " + c.getCampInformation().getCampName());
-						}
-					} else {
-					System.out.println("No slots available");
-					}
-				}
-                return;
-            }
-        }
-		System.out.println("Cannot find " + campName);
-	}
-
-	// Helper function to check for date clashes with other registered camps
-	private boolean hasDateClash(Student student, Camp newCamp) {
-    	for (Camp camp : student.getRegisteredCamps()) {
-        	if (dateClashExists(camp, newCamp)) {
-            	return true;
-        	}
-    	}
-    	return false;
-	}
-
-	// Helper function to check if there's a date clash between two camps
-	private boolean dateClashExists(Camp camp1, Camp camp2) {
-    	Date camp1StartDate = camp1.getCampInformation().getCampStartDate();
-    	Date camp1EndDate = camp1.getCampInformation().getCampEndDate();
-    	Date camp2StartDate = camp2.getCampInformation().getCampStartDate();
-    	Date camp2EndDate = camp2.getCampInformation().getCampEndDate();
-
-    	// Check if camp1 ends before camp2 starts or camp1 starts after camp2 ends
-    	return camp1StartDate.before(camp2EndDate) && camp1EndDate.after(camp2StartDate);
-	}
 
 	public void registerAsCommittee(){
+		Scanner scanner = new Scanner(System.in);
 		Student student = (Student) AuthStore.getCurrentUser();
 		//Checks whether student is already a committee member
 		if (student.getCommitteeStatus() != null){
@@ -173,6 +242,9 @@ public class CampStudentService {
         }
     }
 
+	////////////////////////////////////////////////////////////////
+
+	// Place in Boundary Class
 	public void viewRegisteredCamps() {
     	Student student = (Student) AuthStore.getCurrentUser();
     	if (student.getRegisteredCamps().isEmpty()) {
@@ -219,6 +291,7 @@ public class CampStudentService {
     	}
 	}
 
+	// Place in Boundary Class
 	public void viewAllCampsWithFilters() {
     	Scanner scanner = new Scanner(System.in);
 
@@ -255,6 +328,7 @@ public class CampStudentService {
     	}
 	}
 
+	// Place in Boundary Class
 	public void viewAllCamps(String filterBy, Date filterDate, String locationFilter) {
     	List<Camp> filteredCamps = new ArrayList<>();
     	for (Camp c : CampServiceController.camps) {
@@ -277,6 +351,7 @@ public class CampStudentService {
             	}
         	}
     	}
+
     	// Sort filteredCamps here based on the chosen filter (e.g., by name, date, or location)
 		Collections.sort(filteredCamps, (camp1, camp2) -> {
     		String name1 = camp1.getCampInformation().getCampName();
@@ -311,7 +386,9 @@ public class CampStudentService {
     	}
 	}
 
+	// Place in Boundary Class
 	public void viewRemainingSlots() {
+		Scanner scanner = new Scanner(System.in);
 		scanner.nextLine();
     	System.out.print("Enter Camp Name: ");
     	String campName = scanner.nextLine();
@@ -326,6 +403,7 @@ public class CampStudentService {
 		System.out.println("Cannot find " + campName);
 	}
 	
+	/*
 	public void submitEnquiry() {
         // Initialize an instance of EnquiryService
         EnquiryService enquiryService = new EnquiryService();
@@ -361,7 +439,9 @@ public class CampStudentService {
 			}
     	}
 	}
+	*/
 
+	/*
 	public void viewEnquiries() {
     	Student student = (Student) AuthStore.getCurrentUser();
     	EnquiryService enquiryService = new EnquiryService();
@@ -396,7 +476,9 @@ public class CampStudentService {
         	
     	}
 	}
+	*/
 
+	/* 
 	public void editEnquiry() {
     	Student student = (Student) AuthStore.getCurrentUser();
     	scanner.nextLine();
@@ -419,7 +501,9 @@ public class CampStudentService {
        	System.out.println("Failed to edit the enquiry. Ensure it's your enquiry and it's in DRAFT status (not yet processed).");
     	}
 	}
+	*/
 
+	/* 
 	public void deleteEnquiry() {
     	Student student = (Student) AuthStore.getCurrentUser();
     	scanner.nextLine();
@@ -434,13 +518,17 @@ public class CampStudentService {
         	System.out.println("Failed to delete the enquiry. Ensure it's your enquiry and it's in DRAFT status (not yet processed).");
     	}
 	}
+	*/
 
+	/* 
 	public void viewEnquiriesForCamp() {
+		Student student = (Student) AuthStore.getCurrentUser();
     	String campName = student.getCommitteeStatus();
     	if (campName == null) {
         	System.out.println("Only committee members or staff can view enquiries.");
         	return;
     	}
+
 		EnquiryService enquiryService = new EnquiryService();
     	// Retrieve and display enquiries for the camp
 		Camp camp = null;
@@ -450,6 +538,7 @@ public class CampStudentService {
 				break;
 			}
 		}
+
     	List<Enquiry> enquiries = enquiryService.getEnquiriesForCamp(camp);
 
     	if (enquiries.isEmpty()) {
@@ -467,7 +556,9 @@ public class CampStudentService {
         	}
     	}
 	}
+	*/
 
+	/* 
 	public boolean respondToEnquiry(int enquiryID) {
     	String campName = student.getCommitteeStatus();
     	if (campName == null) {
@@ -492,7 +583,9 @@ public class CampStudentService {
     	}
     	return responseResult;
 	}
+	*/
 
+	/* 
 	public void submitSuggestion() {
         // Initialize an instance of SuggestionService
         SuggestionService suggestionService = new SuggestionService();
@@ -520,40 +613,42 @@ public class CampStudentService {
        		System.out.println("Failed to submit the suggestion.");
     	}
 	}
+	*/
 
-	// public void editSuggestion() {
-    // 	Student student = (Student) AuthStore.getCurrentUser();
-    // 	scanner.nextLine();
-    // 	System.out.print("Enter the Suggestion ID to edit: ");
-    // 	int enquiryID = scanner.nextInt();
+	/*
+	public void editSuggestion() {
+    	Student student = (Student) AuthStore.getCurrentUser();
+    	scanner.nextLine();
+    	System.out.print("Enter the Suggestion ID to edit: ");
+    	int enquiryID = scanner.nextInt();
 
-    // 	SuggestionService suggestionService = new SuggestionService();
-	// 	System.out.print("Enter your new suggestion: ");
-    //     String newSuggestion = scanner.nextLine();
-	// 	if (suggestionService.editSuggestion(suggestionID, student.getStudentID(), newSuggestion)) {
-    //     	System.out.println("Suggestion edited successfully. Still save as draft? (yes/no): ");
-	// 		String saveAsDraft = scanner.nextLine().toLowerCase();
-	// 		boolean isDraft = saveAsDraft.equals("yes");
-	// 		nextStep = enquiryService.confirmSuggestion(enquiryID, student.getStudentID(), campName, newEnquiry, isDraft);
-    // 			if (nextStep) {
-    //     			if (isDraft) {
-    //         			System.out.println("Enquiry saved as a draft");
-    //     			} else {
-    //         			System.out.println("Enquiry submitted successfully with new ID: " + newEnquiryID);
-    //     			}
-    // 			} else {
-    //    			 	System.out.println("Failed to edit the enquiry. Ensure it's your enquiry and it's in DRAFT status (not yet processed).");
-    // 			}
-    // 	} else {
-    //    	System.out.println("Failed to edit the enquiry. Ensure it's your enquiry and it's in DRAFT status (not yet processed).");
-    // 	}
+    	SuggestionService suggestionService = new SuggestionService();
+		System.out.print("Enter your new suggestion: ");
+        String newSuggestion = scanner.nextLine();
+		if (suggestionService.editSuggestion(suggestionID, student.getStudentID(), newSuggestion)) {
+        	System.out.println("Suggestion edited successfully. Still save as draft? (yes/no): ");
+			String saveAsDraft = scanner.nextLine().toLowerCase();
+			boolean isDraft = saveAsDraft.equals("yes");
+			nextStep = enquiryService.confirmSuggestion(enquiryID, student.getStudentID(), campName, newEnquiry, isDraft);
+    			if (nextStep) {
+        			if (isDraft) {
+            			System.out.println("Enquiry saved as a draft");
+        			} else {
+            			System.out.println("Enquiry submitted successfully with new ID: " + newEnquiryID);
+        			}
+    			} else {
+       			 	System.out.println("Failed to edit the enquiry. Ensure it's your enquiry and it's in DRAFT status (not yet processed).");
+    			}
+    	} else {
+       	System.out.println("Failed to edit the enquiry. Ensure it's your enquiry and it's in DRAFT status (not yet processed).");
+    	}
 
-    // 	if (suggestionService.editSuggestion(suggestionID, student.getStudentID(), newSuggestion)) {
-    //     	System.out.println("Suggestion updated successfully.");
-    // 	} else {
-    //    	System.out.println("Failed to edit the suggestion. Ensure it's your enquiry and it's in DRAFT status (not yet processed).");
-    // 	}
-	// }
+    	if (suggestionService.editSuggestion(suggestionID, student.getStudentID(), newSuggestion)) {
+        	System.out.println("Suggestion updated successfully.");
+    	} else {
+       	System.out.println("Failed to edit the suggestion. Ensure it's your enquiry and it's in DRAFT status (not yet processed).");
+    	}
+	}
 
-
+	*/
 }

@@ -63,7 +63,7 @@ public interface IFileDataService {
 
 	 * @return a {@link Map} of {@link Camp} objects with their IDs as keys
 	 */
-	Map<Integer, Camp> importCampData(String CampsFilePath, String usersFilePath, String studentsFilePath, String StaffsFilePath);
+	Map<String, Camp> importCampData(String CampsFilePath, String usersFilePath, String studentsFilePath, String StaffsFilePath);
 	
 	/**
 	 * Exports Camp data to the specified file path.
@@ -73,5 +73,5 @@ public interface IFileDataService {
 	 *                         IDs as keys
 	 * @return true if the data was exported successfully, false otherwise
 	 */
-	boolean exportCampData(String CampsFilePath, Map<Integer, Camp> CampMap);
+	boolean exportCampData(String CampsFilePath, Map<String, Camp> CampMap);
 }

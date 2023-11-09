@@ -18,8 +18,8 @@ public class ReportService {
     }
 
     public void generateCampReport() {
-        Map<Integer, Camp> camps = DataStore.getCampData();
-        Map<String, Student> students = DataStore.getStudentsData();
+        Map<String, Camp> camps = DataStore.getCampData();
+        Map<String, Student> students = DataStore.getStudentData();
         for (Camp camp : camps.values()) {
             if (camp.getCampInformation().getCampStaffInCharge().equals(currentStaffId)) { 
                 List<Student> registeredStudents = camp.getRegisteredStudents();

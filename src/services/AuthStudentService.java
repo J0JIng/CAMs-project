@@ -19,7 +19,7 @@ public class AuthStudentService extends AuthService {
 
     @Override
     public boolean login(String userID, String password) {
-        Map<String, Student> studentData = DataStore.getStudentsData();
+        Map<String, Student> studentData = DataStore.getStudentData();
 
         Student student = studentData.get(userID);
 
