@@ -15,24 +15,44 @@ public class SuggestionService {
         suggestionData = DataStore.getSuggestionData(); 
     }
 
-    public boolean submitSuggestion(String senderID, String campName, String suggestionDetails) {
-        int suggestionID = UUID.randomUUID().hashCode(); 
-        Suggestion suggestion = new Suggestion(suggestionID, campName, senderID, MessageStatus.PENDING, suggestionDetails);
-        suggestion.setSuggestionStatus(MessageStatus.PENDING);
+    public int submitSuggestion(String senderID, String campName, String suggestionDetails, boolean isDraft) {
+        int suggestionID = UUID.randomUUID().hashCode();
+        Suggestion suggestion = new Suggestion(suggestionID, campName, senderID, MessageStatus.DRAFT, suggestionDetails);
+        if (isDraft) {
+            suggestion.setSuggestionStatus(MessageStatus.DRAFT);
+        } else {
+            // Set other status for non-draft enquiries (e.g., PENDING)
+            suggestion.setSuggestionStatus(MessageStatus.PENDING);
+        }
         suggestionData.put(suggestionID, suggestion);
         DataStore.setSuggestionData(suggestionData);
-        return true;
+        return suggestionID;
     }
 
     public boolean editSuggestion(int suggestionID, String senderID, String newDetails) {
         Suggestion suggestion = suggestionData.get(suggestionID);
         if (suggestion != null && suggestion.getSenderID().equals(senderID) && suggestion.getSuggestionStatus() == MessageStatus.DRAFT) {
-            suggestion.setSuggestionDetails(newDetails);
+            suggestion.setSuggestionMessage(newDetails);
             DataStore.setSuggestionData(suggestionData);
             return true;
         }
         return false;
     }
+
+    // public boolean confirmSuggestion(int suggestionID, String senderID, String campName, String suggestionDetails, boolean isDraft) {
+    //     if (suggestionData.containsKey(suggestionID)) {
+    //         Suggestion enquiry = Suggestion(suggestionID, senderID, campName, enquiryMessage);
+    //         if (isDraft) {
+    //             enquiry.setEnquiryStatus(MessageStatus.DRAFT);
+    //         } else {
+    //             enquiry.setEnquiryStatus(MessageStatus.PENDING);
+    //         }
+    //         enquiryData.put(enquiryID, enquiry);
+    //         DataStore.setEnquiryData(enquiryData);
+    //         return true;
+    //     }
+    //     return false;
+    // }
 
     public boolean deleteSuggestion(int suggestionID, String senderID) {
         Suggestion suggestion = suggestionData.get(suggestionID);

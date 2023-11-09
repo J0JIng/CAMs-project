@@ -1,8 +1,8 @@
 package models;
 
+import enums.MessageStatus;
+
 public class Enquiry {
-<<<<<<< Updated upstream
-=======
     private int enquiryID;
     private String campName; 
     private String senderID;
@@ -39,7 +39,7 @@ public class Enquiry {
         return this.campName;
     }
 
-    public void setcampName(String campName) {
+    public void setCampName(String campName) {
         this.campName= campName;
     }
 
@@ -74,6 +74,7 @@ public class Enquiry {
     public void setEnquiryResponse(String enquiryResponse) {
         this.enquiryResponse = enquiryResponse;
     }
->>>>>>> Stashed changes
     
 }
+    
+

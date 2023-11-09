@@ -7,9 +7,8 @@ import interfaces.IFileDataService;
 import models.Camp;
 import models.Student;
 import models.Staff;
-
-import models.Enquiry; //@TODO 
-import models.Suggestion; //@TODO 
+import models.Enquiry; 
+import models.Suggestion; 
 
 public class DataStore {
 	
@@ -18,9 +17,8 @@ public class DataStore {
 	private static Map<String, Student> studentsData = new HashMap<String, Student>();
 	private static Map<String, Staff> StaffData = new HashMap<String, Staff>();
 	private static Map<Integer, Camp> CampData = new HashMap<Integer, Camp>();
-
-	// private static Map<Integer, Enquiry> EnquiryData = new HashMap<Integer, Enquiry>(); @TODO
-    // private static Map<Integer, Suggestion> SuggestionData = new HashMap<Integer, Suggestion>(); @TODO
+	private static Map<Integer, Enquiry> EnquiryData = new HashMap<Integer, Enquiry>(); 
+    private static Map<Integer, Suggestion> SuggestionData = new HashMap<Integer, Suggestion>(); 
 
 	/**
 	 * Private constructor to prevent instantiation of the class.
@@ -83,4 +81,19 @@ public class DataStore {
 		DataStore.CampData = CampData;
 		fileDataService.exportCampData(filePathsMap.get("Camp"), CampData);
 	}
+
+	public static Map<Integer, Enquiry> getEnquiryData() {
+        return EnquiryData;
+    }
+
+   	public static void setEnquiryData(Map<Integer, Enquiry> enquiryData) {
+        DataStore.EnquiryData = enquiryData;
+    }
+
+  	public static Map<Integer, Suggestion> getSuggestionData() {
+        return SuggestionData;
+    }
+  	public static void setSuggestionData(Map<Integer, Suggestion> suggestionData) {
+        DataStore.SuggestionData = suggestionData; 
+    }    
 }

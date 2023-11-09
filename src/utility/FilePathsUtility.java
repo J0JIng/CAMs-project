@@ -20,7 +20,7 @@ public class FilePathsUtility {
 	/**
 	 * Returns a mapping of CSV file paths for various data types used in the
 	 * application. The returned map contains keys such as "user", "student",
-	 * "Staff", "fypcoordinator", "Camp", "request",
+	 * "Staff", "Camp", "request",
 	 * "transferStudentRequest", and "changeCampTitleRequest",
 	 * each associated with their respective file paths.
 	 *

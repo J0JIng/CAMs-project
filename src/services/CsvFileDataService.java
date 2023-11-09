@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import interfaces.IFileDataService;
+import enums.UserRole;
 
 import models.Camp;
 import models.Student;
@@ -142,8 +143,38 @@ public class CsvFileDataService implements IFileDataService {
 		return userInfoMap;
 	}
 
+
+
+
+	// Placeholder statment 
+
+	@Override
+	public Map<String, Student> importStudentData(String usersFilePath, String studentsFilePath){
+		Map<String, Student> studentsMap = new HashMap<String, Student>();
+		return studentsMap;
+	}
+
+	@Override
+	public boolean exportStudentData(String usersFilePath, String studentsFilePath, Map<String, Student> studentMap) {
+		return true ;
+	}
+
+	@Override
+	public Map<Integer, Camp> importCampData(String campFilePath, String usersFilePath,String studentsFilePath, String StaffsFilePath) {
+		Map<Integer, Camp> campsMap = new HashMap<Integer, Camp>();
+		return campsMap;
+	}
+
+	@Override
+	public boolean exportCampData(String campsFilePath, Map<Integer, Camp> campMap) {
+		return true;
+	}
+
+
 	// ---------- Interface method implementation ---------- //
 	// Student
+
+	/* 
 	@Override
 	public Map<String, Student> importStudentData(String usersFilePath, String studentsFilePath) {
 		Map<String, Student> studentsMap = new HashMap<String, Student>();
@@ -179,7 +210,8 @@ public class CsvFileDataService implements IFileDataService {
 
 		return studentsMap;
 	}
-
+	*/
+	/* 
 	@Override
 	public boolean exportStudentData(String usersFilePath, String studentsFilePath, Map<String, Student> studentMap) {
 		List<String> studentLines = new ArrayList<String>();
@@ -224,91 +256,85 @@ public class CsvFileDataService implements IFileDataService {
 		boolean success2 = this.writeCsvFile(studentsFilePath, studentCsvHeaders, studentLines);
 		return success1 && success2;
 	}
+	*/
 
 	// Staff
+	
+	// Staff
 	@Override
-	public Map<String, Staff> importStaffData(String usersFilePath, String StaffsFilePath) {
+	public Map<String, Staff> importStaffData(String usersFilePath, String staffsFilePath) {
 		Map<String, Staff> StaffsMap = new HashMap<String, Staff>();
-
 		List<String[]> usersRows = this.readCsvFile(usersFilePath, userCsvHeaders);
-		List<String[]> StaffsRows = this.readCsvFile(StaffsFilePath, staffCsvHeaders);
+		List<String[]> StaffsRows = this.readCsvFile(staffsFilePath, staffCsvHeaders);
 
 		for (String[] userRow : usersRows) {
 			Map<String, String> userInfoMap = parseUserRow(userRow);
-
 			String role = userInfoMap.get("role");
-			if (!role.equals("Staff"))
+			if (!role.equals("STAFF"))
 				continue;
-
-			String userID = userInfoMap.get("userID");
-			String password = userInfoMap.get("password");
+			
 			String name = userInfoMap.get("name");
+			String userID = userInfoMap.get("userID");
 			String email = userInfoMap.get("email");
-
+			String faculty = userInfoMap.get("faculty");
+			String password = userInfoMap.get("password");
+			
 			// get the associated Staff data
-			int numOfcamps = 0;
+			int numOfCampsManaged = 0;
 			for (String[] StaffRow : StaffsRows) {
 				if (!StaffRow[0].equals(userID))
 					continue;
-
-				numOfcamps = Integer.parseInt(StaffRow[1]);
+				numOfCampsManaged = Integer.parseInt(StaffRow[1]);
 			}
-
-			Staff Staff = new Staff(userID, name, email, password, numOfcamps);
-
+			Staff Staff = new Staff(name, userID, email, faculty, password, numOfCampsManaged);
 			StaffsMap.put(userID, Staff);
 		}
-
 		return StaffsMap;
 	}
 
 	@Override
-	public boolean exportStaffData(String usersFilePath, String StaffsFilePath,
-			Map<String, Staff> StaffMap) {
+	public boolean exportStaffData(String usersFilePath, String staffsFilePath, Map<String, Staff> StaffMap) {
 		List<String> StaffLines = new ArrayList<String>();
 		List<String> userLines = new ArrayList<String>();
-
 		// User
 		List<String[]> usersRows = this.readCsvFile(usersFilePath, userCsvHeaders);
 		for (String[] userRow : usersRows) {
 			Map<String, String> userInfoMap = parseUserRow(userRow);
 			String userLine = String.format("%s,%s,%s,%s,%s",
+					userInfoMap.get("name"),
 					userInfoMap.get("userID"),
-					userInfoMap.get("password"),
 					userInfoMap.get("email"),
-					userInfoMap.get("role"),
-					userInfoMap.get("name"));
-
-			if (userInfoMap.get("role").equals("Staff")) {
+					userInfoMap.get("password"),
+					userInfoMap.get("faculty"),
+					userInfoMap.get("role"));
+					
+			if (userInfoMap.get("role").equals("STAFF")) {
 				Staff Staff = StaffMap.get(userInfoMap.get("userID"));
-
 				userLine = String.format("%s,%s,%s,%s,%s",
+						Staff.getName(),
 						Staff.getUserID(),
-						Staff.getPassword(),
 						Staff.getEmail(),
-						"Staff", // role
-						Staff.getName());
+						Staff.getPassword(),
+						Staff.getFaculty(),
+						"Staff" // role
+						);
 			}
-
 			userLines.add(userLine);
 		}
-
 		// Staff
 		for (Staff Staff : StaffMap.values()) {
 			String StaffLine = String.format("%s,%d",
 					Staff.getStaffID(),
-					Staff.getNumOfcamps());
-
+					Staff.getNumOfCampsManaged());
 			StaffLines.add(StaffLine);
 		}
-
 		// Write to CSV
 		boolean success1 = this.writeCsvFile(usersFilePath, userCsvHeaders, userLines);
-		boolean success2 = this.writeCsvFile(StaffsFilePath, staffCsvHeaders, StaffLines);
+		boolean success2 = this.writeCsvFile(staffsFilePath, staffCsvHeaders, StaffLines);
 		return success1 && success2;
 	}
 
-
+	/* 
 	// Camp
 	@Override
 	public Map<Integer, Camp> importCampData(String campFilePath, String usersFilePath,
@@ -331,7 +357,9 @@ public class CsvFileDataService implements IFileDataService {
 
 		return campsMap;
 	}
+	*/
 
+	/* 
 	@Override
 	public boolean exportCampData(String campsFilePath, Map<Integer, Camp> campMap) {
 		List<String> campLines = new ArrayList<String>();
@@ -350,5 +378,8 @@ public class CsvFileDataService implements IFileDataService {
 
 		// Write to CSV
 		return this.writeCsvFile(campsFilePath, campCsvHeaders, campLines);
+		
 	}
+	*/
+	
 }

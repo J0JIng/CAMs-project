@@ -1,14 +1,14 @@
 package views;
 
 import interfaces.IMenuView;
-import main.CAMs;
+import stores.AuthStore;
 
 public class StudentView implements IMenuView{
 
 	@Override
 	public void displayMenuView() {
 		System.out.println("-----------------------------------");
-		String welcomeMessage = "Welcome " + CAMs.currentUser.getName();
+		String welcomeMessage = "Welcome " + AuthStore.getCurrentUser().getName();
 		int totalLength = welcomeMessage.length();
 		int spaces = (33 - totalLength) / 2;
 
@@ -16,10 +16,20 @@ public class StudentView implements IMenuView{
         System.out.println("|           Student Menu          |");
         System.out.println("|---------------------------------|");
         System.out.println("| 1. View All Camps               |");
-        System.out.println("| 2. Register for Camp            |");
-        System.out.println("| 3. Withdraw from Camp           |");
-        System.out.println("| 4. View Remaining Slots of Camp |");
-        System.out.println("| 5. Logout                       |");
+        System.out.println("| 2. View Camps with Filters      |");
+        System.out.println("| 3. Register for Camp            |");
+        System.out.println("| 4. Withdraw from Camp           |");
+        System.out.println("| 5. View Remaining Slots of Camp |");
+        System.out.println("| 6. Register as Committee        |");
+        System.out.println("| 7. Withdraw from Committee      |");
+        System.out.println("| 8. View Registered Camps        |");
+        System.out.println("| 9. Submit Enquiry               |");
+        System.out.println("| 10. View Enquiry                |");
+        System.out.println("| 11. Edit Enquiry                |");
+        System.out.println("| 12. Delete Enquiry              |");
+        System.out.println("| 13. View Enquiries for Camp     |");
+        System.out.println("| 14. Submit Suggestion           |");
+        System.out.println("| 15. Logout                      |");
         System.out.println("-----------------------------------");
         System.out.print("Select an option: ");
 	}
