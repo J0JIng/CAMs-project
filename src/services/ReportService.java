@@ -2,6 +2,7 @@ package services;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -18,11 +19,14 @@ public class ReportService {
     }
 
     public void generateCampReport() {
-        Map<Integer, Camp> camps = DataStore.getCampData();
+    	Map<Integer, Camp> camps = DataStore.getCampData();
         Map<String, Student> students = DataStore.getStudentsData();
+        
         for (Camp camp : camps.values()) {
-            if (camp.getCampInformation().getCampStaffInCharge().equals(currentStaffId)) { 
-                List<Student> registeredStudents = camp.getRegisteredStudents();
+        	// Checks if camp's staff in charge is accessing the report
+            if (camp.getCampInformation().getCampStaffInCharge().equals(currentStaffId)) {
+            	
+                List<Student> registeredStudents = new ArrayList<>(camp.getRegisteredStudents());
                 registeredStudents.sort(Comparator.comparing(Student::getName));
 
                 String campReportFilename = sanitizeFilename(camp.getCampInformation().getCampName()) + "_report.csv";
