@@ -1,5 +1,6 @@
 package utility;
 
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Optional;
@@ -20,7 +21,7 @@ public class InputSelectionUtility {
      * @param Camps the list of available Camps
      * @return the selected camp or null if no camp is selected
      */
-    public static Camp campSelector(ArrayList<Camp> camps) {  
+    public static Camp campSelector(List<Camp> camps) {  
         while (true) {
             System.out.println("Camp Name");
             for (Camp camp : camps) {

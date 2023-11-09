@@ -11,5 +11,9 @@ public interface ICampStudentService {
      *         available projects
      */
     public List<Camp> getAvailableCamps();
+
+    public List<Camp> getWithdrawnCamps();
+
+    public List<Camp> getRegisteredCamps();
     
 }

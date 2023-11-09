@@ -18,16 +18,22 @@ public class DataStore {
 	private static Map<String, Student> studentsData = new HashMap<String, Student>();
 	private static Map<String, Staff> staffData = new HashMap<String, Staff>();
 	private static Map<String, Camp> campData = new HashMap<String, Camp>();
+	private static Map<Integer, Enquiry> enquiryData = new HashMap<Integer, Enquiry>(); 
+    private static Map<Integer, Suggestion> suggestionData = new HashMap<Integer, Suggestion>(); 
 
 	// Key: studentName | Value: List of camps withdrawn/registered
 	private static Map<String, List<String>> withdrawnCampData = new HashMap<String, List<String>>();
 	private static Map<String, List<String>> registeredCampData = new HashMap<String, List<String>>();
-	// Key: CampName | Value: List of Student withdrawn/registered
-	private static Map<String, List<String>> withdrawnStudentData = new HashMap<String, List<String>>();
+
+	// Key: CampComitteeName(CampComittee) | Value: Camp that the CampComittee member has registered
+	private static Map<String, String> campCommitteeData = new HashMap<String, String>();
+
+	// Key: CampName | Value: List of Student registered
+	//private static Map<String, List<String>> withdrawnStudentData = new HashMap<String, List<String>>();
 	private static Map<String, List<String>> registeredStudentData = new HashMap<String, List<String>>();
 
-	private static Map<Integer, Enquiry> enquiryData = new HashMap<Integer, Enquiry>(); 
-    private static Map<Integer, Suggestion> suggestionData = new HashMap<Integer, Suggestion>(); 
+	// Key: campName | Value: List of CampComitteeName(CampComittee) registered
+	private static Map<String, List<String>> registeredCampCommitteeData = new HashMap<String, List<String>>();
 
 	/**
 	 * Private constructor to prevent instantiation of the class.
@@ -61,6 +67,13 @@ public class DataStore {
 		DataStore.setStudentsData(studentsData);
 		DataStore.setStaffData(staffData);
 		DataStore.setCampData(campData);
+		DataStore.setEnquiryData(enquiryData);
+		DataStore.setSuggestionData(suggestionData);
+		DataStore.setWithdrawnCampData(withdrawnCampData);
+		DataStore.setRegisteredCampData(registeredCampData);
+		DataStore.setRegisteredStudentData(registeredStudentData);
+		DataStore.setCampCommitteeData(campCommitteeData);
+		DataStore.setRegisteredCampCommitteeData(registeredCampCommitteeData);
 		return true;
 	}
 
@@ -121,15 +134,7 @@ public class DataStore {
   	public static void setRegisteredCampData(Map<String, List<String>> registeredCampData) {
         DataStore.registeredCampData = registeredCampData; 
     }    
-
-	public static Map<String, List<String>> getWithdrawnStudentData() {
-        return withdrawnStudentData;
-    }
-
-  	public static void setWithdrawnStudentData(Map<String, List<String>> withdrawnStudentData) {
-        DataStore.withdrawnStudentData = withdrawnStudentData; 
-    }    
-
+	
 	public static Map<String, List<String>> getRegisteredStudentData() {
         return registeredStudentData;
     }
@@ -137,5 +142,32 @@ public class DataStore {
   	public static void setRegisteredStudentData(Map<String, List<String>> registeredStudentData) {
         DataStore.registeredStudentData = registeredStudentData; 
     }    
+
+	public static Map<String, String> getCampCommitteeData() {
+        return campCommitteeData;
+    }
+
+  	public static void setCampCommitteeData(Map<String, String> campCommitteeData) {
+        DataStore.campCommitteeData = campCommitteeData; 
+    }    
+
+
+	public static Map<String, List<String>> getRegisteredCampCommitteeData() {
+        return registeredCampCommitteeData;
+    }
+
+  	public static void setRegisteredCampCommitteeData(Map<String, List<String>> registeredCampCommitteeData) {
+        DataStore.registeredCampCommitteeData = registeredCampCommitteeData; 
+    }    
+
+	/*  KIV may not require it 
+	public static Map<String, List<String>> getWithdrawnStudentData() {
+        return withdrawnStudentData;
+    }
+
+  	public static void setWithdrawnStudentData(Map<String, List<String>> withdrawnStudentData) {
+        DataStore.withdrawnStudentData = withdrawnStudentData; 
+    }    
+	*/
 
 }
