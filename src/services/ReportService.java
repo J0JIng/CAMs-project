@@ -10,7 +10,7 @@ import models.Student;
 import stores.DataStore;
 
 public class ReportService {
-    
+    /* 
     private String currentStaffId; 
 
     public ReportService(String currentStaffId) {
@@ -57,6 +57,6 @@ public class ReportService {
     private String sanitizeFilename(String filename) {
         return filename.replaceAll("\\s+", "_");
     }
-    
+    */
     
 }

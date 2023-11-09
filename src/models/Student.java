@@ -9,8 +9,6 @@ public class Student extends User {
 
     private String studentID;
     private String committeeStatus;
-    private List<Camp> registeredCamps = new ArrayList<>();
-    private List<Camp> withdrawnCamps = new ArrayList<>();
     private List<Enquiry> enquiries= new ArrayList<>();
 
     public Student (String name, String userID, String email, FacultyGroups faculty, String password) {
@@ -33,14 +31,6 @@ public class Student extends User {
     }
     public String getStudentID() {
         return this.studentID;
-    }
-
-    public List<Camp> getRegisteredCamps() {
-        return this.registeredCamps;
-    }
-
-    public List<Camp> getWithdrawnCamps() {
-        return this.withdrawnCamps;
     }
 
     public List<Enquiry> getEnquiries() {

@@ -20,6 +20,8 @@ public class StudentController {
             }
             int choice = scanner.nextInt();
 
+            // choice i need to fix 
+            /* 
             switch (choice) {
                 case 1:
                     controller.campStudentService.viewAllCamps(null, null, null);
@@ -64,7 +66,9 @@ public class StudentController {
                 	controller.campStudentService.submitSuggestion();
                 	break;
                 default: return;
+               
             }
+             */
         }
     }
 }
