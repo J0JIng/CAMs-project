@@ -1,5 +1,7 @@
 package stores;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,7 +86,7 @@ public class DataStore {
 	private DataStore() {}
 
 	public static boolean initDataStore(IFileDataService fileDataService, Map<String, String> filePathsMap) {
-		try {
+        try {
             // Initialize fileDataService and filePathsMap
             DataStore.filePathsMap = filePathsMap;
             DataStore.fileDataService = fileDataService;
@@ -94,14 +96,14 @@ public class DataStore {
             DataStore.staffData = fileDataService.importStaffData(filePathsMap.get("staff"));
     
             System.out.println("DataStore initialized successfully.");
-            return true;
+            return true; 
         } catch (Exception e) {
             System.out.println("Error initializing DataStore: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
-	}
-
+    }
+    
 	public static boolean saveData() {
 		DataStore.setStudentsData(studentsData);
 		DataStore.setStaffData(staffData);
@@ -122,7 +124,6 @@ public class DataStore {
 
 	public static void setStudentsData(Map<String, Student> studentsData) {
 		DataStore.studentsData = studentsData;
-		//fileDataService.exportStudentData(filePathsMap.get("user"), filePathsMap.get("student"), studentsData);
 	}
 
 	public static Map<String, Staff> getStaffData() {
@@ -131,7 +132,6 @@ public class DataStore {
 
 	public static void setStaffData(Map<String, Staff> StaffData) {
 		DataStore.staffData = StaffData;
-		//fileDataService.exportStaffData(filePathsMap.get("user"), filePathsMap.get("Staff"), StaffData);
 	}
 
 	public static Map<String, Camp> getCampData() {
@@ -140,7 +140,6 @@ public class DataStore {
 
 	public static void setCampData(Map<String, Camp> campData) {
 		DataStore.campData = campData;
-		//fileDataService.exportCampData(filePathsMap.get("Camp"), campData);
 	}
 
 	public static Map<Integer, Enquiry> getEnquiryData() {

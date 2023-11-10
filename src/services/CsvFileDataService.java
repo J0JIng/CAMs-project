@@ -103,8 +103,6 @@ public class CsvFileDataService implements IFileDataService {
 		return userInfoMap;
 	}
 	
-	
-
 	// ---------- Interface method implementation ---------- //
 	
 	// Staff
@@ -116,7 +114,7 @@ public class CsvFileDataService implements IFileDataService {
 		for (String[] staffRow : staffsRows) {
 			Map<String, String> userInfoMap = parseUserRow(staffRow);
 
-			String name = userInfoMap.get("userID");
+			String name = userInfoMap.get("name");
 			String email = userInfoMap.get("email");
 			String facultyString = userInfoMap.get("faculty");
 			FacultyGroups faculty = FacultyGroups.valueOf(facultyString.toUpperCase());
@@ -135,9 +133,6 @@ public class CsvFileDataService implements IFileDataService {
 		return staffsMap;
 	}
 
-
-	// Placeholder statment 
-
 	@Override
 	public Map<String, Student> importStudentData(String studentsFilePath){
 		Map<String, Student> studentsMap = new HashMap<String, Student>();
@@ -146,7 +141,7 @@ public class CsvFileDataService implements IFileDataService {
 		for (String[] staffRow : staffsRows) {
 			Map<String, String> userInfoMap = parseUserRow(staffRow);
 
-			String name = userInfoMap.get("userID");
+			String name = userInfoMap.get("name");
 			String email = userInfoMap.get("email");
 			String facultyString = userInfoMap.get("faculty");
 			FacultyGroups faculty = FacultyGroups.valueOf(facultyString.toUpperCase());
