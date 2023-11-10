@@ -12,9 +12,6 @@ import java.util.Map;
 
 import interfaces.IFileDataService;
 import enums.FacultyGroups;
-import enums.UserRole;
-
-import models.Camp;
 import models.Student;
 import models.Staff;
 
@@ -55,53 +52,28 @@ public class CsvFileDataService implements IFileDataService {
 	public List<String[]> readCsvFile(String filePath, List<String> headers) {
 		List<String[]> dataList = new ArrayList<String[]>();
 		headers.clear();
-
+	
 		try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
 			// Headers
 			String[] headerRow = br.readLine().split(",");
 			for (String header : headerRow) {
 				headers.add(header);
 			}
-
+	
 			// Content
-			String line = "";
+			String line;
 			while ((line = br.readLine()) != null) {
 				String[] values = line.split(",");
 				dataList.add(values);
 			}
-
+	
 		} catch (IOException e) {
 			System.out.println("Cannot import data!");
 		}
-
+	
 		return dataList;
 	}
-
-	/**
-	 * Writes the given data to a CSV file located at the given file path.
-	 *
-	 * @param filePath the file path of the CSV file to write
-	 * @param headers  the list of headers for the CSV file
-	 * @param lines    the list of lines to write to the CSV file
-	 * @return true if the data is written successfully, false otherwise
-	 */
-	public boolean writeCsvFile(String filePath, List<String> headers, List<String> lines) {
-		try (FileWriter writer = new FileWriter(filePath)) {
-			// Write Headers
-			String headerLine = String.join(",", headers);
-			writer.write(headerLine + "\n");
-
-			// Write Content
-			for (String line : lines) {
-				writer.write(line + "\n");
-			}
-		} catch (IOException e) {
-			System.out.println("Cannot export data!");
-			return false;
-		}
-		return true;
-	}
-
+	
 	/**
 	 * Parses a string array containing user data and returns a map of user
 	 * information.
@@ -112,18 +84,26 @@ public class CsvFileDataService implements IFileDataService {
 	 *         values in the userRow array
 	 */
 	private Map<String, String> parseUserRow(String[] userRow) {
-		String Name = userRow[0];
-		String Email = userRow[1];
-		String Faculty = userRow[2];
-
-		// Return
-		Map<String, String> userInfoMap = new HashMap<String, String>();
-		userInfoMap.put("name", Name);
-		userInfoMap.put("email", Email);
-		userInfoMap.put("faculty", Faculty);
-
+		Map<String, String> userInfoMap = new HashMap<>();
+	
+		// Check if userRow has at least three elements and they are not empty
+		if (userRow.length >= 3 && !userRow[0].isEmpty() && !userRow[1].isEmpty() && !userRow[2].isEmpty()) {
+			String Name = userRow[0];
+			String Email = userRow[1];
+			String Faculty = userRow[2];
+	
+			userInfoMap.put("name", Name);
+			userInfoMap.put("email", Email);
+			userInfoMap.put("faculty", Faculty);
+		} else {
+			// Handle the case where userRow does not have enough elements or contains empty values
+			System.out.println("Invalid userRow: " + Arrays.toString(userRow));
+		}
+	
 		return userInfoMap;
 	}
+	
+	
 
 	// ---------- Interface method implementation ---------- //
 	

@@ -32,7 +32,6 @@ public class AuthController {
         boolean authenticated = false;
 
         do {
-
             while (true) {
                 System.out.println("<Enter 0 to EXIT>\n");
                 System.out.println("Login as:");
@@ -58,6 +57,7 @@ public class AuthController {
             switch (choice) {
                 case 0:
                     System.out.println("Shutting down CAMs...");
+                    authService = null; // Set authService to null    
                     return;
                 case 1:
                     authService = new AuthStudentService();

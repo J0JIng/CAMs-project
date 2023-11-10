@@ -19,7 +19,7 @@ public class DataStore {
     private static IFileDataService fileDataService;
 
     /**
-     * The map containing file paths for different data types. It should include paths for "user", "student", "Staff", and "Camp".
+     * The map containing file paths for different data types. It should include paths for "student", "Staff".
      */
     private static Map<String, String> filePathsMap;
 
@@ -84,19 +84,22 @@ public class DataStore {
 	private DataStore() {}
 
 	public static boolean initDataStore(IFileDataService fileDataService, Map<String, String> filePathsMap) {
-		// work in progress
-
-		// Initialize fileDataService and filePathsMap
-		DataStore.filePathsMap = filePathsMap;
-		DataStore.fileDataService = fileDataService;
-
-		// Import data
-		DataStore.studentsData = fileDataService.importStudentData(
-            filePathsMap.get("student"));
-
-		DataStore.staffData = fileDataService.importStaffData(
-			filePathsMap.get("Staff"));
-		return true;
+		try {
+            // Initialize fileDataService and filePathsMap
+            DataStore.filePathsMap = filePathsMap;
+            DataStore.fileDataService = fileDataService;
+    
+            // Import data
+            DataStore.studentsData = fileDataService.importStudentData(filePathsMap.get("student"));
+            DataStore.staffData = fileDataService.importStaffData(filePathsMap.get("staff"));
+    
+            System.out.println("DataStore initialized successfully.");
+            return true;
+        } catch (Exception e) {
+            System.out.println("Error initializing DataStore: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
 	}
 
 	public static boolean saveData() {
