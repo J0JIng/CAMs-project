@@ -1,18 +1,16 @@
 package controllers;
 
+import controllers.UserController;
 import java.util.Scanner;
 import views.StudentView;
 import interfaces.ICampStudentService;
 import services.CampStudentService;
 
-public class StudentController {
+public class StudentController extends UserController {
 	public void start() {
     	Scanner scanner = new Scanner(System.in);
 	    //CampServiceController controller = new CampServiceController(CampServiceController.camps);
         CampStudentService service = new CampStudentService();
-	    
-        service.getRegisteredCamps();
-        service.registerCamp();
 
 	    StudentView view = new StudentView();
 	    while (true) {

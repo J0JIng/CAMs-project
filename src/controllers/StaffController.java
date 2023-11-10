@@ -1,9 +1,10 @@
 package controllers;
 
+import controllers.UserController;
 import java.util.Scanner;
 import views.StaffView;
 
-public class StaffController {
+public class StaffController extends UserController {
     
     public void start() {
     	Scanner scanner = new Scanner(System.in);
