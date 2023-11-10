@@ -26,10 +26,6 @@ import models.Staff;
  * methods for reading and writing data from/to CSV files.
  */
 public class CsvFileDataService implements IFileDataService {
-	/**
-	 * The list of headers for the CSV file that stores user data.
-	 */
-	private static List<String> userCsvHeaders = new ArrayList<String>();
 
 	/**
 	 * The list of headers for the CSV file that stores student data.
@@ -41,10 +37,6 @@ public class CsvFileDataService implements IFileDataService {
 	 */
 	private static List<String> staffCsvHeaders = new ArrayList<String>();
 
-	/**
-	 * The list of headers for the CSV file that stores camp data.
-	 */
-	private static List<String> campCsvHeaders = new ArrayList<String>();
 
 	/**
 	 * Constructs an instance of the CsvFileDataService class.
@@ -120,262 +112,76 @@ public class CsvFileDataService implements IFileDataService {
 	 *         values in the userRow array
 	 */
 	private Map<String, String> parseUserRow(String[] userRow) {
-		String userID = userRow[0];
-		String password = userRow[1];
-		String email = userRow[2];
-		String role = userRow[3];
-		String name = userRow[4];
-
-		// to handle names with comma
-		for (int i = 5; i < userRow.length; i++) {
-			if (i != 4)
-				name += ",";
-			name += userRow[i];
-		}
+		String Name = userRow[0];
+		String Email = userRow[1];
+		String Faculty = userRow[2];
 
 		// Return
 		Map<String, String> userInfoMap = new HashMap<String, String>();
-		userInfoMap.put("userID", userID);
-		userInfoMap.put("password", password);
-		userInfoMap.put("email", email);
-		userInfoMap.put("role", role);
-		userInfoMap.put("name", name);
+		userInfoMap.put("name", Name);
+		userInfoMap.put("email", Email);
+		userInfoMap.put("faculty", Faculty);
 
 		return userInfoMap;
 	}
 
-	// Placeholder statment 
-
-	@Override
-	public Map<String, Student> importStudentData(String usersFilePath, String studentsFilePath){
-		Map<String, Student> studentsMap = new HashMap<String, Student>();
-		return studentsMap;
-	}
-
-	@Override
-	public boolean exportStudentData(String usersFilePath, String studentsFilePath, Map<String, Student> studentMap) {
-		return true ;
-	}
-
-	@Override
-	public Map<String, Camp> importCampData(String campFilePath, String usersFilePath,String studentsFilePath, String StaffsFilePath) {
-		Map<String, Camp> campsMap = new HashMap<String, Camp>();
-		return campsMap;
-	}
-
-	@Override
-	public boolean exportCampData(String campsFilePath, Map<String, Camp> campMap) {
-		return true;
-	}
-
-
 	// ---------- Interface method implementation ---------- //
+	
 	// Staff
 	@Override
-	public Map<String, Staff> importStaffData(String usersFilePath, String staffsFilePath) {
-		Map<String, Staff> StaffsMap = new HashMap<String, Staff>();
-		List<String[]> usersRows = this.readCsvFile(usersFilePath, userCsvHeaders);
-		List<String[]> StaffsRows = this.readCsvFile(staffsFilePath, staffCsvHeaders);
+	public Map<String, Staff> importStaffData(String staffsFilePath) {
+		Map<String, Staff> staffsMap = new HashMap<>();
+		List<String[]> staffsRows = readCsvFile(staffsFilePath, staffCsvHeaders);
 
-		for (String[] userRow : usersRows) {
-			Map<String, String> userInfoMap = parseUserRow(userRow);
-			String role = userInfoMap.get("role");
-			if (!role.equals("STAFF"))
-				continue;
-			
-			String name = userInfoMap.get("name");
-			String userID = userInfoMap.get("userID");
+		for (String[] staffRow : staffsRows) {
+			Map<String, String> userInfoMap = parseUserRow(staffRow);
+
+			String name = userInfoMap.get("userID");
 			String email = userInfoMap.get("email");
 			String facultyString = userInfoMap.get("faculty");
 			FacultyGroups faculty = FacultyGroups.valueOf(facultyString.toUpperCase());
-			String password = userInfoMap.get("password");
-			
-			// get the associated Staff data
+
+			// Extract userID from the email (assuming it's the first few characters)
+			int indexOfAtSymbol = email.indexOf('@');
+			String userID = (indexOfAtSymbol != -1) ? email.substring(0, indexOfAtSymbol) : email;
+
+			// Default
+			String password = "password";
 			int numOfCampsManaged = 0;
-			for (String[] StaffRow : StaffsRows) {
-				if (!StaffRow[0].equals(userID))
-					continue;
-				numOfCampsManaged = Integer.parseInt(StaffRow[1]);
-			}
-			Staff Staff = new Staff(name, userID, email, faculty, password, numOfCampsManaged);
-			StaffsMap.put(userID, Staff);
+
+			Staff staff = new Staff(name, userID, email, faculty, password, numOfCampsManaged);
+			staffsMap.put(userID, staff);
 		}
-		return StaffsMap;
+		return staffsMap;
 	}
 
-	@Override
-	public boolean exportStaffData(String usersFilePath, String staffsFilePath, Map<String, Staff> StaffMap) {
-		List<String> StaffLines = new ArrayList<String>();
-		List<String> userLines = new ArrayList<String>();
-		// User
-		List<String[]> usersRows = this.readCsvFile(usersFilePath, userCsvHeaders);
-		for (String[] userRow : usersRows) {
-			Map<String, String> userInfoMap = parseUserRow(userRow);
-			String userLine = String.format("%s,%s,%s,%s,%s",
-					userInfoMap.get("name"),
-					userInfoMap.get("userID"),
-					userInfoMap.get("email"),
-					userInfoMap.get("password"),
-					userInfoMap.get("faculty"),
-					userInfoMap.get("role"));
-					
-			if (userInfoMap.get("role").equals("STAFF")) {
-				Staff Staff = StaffMap.get(userInfoMap.get("userID"));
-				userLine = String.format("%s,%s,%s,%s,%s",
-						Staff.getName(),
-						Staff.getUserID(),
-						Staff.getEmail(),
-						Staff.getPassword(),
-						Staff.getFaculty(),
-						"Staff" // role
-						);
-			}
-			userLines.add(userLine);
-		}
-		// Staff
-		for (Staff Staff : StaffMap.values()) {
-			String StaffLine = String.format("%s,%d",
-					Staff.getStaffID(),
-					Staff.getNumOfCampsManaged());
-			StaffLines.add(StaffLine);
-		}
-		// Write to CSV
-		boolean success1 = this.writeCsvFile(usersFilePath, userCsvHeaders, userLines);
-		boolean success2 = this.writeCsvFile(staffsFilePath, staffCsvHeaders, StaffLines);
-		return success1 && success2;
-	}
 
-	/* 
-	// Student
+	// Placeholder statment 
+
 	@Override
-	public Map<String, Student> importStudentData(String usersFilePath, String studentsFilePath) {
+	public Map<String, Student> importStudentData(String studentsFilePath){
 		Map<String, Student> studentsMap = new HashMap<String, Student>();
+		List<String[]> staffsRows = readCsvFile(studentsFilePath, studentCsvHeaders);
 
-		List<String[]> usersRows = this.readCsvFile(usersFilePath, userCsvHeaders);
-		List<String[]> studentsRows = this.readCsvFile(studentsFilePath, studentCsvHeaders);
+		for (String[] staffRow : staffsRows) {
+			Map<String, String> userInfoMap = parseUserRow(staffRow);
 
-		for (String[] userRow : usersRows) {
-			Map<String, String> userInfoMap = parseUserRow(userRow);
-
-			String role = userInfoMap.get("role");
-			if (!role.equals("student"))
-				continue;
-
-			String userID = userInfoMap.get("userID");
-			String password = userInfoMap.get("password");
-			String name = userInfoMap.get("name");
+			String name = userInfoMap.get("userID");
 			String email = userInfoMap.get("email");
+			String facultyString = userInfoMap.get("faculty");
+			FacultyGroups faculty = FacultyGroups.valueOf(facultyString.toUpperCase());
 
-			// get the associated student data
-			boolean isDeregistered = false;
-			for (String[] studentRow : studentsRows) {
-				if (!studentRow[0].equals(userID))
-					continue;
+			// Extract userID from the email (assuming it's the first few characters)
+			int indexOfAtSymbol = email.indexOf('@');
+			String userID = (indexOfAtSymbol != -1) ? email.substring(0, indexOfAtSymbol) : email;
 
-				isDeregistered = Boolean.parseBoolean(studentRow[1]);
-			}
-
-			Student student = new Student(userID, name, email, password, isDeregistered);
-
+			// Default
+			String password = "password";
+			
+			Student student = new Student(name, userID, email, faculty, password);
 			studentsMap.put(userID, student);
 		}
-
 		return studentsMap;
 	}
-	*/
-	/* 
-	@Override
-	public boolean exportStudentData(String usersFilePath, String studentsFilePath, Map<String, Student> studentMap) {
-		List<String> studentLines = new ArrayList<String>();
-		List<String> userLines = new ArrayList<String>();
-
-		// User
-		List<String[]> usersRows = this.readCsvFile(usersFilePath, userCsvHeaders);
-		for (String[] userRow : usersRows) {
-			Map<String, String> userInfoMap = parseUserRow(userRow);
-			String userLine = String.format("%s,%s,%s,%s,%s",
-					userInfoMap.get("userID"),
-					userInfoMap.get("password"),
-					userInfoMap.get("email"),
-					userInfoMap.get("role"),
-					userInfoMap.get("name"));
-
-			if (userInfoMap.get("role").equals("student")) {
-				Student student = studentMap.get(userInfoMap.get("userID"));
-
-				userLine = String.format("%s,%s,%s,%s,%s",
-						student.getUserID(),
-						student.getPassword(),
-						student.getEmail(),
-						"student", // role
-						student.getName());
-			}
-
-			userLines.add(userLine);
-		}
-
-		// Student
-		for (Student student : studentMap.values()) {
-			String studentLine = String.format("%s,%b",
-					student.getStudentID(),
-					student.getIsDeregistered());
-
-			studentLines.add(studentLine);
-		}
-
-		// Write to CSV
-		boolean success1 = this.writeCsvFile(usersFilePath, userCsvHeaders, userLines);
-		boolean success2 = this.writeCsvFile(studentsFilePath, studentCsvHeaders, studentLines);
-		return success1 && success2;
-	}
-	*/
-
-	/* 
-	// Camp
-	@Override
-	public Map<Integer, Camp> importCampData(String campFilePath, String usersFilePath,
-			String studentsFilePath, String StaffsFilePath) {
-		Map<Integer, Camp> campsMap = new HashMap<Integer, Camp>();
-
-		List<String[]> campsRows = this.readCsvFile(campFilePath, campCsvHeaders);
-
-		for (String[] campRow : campsRows) {
-			int campID = Integer.parseInt(campRow[0]);
-			String title = campRow[1];
-			campStatus status = campStatus.valueOf(campRow[2]);
-			String StaffID = campRow[3];
-			String studentID = campRow.length > 4 ? campRow[4] : null;
-
-			Camp camp = new Camp(campID, title, StaffID, studentID, status);
-
-			campsMap.put(campID, camp);
-		}
-
-		return campsMap;
-	}
-	*/
-
-	/* 
-	@Override
-	public boolean exportCampData(String campsFilePath, Map<Integer, Camp> campMap) {
-		List<String> campLines = new ArrayList<String>();
-
-		// Camp
-		for (Camp camp : campMap.values()) {
-			String campLine = String.format("%d,%s,%s,%s,%s",
-					camp.getCampID(),
-					camp.getTitle(),
-					camp.getStatus(),
-					camp.getStaff().getStaffID(),
-					camp.getStudent() != null ? camp.getStudent().getStudentID() : "");
-
-			campLines.add(campLine);
-		}
-
-		// Write to CSV
-		return this.writeCsvFile(campsFilePath, campCsvHeaders, campLines);
-		
-	}
-	*/
 	
 }

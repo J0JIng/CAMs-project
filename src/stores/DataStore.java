@@ -92,19 +92,10 @@ public class DataStore {
 
 		// Import data
 		DataStore.studentsData = fileDataService.importStudentData(
-            filePathsMap.get("user"),
             filePathsMap.get("student"));
 
 		DataStore.staffData = fileDataService.importStaffData(
-            filePathsMap.get("user"),
 			filePathsMap.get("Staff"));
-
-		DataStore.campData = fileDataService.importCampData(
-            filePathsMap.get("Camp"),
-            filePathsMap.get("user"), 
-            filePathsMap.get("student"), 
-            filePathsMap.get("Staff"));
-
 		return true;
 	}
 

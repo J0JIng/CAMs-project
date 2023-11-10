@@ -19,9 +19,7 @@ public class FilePathsUtility {
 
 	/**
 	 * Returns a mapping of CSV file paths for various data types used in the
-	 * application. The returned map contains keys such as "user", "student",
-	 * "Staff", "Camp", "request",
-	 * "transferStudentRequest", and "changeCampTitleRequest",
+	 * application. The returned map contains keys such as "student", "staff"
 	 * each associated with their respective file paths.
 	 *
 	 * @return a Map containing the CSV file paths for various data types
@@ -30,10 +28,8 @@ public class FilePathsUtility {
 		filePathsMap.clear();
 
 		// Initialize filePathsMap
-		filePathsMap.put("user", "data/user.csv");
-		filePathsMap.put("student", "data/student.csv");
-		filePathsMap.put("Staff", "data/Staff.csv");
-		filePathsMap.put("Camp", "data/Camp.csv");
+		filePathsMap.put("student", "data/student_list.csv");
+		filePathsMap.put("staff", "data/staff_list.csv");
 		return filePathsMap;
 	}
 }

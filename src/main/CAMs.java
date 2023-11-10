@@ -12,13 +12,13 @@ import utility.FilePathsUtility;
 import views.Boundary;
 
 /**
- * The main class responsible for running the FYPMS application.
+ * The main class responsible for running the CAMS application.
  * 
- * <p>
+ * 
  * This class handles initializing of the data store, authentication for users
  * to log in, and starting the appropriate session based on the role of the
  * logged-in user.
- * </p>
+ * 
  */
 public class CAMs {
 	/**
@@ -28,7 +28,7 @@ public class CAMs {
 	};
 
 	/**
-	 * The entry point for the FYPMS application. This method is responsible for
+	 * The entry point for the CAMS application. This method is responsible for
 	 * running an infinite loop to allow multiple users to operate the application.
 	 * 
 	 * @param args an array of String arguments passed to this method
@@ -58,6 +58,7 @@ public class CAMs {
 						break;
 				}
 			} while (true);
+			
 		} catch (Exception e) {
 			// Save Data and Logout user
 			DataStore.saveData();

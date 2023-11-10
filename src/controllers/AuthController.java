@@ -89,7 +89,12 @@ public class AuthController {
      * logout message.
      */
     public static void endSession() {
-        authService.logout();
-        System.out.println("User logged out!");
+        // Check if authService is not null before calling methods on it
+        if (authService != null) {
+            authService.logout();
+            System.out.println("User logged out successfully.");
+        } else {
+            System.out.println("Error: AuthService is null.");
+        }
     }
 }
