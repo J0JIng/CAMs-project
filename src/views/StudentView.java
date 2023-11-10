@@ -8,7 +8,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
-import controllers.CampServiceController;
 import interfaces.IMenuView;
 import models.Camp;
 import models.CampInformation;
@@ -47,7 +46,7 @@ public class StudentView implements IMenuView{
 	}
 
     ////////////////////////////////////////////////////////////////
-    // FOLLOWING VIEW CLASS NOT DONE
+    // FOLLOWING VIEW CLASS NOT DONE // fix this @ ojing
 
     /* 
 	// Place in Boundary Class

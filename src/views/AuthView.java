@@ -1,11 +1,14 @@
 package views;
 
 import interfaces.IMenuView;
+import models.Camp;
 
 public class AuthView implements IMenuView {
 
+
 	@Override
 	public void displayMenuView() {
+
         /* 
 		System.out.println("-----------------------------------");
         System.out.println("|           Login Screen          |");
@@ -16,6 +19,7 @@ public class AuthView implements IMenuView {
         System.out.println("-----------------------------------");
         System.out.print("Select an option: ");
         */
+        
         System.out.println("╔══════════════════════════════════════════════════════════╗");
         System.out.println("║                                                          ║");
         System.out.println("║          ░█████╗░░█████╗░███╗░░░███╗░██████╗             ║");
@@ -34,4 +38,5 @@ public class AuthView implements IMenuView {
 
 
 	}
+    
 }

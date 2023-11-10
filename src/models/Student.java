@@ -9,6 +9,7 @@ public class Student extends User {
 
     private String studentID;
     private String committeeStatus;
+    // fix this @ ojing KIV having enquiry list here
     private List<Enquiry> enquiries= new ArrayList<>();
 
     public Student (String name, String userID, String email, FacultyGroups faculty, String password) {

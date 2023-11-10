@@ -6,7 +6,7 @@ import views.StudentView;
 public class StudentController {
 	public void start() {
     	Scanner scanner = new Scanner(System.in);
-	    CampServiceController controller = new CampServiceController(CampServiceController.camps);
+	    //CampServiceController controller = new CampServiceController(CampServiceController.camps);
 	    
 	    StudentView view = new StudentView();
 	    while (true) {
@@ -20,7 +20,7 @@ public class StudentController {
             }
             int choice = scanner.nextInt();
 
-            // choice i need to fix 
+            // choice i need to fix  // fix this @ ojing
             /* 
             switch (choice) {
                 case 1:
