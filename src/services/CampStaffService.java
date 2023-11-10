@@ -36,12 +36,35 @@ public class CampStaffService implements ICampStaffService {
      * @param visibility the new visibility status ("on" or "off")
      * @return true if the camp visibility was updated successfully, false otherwise
      */
-	public void toggleCampVisibility(Camp camp){
-		List<Camp> staffCreatedCamps = getStaffCreatedCamps();
-		boolean choice = InputSelectionUtility.toggleSelector(staffCreatedCamps);	
-		if(choice) camp.setVisibility(true);
-		else camp.setVisibility(false);
+	public void toggleCampVisibility(Staff staff){
+		List<Camp> staffCreatedCamps = getStaffCreatedCamps(staff);
+		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
+		boolean on = InputSelectionUtility.toggleSelector(staffCreatedCamps);	
+		if(on) {
+			camp.setVisibility(true);
+		}else if(!on && !campIsRegistered(camp)) {
+			camp.setVisibility(false);
+		}
 	}
+
+	public boolean campIsRegistered(Camp camp) {
+		Map<String, List<String>> registeredStudents = DataStore.getCampToRegisteredStudentData();
+		Map<String, List<String>> registeredCampCommittees = DataStore.getCampToRegisteredCampCommitteeData();
+	
+		String campName = camp.getCampInformation().getCampName();
+		
+		// Check if the camp has registered students
+		List<String> registeredStudentList = registeredStudents.get(campName);
+		boolean hasRegisteredStudents = registeredStudentList != null && !registeredStudentList.isEmpty();
+	
+		// Check if the camp has registered camp committees
+		List<String> registeredCampCommitteeList = registeredCampCommittees.get(campName);
+		boolean hasRegisteredCampCommittees = registeredCampCommitteeList != null && !registeredCampCommitteeList.isEmpty();
+	
+		// Return true if the camp has both registered students and camp committees
+		return hasRegisteredStudents && hasRegisteredCampCommittees;
+	}
+	
 
 	// ---------- interface method implementation ---------- //
 
@@ -64,8 +87,7 @@ public class CampStaffService implements ICampStaffService {
      * @return an {@link List} of {@link Camp} objects representing the created camps
      */
 	@Override
-	public List<Camp> getStaffCreatedCamps() {
-		Staff staff = (Staff) AuthStore.getCurrentUser();
+	public List<Camp> getStaffCreatedCamps(Staff staff) {
 		Map<String, Camp> campsData = DataStore.getCampData();
 
 		List<Camp> staffCreatedCamps = campsData.values().stream()
@@ -131,193 +153,55 @@ public class CampStaffService implements ICampStaffService {
      * @param staffID the ID of the {@link Staff} creating the camp
      * @return true if the camps were created successfully, false otherwise
      */
-    public boolean createCamp(Staff staffID){
-		/* 
-		boolean isUniqueName = false;
-    	String campName = "";
-		
-		while (!isUniqueName) {
-        	System.out.print("Enter camp name: ");
-        	String campNameCheck = scanner.nextLine();
-        	campName = campNameCheck; // Created for checking if camp name is already chosen
-        	// Check if a camp with the same name already exists
-        	boolean nameExists = CampServiceController.camps.stream().anyMatch(existingCamp -> existingCamp.getCampInformation().getCampName().equalsIgnoreCase(campNameCheck));
-
-        	if (!nameExists) {
-            	isUniqueName = true;
-        	} else {
-            	System.out.println("Camp with the same name already exists. Please choose a different name.");
-        	}
-    	}
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-    	Date campStartDate = null;
-    	while (campStartDate == null) {
-    		System.out.print("Enter camp start date (dd/MM/yyyy): ");
-    		String StartDateOfCamp = scanner.nextLine();
-    		try {
-        		campStartDate = dateFormat.parse(StartDateOfCamp);
-    		} catch (Exception e) {
-        		System.out.println("Invalid date format for camp start date. Please try again.");
-    		}
-		}
-
-    	Date campEndDate = null;
-    	while (campEndDate == null) {
-    		System.out.print("Enter camp end date (dd/MM/yyyy): ");
-    		String EndDateOfCamp = scanner.nextLine();
-    		try {
-        		campEndDate = dateFormat.parse(EndDateOfCamp);
-    		} catch (Exception e) {
-        		System.out.println("Invalid date format for camp end date. Please try again.");
-    		}
-		}
-
-    	Date campRegistrationClosingDate = null;
-    	while (campRegistrationClosingDate == null) {
-    		System.out.print("Enter registration closing date (dd/MM/yyyy): ");
-    		String closingDate = scanner.nextLine();
-    		try {
-        		campRegistrationClosingDate = dateFormat.parse(closingDate);
-    		} catch (Exception e) {
-        		System.out.println("Invalid date format for camp closing date. Please try again.");
-    		}
-		}
-
-        System.out.print("Enter user group: ");
-        String campUserGroup = scanner.nextLine();
-
-        System.out.print("Enter camp location: ");
-        String campLocation = scanner.nextLine();
-
-        System.out.print("Enter camp description: ");
-        String campDescription = scanner.nextLine();
-
-        System.out.print("Enter total slots: ");
-        int campTotalSlots = scanner.nextInt();
-
-        System.out.print("Enter committee slots: ");
-        int campCommitteeSlots = scanner.nextInt();
-        
-		Camp c = new Camp(new CampInformation(campName, campStartDate, campEndDate, campRegistrationClosingDate, campUserGroup, campLocation, campTotalSlots, campCommitteeSlots, campDescription, AuthStore.getCurrentUser().getName()));
-		CampServiceController.camps.add(c);
-        System.out.println("Created " + c.getCampInformation().getCampName());
-		*/
-		return false;
-	}
+    public boolean createCamp(Staff staff) {
+        Map<String, Camp> campData = DataStore.getCampData();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		System.out.println("Creating a new camp...");
+        Camp newCamp = InputSelectionUtility.createCampInput(getAllCamps(),staff,dateFormat);
+        campData.put(newCamp.getCampInformation().getCampName().toUpperCase(), newCamp);
+        System.out.println("Created " + newCamp.getCampInformation().getCampName());
+        return true;
+    }
 	
 	/**
      * Updates the details of the specified camp if the staff ID matches the
      * camp's creator.
-     *
-     * @param camp    the {@link Camp} object to update
-     * @param details the new details for the camp
+	 * 
      * @param staffID the ID of the {@link Staff} making the update
      * @return true if the camp details were updated successfully, false otherwise
      */
-    public boolean updateCampDetails(Camp camp, CampInformation details, Staff staffID){
-		/*
-		scanner.nextLine();
-    	System.out.print("Enter Camp Name: ");
-    	String campName = scanner.nextLine();
-		for (Camp c : CampServiceController.camps) {
-			if (c.getCampInformation().getCampName().equalsIgnoreCase(campName)) {
-				String newCampName = null;
-            	boolean isUniqueName = false;
-
-            	while (!isUniqueName) {
-                	System.out.print("Enter new camp name: ");
-                	String newCampNameCheck = scanner.nextLine(); // Created for checking if camp name is already chosen
-                	newCampName = newCampNameCheck;
-                	isUniqueName = CampServiceController.camps.stream().noneMatch(existingCamp -> existingCamp.getCampInformation().getCampName().equalsIgnoreCase(newCampNameCheck));
-
-                	if (!isUniqueName) {
-                    	System.out.println("Camp name is not unique. Please choose a different name.");
-                	}
-            	}
-
-				SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-    			Date campStartDate = null;
-    			while (campStartDate == null) {
-    				System.out.print("Enter camp start date (dd/MM/yyyy): ");
-    				String StartDateOfCamp = scanner.nextLine();
-    				try {
-        				campStartDate = dateFormat.parse(StartDateOfCamp);
-    				} catch (Exception e) {
-        				System.out.println("Invalid date format for camp start date. Please try again.");
-    				}
-				}
-
-    			Date campEndDate = null;
-    			while (campEndDate == null) {
-    				System.out.print("Enter camp end date (dd/MM/yyyy): ");
-    				String EndDateOfCamp = scanner.nextLine();
-    				try {
-        				campEndDate = dateFormat.parse(EndDateOfCamp);
-    				} catch (Exception e) {
-        				System.out.println("Invalid date format for camp end date. Please try again.");
-    				}
-				}
-
-    			Date campRegistrationClosingDate = null;
-    			while (campRegistrationClosingDate == null) {
-    				System.out.print("Enter registration closing date (dd/MM/yyyy): ");
-    				String closingDate = scanner.nextLine();
-    				try {
-        				campRegistrationClosingDate = dateFormat.parse(closingDate);
-    				} catch (Exception e) {
-        				System.out.println("Invalid date format for camp closing date. Please try again.");
-    				}
-				}
-
-		        System.out.print("Enter user group: ");
-		        String campUserGroup = scanner.nextLine();
-
-		        System.out.print("Enter camp location: ");
-		        String campLocation = scanner.nextLine();
-
-		        System.out.print("Enter camp description: ");
-		        String campDescription = scanner.nextLine();
-
-		        System.out.print("Enter total slots: ");
-		        int campTotalSlots = scanner.nextInt();
-
-		        System.out.print("Enter committee slots: ");
-		        int campCommitteeSlots = scanner.nextInt();
-		        
-				c.setCampInformation(new CampInformation(newCampName, campStartDate, campEndDate, campRegistrationClosingDate, campUserGroup, campLocation, campTotalSlots, campCommitteeSlots, campDescription, AuthStore.getCurrentUser().getName()));
-				System.out.println("Edited " + c.getCampInformation().getCampName());
-                return;
-            }
-        }
-		System.out.println("Cannot find " + campName);
-		*/
-		return false;
+    public boolean updateCampDetails(Staff staff){
+		System.out.println("Updating camp Details...");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		List<Camp> staffCreatedCamps = getStaffCreatedCamps(staff);
+		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
+		boolean success = InputSelectionUtility.updateCampInput(camp,staff,dateFormat);
+		return success;
 	}
 	
 	/**
      * Deletes the specified camp if the staff ID matches the camp's creator.
      *
-     * @param camp    the {@link Camp} object to delete
      * @param staffID the ID of the {@link Staff} making the delete request
      * @return true if the camp was deleted successfully, false otherwise
      */
-    public boolean deleteCamp(Camp camp, Staff staffID){
-		/* 
-		scanner.nextLine();
-    	System.out.print("Enter Camp Name: ");
-    	String campName = scanner.nextLine();
-		for (Camp c : CampServiceController.camps) {
-			if (c.getCampInformation().getCampName().equalsIgnoreCase(campName)) {
-                CampServiceController.camps.remove(c);
-                System.out.println("Deleted " + campName);
-                return;
-            }
-        }
-        System.out.println("Error deleting " + campName);
-		*/
-		return false;
+    public boolean deleteCamp(Staff staff){
+		Map<String, Camp> campData = DataStore.getCampData();
+		List<Camp> staffCreatedCamps = getStaffCreatedCamps(staff);
+		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
+		String campName = camp.getCampInformation().getCampName();
+		
+		if(campIsRegistered(camp)){
+			System.out.println("Error deleting " + campName);
+			System.out.println("Students have registered for the camp!");
+			return false;
+		}else{
+			System.out.println("Deleted " + campName);
+			campData.remove(campName);
+			return true;
+		}
 	}
 
 }
 
+	

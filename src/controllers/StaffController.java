@@ -30,19 +30,19 @@ public class StaffController extends UserController {
             switch (choice) {
                 case 1:
                     System.out.println("create camp");
-            	    //service.createCamp(); 
+            	    service.createCamp(staff); 
             	    break;
                 case 2:
                     System.out.println("delete camp");
-                	//service.deleteCamp(); 
+                	service.deleteCamp(staff); 
                 	break;
                 case 3:
                     System.out.println("update camp");
-                	//service.updateCampDetails(,); 
+                	service.updateCampDetails(staff); 
                 	break;
                 case 4:
                     System.out.println("Set visibility");
-                	//service.setVisibility(); 
+                	service.toggleCampVisibility(staff); 
                 	break;
                 case 5:
                     //controller.campStaffService.viewAllCamps(null, null, null); 

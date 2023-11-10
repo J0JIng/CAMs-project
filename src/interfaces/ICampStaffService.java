@@ -25,7 +25,7 @@ public interface ICampStaffService {
      *
      * @return an {@link List} of {@link Camp} objects representing the created camps
      */
-    public List<Camp> getStaffCreatedCamps();
+    public List<Camp> getStaffCreatedCamps(Staff staff);
 
     /**
      * Retrieves a list of students attending a specific camp as an Attendee .
