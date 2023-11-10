@@ -1,38 +1,40 @@
 package services;
 
-import java.lang.reflect.Array;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import interfaces.ICampStudentService;
-import utility.InputSelectionUtility;
-
 import enums.FacultyGroups;
 import enums.UserRole;
-
-import stores.AuthStore;
-import stores.DataStore;
-
+import interfaces.ICampStudentService;
 import models.Camp;
 import models.Student;
+import stores.AuthStore;
+import stores.DataStore;
+import utility.InputSelectionUtility;
 
-
+/**
+ * The {@code CampStudentService} class implements the {@link ICampStudentService} interface
+ * and provides services related to camp registration and management.
+ */
 public class CampStudentService implements ICampStudentService {
 	/**
-	 * Constructs an instance of the CampStudentService class.
-	 */
+     * Constructs an instance of the {@code CampStudentService} class.
+     */
 	public CampStudentService(){
 	}
 
 	// ---------- Helper Function ---------- //
 
-	// Helper function to check for date clashes with other registered camps
+	/**
+     * Checks for date clashes with other registered camps.
+     *
+     * @param student The {@link student} for whom to check date clashes.
+     * @param newCamp The new {@link camp} for which to check date clashes.
+     * @return {@code true} if there is a date clash, {@code false} otherwise.
+     */
 	private boolean hasDateClash(Student student, Camp newCamp) {
 		List<Camp> registeredCamps = getRegisteredCamps();
     	for (Camp camp : registeredCamps) {
@@ -43,7 +45,13 @@ public class CampStudentService implements ICampStudentService {
     	return false;
 	}
 
-	// Helper function to check if there's a date clash between two camps
+	/**
+     * Checks if there's a date clash between two camps.
+     *
+     * @param camp1 The first {@link camp} .
+     * @param camp2 The second {@link camp} .
+     * @return {@code true} if there is a date clash, {@code false} otherwise.
+     */
 	private boolean dateClashExists(Camp camp1, Camp camp2) {
     	Date camp1StartDate = camp1.getCampInformation().getCampStartDate();
     	Date camp1EndDate = camp1.getCampInformation().getCampEndDate();
@@ -54,13 +62,24 @@ public class CampStudentService implements ICampStudentService {
     	return camp1StartDate.before(camp2EndDate) && camp1EndDate.after(camp2StartDate);
 	}
 
-	// Helper function to check if camp is over
+	/**
+	 * Checks if the {@link camp} is over based on the current date and the {@link camp}'s registration closing date.
+	 *
+	 * @param currentDate The current date.
+	 * @param camp The {@link camp}  to check.
+	 * @return {@code true} if the {@link camp} is over, {@code false} otherwise.
+	 */
 	private boolean isCampOver(Date currentDate ,Camp camp) {
 		if(currentDate.after(camp.getCampInformation().getCampRegistrationClosingDate())) return true;
 		return false;
 	}
 
-	// Helper function to check if Camp is Full 
+	/**
+	 * Checks if the {@link camp} is full by comparing the number of registered students with the maximum allowed slots.
+	 *
+	 * @param camp The {@link camp} to check.
+	 * @return {@code true} if the {@link camp} is full, {@code false} otherwise.
+	 */
 	private boolean isCampFull(Camp camp){
 		Map<String, List<String>> registeredStudentData = DataStore.getRegisteredStudentData();
 		String campName = camp.getCampInformation().getCampName();
@@ -72,7 +91,13 @@ public class CampStudentService implements ICampStudentService {
 		}	
 	}
 
-	// Helper function to check if Camp committee slots is Full 
+	/**
+	 * Checks if the camp committee slots are full by comparing the number of registered committee members
+	 * with the maximum allowed committee slots.
+	 *
+	 * @param camp The {@link camp} to check.
+	 * @return {@code true} if the camp committee slots are full, {@code false} otherwise.
+	 */
 	private boolean isCampCommitteeFull(Camp camp){
 		Map<String, List<String>> registeredCampCommitteeData = DataStore.getRegisteredCampCommitteeData();
 		String campName = camp.getCampInformation().getCampName();
@@ -85,7 +110,13 @@ public class CampStudentService implements ICampStudentService {
 		}		
 	}
 
-	// Helper function to check if Student is the CampCommittee for the camp
+	/**
+	 * Checks if the {@link student} is the camp committee member for the specified camp.
+	 *
+	 * @param student The {@link student} to check.
+	 * @param camp The {@link camp} to check.
+	 * @return {@code true} if the {@link student} is a camp committee member for the specified {@link camp}, {@code false} otherwise.
+	 */
 	private boolean isUserCampCommitteeForCamp(Student student, Camp camp) {
 		Map<String, String> campCommitteeData = DataStore.getCampCommitteeData();
 		String studentName = student.getName();
@@ -100,7 +131,12 @@ public class CampStudentService implements ICampStudentService {
 		}
 	}
 
-	// Helper function to check if Student is a CampCommittee 
+	/**
+	 * Checks if the {@link student} is a camp committee member for any {@link camp}.
+	 *
+	 * @param student The {@link student} to check.
+	 * @return {@code true} if the {@link student} is a camp committee member, {@code false} otherwise.
+	 */
 	private boolean isUserCampCommittee(Student student) {
 		Map<String, String> campCommitteeData = DataStore.getCampCommitteeData();
 		String studentName = student.getName();
@@ -114,38 +150,43 @@ public class CampStudentService implements ICampStudentService {
 		}
 	}
 
-	// Helper function to check if Student has withdrawn from the camp
+	/**
+	 * Checks if the {@link Student} has withdrawn from the specified {@link Camp}.
+	 *
+	 * @param student The {@link Student} to check.
+	 * @param camp The {@link Camp} to check.
+	 * @return {@code true} if the {@link Student} has withdrawn from the specified {@link Camp}, {@code false} otherwise.
+	 */
 	private boolean isUserWithdrawnFromCamp(Student student, Camp camp) {
 		Map<String, List<String>> withdrawnCampData = DataStore.getWithdrawnCampData();
 		String studentName = student.getName();
 		String campName = camp.getCampInformation().getCampName();
-	
-		if (withdrawnCampData.containsKey(studentName) && withdrawnCampData.get(studentName).contains(campName)) {
-			// The student has withdrawn from the specified camp
-			return true;
-		} else {
-			// The student has not withdrawn from the specified camp
-			return false;
-		}
+
+		return withdrawnCampData.containsKey(studentName) && withdrawnCampData.get(studentName).contains(campName);
 	}
 	
-	// Helper function to check if Student has registered with the camp
+	/**
+	 * Checks if the {@link student} is registered with the specified {@link camp}.
+	 *
+	 * @param student The {@link student} to check.
+	 * @param camp The {@link camp} to check.
+	 * @return {@code true} if the {@link student} is registered with the specified {@link camp}, {@code false} otherwise.
+ 	*/
 	private boolean isUserRegisteredWithCamp(Student student, Camp camp) {
 		Map<String, List<String>> registeredCampData = DataStore.getRegisteredCampData();
 		String studentName = student.getName();
 		String campName = camp.getCampInformation().getCampName();
-	
-		if (registeredCampData.containsKey(studentName) && registeredCampData.get(studentName).contains(campName)) {
-			// The student has registered with the specified camp
-			return true;
-		} else {
-			// The student has not registered with the specified camp
-			return false;
-		}
+
+		return registeredCampData.containsKey(studentName) && registeredCampData.get(studentName).contains(campName);
 	}
 
 	// ---------- interface method implementation ---------- //
 	
+	/**
+     * Retrieves a list of available camps for the currently logged-in student.
+     *
+     * @return List of available camps.
+     */
 	@Override
 	public List<Camp> getAvailableCamps(){
 		Student student = (Student) AuthStore.getCurrentUser();
@@ -166,6 +207,11 @@ public class CampStudentService implements ICampStudentService {
 		return availableCamps;		
 	}
 
+	 /**
+     * Retrieves a list of camps from which the student has withdrawn.
+     *
+     * @return List of withdrawn camps.
+     */
 	@Override
 	public List<Camp> getWithdrawnCamps() {
 		Student student = (Student) AuthStore.getCurrentUser();
@@ -179,6 +225,11 @@ public class CampStudentService implements ICampStudentService {
 		return withdrawnCamps;
 	}
 	
+	/**
+     * Retrieves a list of camps for which the student is registered.
+     *
+     * @return List of registered camps.
+     */
 	@Override
 	public List<Camp> getRegisteredCamps() {
 		Student student = (Student) AuthStore.getCurrentUser();
@@ -192,10 +243,13 @@ public class CampStudentService implements ICampStudentService {
 		return registeredCamps;
 	}
 	
-
 	// ---------- Service method implementation ---------- //
 
-	// Register for Camp
+	/**
+     * Registers the student for a camp based on user input and various checks.
+     *
+     * @return {@code true} if registration is successful, {@code false} otherwise.
+     */
 	public boolean registerCamp() {
 
 		Student student = (Student) AuthStore.getCurrentUser();
@@ -260,7 +314,11 @@ public class CampStudentService implements ICampStudentService {
 		return true;
 	}
 
-	// Withdraw From Camp (Handle logic for Both Atendee and Campcommittee member)
+	/**
+     * Handles the withdrawal from a camp for both regular attendees and camp committee members.
+     *
+     * @return {@code true} if withdrawal is successful, {@code false} otherwise.
+     */
 	public boolean withdrawCamp() {
 		
 		Student student = (Student) AuthStore.getCurrentUser();
@@ -311,7 +369,11 @@ public class CampStudentService implements ICampStudentService {
 		return true;
 	}
 
-	// Register As Committee
+	/**
+     * Registers the student as a camp committee member for a selected camp.
+     *
+     * @return {@code true} if registration as a committee member is successful, {@code false} otherwise.
+     */
 	public boolean registerAsCommittee(){
 
 		Student student = (Student) AuthStore.getCurrentUser();
