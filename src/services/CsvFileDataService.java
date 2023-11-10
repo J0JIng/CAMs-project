@@ -73,6 +73,31 @@ public class CsvFileDataService implements IFileDataService {
 	
 		return dataList;
 	}
+
+	/**
+	 * Writes the given data to a CSV file located at the given file path.
+	 *
+	 * @param filePath the file path of the CSV file to write
+	 * @param headers  the list of headers for the CSV file
+	 * @param lines    the list of lines to write to the CSV file
+	 * @return true if the data is written successfully, false otherwise
+	 */
+	public boolean writeCsvFile(String filePath, List<String> headers, List<String> lines) {
+		try (FileWriter writer = new FileWriter(filePath)) {
+			// Write Headers
+			String headerLine = String.join(",", headers);
+			writer.write(headerLine + "\n");
+
+			// Write Content
+			for (String line : lines) {
+				writer.write(line + "\n");
+			}
+		} catch (IOException e) {
+			System.out.println("Cannot export data!");
+			return false;
+		}
+		return true;
+	}
 	
 	/**
 	 * Parses a string array containing user data and returns a map of user
@@ -105,58 +130,124 @@ public class CsvFileDataService implements IFileDataService {
 	
 	// ---------- Interface method implementation ---------- //
 	
-	// Staff
+	/**
+	 * Imports staff data from a CSV file, creates Staff objects, and stores them in a map.
+	 *
+	 * @param staffsFilePath The file path of the CSV file containing staff data.
+	 * @return A map containing staff objects with user ID as the key.
+	 * @throws IOException          If there is an issue reading the CSV file.
+	 * @throws IllegalArgumentException If the CSV file contains invalid or missing data.
+	 */
 	@Override
 	public Map<String, Staff> importStaffData(String staffsFilePath) {
+		// Initialize the map to store imported staff data
 		Map<String, Staff> staffsMap = new HashMap<>();
-		List<String[]> staffsRows = readCsvFile(staffsFilePath, staffCsvHeaders);
+		try {
+			// Read rows from the CSV file
+			List<String[]> staffsRows = readCsvFile(staffsFilePath, staffCsvHeaders);
 
-		for (String[] staffRow : staffsRows) {
-			Map<String, String> userInfoMap = parseUserRow(staffRow);
+			// Iterate through each row in the CSV file
+			for (String[] staffRow : staffsRows) {
+				// Parse user information from the row
+				Map<String, String> userInfoMap = parseUserRow(staffRow);
 
-			String name = userInfoMap.get("name");
-			String email = userInfoMap.get("email");
-			String facultyString = userInfoMap.get("faculty");
-			FacultyGroups faculty = FacultyGroups.valueOf(facultyString.toUpperCase());
+				// Extract necessary information
+				String name = userInfoMap.get("name");
+				String email = userInfoMap.get("email");
+				String facultyString = userInfoMap.get("faculty");
 
-			// Extract userID from the email (assuming it's the first few characters)
-			int indexOfAtSymbol = email.indexOf('@');
-			String userID = (indexOfAtSymbol != -1) ? email.substring(0, indexOfAtSymbol) : email;
+				// Validate and handle potential errors in data
+				if (name == null || email == null || facultyString == null) {
+					// Log an error or throw an exception, depending on your requirements
+					System.err.println("Invalid data in CSV row: " + Arrays.toString(staffRow));
+					continue; // Skip this row and move to the next one
+				}
 
-			// Default
-			String password = "password";
-			int numOfCampsManaged = 0;
+				// Convert faculty string to FacultyGroups enum
+				FacultyGroups faculty = FacultyGroups.valueOf(facultyString.toUpperCase());
 
-			Staff staff = new Staff(name, userID, email, faculty, password, numOfCampsManaged);
-			staffsMap.put(userID, staff);
-		}
+				// Extract user ID from the email
+				int indexOfAtSymbol = email.indexOf('@');
+				String userID = (indexOfAtSymbol != -1) ? email.substring(0, indexOfAtSymbol) : email;
+
+				// Default values for optional attributes
+				String password = "password";
+				int numOfCampsManaged = 0;
+				boolean isPasswordChanged = false;
+
+				// Create a new Staff object
+				Staff staff = new Staff(name, userID, email, faculty, password, numOfCampsManaged, isPasswordChanged);
+
+				// Add the staff to the map using user ID as the key
+				staffsMap.put(userID, staff);
+			}
+
+			// Log success message
+			System.out.println("Imported " + staffsMap.size() + " staff members from " + staffsFilePath);
+
+		} catch (Exception e) {
+				// Handle exceptions (e.g., file not found, format issues)
+				System.err.println("Error importing Staff data: " + e.getMessage());
+				e.printStackTrace();
+			}
+
+		// Return the map containing imported staff data
 		return staffsMap;
 	}
 
+	/**
+	 * Imports student data from a CSV file, creates Student objects, and stores them in a map.
+	 *
+	 * @param studentsFilePath The file path of the CSV file containing student data.
+	 * @return A map containing student objects with user ID as the key.
+	 * @throws IOException          If there is an issue reading the CSV file.
+	 * @throws IllegalArgumentException If the CSV file contains invalid or missing data.
+	 */
 	@Override
-	public Map<String, Student> importStudentData(String studentsFilePath){
-		Map<String, Student> studentsMap = new HashMap<String, Student>();
-		List<String[]> staffsRows = readCsvFile(studentsFilePath, studentCsvHeaders);
+	public Map<String, Student> importStudentData(String studentsFilePath) {
+		Map<String, Student> studentsMap = new HashMap<>();
 
-		for (String[] staffRow : staffsRows) {
-			Map<String, String> userInfoMap = parseUserRow(staffRow);
+		try {
+			List<String[]> studentRows = readCsvFile(studentsFilePath, studentCsvHeaders);
 
-			String name = userInfoMap.get("name");
-			String email = userInfoMap.get("email");
-			String facultyString = userInfoMap.get("faculty");
-			FacultyGroups faculty = FacultyGroups.valueOf(facultyString.toUpperCase());
+			for (String[] studentRow : studentRows) {
+				Map<String, String> userInfoMap = parseUserRow(studentRow);
 
-			// Extract userID from the email (assuming it's the first few characters)
-			int indexOfAtSymbol = email.indexOf('@');
-			String userID = (indexOfAtSymbol != -1) ? email.substring(0, indexOfAtSymbol) : email;
+				String name = userInfoMap.get("name");
+				String email = userInfoMap.get("email");
+				String facultyString = userInfoMap.get("faculty");
 
-			// Default
-			String password = "password";
-			
-			Student student = new Student(name, userID, email, faculty, password);
-			studentsMap.put(userID, student);
+				// Validate and handle potential errors in data
+				if (name == null || email == null || facultyString == null) {
+					// Log an error or throw an exception, depending on your requirements
+					System.err.println("Invalid data in CSV row: " + Arrays.toString(studentRow));
+					continue; // Skip this row and move to the next one
+				}
+
+				FacultyGroups faculty = FacultyGroups.valueOf(facultyString.toUpperCase());
+
+				// parse userID from the email 
+				int indexOfAtSymbol = email.indexOf('@');
+				String userID = (indexOfAtSymbol != -1) ? email.substring(0, indexOfAtSymbol) : email;
+
+				// Default values
+				String password = "password";
+				int studentPoints = 0;
+				boolean isPasswordChanged = false;
+
+				Student student = new Student(name, userID, email, faculty, password, studentPoints, isPasswordChanged);
+				studentsMap.put(userID, student);
+			}
+
+			System.out.println("Imported " + studentsMap.size() + " students from " + studentsFilePath);
+		} catch (Exception e) {
+			// Handle exceptions (e.g., file not found, format issues)
+			System.err.println("Error importing student data: " + e.getMessage());
+			e.printStackTrace();
 		}
+
 		return studentsMap;
 	}
+
 	
 }

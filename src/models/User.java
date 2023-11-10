@@ -3,19 +3,23 @@ import enums.UserRole;
 import enums.FacultyGroups;
 
 public abstract class User {
+    
     private String name;
     private String userID;
     private String email;
-    private FacultyGroups faculty;
     private String password;
+    private boolean isPasswordChanged;
+    
     private UserRole userRole;
+    private FacultyGroups faculty;
 
-    public User(String name, String userID, String email, FacultyGroups faculty, String password) {
+    public User(String name, String userID, String email, FacultyGroups faculty, String password, boolean isPasswordChanged) {
         this.name = name;
         this.userID = userID;
         this.email = email;
         this.faculty = faculty;
-        this.password = password;        
+        this.password = password; 
+        this.isPasswordChanged = isPasswordChanged;     
     };
   
     public String getName() {
@@ -44,6 +48,14 @@ public abstract class User {
 		this.password = newPassword;
 		return true;
 	}
+
+    public boolean getIsPasswordChanged() {
+        return this.isPasswordChanged;
+    }
+
+    public void setIsPasswordChanged(boolean isPasswordChangedFlag){
+         this.isPasswordChanged = isPasswordChangedFlag;
+    }
 
     public UserRole getUserRole() {
         return this.userRole;

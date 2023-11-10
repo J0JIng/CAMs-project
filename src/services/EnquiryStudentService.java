@@ -10,10 +10,10 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 
-public class EnquiryService {
+public class EnquiryStudentService {
     private Map<Integer, Enquiry> enquiryData;
 
-    public EnquiryService(){
+    public EnquiryStudentService(){
         enquiryData = DataStore.getEnquiryData(); 
     }
     

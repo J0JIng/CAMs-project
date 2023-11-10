@@ -1,6 +1,6 @@
 package services;
 
-public class RequestStaffService {
+public class EnquiryStaffService {
     /* 
 	public boolean respondToEnquiry() {
 		System.out.print("Enter EnquiryID: ");

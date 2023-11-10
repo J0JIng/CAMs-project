@@ -1,15 +1,16 @@
 package controllers;
 
-import controllers.UserController;
 import java.util.Scanner;
 import views.StudentView;
 import interfaces.ICampStudentService;
+import models.Student;
 import services.CampStudentService;
+import stores.AuthStore;
 
 public class StudentController extends UserController {
 	public void start() {
     	Scanner scanner = new Scanner(System.in);
-	    //CampServiceController controller = new CampServiceController(CampServiceController.camps);
+        Student student = (Student) AuthStore.getCurrentUser();
         CampStudentService service = new CampStudentService();
 
 	    StudentView view = new StudentView();
@@ -22,9 +23,10 @@ public class StudentController extends UserController {
                 scanner.next();
                 System.out.print("Select an option: ");
             }
+
             int choice = scanner.nextInt();
 
-            // choice i need to fix  // fix this @ ojing
+            // choice  // fix this @ ojing
         
             switch (choice) {
                 case 1:
@@ -69,7 +71,9 @@ public class StudentController extends UserController {
                 case 14: 
                 	//controller.campStudentService.submitSuggestion();
                 	break;
-                default: return;
+                default: 
+                    scanner.close();
+                    return;
                
             }
              

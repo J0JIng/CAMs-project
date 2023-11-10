@@ -1,18 +1,22 @@
 package controllers;
-
-import controllers.UserController;
 import java.util.Scanner;
+
+import models.Staff;
+import services.CampStaffService;
+import stores.AuthStore;
 import views.StaffView;
 
 public class StaffController extends UserController {
     
     public void start() {
     	Scanner scanner = new Scanner(System.in);
-
-	    
+        CampStaffService service = new CampStaffService();
+        Staff staff = (Staff) AuthStore.getCurrentUser();
+	
 	    StaffView view = new StaffView();
+
 	    while (true) {
-        /*     
+        
             view.displayMenuView();
             
             // Checks for invalid inputs
@@ -25,39 +29,43 @@ public class StaffController extends UserController {
 
             switch (choice) {
                 case 1:
-            	    controller.campStaffService.createCamp(); 
+                    System.out.println("create camp");
+            	    //service.createCamp(); 
             	    break;
                 case 2:
-                	controller.campStaffService.deleteCamp(); 
+                    System.out.println("delete camp");
+                	//service.deleteCamp(); 
                 	break;
                 case 3:
-                	controller.campStaffService.editCamp(); 
+                    System.out.println("update camp");
+                	//service.updateCampDetails(,); 
                 	break;
                 case 4:
-                	controller.campStaffService.setVisibility(); 
+                    System.out.println("Set visibility");
+                	//service.setVisibility(); 
                 	break;
                 case 5:
-                    controller.campStaffService.viewAllCamps(null, null, null); 
+                    //controller.campStaffService.viewAllCamps(null, null, null); 
                     break;
                 case 6: 
-                	controller.campStaffService.viewAllCampsWithFilters();
+                	//controller.campStaffService.viewAllCampsWithFilters();
                 	break;
                 case 7:
-                	controller.campStaffService.viewCreatedCamps(); 
+                	//controller.campStaffService.viewCreatedCamps(); 
                 	break;
                 case 8:
-                	controller.campStaffService.viewStudentList(); 
+                	//controller.campStaffService.viewStudentList(); 
                 	break;
                 case 9:
-                	controller.campStaffService.viewEnquiriesForCamp(); 
+                	//controller.campStaffService.viewEnquiriesForCamp(); 
                 	break;
                 case 10:
-                	controller.campStaffService.respondToEnquiry(); 
+                	//controller.campStaffService.respondToEnquiry(); 
                 	break;
-                default: return;
-                
+                default:
+                    scanner.close(); 
+                    return;   
             }
-            */
         }
     }
 }

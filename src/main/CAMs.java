@@ -50,12 +50,17 @@ public class CAMs {
 				// Start session
 				User user = AuthStore.getCurrentUser();
 				switch (user.getUserRole()) {
-					case STUDENT:
+					case STUDENT,COMMITTEE:
 						new StudentController().start();
 						break;
+
 					case STAFF:
 						new StaffController().start();
 						break;
+
+					default:
+						System.out.println("User Role Not Found");
+						return;
 				}
 			} while (true);
 			
