@@ -35,10 +35,10 @@ public class CAMs {
 	 */
 	public static void main(String[] args) {
 		try {
+			// Initialize DataStore
+			DataStore.initDataStore(new CsvFileDataService(), FilePathsUtility.csvFilePaths());
+			
 			do {
-				// Initialize DataStore
-				DataStore.initDataStore(new CsvFileDataService(), FilePathsUtility.csvFilePaths());
-
 				// Display Splash Screen
 				// Boundary.printSplashScreen(); //@TODO
 

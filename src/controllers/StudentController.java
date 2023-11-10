@@ -72,7 +72,8 @@ public class StudentController extends UserController {
                 	//controller.campStudentService.submitSuggestion();
                 	break;
                 default: 
-                    scanner.close();
+                    System.out.println("Exiting student menu");
+                    AuthController.endSession();
                     return;
                
             }

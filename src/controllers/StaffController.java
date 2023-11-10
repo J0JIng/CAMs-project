@@ -63,7 +63,8 @@ public class StaffController extends UserController {
                 	//controller.campStaffService.respondToEnquiry(); 
                 	break;
                 default:
-                    scanner.close(); 
+                    System.out.println("Exiting Staff menu");
+                    AuthController.endSession();
                     return;   
             }
         }

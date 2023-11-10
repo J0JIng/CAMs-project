@@ -23,7 +23,7 @@ public class UserController {
      *
      * @return {@code true} if the password change was successful, {@code false} otherwise.
      */
-    protected boolean changePassword() {
+    protected static boolean changePassword() {
         String oldPassword, newPassword;
         boolean success = false;
         IUserService userService = new UserService();
