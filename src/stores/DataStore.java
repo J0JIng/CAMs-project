@@ -13,27 +13,70 @@ import models.Suggestion;
 
 public class DataStore {
 	
-	private static IFileDataService fileDataService;
-	private static Map<String, String> filePathsMap;
-	private static Map<String, Student> studentsData = new HashMap<String, Student>();
-	private static Map<String, Staff> staffData = new HashMap<String, Staff>();
-	private static Map<String, Camp> campData = new HashMap<String, Camp>();
-	private static Map<Integer, Enquiry> enquiryData = new HashMap<Integer, Enquiry>(); 
-    private static Map<Integer, Suggestion> suggestionData = new HashMap<Integer, Suggestion>(); 
+	/**
+     * The file data service used for importing and exporting data. It should implement {@link IFileDataService}.
+     */
+    private static IFileDataService fileDataService;
 
-	// Key: studentName | Value: List of camps withdrawn/registered
-	private static Map<String, List<String>> withdrawnCampData = new HashMap<String, List<String>>();
-	private static Map<String, List<String>> registeredCampData = new HashMap<String, List<String>>();
+    /**
+     * The map containing file paths for different data types. It should include paths for "user", "student", "Staff", and "Camp".
+     */
+    private static Map<String, String> filePathsMap;
 
-	// Key: CampComitteeName(CampComittee) | Value: Camp that the CampComittee member has registered
-	private static Map<String, String> campCommitteeData = new HashMap<String, String>();
+    /**
+     * Map containing student data.
+     */
+    private static Map<String, Student> studentsData = new HashMap<>();
 
-	// Key: CampName | Value: List of Student registered
-	//private static Map<String, List<String>> withdrawnStudentData = new HashMap<String, List<String>>();
-	private static Map<String, List<String>> registeredStudentData = new HashMap<String, List<String>>();
+    /**
+     * Map containing staff data.
+     */
+    private static Map<String, Staff> staffData = new HashMap<>();
 
-	// Key: campName | Value: List of CampComitteeName(CampComittee) registered
-	private static Map<String, List<String>> registeredCampCommitteeData = new HashMap<String, List<String>>();
+    /**
+     * Map containing camp data.
+     */
+    private static Map<String, Camp> campData = new HashMap<>();
+
+    /**
+     * Map containing enquiry data. Key: enquiry ID, Value: Enquiry object.
+     */
+    private static Map<Integer, Enquiry> enquiryData = new HashMap<>();
+
+    /**
+     * Map containing suggestion data. Key: suggestion ID, Value: Suggestion object.
+     */
+    private static Map<Integer, Suggestion> suggestionData = new HashMap<>();
+
+    /**
+     * Map representing the relationship between a student and the camps they have withdrawn or registered for.
+     * Key: studentName, Value: List of camps withdrawn/registered.
+     */
+    private static Map<String, List<String>> studentToCampsWithdrawnData = new HashMap<>();
+
+    /**
+     * Map representing the relationship between a student and the camps they have registered for.
+     * Key: studentName, Value: List of camps registered.
+     */
+    private static Map<String, List<String>> studentsToCampsRegisteredData = new HashMap<>();
+
+    /**
+     * Map representing the relationship between a Camp Committee member and the camp they have registered for.
+     * Key: CampCommitteeName(CampCommittee), Value: Camp that the CampCommittee member has registered.
+     */
+    private static Map<String, String> campCommitteeToCampRegisteredData = new HashMap<>();
+
+    /**
+     * Map representing the relationship between a camp and the students registered for it.
+     * Key: CampName, Value: List of Student registered.
+     */
+    private static Map<String, List<String>> campToRegisteredStudentData = new HashMap<>();
+
+    /**
+     * Map representing the relationship between a camp and the Camp Committee members registered for it.
+     * Key: CampName, Value: List of CampCommitteeName(CampCommittee) registered.
+     */
+    private static Map<String, List<String>> campToRegisteredCampCommitteeData = new HashMap<>();
 
 	/**
 	 * Private constructor to prevent instantiation of the class.
@@ -41,6 +84,8 @@ public class DataStore {
 	private DataStore() {}
 
 	public static boolean initDataStore(IFileDataService fileDataService, Map<String, String> filePathsMap) {
+		// work in progress
+
 		// Initialize fileDataService and filePathsMap
 		DataStore.filePathsMap = filePathsMap;
 		DataStore.fileDataService = fileDataService;
@@ -69,11 +114,11 @@ public class DataStore {
 		DataStore.setCampData(campData);
 		DataStore.setEnquiryData(enquiryData);
 		DataStore.setSuggestionData(suggestionData);
-		DataStore.setWithdrawnCampData(withdrawnCampData);
-		DataStore.setRegisteredCampData(registeredCampData);
-		DataStore.setRegisteredStudentData(registeredStudentData);
-		DataStore.setCampCommitteeData(campCommitteeData);
-		DataStore.setRegisteredCampCommitteeData(registeredCampCommitteeData);
+		DataStore.setStudentToCampsWithdrawnData(studentToCampsWithdrawnData);
+		DataStore.setStudentsToCampsRegisteredData(studentsToCampsRegisteredData);
+		DataStore.setCampToRegisteredStudentData(campToRegisteredStudentData);
+		DataStore.setCampToRegisteredCampCommitteeData(campToRegisteredCampCommitteeData);
+		DataStore.setCampCommitteeToCampRegisteredData(campCommitteeToCampRegisteredData);
 		return true;
 	}
 
@@ -119,55 +164,45 @@ public class DataStore {
         DataStore.suggestionData = suggestionData; 
     }    
 
-  	public static Map<String, List<String>> getWithdrawnCampData() {
-        return withdrawnCampData;
+  	public static Map<String, List<String>> getStudentToCampsWithdrawnData() {
+        return studentToCampsWithdrawnData;
     }
 
-  	public static void setWithdrawnCampData(Map<String, List<String>> withdrawnCampData) {
-        DataStore.withdrawnCampData = withdrawnCampData; 
+  	public static void setStudentToCampsWithdrawnData(Map<String, List<String>> studentToCampsWithdrawnData) {
+        DataStore.studentToCampsWithdrawnData = studentToCampsWithdrawnData; 
     }    
 
-	public static Map<String, List<String>> getRegisteredCampData() {
-        return registeredCampData;
+	public static Map<String, List<String>> getStudentsToCampsRegisteredData() {
+        return studentsToCampsRegisteredData;
     }
 
-  	public static void setRegisteredCampData(Map<String, List<String>> registeredCampData) {
-        DataStore.registeredCampData = registeredCampData; 
+  	public static void setStudentsToCampsRegisteredData(Map<String, List<String>> studentsToCampsRegisteredData) {
+        DataStore.studentsToCampsRegisteredData = studentsToCampsRegisteredData; 
     }    
 	
-	public static Map<String, List<String>> getRegisteredStudentData() {
-        return registeredStudentData;
+	public static Map<String, List<String>> getCampToRegisteredStudentData() {
+        return campToRegisteredStudentData;
     }
 
-  	public static void setRegisteredStudentData(Map<String, List<String>> registeredStudentData) {
-        DataStore.registeredStudentData = registeredStudentData; 
+  	public static void setCampToRegisteredStudentData(Map<String, List<String>> campToRegisteredStudentData) {
+        DataStore.campToRegisteredStudentData = campToRegisteredStudentData; 
     }    
 
-	public static Map<String, String> getCampCommitteeData() {
-        return campCommitteeData;
+	public static Map<String, String> getCampCommitteeToCampRegisteredData() {
+        return campCommitteeToCampRegisteredData;
     }
 
-  	public static void setCampCommitteeData(Map<String, String> campCommitteeData) {
-        DataStore.campCommitteeData = campCommitteeData; 
+  	public static void setCampCommitteeToCampRegisteredData(Map<String, String> campCommitteeToCampRegisteredData) {
+        DataStore.campCommitteeToCampRegisteredData = campCommitteeToCampRegisteredData; 
     }    
 
 
-	public static Map<String, List<String>> getRegisteredCampCommitteeData() {
-        return registeredCampCommitteeData;
+	public static Map<String, List<String>> getCampToRegisteredCampCommitteeData() {
+        return campToRegisteredCampCommitteeData;
     }
 
-  	public static void setRegisteredCampCommitteeData(Map<String, List<String>> registeredCampCommitteeData) {
-        DataStore.registeredCampCommitteeData = registeredCampCommitteeData; 
+  	public static void setCampToRegisteredCampCommitteeData(Map<String, List<String>> campToRegisteredCampCommitteeData) {
+        DataStore.campToRegisteredCampCommitteeData = campToRegisteredCampCommitteeData; 
     }    
-
-	/*  KIV may not require it 
-	public static Map<String, List<String>> getWithdrawnStudentData() {
-        return withdrawnStudentData;
-    }
-
-  	public static void setWithdrawnStudentData(Map<String, List<String>> withdrawnStudentData) {
-        DataStore.withdrawnStudentData = withdrawnStudentData; 
-    }    
-	*/
 
 }

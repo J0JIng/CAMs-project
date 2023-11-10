@@ -81,7 +81,7 @@ public class CampStudentService implements ICampStudentService {
 	 * @return {@code true} if the {@link camp} is full, {@code false} otherwise.
 	 */
 	private boolean isCampFull(Camp camp){
-		Map<String, List<String>> registeredStudentData = DataStore.getRegisteredStudentData();
+		Map<String, List<String>> registeredStudentData = DataStore.getCampToRegisteredStudentData();
 		String campName = camp.getCampInformation().getCampName();
 		int maxCampSlots = camp.getCampInformation().getCampTotalSlots();
 		if(registeredStudentData.containsKey(campName) && registeredStudentData.get(campName).size() >= maxCampSlots ){
@@ -99,7 +99,7 @@ public class CampStudentService implements ICampStudentService {
 	 * @return {@code true} if the camp committee slots are full, {@code false} otherwise.
 	 */
 	private boolean isCampCommitteeFull(Camp camp){
-		Map<String, List<String>> registeredCampCommitteeData = DataStore.getRegisteredCampCommitteeData();
+		Map<String, List<String>> registeredCampCommitteeData = DataStore.getCampToRegisteredCampCommitteeData();
 		String campName = camp.getCampInformation().getCampName();
 		int maxCampCommitteeSlots = camp.getCampInformation().getCampCommitteeSlots();
 
@@ -118,7 +118,7 @@ public class CampStudentService implements ICampStudentService {
 	 * @return {@code true} if the {@link student} is a camp committee member for the specified {@link camp}, {@code false} otherwise.
 	 */
 	private boolean isUserCampCommitteeForCamp(Student student, Camp camp) {
-		Map<String, String> campCommitteeData = DataStore.getCampCommitteeData();
+		Map<String, String> campCommitteeData = DataStore.getCampCommitteeToCampRegisteredData();
 		String studentName = student.getName();
 		String campName = camp.getCampInformation().getCampName();
 	
@@ -138,7 +138,7 @@ public class CampStudentService implements ICampStudentService {
 	 * @return {@code true} if the {@link student} is a camp committee member, {@code false} otherwise.
 	 */
 	private boolean isUserCampCommittee(Student student) {
-		Map<String, String> campCommitteeData = DataStore.getCampCommitteeData();
+		Map<String, String> campCommitteeData = DataStore.getCampCommitteeToCampRegisteredData();
 		String studentName = student.getName();
 
 		if (campCommitteeData.containsKey(studentName)) {
@@ -158,7 +158,7 @@ public class CampStudentService implements ICampStudentService {
 	 * @return {@code true} if the {@link Student} has withdrawn from the specified {@link Camp}, {@code false} otherwise.
 	 */
 	private boolean isUserWithdrawnFromCamp(Student student, Camp camp) {
-		Map<String, List<String>> withdrawnCampData = DataStore.getWithdrawnCampData();
+		Map<String, List<String>> withdrawnCampData = DataStore.getStudentToCampsWithdrawnData();
 		String studentName = student.getName();
 		String campName = camp.getCampInformation().getCampName();
 
@@ -173,7 +173,7 @@ public class CampStudentService implements ICampStudentService {
 	 * @return {@code true} if the {@link student} is registered with the specified {@link camp}, {@code false} otherwise.
  	*/
 	private boolean isUserRegisteredWithCamp(Student student, Camp camp) {
-		Map<String, List<String>> registeredCampData = DataStore.getRegisteredCampData();
+		Map<String, List<String>> registeredCampData = DataStore.getStudentsToCampsRegisteredData();
 		String studentName = student.getName();
 		String campName = camp.getCampInformation().getCampName();
 
@@ -215,9 +215,9 @@ public class CampStudentService implements ICampStudentService {
 	@Override
 	public List<Camp> getWithdrawnCamps() {
 		Student student = (Student) AuthStore.getCurrentUser();
-		Map<String, List<String>> withdrawnCampsData = DataStore.getWithdrawnCampData();
+		Map<String, List<String>> studentToCampsWithdrawnData = DataStore.getStudentToCampsWithdrawnData();
 	
-		List<Camp> withdrawnCamps = withdrawnCampsData.entrySet().stream()
+		List<Camp> withdrawnCamps = studentToCampsWithdrawnData.entrySet().stream()
 				.filter(entry -> entry.getValue().contains(student.getName()))
 				.map(entry -> DataStore.getCampData().get(entry.getKey()))
 				.collect(Collectors.toList());
@@ -233,7 +233,7 @@ public class CampStudentService implements ICampStudentService {
 	@Override
 	public List<Camp> getRegisteredCamps() {
 		Student student = (Student) AuthStore.getCurrentUser();
-		Map<String, List<String>> registeredCampsData = DataStore.getRegisteredCampData();
+		Map<String, List<String>> registeredCampsData = DataStore.getStudentsToCampsRegisteredData();
 	
 		List<Camp> registeredCamps = registeredCampsData.entrySet().stream()
 				.filter(entry -> entry.getValue().contains(student.getName()))
@@ -257,8 +257,8 @@ public class CampStudentService implements ICampStudentService {
 
 		// Get Data
 		List<Camp> availableCamps = getAvailableCamps();
-		Map<String, List<String>> registeredCampsData = DataStore.getRegisteredCampData();
-		Map<String, List<String>> registeredStudentData = DataStore.getRegisteredStudentData();
+		Map<String, List<String>> registeredCampsData = DataStore.getStudentsToCampsRegisteredData();
+		Map<String, List<String>> registeredStudentData = DataStore.getCampToRegisteredStudentData();
 
 		// Get User input
 		Camp camp = InputSelectionUtility.campSelector(availableCamps);
@@ -307,8 +307,8 @@ public class CampStudentService implements ICampStudentService {
 		registeredStudentData.get(campName).add(studentName);
 	
 		// Save into DataStore
-		DataStore.setRegisteredCampData(registeredCampsData);
-		DataStore.setRegisteredStudentData(registeredStudentData);
+		DataStore.setStudentsToCampsRegisteredData(registeredCampsData);
+		DataStore.setCampToRegisteredStudentData(registeredStudentData);
 		System.out.println("Registered to chosen camp successfully!");
 
 		return true;
@@ -325,9 +325,9 @@ public class CampStudentService implements ICampStudentService {
 
 		// Get Data
 		List<Camp> RegisteredCamps = getRegisteredCamps();
-		Map<String, List<String>> withdrawnCampsData = DataStore.getWithdrawnCampData();
-		Map<String, List<String>> registeredCampsData = DataStore.getRegisteredCampData();
-		Map<String, List<String>> registeredStudentData = DataStore.getRegisteredStudentData();
+		Map<String, List<String>> withdrawnCampsData = DataStore.getStudentToCampsWithdrawnData();
+		Map<String, List<String>> registeredCampsData = DataStore.getStudentsToCampsRegisteredData();
+		Map<String, List<String>> registeredStudentData = DataStore.getCampToRegisteredStudentData();
 
 		// Get user input
     	Camp camp = InputSelectionUtility.campSelector(RegisteredCamps);
@@ -361,10 +361,10 @@ public class CampStudentService implements ICampStudentService {
 		withdrawnCampsData.get(studentName).add(campName);
 
 		// Save into DataStore
-		DataStore.setRegisteredCampData(registeredCampsData);
-		DataStore.setRegisteredStudentData(registeredStudentData);
-		DataStore.setWithdrawnCampData(withdrawnCampsData);
-
+		DataStore.setStudentsToCampsRegisteredData(registeredCampsData);
+		DataStore.setCampToRegisteredStudentData(registeredStudentData);
+		DataStore.setStudentToCampsWithdrawnData(withdrawnCampsData);
+		
 		System.out.println("Registered to chosen camp successfully!");
 		return true;
 	}
@@ -381,8 +381,8 @@ public class CampStudentService implements ICampStudentService {
 
 		// Get Data
 		List<Camp> availableCamps = getAvailableCamps();
-		Map<String, List<String>> registeredCampCommitteeData = DataStore.getRegisteredCampCommitteeData();
-		Map<String, String> campCommitteeData = DataStore.getCampCommitteeData();
+		Map<String, List<String>> registeredCampCommitteeData = DataStore.getCampToRegisteredCampCommitteeData();
+		Map<String, String> campCommitteeData = DataStore.getCampCommitteeToCampRegisteredData();
 
 		// Get User input
 		Camp camp = InputSelectionUtility.campSelector(availableCamps);
@@ -433,8 +433,8 @@ public class CampStudentService implements ICampStudentService {
 		campCommitteeData.put(campCommitteeName,campName);
 		
 		// Save into DataStore
-		DataStore.setRegisteredCampCommitteeData(registeredCampCommitteeData);
-		DataStore.setCampCommitteeData(campCommitteeData);
+		DataStore.setCampToRegisteredCampCommitteeData(registeredCampCommitteeData);
+		DataStore.setCampCommitteeToCampRegisteredData(campCommitteeData);
 		System.out.println("Registered to chosen camp successfully!");
 		AuthStore.getCurrentUser().setRole(UserRole.COMMITTEE);
 		return true;
