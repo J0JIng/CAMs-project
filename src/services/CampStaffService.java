@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
@@ -21,6 +22,8 @@ import models.Student;
 import stores.AuthStore;
 import stores.DataStore;
 
+import utility.InputSelectionUtility;
+
 public class CampStaffService implements ICampStaffService {
 	Scanner scanner = new Scanner(System.in);
 
@@ -33,21 +36,11 @@ public class CampStaffService implements ICampStaffService {
      * @param visibility the new visibility status ("on" or "off")
      * @return true if the camp visibility was updated successfully, false otherwise
      */
-	public boolean toggleCampVisibility(Camp camp, boolean visibility){
-		/* 		scanner.nextLine();
-    	System.out.print("Enter Camp Name: ");
-    	String campName = scanner.nextLine();
-    	System.out.print("Enter Visibility: ");
-    	boolean b = scanner.nextBoolean();
-        for (Camp c : CampServiceController.camps) {
-			if (c.getCampInformation().getCampName().equalsIgnoreCase(campName)) {
-                c.setVisibility(b);
-                System.out.println(c.getCampInformation().getCampName() +" visibility set to " + b);
-                return;
-            }
-        }
-        System.out.println("Cannot find camp " + campName);
-		*/
+	public void toggleCampVisibility(Camp camp){
+		List<Camp> staffCreatedCamps = getStaffCreatedCamps();
+		boolean choice = InputSelectionUtility.toggleSelector(staffCreatedCamps);	
+		if(choice) camp.setVisibility(true);
+		else camp.setVisibility(false);
 	}
 
 	// ---------- interface method implementation ---------- //
@@ -81,16 +74,53 @@ public class CampStaffService implements ICampStaffService {
 
 		return staffCreatedCamps;
 	}
-	
+
 	/**
-     * Retrieves a list of students attending a specific camp.
+     * Retrieves a list of students attending a specific camp as an Attendee .
      *
      * @param camp the {@link Camp} object for which to retrieve the attendee list
      * @return an {@link List} of {@link Student} objects representing attendees
      */
 	@Override
-	public List<Student> getCampAttendeeList(Camp camp){
-		
+	public List<Student> getCampAttendeeList(Camp camp) {
+		Map<String, List<String>> campToRegisteredStudentData = DataStore.getCampToRegisteredStudentData();
+		Map<String, Student> allStudentsData = DataStore.getStudentData();
+		String campName = camp.getCampInformation().getCampName();
+
+		//retrieves the list of registered student names for the specified camp. If the camp is not found in the map, it defaults to an empty list.
+		List<String> registeredStudents = campToRegisteredStudentData.getOrDefault(campName, Collections.emptyList());
+
+		//returns the list of students attending the specified camp.
+		List<Student> campAttendeeList = registeredStudents.stream()
+				.map(allStudentsData::get)
+				.filter(Objects::nonNull) // Filter out null students if any
+				.collect(Collectors.toList());
+
+		return campAttendeeList;
+	}
+
+	/**
+     * Retrieves a list of students attending a specific camp as a Camp Committee.
+     *
+     * @param camp the {@link Camp} object for which to retrieve the attendee list
+     * @return an {@link List} of {@link Student} objects representing CampCommittee
+     */
+	@Override
+	public List<Student> getCampCommitteeList(Camp camp){
+		Map<String, List<String>> campToRegisteredCampCommitteeData = DataStore.getCampToRegisteredCampCommitteeData();
+		Map<String, Student> allStudentsData = DataStore.getStudentData();
+		String campName = camp.getCampInformation().getCampName();
+
+		//retrieves the list of registered CampCommittee names for the specified camp. If the camp is not found in the map, it defaults to an empty list.
+		List<String> registeredCampCommittee = campToRegisteredCampCommitteeData.getOrDefault(campName, Collections.emptyList());
+
+		//returns the list of CampCommittee attending the specified camp.
+		List<Student> campCommitteeList = registeredCampCommittee.stream()
+				.map(allStudentsData::get)
+				.filter(Objects::nonNull) // Filter out null students if any
+				.collect(Collectors.toList());
+
+		return campCommitteeList;
 	}
 
 	// ---------- Service method implementation ---------- //
@@ -173,6 +203,7 @@ public class CampStaffService implements ICampStaffService {
 		CampServiceController.camps.add(c);
         System.out.println("Created " + c.getCampInformation().getCampName());
 		*/
+		return false;
 	}
 	
 	/**
@@ -261,6 +292,7 @@ public class CampStaffService implements ICampStaffService {
         }
 		System.out.println("Cannot find " + campName);
 		*/
+		return false;
 	}
 	
 	/**
@@ -284,6 +316,7 @@ public class CampStaffService implements ICampStaffService {
         }
         System.out.println("Error deleting " + campName);
 		*/
+		return false;
 	}
 
 }

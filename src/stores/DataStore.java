@@ -50,7 +50,7 @@ public class DataStore {
 
     /**
      * Map representing the relationship between a student and the camps they have withdrawn or registered for.
-     * Key: studentName, Value: List of camps withdrawn/registered.
+     * Key: studentName, Value: List of camps withdrawn
      */
     private static Map<String, List<String>> studentToCampsWithdrawnData = new HashMap<>();
 

@@ -7,7 +7,7 @@ public class StaffController {
     
     public void start() {
     	Scanner scanner = new Scanner(System.in);
-	    //CampServiceController controller = new CampServiceController(CampServiceController.camps);
+
 	    
 	    StaffView view = new StaffView();
 	    while (true) {

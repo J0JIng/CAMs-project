@@ -28,11 +28,19 @@ public interface ICampStaffService {
     public List<Camp> getStaffCreatedCamps();
 
     /**
-     * Retrieves a list of students attending a specific camp.
+     * Retrieves a list of students attending a specific camp as an Attendee .
      *
      * @param camp the {@link Camp} object for which to retrieve the attendee list
      * @return an {@link List} of {@link Student} objects representing attendees
      */
     public List<Student> getCampAttendeeList(Camp camp);
+
+    /**
+     * Retrieves a list of students attending a specific camp as a Camp Committee.
+     *
+     * @param camp the {@link Camp} object for which to retrieve the attendee list
+     * @return an {@link List} of {@link Student} objects representing CampCommittee
+     */
+	public List<Student> getCampCommitteeList(Camp camp);
 
 }
