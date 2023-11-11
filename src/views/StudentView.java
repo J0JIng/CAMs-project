@@ -52,18 +52,19 @@ public class StudentView implements IMenuView{
         System.out.println("║[10] View Enquiry                                         ║");
         System.out.println("║[11] Edit Enquiry                                         ║");
         System.out.println("║[12] Delete Enquiry                                       ║");
+        System.out.println("║[13] Change Password                                      ║");
         if (AuthStore.getCurrentUser().getUserRole() == UserRole.COMMITTEE) {
         // Committee Specific Functions:
-        System.out.println("║[13] View Enquiries for Camp                              ║");
-        System.out.println("║[14] Reply Enquiries for Camp                             ║");
-        System.out.println("║[15] View Suggestion                                      ║");
-        System.out.println("║[16] Edit Suggestion                                      ║");
-        System.out.println("║[17] Delete Suggestion                                    ║");
-        System.out.println("║[18] Submit Suggestion                                    ║");
-        System.out.println("║[19] Generate Camp Report                                 ║");
-        System.out.println("║[20] Logout                                               ║");
+        System.out.println("║[14] View Enquiries for Camp                              ║");
+        System.out.println("║[15] Reply Enquiries for Camp                             ║");
+        System.out.println("║[16] View Suggestion                                      ║");
+        System.out.println("║[17] Edit Suggestion                                      ║");
+        System.out.println("║[18] Delete Suggestion                                    ║");
+        System.out.println("║[19] Submit Suggestion                                    ║");
+        System.out.println("║[20] Generate Camp Report                                 ║");
+        System.out.println("║[21] Logout                                               ║");
         } else {
-        System.out.println("║[13] Logout                                               ║");
+        System.out.println("║[14] Logout                                               ║");
         }
         
         System.out.println("╚══════════════════════════════════════════════════════════╝");

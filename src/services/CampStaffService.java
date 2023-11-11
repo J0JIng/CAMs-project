@@ -40,12 +40,17 @@ public class CampStaffService implements ICampStaffService {
      */
 	public void toggleCampVisibility(Staff staff){
 		List<Camp> staffCreatedCamps = getStaffCreatedCamps(staff);
+		view.viewCamps(staffCreatedCamps);
 		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
-		boolean on = InputSelectionUtility.toggleSelector(staffCreatedCamps);	
-		if(on) {
-			camp.setVisibility(true);
-		}else if(!on && !campIsRegistered(camp)) {
-			camp.setVisibility(false);
+		if (camp != null) {
+			boolean on = InputSelectionUtility.toggleSelector(staffCreatedCamps);	
+			if(on) {
+				camp.setVisibility(true);
+			}else if(!on && !campIsRegistered(camp)) {
+				camp.setVisibility(false);
+			}
+		} else {
+			return;
 		}
 	}
 

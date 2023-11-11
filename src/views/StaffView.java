@@ -45,7 +45,8 @@ public class StaffView implements IMenuView{
         System.out.println("║[13] Generate Camp Report                                 ║");
         System.out.println("║[14] Generate Camp Committee Performance Report           ║");
         System.out.println("║[15] Generate Camp Student's Enquiry Report               ║");
-        System.out.println("║[16] Logout                                               ║");
+        System.out.println("║[16] Change Password                                      ║");
+        System.out.println("║[17] Logout                                               ║");
         System.out.println("╚══════════════════════════════════════════════════════════╝");
         System.out.print("Select an option: ");
 	}
