@@ -146,38 +146,41 @@ public class InputSelectionUtility {
     }
       
     
-    public static boolean toggleSelector(List<Camp> camps) {
+    public static boolean toggleSelector(Camp selectedCamp) {
         while (true) {
-            System.out.println("Select a Camp by entering its index [Exit press Enter]:");
-    
-            for (int i = 0; i < camps.size(); i++) {
-                System.out.printf("%d. %s\n", i + 1, camps.get(i).getCampInformation().getCampName());
-            }
-    
-            System.out.print("Enter the index of the camp you want to update (or press Enter to return): ");
-            String campIndexInput = sc.nextLine();
-    
-            if (campIndexInput.isEmpty()) { // If the input is empty (user pressed Enter), return
-                return false;
-            }
-    
-            int campIndex;
-            try {
-                campIndex = Integer.parseInt(campIndexInput) - 1; // Adjust index to start from 0
-                if (campIndex < 0 || campIndex >= camps.size()) {
-                    throw new NumberFormatException(); // Out of bounds
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid index. Please enter a valid index or press Enter to return.\n");
-                continue;
-            }
-    
-            Camp selectedCamp = camps.get(campIndex);
+//            System.out.println("Select a Camp by entering its index [Exit press Enter]:");
+//    
+//            for (int i = 0; i < camps.size(); i++) {
+//                System.out.printf("%d. %s\n", i + 1, camps.get(i).getCampInformation().getCampName());
+//            }
+//    
+//            System.out.print("Enter the index of the camp you want to update (or press Enter to return): ");
+//            String campIndexInput = sc.nextLine();
+//    
+//            if (campIndexInput.isEmpty()) { // If the input is empty (user pressed Enter), return
+//                return false;
+//            }
+//    
+//            int campIndex;
+//            try {
+//                campIndex = Integer.parseInt(campIndexInput) - 1; // Adjust index to start from 0
+//                if (campIndex < 0 || campIndex >= camps.size()) {
+//                    throw new NumberFormatException(); // Out of bounds
+//                }
+//            } catch (NumberFormatException e) {
+//                System.out.println("Invalid index. Please enter a valid index or press Enter to return.\n");
+//                continue;
+//            }
+//    
+//            Camp selectedCamp = camps.get(campIndex);
     
             // Print menu
-            System.out.println("Select Camp Visibility [Exit press Enter]:");
-            System.out.println("1. On");
-            System.out.println("0. Off");
+        	System.out.println("╔══════════════════════════════════════════════════════════╗");
+            ViewUtility.displayInMenuCentered("Select Camp Visibility [Exit press Enter]:");
+        	ViewUtility.displayInMenuNumbered("Off", 0);
+        	ViewUtility.displayInMenuNumbered("On", 1);
+            System.out.println("╚══════════════════════════════════════════════════════════╝");
+            System.out.println("Select option: ");
     
             // Get user input
             String visibilityInput = sc.nextLine();

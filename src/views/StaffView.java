@@ -71,7 +71,7 @@ public class StaffView implements IMenuView{
 	 * Displays all camps without any filters
 	 * @param list 
 	 */
-	public void viewCamps(List<Camp> campData) {
+	public void viewCamps(List<Camp> campData, String title) {
     	// Print the filtered and sorted camps
 		System.out.println("╔══════════════════════════════════════════════════════════╗");
         System.out.println("║                                                          ║");   
@@ -83,8 +83,7 @@ public class StaffView implements IMenuView{
 		System.out.println("║         ╚═════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝     ╚══════╝       ║");
         System.out.println("║                                                          ║");                                  
         System.out.println("╠══════════════════════════════════════════════════════════╣");
-        System.out.println("║                    - List of Camps -                     ║");
-        System.out.println("║                  Choose to view details                  ║");
+        ViewUtility.displayInMenuCentered(title);
         System.out.println("╠══════════════════════════════════════════════════════════╣");
         int i = 1;
     	for (Camp c : campData) {

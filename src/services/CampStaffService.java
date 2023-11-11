@@ -40,10 +40,10 @@ public class CampStaffService implements ICampStaffService {
      */
 	public void toggleCampVisibility(Staff staff){
 		List<Camp> staffCreatedCamps = getStaffCreatedCamps(staff);
-		view.viewCamps(staffCreatedCamps);
+		view.viewCamps(staffCreatedCamps, " - Choose Camp to Toggle Visibility - ");
 		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
 		if (camp != null) {
-			boolean on = InputSelectionUtility.toggleSelector(staffCreatedCamps);	
+			boolean on = InputSelectionUtility.toggleSelector(camp);	
 			if(on) {
 				camp.setVisibility(true);
 			}else if(!on && !campIsRegistered(camp)) {
@@ -181,7 +181,7 @@ public class CampStaffService implements ICampStaffService {
 		System.out.println("Updating camp Details...");
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		List<Camp> staffCreatedCamps = getStaffCreatedCamps(staff);
-		view.viewCamps(staffCreatedCamps);
+		view.viewCamps(staffCreatedCamps, " - Choose Camp to Update - ");
 		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
 		if (camp != null) {
 			view.editCampView();
@@ -201,7 +201,7 @@ public class CampStaffService implements ICampStaffService {
     public boolean deleteCamp(Staff staff){
 		Map<String, Camp> campData = DataStore.getCampData();
 		List<Camp> staffCreatedCamps = getStaffCreatedCamps(staff);
-		view.viewCamps(staffCreatedCamps);
+		view.viewCamps(staffCreatedCamps, " - Choose Camp to Delete - ");
 		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
 		if (camp != null) {
 			String campName = camp.getCampInformation().getCampName();
@@ -220,9 +220,12 @@ public class CampStaffService implements ICampStaffService {
 		}
 	}
     
+    /**
+     * Shows all camps in the system.
+     */
     public void viewAllCamps() {
     	while (true) {
-    		view.viewCamps(getAllCamps());
+    		view.viewCamps(getAllCamps(), " - List of Camps - ");
     		Camp c = InputSelectionUtility.campSelector(getAllCamps());
     		if (c != null) {
 	    		view.viewCampInformation(c);
@@ -231,6 +234,13 @@ public class CampStaffService implements ICampStaffService {
     			return;
     		}
     	}
+    }
+    
+    public void viewCreatedCamps() {
+		List<Camp> staffCreatedCamps = getStaffCreatedCamps((Staff)AuthStore.getCurrentUser());
+		view.viewCamps(staffCreatedCamps, " - Camps Created by " + AuthStore.getCurrentUser().getName() + " - ");
+		System.out.print("(Press Enter to return) ");
+		scanner.nextLine();
     }
 }
 

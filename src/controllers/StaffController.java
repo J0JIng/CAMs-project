@@ -52,7 +52,7 @@ public class StaffController extends UserController {
                 	break;
                 case 7:
                 	//System.out.println("View Created Camps");
-                	//service.viewCreatedCamps(); 
+                	service.viewCreatedCamps(); 
                 	break;
                 case 8:
                 	//controller.campStaffService.viewStudentList(); 
