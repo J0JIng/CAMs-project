@@ -206,7 +206,16 @@ public class CampStaffService implements ICampStaffService {
 	}
     
     public void viewAllCamps() {
-    	view.viewAllCamps(getAllCamps());
+    	while (true) {
+    		view.viewAllCamps(getAllCamps());
+    		Camp c = InputSelectionUtility.campSelector(getAllCamps());
+    		if (c != null) {
+	    		view.viewCampInformation(c);
+	    		scanner.nextLine();
+    		} else {
+    			return;
+    		}
+    	}
     }
 }
 

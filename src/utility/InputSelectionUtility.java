@@ -123,10 +123,6 @@ public class InputSelectionUtility {
         while (true) {
             System.out.println("Select a Camp:");
     
-            for (int i = 0; i < camps.size(); i++) {
-                System.out.printf("%d. %s\n", i + 1, camps.get(i).getCampInformation().getCampName());
-            }
-    
             System.out.print("Enter the index of the camp (or press Enter to return): ");
             String campIndexInput = sc.nextLine();
     

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import interfaces.IMenuView;
 import models.Camp;
+import models.CampInformation;
 import stores.AuthStore;
 import stores.DataStore;
 import utility.ViewUtility;
@@ -14,10 +15,6 @@ public class StaffView implements IMenuView{
 	@Override
 	public void displayMenuView() {
 		ViewUtility.clearScreen();
-		
-		String welcomeMessage = "Welcome " + AuthStore.getCurrentUser().getName();
-		int totalLength = welcomeMessage.length();
-		int spaces = (58 - totalLength) / 2;
 
 		System.out.println("╔══════════════════════════════════════════════════════════╗");
         System.out.println("║                                                          ║");   
@@ -31,7 +28,7 @@ public class StaffView implements IMenuView{
         System.out.println("╠══════════════════════════════════════════════════════════╣");
         System.out.println("║                      - Staff Menu -                      ║");
         System.out.println("╠══════════════════════════════════════════════════════════╣");
-        System.out.println("║" + " ".repeat(spaces) + welcomeMessage + " ".repeat(58 - totalLength - spaces) + "║");
+        ViewUtility.displayInMenuCentered("Welcome " + AuthStore.getCurrentUser().getName());
         System.out.println("╠══════════════════════════════════════════════════════════╣");
         System.out.println("║[1]  Create Camp                                          ║");
         System.out.println("║[2]  Delete Camp                                          ║");
@@ -88,17 +85,41 @@ public class StaffView implements IMenuView{
         System.out.println("║                    - List of Camps -                     ║");
         System.out.println("║                  Choose to view details                  ║");
         System.out.println("╠══════════════════════════════════════════════════════════╣");
-    	int i = 1;
+        int i = 1;
     	for (Camp c : campData) {
-    		String campText = c.getCampInformation().getCampName();
-    		int totalLength = campText.length();
-            System.out.println("║[" + (i) + "] " + campText + " ".repeat(54- totalLength) + "║");
+    		ViewUtility.displayInMenuNumbered(c.getCampInformation().getCampName(), i);
         	i++;
     	}
-    	String text = "Quit";
-    	System.out.println("║[" + (i) + "] " + text + " ".repeat(54- text.length()) + "║");
         System.out.println("╚══════════════════════════════════════════════════════════╝");
-        System.out.print("Select an option: ");
+	}
+	
+	/**
+	 * Displays all camps without any filters
+	 * @param list 
+	 */
+	public void viewCampInformation(Camp c) {
+    	// Print the filtered and sorted camps
+		System.out.println("╔══════════════════════════════════════════════════════════╗");
+		ViewUtility.displayInMenuCentered(" - " + c.getCampInformation().getCampName() + " - ");
+		System.out.println("╠══════════════════════════════════════════════════════════╣");
+        int i = 1;
+    	//for (Camp c : campData) {
+    		CampInformation campInfo = c.getCampInformation();
+    		ViewUtility.displayInMenuBullet("Name: " + campInfo.getCampName());
+    		ViewUtility.displayInMenuBullet("Start Date: " + campInfo.getCampStartDate());
+    		ViewUtility.displayInMenuBullet("End Date: " + campInfo.getCampEndDate());
+    		ViewUtility.displayInMenuBullet("Registration Closing Date: " + campInfo.getCampRegistrationClosingDate());
+    		ViewUtility.displayInMenuBullet("User Group: " + campInfo.getFacultyGroup());
+    		ViewUtility.displayInMenuBullet("Location: " + campInfo.getCampLocation());
+    		ViewUtility.displayInMenuBullet("Total Slots: " + campInfo.getCampTotalSlots());
+    		ViewUtility.displayInMenuBullet("Committee Slots: " + campInfo.getCampCommitteeSlots());
+    		ViewUtility.displayInMenuBullet("Description: " + campInfo.getCampDescription());
+    		ViewUtility.displayInMenuBullet("Staff In Charge: " + campInfo.getCampStaffInCharge());
+    		ViewUtility.displayInMenuBullet("Camp Visibility: " + c.getVisibility());
+        	i++;
+    	//}
+        System.out.println("╚══════════════════════════════════════════════════════════╝");
+        System.out.print("(Press Enter to return) ");
 	}
 
     /* 
