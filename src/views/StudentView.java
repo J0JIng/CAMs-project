@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
+import enums.UserRole;
 import interfaces.IMenuView;
 import models.Camp;
 import models.CampInformation;
@@ -51,9 +52,20 @@ public class StudentView implements IMenuView{
         System.out.println("║[10] View Enquiry                                         ║");
         System.out.println("║[11] Edit Enquiry                                         ║");
         System.out.println("║[12] Delete Enquiry                                       ║");
+        if (AuthStore.getCurrentUser().getUserRole() == UserRole.COMMITTEE) {
+        // Committee Specific Functions:
         System.out.println("║[13] View Enquiries for Camp                              ║");
-        System.out.println("║[14] Submit Suggestion                                    ║");
-        System.out.println("║[15] Logout                                               ║");
+        System.out.println("║[14] Reply Enquiries for Camp                             ║");
+        System.out.println("║[15] View Suggestion                                      ║");
+        System.out.println("║[16] Edit Suggestion                                      ║");
+        System.out.println("║[17] Delete Suggestion                                    ║");
+        System.out.println("║[18] Submit Suggestion                                    ║");
+        System.out.println("║[19] Generate Camp Report                                 ║");
+        System.out.println("║[20] Logout                                               ║");
+        } else {
+        System.out.println("║[13] Logout                                               ║");
+        }
+        
         System.out.println("╚══════════════════════════════════════════════════════════╝");
         System.out.print("Select an option: ");
 	}

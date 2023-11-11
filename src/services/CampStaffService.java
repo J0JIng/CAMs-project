@@ -176,10 +176,15 @@ public class CampStaffService implements ICampStaffService {
 		System.out.println("Updating camp Details...");
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		List<Camp> staffCreatedCamps = getStaffCreatedCamps(staff);
+		view.viewCamps(staffCreatedCamps);
 		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
-		view.editCampView();
-		boolean success = InputSelectionUtility.updateCampInput(camp,staff,dateFormat);
-		return success;
+		if (camp != null) {
+			view.editCampView();
+			boolean success = InputSelectionUtility.updateCampInput(camp,staff,dateFormat);
+			return success;
+		} else {
+			return false;
+		}
 	}
 	
 	/**
@@ -191,23 +196,28 @@ public class CampStaffService implements ICampStaffService {
     public boolean deleteCamp(Staff staff){
 		Map<String, Camp> campData = DataStore.getCampData();
 		List<Camp> staffCreatedCamps = getStaffCreatedCamps(staff);
+		view.viewCamps(staffCreatedCamps);
 		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
-		String campName = camp.getCampInformation().getCampName();
-		
-		if(campIsRegistered(camp)){
-			System.out.println("Error deleting " + campName);
-			System.out.println("Students have registered for the camp!");
+		if (camp != null) {
+			String campName = camp.getCampInformation().getCampName();
+			
+			if(campIsRegistered(camp)){
+				System.out.println("Error deleting " + campName);
+				System.out.println("Students have registered for the camp!");
+				return false;
+			}else{
+				System.out.println("Deleted " + campName);
+				campData.remove(campName);
+				return true;
+			}
+		} else {
 			return false;
-		}else{
-			System.out.println("Deleted " + campName);
-			campData.remove(campName);
-			return true;
 		}
 	}
     
     public void viewAllCamps() {
     	while (true) {
-    		view.viewAllCamps(getAllCamps());
+    		view.viewCamps(getAllCamps());
     		Camp c = InputSelectionUtility.campSelector(getAllCamps());
     		if (c != null) {
 	    		view.viewCampInformation(c);

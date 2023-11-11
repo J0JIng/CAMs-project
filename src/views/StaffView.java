@@ -70,7 +70,7 @@ public class StaffView implements IMenuView{
 	 * Displays all camps without any filters
 	 * @param list 
 	 */
-	public void viewAllCamps(List<Camp> campData) {
+	public void viewCamps(List<Camp> campData) {
     	// Print the filtered and sorted camps
 		System.out.println("╔══════════════════════════════════════════════════════════╗");
         System.out.println("║                                                          ║");   
