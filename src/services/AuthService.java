@@ -10,6 +10,7 @@ import stores.AuthStore;
  * It provides basic authentication functionalities for user login and logout.
  */
 public abstract class AuthService implements IAuthService {
+    
     public abstract boolean login(String userID, String password);
 
     /**

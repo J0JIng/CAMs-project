@@ -1,23 +1,25 @@
 package models;
-
-import enums.AccessLevel;
 import enums.UserRole;
+import enums.FacultyGroups;
 
 public abstract class User {
+    
     private String name;
     private String userID;
     private String email;
-    private String faculty;
     private String password;
-    private AccessLevel accessLevel;
+    private boolean isPasswordChanged;
+    
     private UserRole userRole;
+    private FacultyGroups faculty;
 
-    public User(String name, String userID, String email, String faculty, String password) {
+    public User(String name, String userID, String email, FacultyGroups faculty, String password, boolean isPasswordChanged) {
         this.name = name;
         this.userID = userID;
         this.email = email;
         this.faculty = faculty;
-        this.password = password;        
+        this.password = password; 
+        this.isPasswordChanged = isPasswordChanged;     
     };
   
     public String getName() {
@@ -32,7 +34,7 @@ public abstract class User {
         return this.email;
     }
 
-    public String getFaculty() {
+    public FacultyGroups getFaculty() {
         return this.faculty;
     }
 
@@ -47,14 +49,13 @@ public abstract class User {
 		return true;
 	}
 
-    public AccessLevel getAccessLevel() {
-        return this.accessLevel;
+    public boolean getIsPasswordChanged() {
+        return this.isPasswordChanged;
     }
 
-    public Boolean setAccessLevel(AccessLevel accessLevel) {
-		this.accessLevel = accessLevel;
-		return true;
-	}
+    public void setIsPasswordChanged(boolean isPasswordChangedFlag){
+         this.isPasswordChanged = isPasswordChangedFlag;
+    }
 
     public UserRole getUserRole() {
         return this.userRole;

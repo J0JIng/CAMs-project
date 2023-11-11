@@ -6,34 +6,24 @@ import interfaces.IUserService;
 import services.UserService;
 
 /**
- * The UserController class is responsible for handling user-related
- * actions, such as changing the user's password. This
- * class serves as a base class for more specific user types like
- * StudentController or SupervisorController
- * 
+ * The {@code UserController} class provides methods to interact with user accounts and passwords.
  */
 public class UserController {
-    
+
+    /** The {@code Scanner} object for reading user input. */
     private static final Scanner sc = new Scanner(System.in);
 
-    public UserController() {};
+    /**
+     * Constructs a new {@code UserController}.
+     */
+    public UserController() {}
 
     /**
-     * Changes the user's password by prompting for their old and new passwords.
-     * If the old password matches the current one and the new password is
-     * different,
-     * the change is successful.
+     * Allows the user to change their password interactively.
      *
-     * The password change fails in the following scenarios:
-     * <ol>
-     * <li>The old password does not match the current password</li>
-     * <li>The new password is the same as the old password</li>
-     * <li>The user decides to quit the process by entering "X"</li>
-     * </ol>
-     *
-     * @return true if the password change is successful, false otherwise
+     * @return {@code true} if the password change was successful, {@code false} otherwise.
      */
-    protected boolean changePassword() {
+    protected static boolean changePassword() {
         String oldPassword, newPassword;
         boolean success = false;
         IUserService userService = new UserService();

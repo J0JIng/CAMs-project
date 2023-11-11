@@ -8,10 +8,10 @@ import java.util.HashMap;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class SuggestionService {
+public class SuggestionStudentService {
     private Map<Integer, Suggestion> suggestionData;
 
-    public SuggestionService() {
+    public SuggestionStudentService() {
         suggestionData = DataStore.getSuggestionData(); 
     }
 

@@ -1,19 +1,18 @@
 package models;
 
-import enums.AccessLevel;
 import enums.UserRole;
+import enums.FacultyGroups;
 
 public class Staff extends User {
 
   private String staffID;
   private int numOfCampsManaged;
 
-  public Staff (String name, String staffID, String email, String faculty, String password, int numOfCampsManaged) {
-    super(name, staffID, email, faculty, password);
+  public Staff (String name, String staffID, String email, FacultyGroups faculty, String password, int numOfCampsManaged,  boolean isPasswordChanged) {
+    super(name, staffID, email, faculty, password, isPasswordChanged);
     this.staffID = staffID;
     this.numOfCampsManaged = numOfCampsManaged;
     super.setRole(UserRole.STAFF);
-    super.setAccessLevel(AccessLevel.TOP);
   }
 
   public String getStaffID() {

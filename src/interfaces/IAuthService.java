@@ -1,7 +1,7 @@
 package interfaces;
 
 /**
- * The IAuthService interface defines a contract for managing
+ * The {@link IAuthService} interface defines a contract for managing
  * authentication services, such as login and logout.
  */
 public interface IAuthService {
@@ -15,7 +15,7 @@ public interface IAuthService {
     public boolean login(String userID, String password);
 
     /**
-     * Logs out the currently logged in user.
+     * Logs out the currently logged-in user.
      *
      * @return true if the logout was successful, false otherwise
      */

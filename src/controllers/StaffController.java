@@ -1,17 +1,22 @@
 package controllers;
-
 import java.util.Scanner;
+
+import models.Staff;
+import services.CampStaffService;
+import stores.AuthStore;
 import views.StaffView;
 
-public class StaffController {
+public class StaffController extends UserController {
     
     public void start() {
     	Scanner scanner = new Scanner(System.in);
-	    CampServiceController controller = new CampServiceController(CampServiceController.camps);
-	    
+        CampStaffService service = new CampStaffService();
+        Staff staff = (Staff) AuthStore.getCurrentUser();
+	
 	    StaffView view = new StaffView();
+
 	    while (true) {
-            
+        
             view.displayMenuView();
             
             // Checks for invalid inputs
@@ -24,36 +29,44 @@ public class StaffController {
 
             switch (choice) {
                 case 1:
-            	    controller.campStaffService.createCamp(); 
+                    //System.out.println("Create camp");
+            	    service.createCamp(staff);
             	    break;
                 case 2:
-                	controller.campStaffService.deleteCamp(); 
+                    //System.out.println("Delete camp");
+                	service.deleteCamp(staff); 
                 	break;
                 case 3:
-                	controller.campStaffService.editCamp(); 
+                    //System.out.println("Update camp details");
+                	service.updateCampDetails(staff); 
                 	break;
                 case 4:
-                	controller.campStaffService.setVisibility(); 
+                    //System.out.println("Set visibility");
+                	service.toggleCampVisibility(staff);
                 	break;
                 case 5:
-                    controller.campStaffService.viewAllCamps(null, null, null); 
+                    service.viewAllCamps();
                     break;
                 case 6: 
-                	controller.campStaffService.viewAllCampsWithFilters();
+                	//controller.campStaffService.viewAllCampsWithFilters();
                 	break;
                 case 7:
-                	controller.campStaffService.viewCreatedCamps(); 
+                	//System.out.println("View Created Camps");
+                	//service.viewCreatedCamps(); 
                 	break;
                 case 8:
-                	controller.campStaffService.viewStudentList(); 
+                	//controller.campStaffService.viewStudentList(); 
                 	break;
                 case 9:
-                	controller.campStaffService.viewEnquiriesForCamp(); 
+                	//controller.campStaffService.viewEnquiriesForCamp(); 
                 	break;
                 case 10:
-                	controller.campStaffService.respondToEnquiry(); 
+                	//controller.campStaffService.respondToEnquiry(); 
                 	break;
-                default: return;
+                default:
+                    System.out.println("Exiting Staff menu");
+                    AuthController.endSession();
+                    return;   
             }
         }
     }

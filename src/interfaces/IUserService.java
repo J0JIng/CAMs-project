@@ -1,7 +1,7 @@
 package interfaces;
 
 /**
- * The IUserService interface defines a contract for user services.
+ * The {@link IUserService} interface defines a contract for user services.
  */
 public interface IUserService {
     /**

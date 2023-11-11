@@ -1,23 +1,18 @@
 package models;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import enums.AccessLevel;
-import enums.StudentRole;
 import enums.UserRole;
+import enums.FacultyGroups;
 
 public class Student extends User {
 
     private String studentID;
     private String committeeStatus;
-    private List<Camp> registeredCamps = new ArrayList<>();
-    private List<Camp> withdrawnCamps = new ArrayList<>();
-    private List<Enquiry> enquiries= new ArrayList<>();
+    private int studentPoints;
 
-    public Student (String name, String userID, String email, String faculty, String password, StudentRole studentRole) {
-        super(name, userID, email, faculty, password);
+    public Student (String name, String userID, String email, FacultyGroups faculty, String password, int studentPoints, boolean isPasswordChanged) {
+        super(name, userID, email, faculty, password, isPasswordChanged);
         this.studentID = userID;
+        this.studentPoints = studentPoints;
         super.setRole(UserRole.STUDENT);
     }
     
@@ -38,16 +33,12 @@ public class Student extends User {
         return this.studentID;
     }
 
-    public List<Camp> getRegisteredCamps() {
-        return this.registeredCamps;
+    public int getStudentPoints() {
+        return this.studentPoints;
     }
 
-    public List<Camp> getWithdrawnCamps() {
-        return this.withdrawnCamps;
-    }
-
-    public List<Enquiry> getEnquiries() {
-        return this.enquiries;
+    public void incrementStudentPoints() {
+         this.studentPoints++;
     }
 
 }
