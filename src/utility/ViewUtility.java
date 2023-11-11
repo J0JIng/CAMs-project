@@ -29,6 +29,10 @@ public class ViewUtility {
     	System.out.println("║- " + s + " ".repeat(56- s.length()) + "║");
     }
     
+    /**
+     * Displays string at the center of the menu
+     * @param s the string to be centered
+     */
     public static void displayInMenuCentered(String s) {
 		int totalLength = s.length();
 		int spaces = (58 - totalLength) / 2;

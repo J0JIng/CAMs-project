@@ -70,6 +70,32 @@ public class StudentView implements IMenuView{
         System.out.println("╚══════════════════════════════════════════════════════════╝");
         System.out.print("Select an option: ");
 	}
+	
+	/**
+	 * Displays all camps without any filters
+	 * @param list 
+	 */
+	public void viewCamps(List<Camp> campData, String title) {
+    	// Print the filtered and sorted camps
+		System.out.println("╔══════════════════════════════════════════════════════════╗");
+        System.out.println("║                                                          ║");   
+		System.out.println("║         ██████╗ █████╗ ███╗   ███╗██████╗ ███████╗       ║");
+		System.out.println("║        ██╔════╝██╔══██╗████╗ ████║██╔══██╗██╔════╝       ║");
+		System.out.println("║        ██║     ███████║██╔████╔██║██████╔╝███████╗       ║");
+		System.out.println("║        ██║     ██╔══██║██║╚██╔╝██║██╔═══╝ ╚════██║       ║");
+		System.out.println("║        ╚██████╗██║  ██║██║ ╚═╝ ██║██║     ███████║       ║");
+		System.out.println("║         ╚═════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝     ╚══════╝       ║");
+        System.out.println("║                                                          ║");                                  
+        System.out.println("╠══════════════════════════════════════════════════════════╣");
+        ViewUtility.displayInMenuCentered(title);
+        System.out.println("╠══════════════════════════════════════════════════════════╣");
+        int i = 1;
+    	for (Camp c : campData) {
+    		ViewUtility.displayInMenuNumbered(c.getCampInformation().getCampName(), i);
+        	i++;
+    	}
+        System.out.println("╚══════════════════════════════════════════════════════════╝");
+	}
 
     ////////////////////////////////////////////////////////////////
     // FOLLOWING VIEW CLASS NOT DONE // fix this @ ojing

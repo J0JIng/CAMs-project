@@ -236,12 +236,37 @@ public class CampStaffService implements ICampStaffService {
     	}
     }
     
+    /**
+     * Shows all camps created by the Staff user
+     */
     public void viewCreatedCamps() {
 		List<Camp> staffCreatedCamps = getStaffCreatedCamps((Staff)AuthStore.getCurrentUser());
 		view.viewCamps(staffCreatedCamps, " - Camps Created by " + AuthStore.getCurrentUser().getName() + " - ");
 		System.out.print("(Press Enter to return) ");
 		scanner.nextLine();
     }
+
+    /**
+     * Shows the list of students registered in each Camp
+     */
+	public void viewStudentList() {
+		while (true) {
+    		view.viewCamps(getAllCamps(), " - Choose Camp to view Student list - ");
+    		Camp c = InputSelectionUtility.campSelector(getAllCamps());
+    		if (c != null) {
+    			Map<String, List<String>> listOfStudentsInCamps = DataStore.getCampToRegisteredStudentData();
+    			List<String> students = listOfStudentsInCamps.get(c);
+    			
+    			Map<String, List<String>> listOfCommitteeInCamps = DataStore.getCampToRegisteredCampCommitteeData();
+    			List<String> committeeMembers = listOfCommitteeInCamps.get(c);
+
+	    		view.viewStudentList(students, committeeMembers, c);
+    		} else {
+    			System.out.println("asdfasdf");
+    			return;
+    		}
+    	}
+	}
 }
 
 	

@@ -14,12 +14,14 @@ import models.Student;
 import stores.AuthStore;
 import stores.DataStore;
 import utility.InputSelectionUtility;
+import views.StudentView;
 
 /**
  * The {@code CampStudentService} class implements the {@link ICampStudentService} interface
  * and provides services related to camp registration and management.
  */
 public class CampStudentService implements ICampStudentService {
+	StudentView view = new StudentView();
 	/**
      * Constructs an instance of the {@code CampStudentService} class.
      */
@@ -260,6 +262,9 @@ public class CampStudentService implements ICampStudentService {
 		Map<String, List<String>> registeredCampsData = DataStore.getStudentsToCampsRegisteredData();
 		Map<String, List<String>> registeredStudentData = DataStore.getCampToRegisteredStudentData();
 
+		// Display available camps to register
+		view.viewCamps(availableCamps, " - Choose Camp to Register - ");
+		
 		// Get User input
 		Camp camp = InputSelectionUtility.campSelector(availableCamps);
         if (camp == null) {

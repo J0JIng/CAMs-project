@@ -51,6 +51,16 @@ public class StaffView implements IMenuView{
         System.out.print("Select an option: ");
 	}
 	
+	public void studentChoiceView() {
+		System.out.println("╔══════════════════════════════════════════════════════════╗");
+		System.out.println("║                   - Choose List Type -                   ║");
+        System.out.println("╠══════════════════════════════════════════════════════════╣");
+        System.out.println("║[1] Registered Students                                   ║");
+        System.out.println("║[2] Committe Members                                      ║");
+        System.out.println("╚══════════════════════════════════════════════════════════╝");
+        System.out.print("Select an option: ");
+	}
+	
 	public void editCampView() {
 		System.out.println("╔══════════════════════════════════════════════════════════╗");
 		System.out.println("║                 Select a field to update:                ║");
@@ -64,6 +74,30 @@ public class StaffView implements IMenuView{
         System.out.println("║[7] Camp Description                                      ║");
         System.out.println("║[8] Camp User Group                                       ║");
         System.out.println("║[9] Exit                                                  ║");
+        System.out.println("╚══════════════════════════════════════════════════════════╝");
+	}
+	
+	public void viewStudentList(List<String> students, List<String> committeeMembers, Camp c) {
+		System.out.println("╔══════════════════════════════════════════════════════════╗");
+		ViewUtility.displayInMenuCentered(" - Students Registered in " + c.getCampInformation().getCampName() + " - ");
+		System.out.println("╠══════════════════════════════════════════════════════════╣");
+		if (students == null || students.size() == 0) {
+			ViewUtility.displayInMenuCentered(" - No Students Registered in " + c.getCampInformation().getCampName() + " - ");
+		} else {
+			for (int i = 0; i < students.size(); i++) {
+		        ViewUtility.displayInMenuNumbered(students.get(i), i+1);
+		    }
+		}
+        System.out.println("╠══════════════════════════════════════════════════════════╣");
+        ViewUtility.displayInMenuCentered(" - Committe Members in " + c.getCampInformation().getCampName() + " - ");
+        System.out.println("╠══════════════════════════════════════════════════════════╣");
+        if (committeeMembers == null || committeeMembers.size() == 0) {
+        	ViewUtility.displayInMenuCentered(" - No Committe Members in " + c.getCampInformation().getCampName() + " - ");
+        } else {
+        	for (int i = 0; i < students.size(); i++) {
+    	        ViewUtility.displayInMenuNumbered(committeeMembers.get(i), i+1);
+    	    }
+        }
         System.out.println("╚══════════════════════════════════════════════════════════╝");
 	}
 	
@@ -255,24 +289,7 @@ public class StaffView implements IMenuView{
 	*/
 
     /* 
-	public void viewStudentList() {
-		scanner.nextLine();
-    	System.out.print("Enter Camp Name: ");
-    	String campName = scanner.nextLine();
-        for (Camp c : CampServiceController.camps) {
-			if (c.getCampInformation().getCampName().equalsIgnoreCase(campName)) {
-				Student s;
-				if (c.getRegisteredStudents().size() != 0) {
-					for (int i = 1; i <= c.getRegisteredStudents().size(); i++) {
-						s = c.getRegisteredStudents().get(i);
-						System.out.println(i + s.getName());
-					}
-				} else {System.out.println("No students registered");}
-                return;
-            }
-        }
-        System.out.println("Cannot find camp " + campName);
-	}
+
 
 	public void viewEnquiriesForCamp() {
 		System.out.print("Enter Camp Name: ");
