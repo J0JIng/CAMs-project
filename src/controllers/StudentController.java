@@ -74,7 +74,16 @@ public class StudentController extends UserController {
                 	service.respondEnquiry();
                 	break;
                 case 15:
-                    //controller.campStudentService.submitSuggestion();
+                    service.submitSuggestion();
+                    break;
+                case 16:
+                    service.viewSuggestions();
+                    break;
+                case 17:
+                    service.editSuggestion();
+                    break;
+                case 18:
+                    service.deleteSuggestion();
                     break;
                 default: 
                     System.out.println("Exiting student menu");

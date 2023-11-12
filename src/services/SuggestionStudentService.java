@@ -1,5 +1,6 @@
 package services;
 
+import models.Enquiry;
 import models.Suggestion;
 import stores.DataStore;
 import enums.MessageStatus;
@@ -16,8 +17,8 @@ public class SuggestionStudentService {
     }
 
     public int submitSuggestion(String senderID, String campName, String suggestionDetails, boolean isDraft) {
-        int suggestionID = UUID.randomUUID().hashCode();
-        Suggestion suggestion = new Suggestion(suggestionID, campName, senderID, MessageStatus.DRAFT, suggestionDetails);
+        int suggestionID = Math.abs(UUID.randomUUID().hashCode());
+        Suggestion suggestion = new Suggestion(suggestionID, senderID, campName, suggestionDetails);
         if (isDraft) {
             suggestion.setSuggestionStatus(MessageStatus.DRAFT);
         } else {
@@ -29,32 +30,43 @@ public class SuggestionStudentService {
         return suggestionID;
     }
 
-    public boolean editSuggestion(int suggestionID, String senderID, String newDetails) {
-        Suggestion suggestion = suggestionData.get(suggestionID);
-        if (suggestion != null && suggestion.getSenderID().equals(senderID) && suggestion.getSuggestionStatus() == MessageStatus.DRAFT) {
-            suggestion.setSuggestionMessage(newDetails);
-            DataStore.setSuggestionData(suggestionData);
-            return true;
+    public Map<Integer, Suggestion> viewDraftSuggestion(String studentID) {
+        return suggestionData.values().stream()
+                .filter(suggestion -> suggestion.getSenderID().equals(studentID) && suggestion.getSuggestionStatus() == MessageStatus.DRAFT)
+                .collect(Collectors.toMap(Suggestion::getSuggestionID, suggestion -> suggestion));
+    }
+    public Map<Integer, Suggestion> viewSubmittedSuggestion(String studentID) {
+        return suggestionData.values().stream()
+                .filter(suggestion -> suggestion.getSenderID().equals(studentID) && suggestion.getSuggestionStatus() == MessageStatus.PENDING)
+                .collect(Collectors.toMap(Suggestion::getSuggestionID, suggestion -> suggestion));
+    }
+    public Map<Integer, Suggestion> viewAcceptedSuggestion(String studentID) {
+        return suggestionData.values().stream()
+                .filter(suggestion -> suggestion.getSenderID().equals(studentID) && suggestion.getSuggestionStatus() == MessageStatus.ACCEPTED)
+                .collect(Collectors.toMap(Suggestion::getSuggestionID, suggestion -> suggestion));
+    }
+    public Map<Integer, Suggestion> viewRejectedSuggestion(String studentID) {
+        return suggestionData.values().stream()
+                .filter(suggestion -> suggestion.getSenderID().equals(studentID) && suggestion.getSuggestionStatus() == MessageStatus.REJECTED)
+                .collect(Collectors.toMap(Suggestion::getSuggestionID, suggestion -> suggestion));
+    }
+
+    public boolean editSuggestion(int suggestionID, String senderID, String newDetails, boolean isDraft) {
+        if (suggestionData.containsKey(suggestionID)) {
+            Suggestion suggestion = suggestionData.get(suggestionID);
+            if (suggestion.getSenderID().equals(senderID) && suggestion.getSuggestionStatus() == MessageStatus.DRAFT) {
+                suggestion.setSuggestionMessage(newDetails);
+                if (!isDraft) {
+                    suggestion.setSuggestionStatus(MessageStatus.PENDING);
+                }
+                DataStore.setSuggestionData(suggestionData);
+                return true;
+            }
         }
         return false;
     }
 
-    // public boolean confirmSuggestion(int suggestionID, String senderID, String campName, String suggestionDetails, boolean isDraft) {
-    //     if (suggestionData.containsKey(suggestionID)) {
-    //         Suggestion enquiry = Suggestion(suggestionID, senderID, campName, enquiryMessage);
-    //         if (isDraft) {
-    //             enquiry.setEnquiryStatus(MessageStatus.DRAFT);
-    //         } else {
-    //             enquiry.setEnquiryStatus(MessageStatus.PENDING);
-    //         }
-    //         enquiryData.put(enquiryID, enquiry);
-    //         DataStore.setEnquiryData(enquiryData);
-    //         return true;
-    //     }
-    //     return false;
-    // }
-
-    public boolean deleteSuggestion(int suggestionID, String senderID) {
+    public boolean deleteDraftSuggestion(int suggestionID, String senderID) {
         Suggestion suggestion = suggestionData.get(suggestionID);
         if (suggestion != null && suggestion.getSenderID().equals(senderID) && suggestion.getSuggestionStatus() == MessageStatus.DRAFT) {
             suggestionData.remove(suggestionID);
@@ -64,10 +76,14 @@ public class SuggestionStudentService {
         return false;
     }
 
-    public boolean reviewSuggestion(int suggestionID, MessageStatus suggestionStatus) {
+    public boolean reviewSuggestion(int suggestionID, boolean suggestionStatus) {
         Suggestion suggestion = suggestionData.get(suggestionID);
         if (suggestion != null) {
-            suggestion.setSuggestionStatus(suggestionStatus);
+            if (suggestionStatus) {
+                suggestion.setSuggestionStatus(MessageStatus.ACCEPTED);
+            } else {
+                suggestion.setSuggestionStatus(MessageStatus.REJECTED);
+            }
             DataStore.setSuggestionData(suggestionData);
             return true;
         }

@@ -25,7 +25,8 @@ public class StaffView implements IMenuView{
         System.out.println("| 8. View Student List            |");
         System.out.println("| 9. View Enquiries for Camp      |");
         System.out.println("| 10. Respond to Enquiries        |");
-        System.out.println("| 11. Logout                      |");
+        System.out.println("| 11. Review Suggestions          |");
+        System.out.println("| 12. Logout                      |");
         System.out.println("-----------------------------------");
         System.out.print("Select an option: ");
 	}

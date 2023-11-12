@@ -213,6 +213,18 @@ public class CampStaffService implements ICampStaffService {
 		return enquiriesForCampMap;
 	}
 
+	private Map<Integer, Suggestion> getAllSuggestionsForCamp(Camp camp) {
+		Map<Integer, Suggestion> suggestionData = DataStore.getSuggestionData();
+		String campName = camp.getCampInformation().getCampName();
+
+		// Returns a Map<Integer, Enquiry> with Enquiries having the specified Camp name.
+		Map<Integer, Suggestion> suggestionsForCampMap = suggestionData.values().stream()
+				.filter(suggestion -> campName.equals(suggestion.getCampName()))
+				.collect(Collectors.toMap(Suggestion::getSuggestionID, suggestion -> suggestion));
+
+		return suggestionsForCampMap;
+	}
+
 	private void displayEnquiries(Map<Integer, Enquiry> enquiries) {
 		if (enquiries.isEmpty()) {
 			System.out.println("No enquiries to display.");
@@ -260,6 +272,33 @@ public class CampStaffService implements ICampStaffService {
 
 		// Respond using EnquiryStudentService
 		return enquiryService.respondToEnquiry(selectedEnquiry.getEnquiryID(), staff.getStaffID(), MessageStatus.ACCEPTED, response);
+	}
+
+	public boolean respondToSuggestion(Staff staff) {
+		SuggestionStudentService suggestionService = new SuggestionStudentService();
+
+		// Get list of Staff created camps
+		List<Camp> staffCreatedCamps = getStaffCreatedCamps(staff);
+		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
+
+		// Get enquiries for the selected camp
+		Map<Integer, Suggestion> campSuggestions = getAllSuggestionsForCamp(camp);
+		// Check if there are draft suggestions to respond
+		if (campSuggestions.isEmpty()) {
+			System.out.println("You have no suggestions to review.");
+			return false;
+		}
+
+		// Get User input
+		Suggestion selectedSuggestion = InputSelectionUtility.suggestionSelector(campSuggestions);
+		int reviewOption = InputSelectionUtility.getIntInput("Do you want to accept this suggestion? (1: Yes, 2: No): ");
+		boolean suggestionStatus = (reviewOption == 1);
+		Map<String, Student> students = DataStore.getStudentData();
+		Student sender = students.get(selectedSuggestion.getSenderID());
+		if (suggestionStatus){sender.incrementStudentPoints();}
+
+		// Respond using EnquiryStudentService
+		return suggestionService.reviewSuggestion(selectedSuggestion.getSuggestionID(), suggestionStatus);
 	}
 
 }

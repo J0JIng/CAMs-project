@@ -15,6 +15,7 @@ import models.Staff;
 import models.Camp;
 import models.CampInformation;
 import models.Enquiry;
+import models.Suggestion;
 import stores.AuthStore;
 
 public class InputSelectionUtility {
@@ -365,6 +366,25 @@ public class InputSelectionUtility {
 
             if (selectedEnquiry != null) {
                 return selectedEnquiry;
+            } else {
+                System.out.println("Invalid ID. Please enter a valid ID or press Enter to return.\n");
+            }
+        }
+    }
+
+    public static Suggestion suggestionSelector(Map<Integer, Suggestion> suggestions) {
+        while (true) {
+            System.out.println("Select a Suggestion:");
+
+            for (Map.Entry<Integer, Suggestion> entry : suggestions.entrySet()) {
+                System.out.println(entry.getKey() + ". " + entry.getValue().getSuggestionMessage());
+            }
+
+            int suggestionID = getIntInput("Enter the ID of the suggestion (or press Enter to return): ");
+            Suggestion selectedSuggestion = suggestions.get(suggestionID);
+
+            if (selectedSuggestion != null) {
+                return selectedSuggestion;
             } else {
                 System.out.println("Invalid ID. Please enter a valid ID or press Enter to return.\n");
             }

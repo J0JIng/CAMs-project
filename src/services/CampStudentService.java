@@ -13,6 +13,7 @@ import interfaces.ICampStudentService;
 import models.Camp;
 import models.Student;
 import models.Enquiry;
+import models.Suggestion;
 import stores.AuthStore;
 import stores.DataStore;
 import utility.InputSelectionUtility;
@@ -199,6 +200,19 @@ public class CampStudentService implements ICampStudentService {
 			System.out.println("Status: " + enquiry.getEnquiryStatus());
 			System.out.println("Response: " + enquiry.getEnquiryResponse());
 			System.out.println("Responder ID: " + enquiry.getResponderID());
+			System.out.println("------");
+		}
+	}
+
+	private void displaySuggestion(Map<Integer, Suggestion> suggestions) {
+		if (suggestions.isEmpty()) {
+			System.out.println("No suggestions to display.");
+			return;
+		}
+		for (Suggestion suggestion : suggestions.values()) {
+			System.out.println("Suggestion ID: " + suggestion.getSuggestionID());
+			System.out.println("Message: " + suggestion.getSuggestionMessage());
+			//System.out.println("Status: " + suggestion.getSuggestionStatus());
 			System.out.println("------");
 		}
 	}
@@ -632,8 +646,8 @@ public class CampStudentService implements ICampStudentService {
 		String campName = committeeToCampData.get(studentName);
 
 		// Debugging statement
-		System.out.println("Student Name: " + studentName);
-		System.out.println("Camp Name from Committee Data: " + campName);
+		//System.out.println("Student Name: " + studentName);
+		//System.out.println("Camp Name from Committee Data: " + campName);
 
 		// Step 2: Get the Camp object using the camp name (case-insensitive)
 		Map<String, Camp> campData = DataStore.getCampData();
@@ -643,7 +657,7 @@ public class CampStudentService implements ICampStudentService {
 				.orElse(null);
 
 		// Debugging statement
-		System.out.println("Committee Camp: " + committeeCamp);
+		//System.out.println("Committee Camp: " + committeeCamp);
 
 		return committeeCamp;
 	}
@@ -675,6 +689,131 @@ public class CampStudentService implements ICampStudentService {
         // Respond using EnquiryStudentService
         return enquiryService.respondToEnquiry(selectedEnquiry.getEnquiryID(), student.getStudentID(), MessageStatus.ACCEPTED, response);
     }
+
+	public void submitSuggestion() {
+		Student student = (Student) AuthStore.getCurrentUser();
+		SuggestionStudentService suggestionService = new SuggestionStudentService();
+
+		if(!isUserCampCommittee(student)){
+			System.out.println("Only committee members can submit suggestions!");
+			return;
+		}
+		// Get User's committee camp
+		Camp committeecamp = getCommitteeCamp(student);
+
+		// Get User input
+		String campName = committeecamp.getCampInformation().getCampName();
+		String suggestionMessage = InputSelectionUtility.getStringInput("Enter suggestion: ");
+		// Prompt the user whether they'd like the suggestion to be saved as draft (1: Yes, 2: No)
+		int draftChoice = InputSelectionUtility.getIntInput("Do you want to save the suggestion as a draft? (1: Yes, 2: No): ");
+		boolean isDraft = (draftChoice == 1);
+		if (!isDraft){student.incrementStudentPoints();}
+
+		// Create a new suggestion using SuggestionStudentService
+		int suggestionID = suggestionService.submitSuggestion(student.getStudentID(), campName, suggestionMessage, isDraft);
+
+		System.out.println("Suggestion submitted with ID: " + suggestionID);
+	}
+
+	public void viewSuggestions() {
+		Student student = (Student) AuthStore.getCurrentUser();
+		SuggestionStudentService suggestionService = new SuggestionStudentService();
+
+		if(!isUserCampCommittee(student)){
+			System.out.println("Only committee members can view suggestions!");
+			return;
+		}
+		// Get draft, pending and responded suggestions
+		Map<Integer, Suggestion> draftSuggestions = suggestionService.viewDraftSuggestion(student.getStudentID());
+		Map<Integer, Suggestion> submittedSuggestions = suggestionService.viewSubmittedSuggestion(student.getStudentID());
+		Map<Integer, Suggestion> acceptedSuggestions = suggestionService.viewAcceptedSuggestion(student.getStudentID());
+		Map<Integer, Suggestion> rejectedSuggestions = suggestionService.viewRejectedSuggestion(student.getStudentID());
+
+		// Display draft Suggestions
+		System.out.println("Draft Suggestions:");
+		displaySuggestion(draftSuggestions);
+
+		// Display submitted Suggestions
+		System.out.println("\nSubmitted Suggestions:");
+		displaySuggestion(submittedSuggestions);
+
+		// Display accepted Suggestions
+		System.out.println("\nAccepted Suggestions:");
+		displaySuggestion(acceptedSuggestions);
+
+		// Display rejected Suggestions
+		System.out.println("\nRejected Suggestions:");
+		displaySuggestion(rejectedSuggestions);
+	}
+
+	public boolean editSuggestion() {
+		Student student = (Student) AuthStore.getCurrentUser();
+		SuggestionStudentService suggestionService = new SuggestionStudentService();
+
+		if(!isUserCampCommittee(student)){
+			System.out.println("Only committee members can edit suggestions!");
+			return false;
+		}
+		// Get Data
+		Map<Integer, Suggestion> draftSuggestions = suggestionService.viewDraftSuggestion(student.getStudentID());
+
+		// Check if there are draft suggestions to edit
+		if (draftSuggestions.isEmpty()) {
+			System.out.println("You have no draft suggestions to edit.");
+			return false;
+		}
+		// Get User input
+		Suggestion selectedSuggestion = InputSelectionUtility.suggestionSelector(draftSuggestions);
+
+		if (selectedSuggestion != null) {
+			String newDetails = InputSelectionUtility.getStringInput("Enter your new suggestion: ");
+
+			// Prompt the user whether they'd like the enquiry to be saved as draft (1: Yes, 2: No)
+			int draftChoice = InputSelectionUtility.getIntInput("Do you want to save the suggestion as a draft? (1: Yes, 2: No): ");
+			boolean isDraft = (draftChoice == 1);
+			if (!isDraft){student.incrementStudentPoints();}
+
+			// Edit the selected draft suggestion using SuggestionStudentService
+			return suggestionService.editSuggestion(selectedSuggestion.getSuggestionID(), student.getStudentID(), newDetails, isDraft);
+		}
+		return false;
+	}
+
+	public void deleteSuggestion() {
+		Student student = (Student) AuthStore.getCurrentUser();
+		SuggestionStudentService suggestionService = new SuggestionStudentService();
+
+		if(!isUserCampCommittee(student)){
+			System.out.println("Only committee members can delete suggestions!");
+			return;
+		}
+		// Get Data
+		Map<Integer, Suggestion> draftSuggestions = suggestionService.viewDraftSuggestion(student.getStudentID());
+
+		// Check if there are draft suggestions to delete
+		if (draftSuggestions.isEmpty()) {
+			System.out.println("You have no draft suggestions to delete.");
+			return;
+		}
+		// Get User input
+		Suggestion selectedSuggestion = InputSelectionUtility.suggestionSelector(draftSuggestions);
+
+		if (selectedSuggestion != null) {
+			// Confirm deletion
+			int confirmChoice = InputSelectionUtility.getIntInput("Are you sure you want to delete this enquiry? (1: Yes, 2: No): ");
+			if (confirmChoice == 1) {
+				// Delete the selected draft enquiry using EnquiryStudentService
+				boolean deleted = suggestionService.deleteDraftSuggestion(selectedSuggestion.getSuggestionID(), student.getStudentID());
+				if (deleted) {
+					System.out.println("Suggestion deleted successfully.");
+				} else {
+					System.out.println("Failed to delete the suggestion. Please try again.");
+				}
+			} else {
+				System.out.println("Suggestion deletion canceled.");
+			}
+		}
+	}
 
 
 }

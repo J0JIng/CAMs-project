@@ -9,10 +9,10 @@ public class Suggestion {
     private MessageStatus suggestionStatus;
     private String suggestionMessage;
 
-    public Suggestion(int suggestionID, String campName, String senderID, MessageStatus suggestionStatus, String suggestionMessage) {
+    public Suggestion(int suggestionID, String senderID, String campName, String suggestionMessage) {
         this.suggestionID = suggestionID;
-        this.campName = campName;
         this.senderID = senderID;
+        this.campName = campName;
         this.suggestionMessage = suggestionMessage;
         this.suggestionStatus = MessageStatus.DRAFT;
     }

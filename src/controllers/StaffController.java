@@ -62,6 +62,9 @@ public class StaffController extends UserController {
                 case 10:
                 	service.respondToEnquiry(staff);
                 	break;
+                case 11:
+                    service.respondToSuggestion(staff);
+                    break;
                 default:
                     System.out.println("Exiting Staff menu");
                     AuthController.endSession();
