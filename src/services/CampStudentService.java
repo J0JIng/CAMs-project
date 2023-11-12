@@ -7,10 +7,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import enums.FacultyGroups;
+import enums.MessageStatus;
 import enums.UserRole;
 import interfaces.ICampStudentService;
 import models.Camp;
 import models.Student;
+import models.Enquiry;
 import stores.AuthStore;
 import stores.DataStore;
 import utility.InputSelectionUtility;
@@ -179,6 +181,28 @@ public class CampStudentService implements ICampStudentService {
 
 		return registeredCampData.containsKey(studentName) && registeredCampData.get(studentName).contains(campName);
 	}
+
+	/**
+	 * Displays the details of the given enquiries.
+	 *
+	 * @param enquiries the enquiries to display.
+	 */
+	private void displayEnquiries(Map<Integer, Enquiry> enquiries) {
+		if (enquiries.isEmpty()) {
+			System.out.println("No enquiries to display.");
+			return;
+		}
+		for (Enquiry enquiry : enquiries.values()) {
+			System.out.println("Enquiry ID: " + enquiry.getEnquiryID());
+			System.out.println("Camp Name: " + enquiry.getCampName());
+			System.out.println("Message: " + enquiry.getEnquiryMessage());
+			System.out.println("Status: " + enquiry.getEnquiryStatus());
+			System.out.println("Response: " + enquiry.getEnquiryResponse());
+			System.out.println("Responder ID: " + enquiry.getResponderID());
+			System.out.println("------");
+		}
+	}
+
 
 	// ---------- interface method implementation ---------- //
 	
@@ -439,4 +463,218 @@ public class CampStudentService implements ICampStudentService {
 		AuthStore.getCurrentUser().setRole(UserRole.COMMITTEE);
 		return true;
 	}
+	
+	/**
+     * Submits an enquiry for the currently logged-in student.
+     *
+     * @param enquiryMessage The message of the enquiry.
+     * @param isDraft        Whether the enquiry is a draft.
+     * @return The ID of the submitted enquiry.
+     */
+    public void submitEnquiry() {
+    	Student student = (Student) AuthStore.getCurrentUser();
+        EnquiryStudentService enquiryService = new EnquiryStudentService();
+        
+        //Get Data
+        List<Camp> availableCamps = getAvailableCamps();
+
+		// Get User input
+		Camp selectedCamp = InputSelectionUtility.campSelector(availableCamps);
+        assert selectedCamp != null;
+        String campName = selectedCamp.getCampInformation().getCampName();
+		String enquiryMessage = InputSelectionUtility.getStringInput("Enter enquiry message: ");
+		// Prompt the user whether they'd like the enquiry to be saved as draft (1: Yes, 2: No)
+	    int draftChoice = InputSelectionUtility.getIntInput("Do you want to save the enquiry as a draft? (1: Yes, 2: No): ");
+	    boolean isDraft = (draftChoice == 1);
+
+        // Create a new enquiry using EnquiryStudentService
+        int enquiryID = enquiryService.createEnquiry(student.getStudentID(), campName, enquiryMessage, isDraft);
+
+        System.out.println("Enquiry submitted with ID: " + enquiryID);
+    }
+
+	/**
+	 * Displays the draft, pending and responded enquiries for the current student.
+	 * Draft enquiries are those that have not been submitted, and responded enquiries
+	 * are those that have received a response.
+	 */
+	public void viewEnquiries() {
+		Student student = (Student) AuthStore.getCurrentUser();
+		EnquiryStudentService enquiryService = new EnquiryStudentService();
+
+		// Get draft, pending and responded enquiries
+		Map<Integer, Enquiry> draftEnquiries = enquiryService.viewDraftEnquiries(student.getStudentID());
+		Map<Integer, Enquiry> submittedEnquiries = enquiryService.viewSubmittedEnquiries(student.getStudentID());
+		Map<Integer, Enquiry> respondedEnquiries = enquiryService.viewRespondedEnquiries(student.getStudentID());
+
+		// Display draft enquiries
+		System.out.println("Draft Enquiries:");
+		displayEnquiries(draftEnquiries);
+
+		// Display submitted enquiries
+		System.out.println("\nSubmitted Enquiries:");
+		displayEnquiries(submittedEnquiries);
+
+		// Display responded enquiries
+		System.out.println("\nResponded Enquiries:");
+		displayEnquiries(respondedEnquiries);
+	}
+
+	/**
+	 * Handles the editing of draft enquiries.
+	 *
+	 * @return {@code true} if editing is successful, {@code false} otherwise.
+	 */
+	public boolean editEnquiry() {
+		Student student = (Student) AuthStore.getCurrentUser();
+		EnquiryStudentService enquiryService = new EnquiryStudentService();
+
+		// Get Data
+		Map<Integer, Enquiry> draftEnquiries = enquiryService.viewDraftEnquiries(student.getStudentID());
+
+		// Check if there are draft enquiries to edit
+		if (draftEnquiries.isEmpty()) {
+			System.out.println("You have no draft enquiries to edit.");
+			return false;
+		}
+
+		// Get User input
+		Enquiry selectedEnquiry = InputSelectionUtility.enquirySelector(draftEnquiries);
+
+		if (selectedEnquiry != null) {
+			String newMessage = InputSelectionUtility.getStringInput("Enter the new enquiry message: ");
+
+			// Prompt the user whether they'd like the enquiry to be saved as draft (1: Yes, 2: No)
+			int draftChoice = InputSelectionUtility.getIntInput("Do you want to save the enquiry as a draft? (1: Yes, 2: No): ");
+			boolean isDraft = (draftChoice == 1);
+
+			// Edit the selected draft enquiry using EnquiryStudentService
+			return enquiryService.editDraftEnquiry(selectedEnquiry.getEnquiryID(), student.getStudentID(), newMessage, isDraft);
+		}
+		return false;
+	}
+
+	/**
+	 * Handles the deletion of a draft enquiry for a student.
+	 * Prompts the user to select a draft enquiry and confirms the deletion.
+	 * Deletes the selected draft enquiry if confirmed.
+	 */
+	public void deleteEnquiry() {
+		Student student = (Student) AuthStore.getCurrentUser();
+		EnquiryStudentService enquiryService = new EnquiryStudentService();
+
+		// Get Data
+		Map<Integer, Enquiry> draftEnquiries = enquiryService.viewDraftEnquiries(student.getStudentID());
+
+		// Check if there are draft enquiries to delete
+		if (draftEnquiries.isEmpty()) {
+			System.out.println("You have no draft enquiries to delete.");
+			return;
+		}
+
+		// Get User input
+		Enquiry selectedEnquiry = InputSelectionUtility.enquirySelector(draftEnquiries);
+
+		if (selectedEnquiry != null) {
+			// Confirm deletion
+			int confirmChoice = InputSelectionUtility.getIntInput("Are you sure you want to delete this enquiry? (1: Yes, 2: No): ");
+			if (confirmChoice == 1) {
+				// Delete the selected draft enquiry using EnquiryStudentService
+				boolean deleted = enquiryService.deleteDraftEnquiry(selectedEnquiry.getEnquiryID(), student.getStudentID());
+				if (deleted) {
+					System.out.println("Enquiry deleted successfully.");
+				} else {
+					System.out.println("Failed to delete the enquiry. Please try again.");
+				}
+			} else {
+				System.out.println("Enquiry deletion canceled.");
+			}
+		}
+	}
+
+	/**
+	 * Handles the viewing of enquiries for a specific camp committee member.
+	 * Prompts the camp committee member to select a camp and displays the enquiries related to that camp.
+	 * Enquiries include both draft and responded enquiries.
+	 * Available options are presented for each enquiry, including viewing details and responding.
+	 */
+	public void viewEnquiriesForCamp() {
+		Student student = (Student) AuthStore.getCurrentUser();
+		EnquiryStudentService enquiryService = new EnquiryStudentService();
+		// Check if the student is a camp committee member
+		if(!isUserCampCommittee(student)){
+			System.out.println("Only committee members can view enquiries!");
+			return;
+		}
+		// Get User's committee camp
+		Camp committeecamp = getCommitteeCamp(student);
+		Map<Integer, Enquiry> campEnquiries = getAllEnquiriesForCamp(committeecamp);
+		displayEnquiries(campEnquiries);
+	}
+
+
+	public Map<Integer, Enquiry> getAllEnquiriesForCamp(Camp camp) {
+		Map<Integer, Enquiry> enquiryData = DataStore.getEnquiryData();
+		String campName = camp.getCampInformation().getCampName();
+
+		// Returns a Map<Integer, Enquiry> with Enquiries having the specified Camp name.
+		Map<Integer, Enquiry> enquiriesForCampMap = enquiryData.values().stream()
+				.filter(enquiry -> campName.equals(enquiry.getCampName()))
+				.collect(Collectors.toMap(Enquiry::getEnquiryID, enquiry -> enquiry));
+
+		return enquiriesForCampMap;
+	}
+
+	public static Camp getCommitteeCamp(Student student) {
+		// Step 1: Get the camp name associated with the student (committee member)
+		Map<String, String> committeeToCampData = DataStore.getCampCommitteeToCampRegisteredData();
+		String studentName = student.getName();
+		String campName = committeeToCampData.get(studentName);
+
+		// Debugging statement
+		System.out.println("Student Name: " + studentName);
+		System.out.println("Camp Name from Committee Data: " + campName);
+
+		// Step 2: Get the Camp object using the camp name (case-insensitive)
+		Map<String, Camp> campData = DataStore.getCampData();
+		Camp committeeCamp = campData.values().stream()
+				.filter(camp -> camp.getCampInformation().getCampName().equalsIgnoreCase(campName))
+				.findFirst()
+				.orElse(null);
+
+		// Debugging statement
+		System.out.println("Committee Camp: " + committeeCamp);
+
+		return committeeCamp;
+	}
+
+
+	public boolean respondEnquiry() {
+		Student student = (Student) AuthStore.getCurrentUser();
+		EnquiryStudentService enquiryService = new EnquiryStudentService();
+
+		if(!isUserCampCommittee(student)){
+			System.out.println("Only committee members can respond to enquiries!");
+			return false;
+		}
+
+		// Get Data
+		Camp selectedCamp = getCommitteeCamp(student);
+		// Get enquiries for the selected camp
+		Map<Integer, Enquiry> campEnquiries = getAllEnquiriesForCamp(selectedCamp);
+		// Check if there are draft enquiries to edit
+		if (campEnquiries.isEmpty()) {
+			System.out.println("You have no enquiries to reply to.");
+			return false;
+		}
+
+		// Get User input
+		Enquiry selectedEnquiry = InputSelectionUtility.enquirySelector(campEnquiries);
+        String response = InputSelectionUtility.getStringInput("Enter response: ");
+		student.incrementStudentPoints();
+        // Respond using EnquiryStudentService
+        return enquiryService.respondToEnquiry(selectedEnquiry.getEnquiryID(), student.getStudentID(), MessageStatus.ACCEPTED, response);
+    }
+
+
 }

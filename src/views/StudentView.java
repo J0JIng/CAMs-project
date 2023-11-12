@@ -39,7 +39,7 @@ public class StudentView implements IMenuView{
         System.out.println("| 11. Edit Enquiry                |");
         System.out.println("| 12. Delete Enquiry              |");
         System.out.println("| 13. View Enquiries for Camp     |");
-        System.out.println("| 14. Submit Suggestion           |");
+        System.out.println("| 14. Respond to Enquiries        |");
         System.out.println("| 15. Logout                      |");
         System.out.println("-----------------------------------");
         System.out.print("Select an option: ");

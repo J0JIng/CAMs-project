@@ -16,6 +16,7 @@ public class StudentController extends UserController {
 	    StudentView view = new StudentView();
 	    while (true) {
             view.displayMenuView();
+
             
             // Checks for invalid inputs
             while (!scanner.hasNextInt()) {
@@ -25,6 +26,7 @@ public class StudentController extends UserController {
             }
 
             int choice = scanner.nextInt();
+            scanner.nextLine();
 
             // choice  // fix this @ ojing
         
@@ -54,23 +56,26 @@ public class StudentController extends UserController {
                 	//controller.campStudentService.viewRegisteredCamps();
                     break;
                 case 9: 
-                	//controller.campStudentService.submitEnquiry();
+                	service.submitEnquiry();
                 	break;
                 case 10: 
-                	//controller.campStudentService.viewEnquiries();
+                	service.viewEnquiries();
                 	break;
                 case 11: 
-                	//controller.campStudentService.editEnquiry();
+                	service.editEnquiry();
                 	break;
                 case 12: 
-                	//controller.campStudentService.deleteEnquiry();
+                	service.deleteEnquiry();
                 	break;
                 case 13: 
-                	//controller.campStudentService.viewEnquiriesForCamp();
+                	service.viewEnquiriesForCamp();
                 	break;
                 case 14: 
-                	//controller.campStudentService.submitSuggestion();
+                	service.respondEnquiry();
                 	break;
+                case 15:
+                    //controller.campStudentService.submitSuggestion();
+                    break;
                 default: 
                     System.out.println("Exiting student menu");
                     AuthController.endSession();

@@ -11,14 +11,13 @@ import java.util.Objects;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
+import enums.MessageStatus;
 import interfaces.ICampStaffService;
 
 import enums.UserRole;
 import enums.FacultyGroups;
-import models.Camp;
-import models.CampInformation;
-import models.Staff;
-import models.Student;
+import services.*;
+import models.*;
 import stores.AuthStore;
 import stores.DataStore;
 
@@ -200,6 +199,67 @@ public class CampStaffService implements ICampStaffService {
 			campData.remove(campName);
 			return true;
 		}
+	}
+
+	private Map<Integer, Enquiry> getAllEnquiriesForCamp(Camp camp) {
+		Map<Integer, Enquiry> enquiryData = DataStore.getEnquiryData();
+		String campName = camp.getCampInformation().getCampName();
+
+		// Returns a Map<Integer, Enquiry> with Enquiries having the specified Camp name.
+		Map<Integer, Enquiry> enquiriesForCampMap = enquiryData.values().stream()
+				.filter(enquiry -> campName.equals(enquiry.getCampName()))
+				.collect(Collectors.toMap(Enquiry::getEnquiryID, enquiry -> enquiry));
+
+		return enquiriesForCampMap;
+	}
+
+	private void displayEnquiries(Map<Integer, Enquiry> enquiries) {
+		if (enquiries.isEmpty()) {
+			System.out.println("No enquiries to display.");
+			return;
+		}
+		for (Enquiry enquiry : enquiries.values()) {
+			System.out.println("Enquiry ID: " + enquiry.getEnquiryID());
+			System.out.println("Camp Name: " + enquiry.getCampName());
+			System.out.println("Message: " + enquiry.getEnquiryMessage());
+			System.out.println("Status: " + enquiry.getEnquiryStatus());
+			System.out.println("Response: " + enquiry.getEnquiryResponse());
+			System.out.println("Responder ID: " + enquiry.getResponderID());
+			System.out.println("------");
+		}
+	}
+
+	public void viewEnquiriesForCamp(Staff staff) {
+		EnquiryStudentService enquiryService = new EnquiryStudentService();
+
+		// Get list of Staff created camps
+		List<Camp> staffCreatedCamps = getStaffCreatedCamps(staff);
+		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
+		Map<Integer, Enquiry> campEnquiries = getAllEnquiriesForCamp(camp);
+		displayEnquiries(campEnquiries);
+	}
+
+	public boolean respondToEnquiry(Staff staff) {
+		EnquiryStudentService enquiryService = new EnquiryStudentService();
+
+		// Get list of Staff created camps
+		List<Camp> staffCreatedCamps = getStaffCreatedCamps(staff);
+		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
+
+		// Get enquiries for the selected camp
+		Map<Integer, Enquiry> campEnquiries = getAllEnquiriesForCamp(camp);
+		// Check if there are draft enquiries to edit
+		if (campEnquiries.isEmpty()) {
+			System.out.println("You have no enquiries to reply to.");
+			return false;
+		}
+
+		// Get User input
+		Enquiry selectedEnquiry = InputSelectionUtility.enquirySelector(campEnquiries);
+		String response = InputSelectionUtility.getStringInput("Enter response: ");
+
+		// Respond using EnquiryStudentService
+		return enquiryService.respondToEnquiry(selectedEnquiry.getEnquiryID(), staff.getStaffID(), MessageStatus.ACCEPTED, response);
 	}
 
 }

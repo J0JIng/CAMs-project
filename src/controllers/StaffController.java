@@ -57,10 +57,10 @@ public class StaffController extends UserController {
                 	//controller.campStaffService.viewStudentList(); 
                 	break;
                 case 9:
-                	//controller.campStaffService.viewEnquiriesForCamp(); 
+                	service.viewEnquiriesForCamp(staff);
                 	break;
                 case 10:
-                	//controller.campStaffService.respondToEnquiry(); 
+                	service.respondToEnquiry(staff);
                 	break;
                 default:
                     System.out.println("Exiting Staff menu");

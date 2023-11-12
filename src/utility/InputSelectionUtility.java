@@ -14,6 +14,7 @@ import java.util.Date;
 import models.Staff;
 import models.Camp;
 import models.CampInformation;
+import models.Enquiry;
 import stores.AuthStore;
 
 public class InputSelectionUtility {
@@ -46,7 +47,7 @@ public class InputSelectionUtility {
                 sc.next(); // Consume the invalid input
             }
         }
-
+        sc.nextLine();
         return value;
     }
 
@@ -344,4 +345,32 @@ public class InputSelectionUtility {
         System.out.println("Camp details updated successfully.");
         return true;
     }
+
+    /**
+     * Selects an Enquiry from a map of Enquiries by getting user input.
+     *
+     * @param enquiries is the map of available Enquiries (ID to Enquiry)
+     * @return the selected enquiry or null if no enquiry is selected
+     */
+    public static Enquiry enquirySelector(Map<Integer, Enquiry> enquiries) {
+        while (true) {
+            System.out.println("Select an Enquiry:");
+
+            for (Map.Entry<Integer, Enquiry> entry : enquiries.entrySet()) {
+                System.out.println(entry.getKey() + ". " + entry.getValue().getEnquiryMessage());
+            }
+
+            int enquiryID = getIntInput("Enter the ID of the enquiry (or press Enter to return): ");
+            Enquiry selectedEnquiry = enquiries.get(enquiryID);
+
+            if (selectedEnquiry != null) {
+                return selectedEnquiry;
+            } else {
+                System.out.println("Invalid ID. Please enter a valid ID or press Enter to return.\n");
+            }
+        }
+    }
+
+
+
 }
