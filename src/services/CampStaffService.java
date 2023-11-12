@@ -300,7 +300,7 @@ public class CampStaffService implements ICampStaffService {
 	        	default: System.out.println("Invalid option."); 
 	        		break;
 	    	}
-    	} while (option > 0 && option <= 3);
+    	} while (option != 0 && option > 3);
     	
     	List<Camp> filteredCamps = new ArrayList<>(); // The filtered list
     	
@@ -313,6 +313,7 @@ public class CampStaffService implements ICampStaffService {
             	if (filterDate != null) {
                 	Date campDate = c.getCampInformation().getCampStartDate();
                 	if (campDate.equals(filterDate)) {
+                		System.out.println("Added " + c.getCampInformation().getCampName());
                     	filteredCamps.add(c);
                 	}
             	}
@@ -324,15 +325,16 @@ public class CampStaffService implements ICampStaffService {
         	}
     	}
     	
-    	// Sort filteredCamps here based on the chosen filter (e.g., by name, date, or location)
-		Collections.sort(filteredCamps, (camp1, camp2) -> {
-    		String name1 = camp1.getCampInformation().getCampName();
-    		String name2 = camp2.getCampInformation().getCampName();
-    		return name1.compareTo(name2);
-		});
+//    	// Sort filteredCamps here based on the chosen filter (e.g., by name, date, or location)
+//		Collections.sort(filteredCamps, (camp1, camp2) -> {
+//    		String name1 = camp1.getCampInformation().getCampName();
+//    		String name2 = camp2.getCampInformation().getCampName();
+//    		return name1.compareTo(name2);
+//		});
     	if (filteredCamps.isEmpty()) {
         	System.out.println("No matching camps found.");
     	} else {
+    		System.out.println("Not empty");
     		// Displays the filtered list of camps
     		switch (option) {
 	    		case 1:
@@ -344,8 +346,10 @@ public class CampStaffService implements ICampStaffService {
 	        	default: 
 	        		view.viewCamps(filteredCamps, " - List of Camps - "); 
 	        		break;
-    		}	
+    		}
     	}
+    	System.out.println("(Press Enter to return)");
+    	scanner.nextLine();
 	}
 }
 
