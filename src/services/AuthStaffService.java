@@ -5,6 +5,7 @@ import java.util.Map;
 import models.Staff;
 import stores.AuthStore;
 import stores.DataStore;
+import views.AuthView;
 
 /**
  * The AuthSupervisorService class extends AuthService and
@@ -15,6 +16,7 @@ public class AuthStaffService extends AuthService {
      * Constructs an instance of the AuthSupervisorService class.
      */
     public AuthStaffService() {
+    	AuthView.staffLoginView();
     };
 
     @Override

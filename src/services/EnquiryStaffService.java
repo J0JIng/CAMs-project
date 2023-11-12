@@ -1,5 +1,16 @@
 package services;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+import models.Camp;
+import models.Enquiry;
+import models.Student;
+import stores.DataStore;
+
 public class EnquiryStaffService {
     /* 
 	public boolean respondToEnquiry() {
@@ -39,4 +50,17 @@ public class EnquiryStaffService {
 
     	return responseResult;
 	}*/
+
+	public List<Enquiry> getAllEnquiriesForCamp (Camp camp){
+		Map<Integer, Enquiry> enquiryData = DataStore.getEnquiryData();
+		String campName = camp.getCampInformation().getCampName();
+
+		//returns the list of Enquiries with Camp name.
+		List<Enquiry> enquiriesForCampList = enquiryData.values().stream()
+				.filter(enquiry -> campName.equals(enquiry.getCampName()))
+				.collect(Collectors.toList());
+
+		return enquiriesForCampList;
+	}
 }
+

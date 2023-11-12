@@ -46,7 +46,7 @@ public class InputSelectionUtility {
                 sc.next(); // Consume the invalid input
             }
         }
-
+        sc.nextLine(); // Consumes the nextline character
         return value;
     }
 
@@ -72,8 +72,7 @@ public class InputSelectionUtility {
         String campName = "";
 
         while (!isUniqueName) {
-            System.out.print("Enter camp name: ");
-            String campNameCheck = sc.nextLine();
+            String campNameCheck = getStringInput("Enter camp name: ");
             campName = campNameCheck;
 
             boolean nameExists = existingCamps.stream()
@@ -124,10 +123,6 @@ public class InputSelectionUtility {
         while (true) {
             System.out.println("Select a Camp:");
     
-            for (int i = 0; i < camps.size(); i++) {
-                System.out.printf("%d. %s\n", i + 1, camps.get(i).getCampInformation().getCampName());
-            }
-    
             System.out.print("Enter the index of the camp (or press Enter to return): ");
             String campIndexInput = sc.nextLine();
     
@@ -151,38 +146,41 @@ public class InputSelectionUtility {
     }
       
     
-    public static boolean toggleSelector(List<Camp> camps) {
+    public static boolean toggleSelector(Camp selectedCamp) {
         while (true) {
-            System.out.println("Select a Camp by entering its index [Exit press Enter]:");
-    
-            for (int i = 0; i < camps.size(); i++) {
-                System.out.printf("%d. %s\n", i + 1, camps.get(i).getCampInformation().getCampName());
-            }
-    
-            System.out.print("Enter the index of the camp you want to update (or press Enter to return): ");
-            String campIndexInput = sc.nextLine();
-    
-            if (campIndexInput.isEmpty()) { // If the input is empty (user pressed Enter), return
-                return false;
-            }
-    
-            int campIndex;
-            try {
-                campIndex = Integer.parseInt(campIndexInput) - 1; // Adjust index to start from 0
-                if (campIndex < 0 || campIndex >= camps.size()) {
-                    throw new NumberFormatException(); // Out of bounds
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid index. Please enter a valid index or press Enter to return.\n");
-                continue;
-            }
-    
-            Camp selectedCamp = camps.get(campIndex);
+//            System.out.println("Select a Camp by entering its index [Exit press Enter]:");
+//    
+//            for (int i = 0; i < camps.size(); i++) {
+//                System.out.printf("%d. %s\n", i + 1, camps.get(i).getCampInformation().getCampName());
+//            }
+//    
+//            System.out.print("Enter the index of the camp you want to update (or press Enter to return): ");
+//            String campIndexInput = sc.nextLine();
+//    
+//            if (campIndexInput.isEmpty()) { // If the input is empty (user pressed Enter), return
+//                return false;
+//            }
+//    
+//            int campIndex;
+//            try {
+//                campIndex = Integer.parseInt(campIndexInput) - 1; // Adjust index to start from 0
+//                if (campIndex < 0 || campIndex >= camps.size()) {
+//                    throw new NumberFormatException(); // Out of bounds
+//                }
+//            } catch (NumberFormatException e) {
+//                System.out.println("Invalid index. Please enter a valid index or press Enter to return.\n");
+//                continue;
+//            }
+//    
+//            Camp selectedCamp = camps.get(campIndex);
     
             // Print menu
-            System.out.println("Select Camp Visibility [Exit press Enter]:");
-            System.out.println("1. On");
-            System.out.println("0. Off");
+        	System.out.println("╔══════════════════════════════════════════════════════════╗");
+            ViewUtility.displayInMenuCentered("Select Camp Visibility [Exit press Enter]:");
+        	ViewUtility.displayInMenuNumbered("Off", 0);
+        	ViewUtility.displayInMenuNumbered("On", 1);
+            System.out.println("╚══════════════════════════════════════════════════════════╝");
+            System.out.println("Select option: ");
     
             // Get user input
             String visibilityInput = sc.nextLine();
@@ -219,10 +217,11 @@ public class InputSelectionUtility {
             return null;
         }
     }
-
+    
+    /**
+    * Takes in Inputs for creation of camp
+    */
     public static Camp createCampInput(List<Camp> camps, Staff staff, SimpleDateFormat dateFormat) {
-        System.out.println("Creating a new camp...");
-
         String campName = getUniqueCampName(camps);
         Date campStartDate = InputSelectionUtility.getDateInput("Enter camp start date (dd/MM/yyyy): ", dateFormat);
         Date campEndDate = InputSelectionUtility.getDateInput("Enter camp end date (dd/MM/yyyy): ", dateFormat);
@@ -268,16 +267,7 @@ public class InputSelectionUtility {
 
         while (!exit) {
             // Print menu for updating camp details
-            System.out.println("Select a field to update:");
-            System.out.println("1. Camp Name");
-            System.out.println("2. Camp Start Date");
-            System.out.println("3. Camp End Date");
-            System.out.println("4. Camp Registration Closing Date");
-            System.out.println("5. Camp Location");
-            System.out.println("6. Camp Total Slots");
-            System.out.println("7. Camp Description");
-            System.out.println("8. Camp User Group");
-            System.out.println("9. Exit");
+        	
     
             int choice = InputSelectionUtility.getIntInput("Enter your choice: ");
     

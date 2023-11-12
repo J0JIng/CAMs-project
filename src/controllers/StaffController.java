@@ -28,39 +28,38 @@ public class StaffController extends UserController {
             int choice = scanner.nextInt();
 
             switch (choice) {
-                case 1:
-                    System.out.println("create camp");
-            	    service.createCamp(staff); 
+                case 1: // Create Camp
+            	    service.createCamp(staff);
             	    break;
-                case 2:
-                    System.out.println("delete camp");
+                case 2: // Delete Camp
                 	service.deleteCamp(staff); 
                 	break;
-                case 3:
-                    System.out.println("update camp");
+                case 3: // Update camp details
                 	service.updateCampDetails(staff); 
                 	break;
-                case 4:
-                    System.out.println("Set visibility");
-                	service.toggleCampVisibility(staff); 
+                case 4: // Set camp visibility
+                	service.toggleCampVisibility(staff);
                 	break;
-                case 5:
-                    //controller.campStaffService.viewAllCamps(null, null, null); 
+                case 5: // View all camps
+                    service.viewAllCamps();
                     break;
                 case 6: 
                 	//controller.campStaffService.viewAllCampsWithFilters();
                 	break;
-                case 7:
-                	//controller.campStaffService.viewCreatedCamps(); 
+                case 7: // View Staff created Camps
+                	service.viewCreatedCamps(); 
                 	break;
-                case 8:
-                	//controller.campStaffService.viewStudentList(); 
+                case 8: // View List of students in a Camp
+                	service.viewStudentList(); 
                 	break;
                 case 9:
                 	//controller.campStaffService.viewEnquiriesForCamp(); 
                 	break;
                 case 10:
                 	//controller.campStaffService.respondToEnquiry(); 
+                	break;
+                case 16:
+                	// Change password
                 	break;
                 default:
                     System.out.println("Exiting Staff menu");

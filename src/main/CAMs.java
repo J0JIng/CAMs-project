@@ -50,7 +50,7 @@ public class CAMs {
 				// Start session
 				User user = AuthStore.getCurrentUser();
 				switch (user.getUserRole()) {
-					case STUDENT,COMMITTEE:
+					case STUDENT: case COMMITTEE:
 						new StudentController().start();
 						break;
 

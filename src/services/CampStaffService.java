@@ -21,11 +21,13 @@ import models.Staff;
 import models.Student;
 import stores.AuthStore;
 import stores.DataStore;
+import views.StaffView;
 
 import utility.InputSelectionUtility;
 
 public class CampStaffService implements ICampStaffService {
 	Scanner scanner = new Scanner(System.in);
+	StaffView view = new StaffView();
 
 	// ---------- Helper Function ---------- //
 
@@ -38,12 +40,17 @@ public class CampStaffService implements ICampStaffService {
      */
 	public void toggleCampVisibility(Staff staff){
 		List<Camp> staffCreatedCamps = getStaffCreatedCamps(staff);
+		view.viewCamps(staffCreatedCamps, " - Choose Camp to Toggle Visibility - ");
 		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
-		boolean on = InputSelectionUtility.toggleSelector(staffCreatedCamps);	
-		if(on) {
-			camp.setVisibility(true);
-		}else if(!on && !campIsRegistered(camp)) {
-			camp.setVisibility(false);
+		if (camp != null) {
+			boolean on = InputSelectionUtility.toggleSelector(camp);	
+			if(on) {
+				camp.setVisibility(true);
+			}else if(!on && !campIsRegistered(camp)) {
+				camp.setVisibility(false);
+			}
+		} else {
+			return;
 		}
 	}
 
@@ -174,9 +181,15 @@ public class CampStaffService implements ICampStaffService {
 		System.out.println("Updating camp Details...");
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		List<Camp> staffCreatedCamps = getStaffCreatedCamps(staff);
+		view.viewCamps(staffCreatedCamps, " - Choose Camp to Update - ");
 		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
-		boolean success = InputSelectionUtility.updateCampInput(camp,staff,dateFormat);
-		return success;
+		if (camp != null) {
+			view.editCampView();
+			boolean success = InputSelectionUtility.updateCampInput(camp,staff,dateFormat);
+			return success;
+		} else {
+			return false;
+		}
 	}
 	
 	/**
@@ -188,20 +201,72 @@ public class CampStaffService implements ICampStaffService {
     public boolean deleteCamp(Staff staff){
 		Map<String, Camp> campData = DataStore.getCampData();
 		List<Camp> staffCreatedCamps = getStaffCreatedCamps(staff);
+		view.viewCamps(staffCreatedCamps, " - Choose Camp to Delete - ");
 		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
-		String campName = camp.getCampInformation().getCampName();
-		
-		if(campIsRegistered(camp)){
-			System.out.println("Error deleting " + campName);
-			System.out.println("Students have registered for the camp!");
+		if (camp != null) {
+			String campName = camp.getCampInformation().getCampName();
+			
+			if(campIsRegistered(camp)){
+				System.out.println("Error deleting " + campName);
+				System.out.println("Students have registered for the camp!");
+				return false;
+			}else{
+				System.out.println("Deleted " + campName);
+				campData.remove(campName);
+				return true;
+			}
+		} else {
 			return false;
-		}else{
-			System.out.println("Deleted " + campName);
-			campData.remove(campName);
-			return true;
 		}
 	}
+    
+    /**
+     * Shows all camps in the system.
+     */
+    public void viewAllCamps() {
+    	while (true) {
+    		view.viewCamps(getAllCamps(), " - List of Camps - ");
+    		Camp c = InputSelectionUtility.campSelector(getAllCamps());
+    		if (c != null) {
+	    		view.viewCampInformation(c);
+	    		scanner.nextLine();
+    		} else {
+    			return;
+    		}
+    	}
+    }
+    
+    /**
+     * Shows all camps created by the Staff user
+     */
+    public void viewCreatedCamps() {
+		List<Camp> staffCreatedCamps = getStaffCreatedCamps((Staff)AuthStore.getCurrentUser());
+		view.viewCamps(staffCreatedCamps, " - Camps Created by " + AuthStore.getCurrentUser().getName() + " - ");
+		System.out.print("(Press Enter to return) ");
+		scanner.nextLine();
+    }
 
+    /**
+     * Shows the list of students registered in each Camp
+     */
+	public void viewStudentList() {
+		while (true) {
+    		view.viewCamps(getAllCamps(), " - Choose Camp to view Student list - ");
+    		Camp c = InputSelectionUtility.campSelector(getAllCamps());
+    		if (c != null) {
+    			Map<String, List<String>> listOfStudentsInCamps = DataStore.getCampToRegisteredStudentData();
+    			List<String> students = listOfStudentsInCamps.get(c);
+    			
+    			Map<String, List<String>> listOfCommitteeInCamps = DataStore.getCampToRegisteredCampCommitteeData();
+    			List<String> committeeMembers = listOfCommitteeInCamps.get(c);
+
+	    		view.viewStudentList(students, committeeMembers, c);
+    		} else {
+    			System.out.println("asdfasdf");
+    			return;
+    		}
+    	}
+	}
 }
 
 	
