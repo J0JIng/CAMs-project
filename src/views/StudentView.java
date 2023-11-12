@@ -124,6 +124,34 @@ public class StudentView implements IMenuView{
         System.out.println("╚══════════════════════════════════════════════════════════╝");
         System.out.print("(Press Enter to return) ");
 	}
+	
+	/**
+	 * Displays all camps without any filters
+	 * @param list 
+	 */
+	public void viewCampsSlots(List<Camp> campData) {
+    	// Print the filtered and sorted camps
+		System.out.println("╔══════════════════════════════════════════════════════════╗");
+        System.out.println("║                                                          ║");   
+		System.out.println("║         ██████╗ █████╗ ███╗   ███╗██████╗ ███████╗       ║");
+		System.out.println("║        ██╔════╝██╔══██╗████╗ ████║██╔══██╗██╔════╝       ║");
+		System.out.println("║        ██║     ███████║██╔████╔██║██████╔╝███████╗       ║");
+		System.out.println("║        ██║     ██╔══██║██║╚██╔╝██║██╔═══╝ ╚════██║       ║");
+		System.out.println("║        ╚██████╗██║  ██║██║ ╚═╝ ██║██║     ███████║       ║");
+		System.out.println("║         ╚═════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝     ╚══════╝       ║");
+        System.out.println("║                                                          ║");                                  
+        System.out.println("╠══════════════════════════════════════════════════════════╣");
+        ViewUtility.displayInMenuCentered(" - Slots remaining for each camp - ");
+        System.out.println("╠══════════════════════════════════════════════════╦═══════╣");
+        System.out.println("║                     Camp Name                    ║ Slots ║");
+        int i = 1;
+    	for (Camp c : campData) {
+    		ViewUtility.displayInMenuNumberedTwoColumns(c.getCampInformation().getCampName(), i, c.getCampInformation().getCampTotalSlots());
+        	i++;
+    	}
+        System.out.println("╚══════════════════════════════════════════════════╩═══════╝");
+        System.out.print("(Press Enter to return) ");
+	}
 
     ////////////////////////////////////////////////////////////////
     // FOLLOWING VIEW CLASS NOT DONE // fix this @ ojing

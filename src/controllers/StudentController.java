@@ -44,7 +44,7 @@ public class StudentController extends UserController {
 	                	service.withdrawCamp();
 	                    break;
 	                case 5:
-	                	//controller.campStudentService.viewRemainingSlots();
+	                	service.viewRemainingSlots();
 	                    break;
 	                case 6:
 	                	service.registerAsCommittee();

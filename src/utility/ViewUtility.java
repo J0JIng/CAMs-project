@@ -38,4 +38,14 @@ public class ViewUtility {
 		int spaces = (58 - totalLength) / 2;
     	System.out.println("║" + " ".repeat(spaces) + s + " ".repeat(58 - totalLength - spaces) + "║");
     }
+    
+    /**
+     * Displays string as a numbered entry in the menu
+     * @param s the string in the entry
+     * @param index the numbered index
+     */
+    public static void displayInMenuNumberedTwoColumns(String s, int index, int colValue) {
+    	System.out.println("╠══════════════════════════════════════════════════╬═══════╣");
+    	System.out.println("║[" + (index) + "] " + s + " ".repeat(46- s.length()) + "║ " + colValue + " ".repeat(6- String.valueOf(colValue).length()) + "║");
+    }
 }

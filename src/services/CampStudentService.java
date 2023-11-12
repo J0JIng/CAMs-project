@@ -336,6 +336,9 @@ public class CampStudentService implements ICampStudentService {
 			registeredStudentData.put(campName, new ArrayList<String>());
 		}
 		registeredStudentData.get(campName).add(studentName);
+		
+		// Reduce no. of slots
+		camp.getCampInformation().setCampTotalSlots(camp.getCampInformation().getCampTotalSlots()-1);
 	
 		// Save into DataStore
 		DataStore.setStudentsToCampsRegisteredData(registeredCampsData);
@@ -390,6 +393,9 @@ public class CampStudentService implements ICampStudentService {
 			withdrawnCampsData.put(studentName, new ArrayList<String>());
 		}
 		withdrawnCampsData.get(studentName).add(campName);
+		
+		// Increase no. of slots
+		camp.getCampInformation().setCampTotalSlots(camp.getCampInformation().getCampTotalSlots()+1);
 
 		// Save into DataStore
 		DataStore.setStudentsToCampsRegisteredData(registeredCampsData);
@@ -463,6 +469,9 @@ public class CampStudentService implements ICampStudentService {
 		// Add the camp as the value of student-campcommitee key pair 
 		campCommitteeData.put(campCommitteeName,campName);
 		
+		// Reduce no. of committee slots
+		camp.getCampInformation().setCampCommitteeSlots(camp.getCampInformation().getCampCommitteeSlots()-1);
+		
 		// Save into DataStore
 		DataStore.setCampToRegisteredCampCommitteeData(registeredCampCommitteeData);
 		DataStore.setCampCommitteeToCampRegisteredData(campCommitteeData);
@@ -470,6 +479,14 @@ public class CampStudentService implements ICampStudentService {
 		AuthStore.getCurrentUser().setRole(UserRole.COMMITTEE);
 		return true;
 	}
+	
+	/**
+     * Shows all no. of remaining slots for all the camps.
+     */
+    public void viewRemainingSlots() {
+    	view.viewCampsSlots(getAllCamps());
+    	scanner.nextLine();
+    }
 	
 	/**
      * Shows all camps viewable by the student.
@@ -566,5 +583,4 @@ public class CampStudentService implements ICampStudentService {
     	System.out.println("(Press Enter to return)");
     	scanner.nextLine();
 	}
-	
 }
