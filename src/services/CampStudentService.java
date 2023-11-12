@@ -199,8 +199,8 @@ public class CampStudentService implements ICampStudentService {
 		//Date currentDate = new Date();
 
 		List<Camp> availableCamps = campsData.values().stream()
-		.filter(camp -> camp.getCampInformation().getFacultyGroup() == student.getFaculty()
-					  ||camp.getCampInformation().getFacultyGroup() == FacultyGroups.ALL
+		.filter(camp -> (camp.getCampInformation().getFacultyGroup() == student.getFaculty()
+					  ||camp.getCampInformation().getFacultyGroup() == FacultyGroups.ALL)
 					  &&camp.getVisibility() == true
 					  &&!isCampFull(camp)
 					  //&&!isCampOver(currentDate,camp)
