@@ -58,6 +58,16 @@ public class StaffController extends UserController {
                 case 10:
                 	//controller.campStaffService.respondToEnquiry(); 
                 	break;
+                case 11:
+                	break;
+                case 12:
+                	break;
+                case 13:
+                	break;
+                case 14:
+                	break;
+                case 15:
+                	break;
                 case 16:
                 	// Change password
                 	break;

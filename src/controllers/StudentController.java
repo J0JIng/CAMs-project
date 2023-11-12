@@ -1,6 +1,8 @@
 package controllers;
 
 import java.util.Scanner;
+
+import enums.UserRole;
 import views.StudentView;
 import interfaces.ICampStudentService;
 import models.Student;
@@ -25,57 +27,122 @@ public class StudentController extends UserController {
             }
 
             int choice = scanner.nextInt();
-
-            // choice  // fix this @ ojing
-        
-            switch (choice) {
-                case 1:
-                    //controller.campStudentService.viewAllCamps(null, null, null);
-                    break;
-                case 2: 
-                	//controller.campStudentService.viewAllCampsWithFilters();
-                	break;
-                case 3:
-                	service.registerCamp();
-                    break;
-                case 4:
-                	service.withdrawCamp();
-                    break;
-                case 5:
-                	//controller.campStudentService.viewRemainingSlots();
-                    break;
-                case 6:
-                	service.registerAsCommittee();
-                    break;
-                case 7:
-                	//controller.campStudentService.withdrawFromCommittee();
-                    break;
-                case 8:
-                	//controller.campStudentService.viewRegisteredCamps();
-                    break;
-                case 9: 
-                	//controller.campStudentService.submitEnquiry();
-                	break;
-                case 10: 
-                	//controller.campStudentService.viewEnquiries();
-                	break;
-                case 11: 
-                	//controller.campStudentService.editEnquiry();
-                	break;
-                case 12: 
-                	//controller.campStudentService.deleteEnquiry();
-                	break;
-                case 13: 
-                	//controller.campStudentService.viewEnquiriesForCamp();
-                	break;
-                case 14: 
-                	//controller.campStudentService.submitSuggestion();
-                	break;
-                default: 
-                    System.out.println("Exiting student menu");
-                    AuthController.endSession();
-                    return;
-               
+            
+            if (student.getUserRole() == UserRole.STUDENT) {
+            	// Student selection menu
+	            switch (choice) {
+	                case 1: // View all camps viewable by Student
+	                    service.viewAllCamps();
+	                    break;
+	                case 2: // View all camps viewable by Student with Filters
+	                	service.viewAllCampsWithFilters();
+	                	break;
+	                case 3:
+	                	service.registerCamp();
+	                    break;
+	                case 4:
+	                	service.withdrawCamp();
+	                    break;
+	                case 5:
+	                	//controller.campStudentService.viewRemainingSlots();
+	                    break;
+	                case 6:
+	                	service.registerAsCommittee();
+	                    break;
+	                case 7:
+	                	//controller.campStudentService.withdrawFromCommittee();
+	                    break;
+	                case 8:
+	                	//controller.campStudentService.viewRegisteredCamps();
+	                    break;
+	                case 9: 
+	                	//controller.campStudentService.submitEnquiry();
+	                	break;
+	                case 10: 
+	                	//controller.campStudentService.viewEnquiries();
+	                	break;
+	                case 11: 
+	                	//controller.campStudentService.editEnquiry();
+	                	break;
+	                case 12: 
+	                	//controller.campStudentService.deleteEnquiry();
+	                	break;
+	                case 13: 
+	                	// Change password
+	                	break;
+	                default: 
+	                    System.out.println("Exiting student menu");
+	                    AuthController.endSession();
+	                    return;
+	            }
+            } else if (student.getUserRole() == UserRole.COMMITTEE) {
+            	// Student selection menu
+	            switch (choice) {
+	                case 1: // View all camps viewable by Student
+	                    service.viewAllCamps();
+	                    break;
+	                case 2: // View all camps viewable by Student with Filters
+	                	service.viewAllCampsWithFilters();
+	                	break;
+	                case 3:
+	                	service.registerCamp();
+	                    break;
+	                case 4:
+	                	service.withdrawCamp();
+	                    break;
+	                case 5:
+	                	//controller.campStudentService.viewRemainingSlots();
+	                    break;
+	                case 6:
+	                	service.registerAsCommittee();
+	                    break;
+	                case 7:
+	                	//controller.campStudentService.withdrawFromCommittee();
+	                    break;
+	                case 8:
+	                	//controller.campStudentService.viewRegisteredCamps();
+	                    break;
+	                case 9: 
+	                	//controller.campStudentService.submitEnquiry();
+	                	break;
+	                case 10: 
+	                	//controller.campStudentService.viewEnquiries();
+	                	break;
+	                case 11: 
+	                	//controller.campStudentService.editEnquiry();
+	                	break;
+	                case 12: 
+	                	//controller.campStudentService.deleteEnquiry();
+	                	break;
+	                case 13: 
+	                	//Change password
+	                	break;
+	                case 14:
+	                	// View enquiries for camp
+	                	break;
+	                case 15:
+	                	// Reply enquiries for camp
+	                	break;
+	                case 16:
+	                	// View suggestion for camp
+	                	break;
+	                case 17:
+	                	// Edit suggestion for camp
+	                	break;
+	                case 18:
+	                	// Delete suggestion for camp
+	                	break;
+	                case 19:
+	                	// Submit suggestion for camp
+	                	break;
+	                case 20:
+	                	// Generate camp report
+	                	break;
+	                default: 
+	                    System.out.println("Exiting student menu");
+	                    AuthController.endSession();
+	                    return;
+	            }
             }
              
         }

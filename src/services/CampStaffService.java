@@ -255,10 +255,10 @@ public class CampStaffService implements ICampStaffService {
     		Camp c = InputSelectionUtility.campSelector(getAllCamps());
     		if (c != null) {
     			Map<String, List<String>> listOfStudentsInCamps = DataStore.getCampToRegisteredStudentData();
-    			List<String> students = listOfStudentsInCamps.get(c);
+    			List<String> students = listOfStudentsInCamps.get(c.getCampInformation().getCampName());
     			
     			Map<String, List<String>> listOfCommitteeInCamps = DataStore.getCampToRegisteredCampCommitteeData();
-    			List<String> committeeMembers = listOfCommitteeInCamps.get(c);
+    			List<String> committeeMembers = listOfCommitteeInCamps.get(c.getCampInformation().getCampName());
 
 	    		view.viewStudentList(students, committeeMembers, c);
     		} else {
@@ -325,12 +325,6 @@ public class CampStaffService implements ICampStaffService {
         	}
     	}
     	
-//    	// Sort filteredCamps here based on the chosen filter (e.g., by name, date, or location)
-//		Collections.sort(filteredCamps, (camp1, camp2) -> {
-//    		String name1 = camp1.getCampInformation().getCampName();
-//    		String name2 = camp2.getCampInformation().getCampName();
-//    		return name1.compareTo(name2);
-//		});
     	if (filteredCamps.isEmpty()) {
         	System.out.println("No matching camps found.");
     	} else {

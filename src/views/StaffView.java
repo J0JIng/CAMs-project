@@ -10,7 +10,7 @@ import stores.AuthStore;
 import stores.DataStore;
 import utility.ViewUtility;
 
-public class StaffView implements IMenuView{
+public class StaffView implements IMenuView {
 
 	@Override
 	public void displayMenuView() {
@@ -128,8 +128,8 @@ public class StaffView implements IMenuView{
 	}
 	
 	/**
-	 * Displays all camps without any filters
-	 * @param list 
+	 * Displays the camp information of the camp.
+	 * @param Camp c 
 	 */
 	public void viewCampInformation(Camp c) {
     	// Print the filtered and sorted camps
@@ -154,10 +154,6 @@ public class StaffView implements IMenuView{
     	//}
         System.out.println("╚══════════════════════════════════════════════════════════╝");
         System.out.print("(Press Enter to return) ");
-	}
-	
-	public void viewAllCampsWithFilters() {
-    	
 	}
 
     /* 

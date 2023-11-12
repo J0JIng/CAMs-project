@@ -96,6 +96,34 @@ public class StudentView implements IMenuView{
     	}
         System.out.println("╚══════════════════════════════════════════════════════════╝");
 	}
+	
+	/**
+	 * Displays the camp information of the camp
+	 * @param Camp c
+	 */
+	public void viewCampInformation(Camp c) {
+    	// Print the filtered and sorted camps
+		System.out.println("╔══════════════════════════════════════════════════════════╗");
+		ViewUtility.displayInMenuCentered(" - " + c.getCampInformation().getCampName() + " - ");
+		System.out.println("╠══════════════════════════════════════════════════════════╣");
+        int i = 1;
+    	//for (Camp c : campData) {
+    		CampInformation campInfo = c.getCampInformation();
+    		ViewUtility.displayInMenuBullet("Name: " + campInfo.getCampName());
+    		ViewUtility.displayInMenuBullet("Start Date: " + campInfo.getCampStartDate());
+    		ViewUtility.displayInMenuBullet("End Date: " + campInfo.getCampEndDate());
+    		ViewUtility.displayInMenuBullet("Registration Closing Date: " + campInfo.getCampRegistrationClosingDate());
+    		ViewUtility.displayInMenuBullet("User Group: " + campInfo.getFacultyGroup());
+    		ViewUtility.displayInMenuBullet("Location: " + campInfo.getCampLocation());
+    		ViewUtility.displayInMenuBullet("Total Slots: " + campInfo.getCampTotalSlots());
+    		ViewUtility.displayInMenuBullet("Committee Slots: " + campInfo.getCampCommitteeSlots());
+    		ViewUtility.displayInMenuBullet("Description: " + campInfo.getCampDescription());
+    		ViewUtility.displayInMenuBullet("Staff In Charge: " + campInfo.getCampStaffInCharge());
+        	i++;
+    	//}
+        System.out.println("╚══════════════════════════════════════════════════════════╝");
+        System.out.print("(Press Enter to return) ");
+	}
 
     ////////////////////////////////////////////////////////////////
     // FOLLOWING VIEW CLASS NOT DONE // fix this @ ojing

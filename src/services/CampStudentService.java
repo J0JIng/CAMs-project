@@ -1,9 +1,11 @@
 package services;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import enums.FacultyGroups;
@@ -22,6 +24,7 @@ import views.StudentView;
  */
 public class CampStudentService implements ICampStudentService {
 	StudentView view = new StudentView();
+	Scanner scanner = new Scanner(System.in);
 	/**
      * Constructs an instance of the {@code CampStudentService} class.
      */
@@ -200,6 +203,29 @@ public class CampStudentService implements ICampStudentService {
 					  ||camp.getCampInformation().getFacultyGroup() == FacultyGroups.ALL
 					  &&camp.getVisibility() == true
 					  &&!isCampFull(camp)
+					  //&&!isCampOver(currentDate,camp)
+					  //&&!isUserWithdrawnFromCamp(withdrawnCampsData, camp)
+					  //&&!hasDateClash(student, camp)
+					  )
+		.collect(Collectors.toCollection(ArrayList::new));
+
+		return availableCamps;		
+	}
+	
+	/**
+     * Retrieves a list of available camps for the currently logged-in student.
+     *
+     * @return List of all regardless of registration requirements camps.
+     */
+	public List<Camp> getAllCamps(){
+		Student student = (Student) AuthStore.getCurrentUser();
+		Map<String, Camp> campsData = DataStore.getCampData();
+		//Date currentDate = new Date();
+
+		List<Camp> availableCamps = campsData.values().stream()
+		.filter(camp -> (camp.getCampInformation().getFacultyGroup() == student.getFaculty()
+					  ||camp.getCampInformation().getFacultyGroup() == FacultyGroups.ALL)
+					  &&camp.getVisibility() == true
 					  //&&!isCampOver(currentDate,camp)
 					  //&&!isUserWithdrawnFromCamp(withdrawnCampsData, camp)
 					  //&&!hasDateClash(student, camp)
@@ -444,4 +470,101 @@ public class CampStudentService implements ICampStudentService {
 		AuthStore.getCurrentUser().setRole(UserRole.COMMITTEE);
 		return true;
 	}
+	
+	/**
+     * Shows all camps viewable by the student.
+     */
+    public void viewAllCamps() {
+    	while (true) {
+    		view.viewCamps(getAllCamps(), " - List of Camps - ");
+    		Camp c = InputSelectionUtility.campSelector(getAllCamps());
+    		if (c != null) {
+	    		view.viewCampInformation(c);
+	    		scanner.nextLine();
+    		} else {
+    			return;
+    		}
+    	}
+    }
+    
+    /**
+     * Shows the list of camps using user specified filter
+     */
+	public void viewAllCampsWithFilters() {
+		
+		// Various filters for camps
+    	String filterBy = null; 		// Type of filter
+    	Date filterDate = null;			// Filter date
+    	String locationFilter = null;	// Filter location
+
+    	System.out.println("Filter Options:");
+    	System.out.println("1. Filter by Date");
+    	System.out.println("2. Filter by Location");
+    	System.out.println("3. Sort by Name (Alphabetical Order)");
+    	
+    	int option = 0;
+    	do {
+	    	option = InputSelectionUtility.getIntInput("Enter the filter option (1/2/3): ");
+	    	switch (option) {
+	    		case 1:
+	    			filterBy = "date";
+		        	filterDate = InputSelectionUtility.getDateInput("Enter the start date to filter by (dd/MM/yyyy): ", new SimpleDateFormat("dd/MM/yyyy"));
+					break;
+	    		case 2:
+	    			filterBy = "location";
+		        	locationFilter = InputSelectionUtility.getStringInput("Enter the location to filter by: ");
+		        	break;
+	        	case 3:
+	        		System.out.println("Sorting by alphabetical order..."); // Sort by alphabetical order
+	        		break;
+	        	default: System.out.println("Invalid option."); 
+	        		break;
+	    	}
+    	} while (option != 0 && option > 3);
+    	
+    	List<Camp> filteredCamps = new ArrayList<>(); // The filtered list
+    	
+    	// Chooses to add each camp to filtered list based on filtering criteria chosen
+    	for (Camp c : getAllCamps()) {
+        	if (filterBy == null) {
+            	// Default sorting by name
+            	filteredCamps.add(c);
+        	} else if (filterBy.equals("date")) {
+            	if (filterDate != null) {
+                	Date campDate = c.getCampInformation().getCampStartDate();
+                	if (campDate.equals(filterDate)) {
+                		System.out.println("Added " + c.getCampInformation().getCampName());
+                    	filteredCamps.add(c);
+                	}
+            	}
+        	} else if (filterBy.equals("location")) {
+            	String campLocation = c.getCampInformation().getCampLocation();
+            	if (campLocation.equalsIgnoreCase(locationFilter)) { // Compare with the provided location filter
+                	filteredCamps.add(c);
+            	}
+        	}
+    	}
+    	
+    	if (filteredCamps.isEmpty()) {
+        	System.out.println("No matching camps found.");
+    	} else {
+    		System.out.println("Not empty");
+    		// Displays the filtered list of camps
+    		switch (option) {
+	    		case 1:
+	    			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+	    			view.viewCamps(filteredCamps, " - List of Camps starting on " + dateFormat.format(filterDate) + " - ");
+					break;
+	    		case 2:
+	    			view.viewCamps(filteredCamps, " - List of Camps in " + locationFilter + " - ");
+		        	break;
+	        	default: 
+	        		view.viewCamps(filteredCamps, " - List of Camps - "); 
+	        		break;
+    		}
+    	}
+    	System.out.println("(Press Enter to return)");
+    	scanner.nextLine();
+	}
+	
 }
