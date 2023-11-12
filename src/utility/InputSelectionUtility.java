@@ -230,7 +230,7 @@ public class InputSelectionUtility {
         String campDescription = InputSelectionUtility.getStringInput("Enter camp description: ");
         int campTotalSlots = InputSelectionUtility.getIntInput("Enter total slots: ");
         int campCommitteeSlots = InputSelectionUtility.getIntInput("Enter committee slots: ");
-        String campUserGroup = InputSelectionUtility.getStringInput("Enter user group:");
+        String campUserGroup = InputSelectionUtility.getStringInput("Enter user group: ");
         FacultyGroups faculty = validateFacultyGroup(campUserGroup);
 
         while (faculty == null) {

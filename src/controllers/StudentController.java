@@ -50,10 +50,11 @@ public class StudentController extends UserController {
 	                	service.registerAsCommittee();
 	                    break;
 	                case 7:
+	                	System.out.println("Cannot withdraw from Committee");
 	                	//controller.campStudentService.withdrawFromCommittee();
 	                    break;
 	                case 8:
-	                	//controller.campStudentService.viewRegisteredCamps();
+	                	service.viewRegisteredCamps();
 	                    break;
 	                case 9: 
 	                	//controller.campStudentService.submitEnquiry();
@@ -78,7 +79,7 @@ public class StudentController extends UserController {
             } else if (student.getUserRole() == UserRole.COMMITTEE) {
             	// Student selection menu
 	            switch (choice) {
-	                case 1: // View all camps viewable by Student
+		            case 1: // View all camps viewable by Student
 	                    service.viewAllCamps();
 	                    break;
 	                case 2: // View all camps viewable by Student with Filters
@@ -91,16 +92,17 @@ public class StudentController extends UserController {
 	                	service.withdrawCamp();
 	                    break;
 	                case 5:
-	                	//controller.campStudentService.viewRemainingSlots();
+	                	service.viewRemainingSlots();
 	                    break;
 	                case 6:
 	                	service.registerAsCommittee();
 	                    break;
 	                case 7:
+	                	System.out.println("Cannot withdraw from Committee");
 	                	//controller.campStudentService.withdrawFromCommittee();
 	                    break;
 	                case 8:
-	                	//controller.campStudentService.viewRegisteredCamps();
+	                	service.viewRegisteredCamps();
 	                    break;
 	                case 9: 
 	                	//controller.campStudentService.submitEnquiry();

@@ -94,7 +94,7 @@ public class StaffView implements IMenuView {
         if (committeeMembers == null || committeeMembers.size() == 0) {
         	ViewUtility.displayInMenuCentered(" - No Committe Members in " + c.getCampInformation().getCampName() + " - ");
         } else {
-        	for (int i = 0; i < students.size(); i++) {
+        	for (int i = 0; i < committeeMembers.size(); i++) {
     	        ViewUtility.displayInMenuNumbered(committeeMembers.get(i), i+1);
     	    }
         }

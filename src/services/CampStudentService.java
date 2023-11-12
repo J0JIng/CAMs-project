@@ -262,11 +262,17 @@ public class CampStudentService implements ICampStudentService {
 	public List<Camp> getRegisteredCamps() {
 		Student student = (Student) AuthStore.getCurrentUser();
 		Map<String, List<String>> registeredCampsData = DataStore.getStudentsToCampsRegisteredData();
-	
-		List<Camp> registeredCamps = registeredCampsData.entrySet().stream()
-				.filter(entry -> entry.getValue().contains(student.getName()))
-				.map(entry -> DataStore.getCampData().get(entry.getKey()))
-				.collect(Collectors.toList());
+	    
+	    List<Camp> registeredCamps = registeredCampsData.entrySet().stream()
+	    	    .filter(entry -> entry.getKey().equals(student.getName()))
+	    	    .flatMap(entry -> entry.getValue().stream())
+	    	    .map(campName -> DataStore.getCampData().get(campName))
+	    	    .collect(Collectors.toList());
+		
+//		List<Camp> registeredCamps = registeredCampsData.entrySet().stream()
+//				.filter(entry -> entry.getValue().contains(student.getName()))
+//				.map(entry -> DataStore.getCampData().get(entry.getKey()))
+//				.collect(Collectors.toList());
 	
 		return registeredCamps;
 	}
@@ -363,6 +369,9 @@ public class CampStudentService implements ICampStudentService {
 		Map<String, List<String>> registeredCampsData = DataStore.getStudentsToCampsRegisteredData();
 		Map<String, List<String>> registeredStudentData = DataStore.getCampToRegisteredStudentData();
 
+		// Display available camps to register
+		view.viewCamps(RegisteredCamps, " - Choose Camp to Withdraw - ");
+		
 		// Get user input
     	Camp camp = InputSelectionUtility.campSelector(RegisteredCamps);
         if (camp == null) {
@@ -402,7 +411,7 @@ public class CampStudentService implements ICampStudentService {
 		DataStore.setCampToRegisteredStudentData(registeredStudentData);
 		DataStore.setStudentToCampsWithdrawnData(withdrawnCampsData);
 		
-		System.out.println("Registered to chosen camp successfully!");
+		System.out.println("Withdrawn from chosen camp successfully!");
 		return true;
 	}
 
@@ -421,6 +430,9 @@ public class CampStudentService implements ICampStudentService {
 		Map<String, List<String>> registeredCampCommitteeData = DataStore.getCampToRegisteredCampCommitteeData();
 		Map<String, String> campCommitteeData = DataStore.getCampCommitteeToCampRegisteredData();
 
+		// Display available camps to register
+		view.viewCamps(availableCamps, " - Choose Camp to join as Committee Member - ");
+		
 		// Get User input
 		Camp camp = InputSelectionUtility.campSelector(availableCamps);
         if (camp == null) {
@@ -469,13 +481,15 @@ public class CampStudentService implements ICampStudentService {
 		// Add the camp as the value of student-campcommitee key pair 
 		campCommitteeData.put(campCommitteeName,campName);
 		
+		// Increase no. of slots
+		camp.getCampInformation().setCampTotalSlots(camp.getCampInformation().getCampTotalSlots()-1);
 		// Reduce no. of committee slots
 		camp.getCampInformation().setCampCommitteeSlots(camp.getCampInformation().getCampCommitteeSlots()-1);
 		
 		// Save into DataStore
 		DataStore.setCampToRegisteredCampCommitteeData(registeredCampCommitteeData);
 		DataStore.setCampCommitteeToCampRegisteredData(campCommitteeData);
-		System.out.println("Registered to chosen camp successfully!");
+		System.out.println("Registered to chosen camp successfully as Committee Member!");
 		AuthStore.getCurrentUser().setRole(UserRole.COMMITTEE);
 		return true;
 	}
@@ -583,4 +597,15 @@ public class CampStudentService implements ICampStudentService {
     	System.out.println("(Press Enter to return)");
     	scanner.nextLine();
 	}
+	
+	/**
+	 * Shows the camps that the student is registered in.
+	 */
+	public void viewRegisteredCamps() {
+		List<Camp> list = getRegisteredCamps();
+		view.viewCamps(list, " - Camps registered by " + AuthStore.getCurrentUser().getName() + " - ");
+		System.out.print("(Press Enter to return) ");
+		scanner.nextLine();
+	}
+
 }
