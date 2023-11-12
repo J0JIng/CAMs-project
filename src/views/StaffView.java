@@ -155,6 +155,10 @@ public class StaffView implements IMenuView{
         System.out.println("╚══════════════════════════════════════════════════════════╝");
         System.out.print("(Press Enter to return) ");
 	}
+	
+	public void viewAllCampsWithFilters() {
+    	
+	}
 
     /* 
 	public void viewCreatedCamps() {

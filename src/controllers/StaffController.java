@@ -43,11 +43,11 @@ public class StaffController extends UserController {
                 case 5: // View all camps
                     service.viewAllCamps();
                     break;
-                case 6: 
-                	//controller.campStaffService.viewAllCampsWithFilters();
+                case 6: // Views all camps with filters
+                	service.viewAllCampsWithFilters();
                 	break;
                 case 7: // View Staff created Camps
-                	service.viewCreatedCamps(); 
+                	service.viewCreatedCamps(staff); 
                 	break;
                 case 8: // View List of students in a Camp
                 	service.viewStudentList(); 

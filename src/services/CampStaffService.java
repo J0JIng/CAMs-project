@@ -239,8 +239,8 @@ public class CampStaffService implements ICampStaffService {
     /**
      * Shows all camps created by the Staff user
      */
-    public void viewCreatedCamps() {
-		List<Camp> staffCreatedCamps = getStaffCreatedCamps((Staff)AuthStore.getCurrentUser());
+    public void viewCreatedCamps(Staff staff) {
+		List<Camp> staffCreatedCamps = getStaffCreatedCamps(staff);
 		view.viewCamps(staffCreatedCamps, " - Camps Created by " + AuthStore.getCurrentUser().getName() + " - ");
 		System.out.print("(Press Enter to return) ");
 		scanner.nextLine();
@@ -262,9 +262,89 @@ public class CampStaffService implements ICampStaffService {
 
 	    		view.viewStudentList(students, committeeMembers, c);
     		} else {
-    			System.out.println("asdfasdf");
     			return;
     		}
+    	}
+	}
+	
+	/**
+     * Shows the list of camps using user specified filter
+     */
+	public void viewAllCampsWithFilters() {
+		
+		// Various filters for camps
+    	String filterBy = null; 		// Type of filter
+    	Date filterDate = null;			// Filter date
+    	String locationFilter = null;	// Filter location
+
+    	System.out.println("Filter Options:");
+    	System.out.println("1. Filter by Date");
+    	System.out.println("2. Filter by Location");
+    	System.out.println("3. Sort by Name (Alphabetical Order)");
+    	
+    	int option = 0;
+    	do {
+	    	option = InputSelectionUtility.getIntInput("Enter the filter option (1/2/3): ");
+	    	switch (option) {
+	    		case 1:
+	    			filterBy = "date";
+		        	filterDate = InputSelectionUtility.getDateInput("Enter the start date to filter by (dd/MM/yyyy): ", new SimpleDateFormat("dd/MM/yyyy"));
+					break;
+	    		case 2:
+	    			filterBy = "location";
+		        	locationFilter = InputSelectionUtility.getStringInput("Enter the location to filter by: ");
+		        	break;
+	        	case 3:
+	        		System.out.println("Sorting by alphabetical order..."); // Sort by alphabetical order
+	        		break;
+	        	default: System.out.println("Invalid option."); 
+	        		break;
+	    	}
+    	} while (option > 0 && option <= 3);
+    	
+    	List<Camp> filteredCamps = new ArrayList<>(); // The filtered list
+    	
+    	// Chooses to add each camp to filtered list based on filtering criteria chosen
+    	for (Camp c : getAllCamps()) {
+        	if (filterBy == null) {
+            	// Default sorting by name
+            	filteredCamps.add(c);
+        	} else if (filterBy.equals("date")) {
+            	if (filterDate != null) {
+                	Date campDate = c.getCampInformation().getCampStartDate();
+                	if (campDate.equals(filterDate)) {
+                    	filteredCamps.add(c);
+                	}
+            	}
+        	} else if (filterBy.equals("location")) {
+            	String campLocation = c.getCampInformation().getCampLocation();
+            	if (campLocation.equalsIgnoreCase(locationFilter)) { // Compare with the provided location filter
+                	filteredCamps.add(c);
+            	}
+        	}
+    	}
+    	
+    	// Sort filteredCamps here based on the chosen filter (e.g., by name, date, or location)
+		Collections.sort(filteredCamps, (camp1, camp2) -> {
+    		String name1 = camp1.getCampInformation().getCampName();
+    		String name2 = camp2.getCampInformation().getCampName();
+    		return name1.compareTo(name2);
+		});
+    	if (filteredCamps.isEmpty()) {
+        	System.out.println("No matching camps found.");
+    	} else {
+    		// Displays the filtered list of camps
+    		switch (option) {
+	    		case 1:
+	    			view.viewCamps(filteredCamps, " - List of Camps starting on " + filterDate + " - ");
+					break;
+	    		case 2:
+	    			view.viewCamps(filteredCamps, " - List of Camps in " + locationFilter + " - ");
+		        	break;
+	        	default: 
+	        		view.viewCamps(filteredCamps, " - List of Camps - "); 
+	        		break;
+    		}	
     	}
 	}
 }
