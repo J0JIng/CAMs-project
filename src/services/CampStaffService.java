@@ -338,7 +338,8 @@ public class CampStaffService implements ICampStaffService {
     		// Displays the filtered list of camps
     		switch (option) {
 	    		case 1:
-	    			view.viewCamps(filteredCamps, " - List of Camps starting on " + filterDate + " - ");
+	    			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+	    			view.viewCamps(filteredCamps, " - List of Camps starting on " + dateFormat.format(filterDate) + " - ");
 					break;
 	    		case 2:
 	    			view.viewCamps(filteredCamps, " - List of Camps in " + locationFilter + " - ");
