@@ -71,9 +71,10 @@ public class StaffView implements IMenuView {
         System.out.println("║[4] Camp Registration Closing Date                        ║");
         System.out.println("║[5] Camp Location                                         ║");
         System.out.println("║[6] Camp Total Slots                                      ║");
-        System.out.println("║[7] Camp Description                                      ║");
-        System.out.println("║[8] Camp User Group                                       ║");
-        System.out.println("║[9] Exit                                                  ║");
+        System.out.println("║[7] Camp Camp Committee Slots                             ║");
+        System.out.println("║[8] Description                                           ║");
+        System.out.println("║[9] User Group                                            ║");
+		System.out.println("║[10] Exit User                                            ║");
         System.out.println("╚══════════════════════════════════════════════════════════╝");
 	}
 	
@@ -155,6 +156,32 @@ public class StaffView implements IMenuView {
         System.out.println("╚══════════════════════════════════════════════════════════╝");
         System.out.print("(Press Enter to return) ");
 	}
+
+	public void viewFliterOption() {
+    	// Print the filtered and sorted camps
+		System.out.println("╔══════════════════════════════════════════════════════════╗");
+		System.out.println("║      				Filter Options:						 ║");
+		System.out.println("╠══════════════════════════════════════════════════════════╣");
+    	System.out.println("║   1. Filter by Date										 ║");
+    	System.out.println("║   2. Filter by Location								     ║");	
+    	System.out.println("║   3. Sort by Name (Alphabetical Order)					 ║");
+		System.out.println("╚══════════════════════════════════════════════════════════╝");
+	}
+
+	public void viewToggleOption(Camp camp) {
+    	// Print menu
+		System.out.println("╔══════════════════════════════════════════════════════════╗");
+		ViewUtility.displayInMenuCentered(" - " + camp.getCampInformation().getCampName() + " - ");
+		System.out.println("╠══════════════════════════════════════════════════════════╣");
+		ViewUtility.displayInMenuCentered("Select Camp Visibility [Exit press Enter]:");
+		ViewUtility.displayInMenuNumbered("Off", 0);
+		ViewUtility.displayInMenuNumbered("On", 1);
+		System.out.println("╚══════════════════════════════════════════════════════════╝");
+		System.out.println("Select option: ");
+	}
+	
+	
+
 
     /* 
 	public void viewCreatedCamps() {

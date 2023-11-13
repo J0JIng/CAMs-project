@@ -70,6 +70,7 @@ public class StudentController extends UserController {
 	                	break;
 	                case 13: 
 	                	// Change password
+						super.changePassword();
 	                	break;
 	                default: 
 	                    System.out.println("Exiting student menu");
@@ -118,6 +119,7 @@ public class StudentController extends UserController {
 	                	break;
 	                case 13: 
 	                	//Change password
+						super.changePassword();
 	                	break;
 	                case 14:
 	                	// View enquiries for camp

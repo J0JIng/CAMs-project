@@ -14,11 +14,14 @@ import java.util.Date;
 import models.Staff;
 import models.Camp;
 import models.CampInformation;
+import services.CampStaffService;
 import stores.AuthStore;
 
 public class InputSelectionUtility {
 
     private static final Scanner sc = new Scanner(System.in);
+    private static final int MAX_COMMITTEE_SLOTS = 10;  
+    private static final CampStaffService campStaffService = new CampStaffService();
 
     public InputSelectionUtility() {
     };
@@ -111,6 +114,14 @@ public class InputSelectionUtility {
         return date;
     }
 
+     private static FacultyGroups validateFacultyGroup(String userInput) {
+        try {
+            return FacultyGroups.valueOf(userInput.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
+
     // ---------- Utility method implementation ---------- //
 
     /**
@@ -123,7 +134,7 @@ public class InputSelectionUtility {
         while (true) {
             System.out.println("Select a Camp:");
     
-            System.out.print("Enter the index of the camp (or press Enter to return): ");
+            //System.out.print("Enter the index of the camp (or press Enter to return): ");
             String campIndexInput = sc.nextLine();
     
             if (campIndexInput.isEmpty()) { // If the input is empty (user pressed Enter), return
@@ -148,40 +159,7 @@ public class InputSelectionUtility {
     
     public static boolean toggleSelector(Camp selectedCamp) {
         while (true) {
-//            System.out.println("Select a Camp by entering its index [Exit press Enter]:");
-//    
-//            for (int i = 0; i < camps.size(); i++) {
-//                System.out.printf("%d. %s\n", i + 1, camps.get(i).getCampInformation().getCampName());
-//            }
-//    
-//            System.out.print("Enter the index of the camp you want to update (or press Enter to return): ");
-//            String campIndexInput = sc.nextLine();
-//    
-//            if (campIndexInput.isEmpty()) { // If the input is empty (user pressed Enter), return
-//                return false;
-//            }
-//    
-//            int campIndex;
-//            try {
-//                campIndex = Integer.parseInt(campIndexInput) - 1; // Adjust index to start from 0
-//                if (campIndex < 0 || campIndex >= camps.size()) {
-//                    throw new NumberFormatException(); // Out of bounds
-//                }
-//            } catch (NumberFormatException e) {
-//                System.out.println("Invalid index. Please enter a valid index or press Enter to return.\n");
-//                continue;
-//            }
-//    
-//            Camp selectedCamp = camps.get(campIndex);
-    
-            // Print menu
-        	System.out.println("╔══════════════════════════════════════════════════════════╗");
-            ViewUtility.displayInMenuCentered("Select Camp Visibility [Exit press Enter]:");
-        	ViewUtility.displayInMenuNumbered("Off", 0);
-        	ViewUtility.displayInMenuNumbered("On", 1);
-            System.out.println("╚══════════════════════════════════════════════════════════╝");
-            System.out.println("Select option: ");
-    
+            
             // Get user input
             String visibilityInput = sc.nextLine();
             int choice;
@@ -209,38 +187,70 @@ public class InputSelectionUtility {
             }
         }
     }
-
-    private static FacultyGroups validateFacultyGroup(String userInput) {
-        try {
-            return FacultyGroups.valueOf(userInput.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            return null;
-        }
-    }
-    
+ 
     /**
     * Takes in Inputs for creation of camp
     */
-    public static Camp createCampInput(List<Camp> camps, Staff staff, SimpleDateFormat dateFormat) {
-        String campName = getUniqueCampName(camps);
-        Date campStartDate = InputSelectionUtility.getDateInput("Enter camp start date (dd/MM/yyyy): ", dateFormat);
-        Date campEndDate = InputSelectionUtility.getDateInput("Enter camp end date (dd/MM/yyyy): ", dateFormat);
-        Date campRegistrationClosingDate = InputSelectionUtility.getDateInput("Enter registration closing date (dd/MM/yyyy): ", dateFormat);
-        String campLocation = InputSelectionUtility.getStringInput("Enter camp location: ");
-        String campDescription = InputSelectionUtility.getStringInput("Enter camp description: ");
-        int campTotalSlots = InputSelectionUtility.getIntInput("Enter total slots: ");
-        int campCommitteeSlots = InputSelectionUtility.getIntInput("Enter committee slots: ");
-        String campUserGroup = InputSelectionUtility.getStringInput("Enter user group: ");
-        FacultyGroups faculty = validateFacultyGroup(campUserGroup);
-
-        while (faculty == null) {
-            System.out.println("Invalid user group. Please Enter a valid user group.");
-            campUserGroup = InputSelectionUtility.getStringInput("Enter user group:");
-            faculty = validateFacultyGroup(campUserGroup);
+    public static CampInformation getCampInput(List<Camp> allCamps, Staff staff, SimpleDateFormat dateFormat) {
+        // get Unique Camp Name
+        String campName = getUniqueCampName(allCamps);
+    
+        // get the registration closing date
+        Date campRegistrationClosingDate = getDateInput("Enter camp start date (dd/MM/yyyy): ", dateFormat);
+    
+        // Validate and get the camp start date
+        Date campStartDate;
+        do {
+            campStartDate = getDateInput("Enter camp start date (dd/MM/yyyy): ", dateFormat);
+            if (campStartDate.before(campRegistrationClosingDate)) {
+                System.out.println("Camp start date must be after the registration closing date. Please enter a valid date.");
+            }
+        } while (campStartDate.before(campRegistrationClosingDate));
+    
+        // Validate and get the camp end date
+        Date campEndDate;
+        do {
+            campEndDate = getDateInput("Enter camp end date (dd/MM/yyyy): ", dateFormat);
+            if (campEndDate.before(campStartDate)) {
+                System.out.println("Camp end date must be after the start date. Please enter a valid date.");
+            }
+        } while (campEndDate.before(campStartDate));
+    
+        String campLocation = getStringInput("Enter camp location: ");
+        String campDescription = getStringInput("Enter camp description: ");
+    
+        int campCommitteeSlots = getIntInput("Enter committee slots: ");
+        if (campCommitteeSlots > MAX_COMMITTEE_SLOTS) {
+            campCommitteeSlots = MAX_COMMITTEE_SLOTS;
+            System.out.println("Input camp committee slots greater than allowed camp committee slots. Maximum default of 10 is set");
         }
-
-        return new Camp(new CampInformation(campName, campStartDate, campEndDate, campRegistrationClosingDate, 
-        campLocation, campTotalSlots, campCommitteeSlots, campDescription, staff.getName(), faculty));
+    
+        // validate and get total camp slots
+        int campTotalSlots;
+        do {
+            campTotalSlots = getIntInput("Enter total slots: ");
+            // Check if total slots are greater than or equal to camp committee slots
+            if (campTotalSlots < campCommitteeSlots) {
+                System.out.println("Total slots must be greater than or equal to camp committee slots. Please enter the values again.");
+                continue; // Continue to the next iteration of the loop
+            } else {
+                break;
+            }
+        } while (true);
+    
+        // Validate and get the faculty User Group
+        FacultyGroups faculty;
+        do {
+            String campUserGroup = getStringInput("Enter user group:");
+            faculty = validateFacultyGroup(campUserGroup);
+    
+            if (faculty == null) {
+                System.out.println("Invalid user group. Please enter a valid user group.");
+            }
+        } while (faculty == null);
+    
+        return new CampInformation(campName, campStartDate, campEndDate, campRegistrationClosingDate,
+                campLocation, campTotalSlots, campCommitteeSlots, campDescription, staff.getName(), faculty);
     }
 
     /**
@@ -274,53 +284,104 @@ public class InputSelectionUtility {
             switch (choice) {
                 case 1:
                     // Update Camp Name
-                    String newCampName = getStringInput("Enter new camp name: ");
-                    camp.getCampInformation().setCampName(newCampName);
+                    try {
+                        String newCampName = getStringInput("Enter new camp name: ");
+                        campStaffService.updateCampName(camp, newCampName);
+                        System.out.println("Camp name updated successfully!");
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("Error updating camp name: " + e.getMessage());
+                    }
                     break;
-    
                 case 2:
                     // Update Camp Start Date
-                    Date newStartDate = getDateInput("Enter new camp start date (dd/MM/yyyy): ", dateFormat);
-                    camp.getCampInformation().setCampStartDate(newStartDate);
+                    try {
+                        Date newStartDate = getDateInput("Enter new camp start date (dd/MM/yyyy): ", dateFormat);
+                        campStaffService.updateCampStartDate(camp, newStartDate);
+                        System.out.println("Camp start date updated successfully!");
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("Error updating camp start date: " + e.getMessage());
+                    }
                     break;
-    
+
                 case 3:
                     // Update Camp End Date
-                    Date newEndDate = getDateInput("Enter new camp end date (dd/MM/yyyy): ", dateFormat);
-                    camp.getCampInformation().setCampEndDate(newEndDate);
+                    try {
+                        Date newEndDate = getDateInput("Enter new camp end date (dd/MM/yyyy): ", dateFormat);
+                        campStaffService.updateCampEndDate(camp, newEndDate);
+                        System.out.println("Camp End date updated successfully!");
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("Error updating camp End date: " + e.getMessage());
+                    }
                     break;
     
                 case 4:
-                    // Update Camp Registration Closing Date
-                    Date newClosingDate = getDateInput("Enter new camp registration closing date (dd/MM/yyyy): ", dateFormat);
-                    camp.getCampInformation().setCampRegistrationClosingDate(newClosingDate);
+                    // Update registration End Date
+                    try {
+                        Date newRegistrationClosingDate = getDateInput("Enter new camp registration closing date (dd/MM/yyyy): ", dateFormat);
+                        campStaffService.updateRegistrationEndDate(camp, newRegistrationClosingDate);
+                        System.out.println("Camp Registration End date updated successfully!");
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("Error updating camp End date: " + e.getMessage());
+                    }
                     break;
     
                 case 5:
                     // Update Camp Location
                     String newLocation = getStringInput("Enter new camp location: ");
-                    camp.getCampInformation().setCampLocation(newLocation);
+
+                    // Validate the new location
+                    try {
+                        campStaffService.updateCampLocation(camp, newLocation);
+                    } catch (IllegalArgumentException e) {
+                        System.out.println(e.getMessage());  
+                    }
                     break;
     
                 case 6:
                     // Update Camp Total Slots
                     int newTotalSlots = getIntInput("Enter new camp total slots: ");
-                    camp.getCampInformation().setCampTotalSlots(newTotalSlots);
+                
+                    try {
+                        campStaffService.updateCampTotalSlot(camp, newTotalSlots);
+                        System.out.println("Camp total slots updated successfully.");
+                    } catch (IllegalArgumentException e) {
+                        System.out.println(e.getMessage()); 
+                    }
                     break;
-    
+                
+                
                 case 7:
-                    // Update Camp Description
-                    String newDescription = getStringInput("Enter new camp description: ");
-                    camp.getCampInformation().setCampDescription(newDescription);
-                    break;
-    
-                case 8:
-                    String campUserGroup = InputSelectionUtility.getStringInput("Enter user group:");
-		            FacultyGroups faculty = FacultyGroups.valueOf(campUserGroup.toUpperCase());
-                    camp.getCampInformation().setFacultyGroup(faculty);
+                    // Update Camp Committee Total Slots
+                    int newCommitteeSlots = getIntInput("Enter new camp committee slots: ");
+                
+                    try {
+                        campStaffService.updateCampCommitteeSlots(camp, newCommitteeSlots);
+                        System.out.println("Camp committee slots updated successfully.");
+                    } catch (IllegalArgumentException e) {
+                        System.out.println(e.getMessage()); 
+                    }
                     break;
 
+                case 8:
+                    // Update Camp Description
+                    String newDescription = getStringInput("Enter new camp description: ");
+                    try {
+                        campStaffService.updateCampDescription(camp, newDescription);
+                    } catch (IllegalArgumentException e) {
+                        System.out.println(e.getMessage());  
+                    }
+                    break;
+    
                 case 9:
+                    // Validate and update the faculty User Group
+                    String campUserGroup = getStringInput("Enter user group:");
+                    try {
+                        campStaffService.updateCampFacultyGroup(camp, campUserGroup);
+                    } catch (IllegalArgumentException e) {
+                        System.out.println(e.getMessage());  
+                    }
+
+                case 10:
                     // Exit editing loop
                     exit = true;
                     break;

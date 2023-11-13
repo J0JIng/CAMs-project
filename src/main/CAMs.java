@@ -39,9 +39,6 @@ public class CAMs {
 			DataStore.initDataStore(new CsvFileDataService(), FilePathsUtility.csvFilePaths());
 			
 			do {
-				// Display Splash Screen
-				// Boundary.printSplashScreen(); //@TODO
-
 				// Authentication - Log In
 				AuthController.startSession();
 				if (!AuthStore.isLoggedIn())

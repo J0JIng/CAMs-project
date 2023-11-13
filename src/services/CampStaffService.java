@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
@@ -16,7 +17,6 @@ import interfaces.ICampStaffService;
 import enums.UserRole;
 import enums.FacultyGroups;
 import models.Camp;
-import models.CampInformation;
 import models.Staff;
 import models.Student;
 import stores.AuthStore;
@@ -26,6 +26,7 @@ import views.StaffView;
 import utility.InputSelectionUtility;
 
 public class CampStaffService implements ICampStaffService {
+	private static final int MAX_COMMITTEE_SLOTS = 10; 
 	Scanner scanner = new Scanner(System.in);
 	StaffView view = new StaffView();
 
@@ -34,14 +35,9 @@ public class CampStaffService implements ICampStaffService {
 	/**
      * Toggles the visibility of the specified camp to "on" or "off".
      *
-     * @param camp      the {@link Camp} object to update
-     * @param visibility the new visibility status ("on" or "off")
-     * @return true if the camp visibility was updated successfully, false otherwise
+     * @param camp the {@link Camp} object to update
      */
-	public void toggleCampVisibility(Staff staff){
-		List<Camp> staffCreatedCamps = getStaffCreatedCamps(staff);
-		view.viewCamps(staffCreatedCamps, " - Choose Camp to Toggle Visibility - ");
-		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
+	public void toggleCampVisibility(Camp camp){
 		if (camp != null) {
 			boolean on = InputSelectionUtility.toggleSelector(camp);	
 			if(on) {
@@ -54,6 +50,12 @@ public class CampStaffService implements ICampStaffService {
 		}
 	}
 
+	/**
+     * Checks if a camp is registered by students or camp committees.
+     *
+     * @param camp the {@link Camp} object to check
+     * @return true if the camp is registered, false otherwise
+     */
 	public boolean campIsRegistered(Camp camp) {
 		Map<String, List<String>> registeredStudents = DataStore.getCampToRegisteredStudentData();
 		Map<String, List<String>> registeredCampCommittees = DataStore.getCampToRegisteredCampCommitteeData();
@@ -73,17 +75,15 @@ public class CampStaffService implements ICampStaffService {
 	}
 	
 
-	// ---------- interface method implementation ---------- //
-
 	/**
      * Retrieves a list of all camps.
      *
      * @return an {@link List} of {@link Camp} objects representing all camps
      */
 	@Override
-	public List<Camp> getAllCamps() {
+	public ArrayList<Camp> getAllCamps() {
     	Map<String, Camp> campsData = DataStore.getCampData();
-    	List<Camp> allCamps = new ArrayList<>(campsData.values());
+    	ArrayList<Camp> allCamps = new ArrayList<>(campsData.values());
     	return allCamps;
 	}
 	
@@ -94,12 +94,12 @@ public class CampStaffService implements ICampStaffService {
      * @return an {@link List} of {@link Camp} objects representing the created camps
      */
 	@Override
-	public List<Camp> getStaffCreatedCamps(Staff staff) {
+	public ArrayList<Camp> getStaffCreatedCamps(Staff staff) {
 		Map<String, Camp> campsData = DataStore.getCampData();
 
-		List<Camp> staffCreatedCamps = campsData.values().stream()
+		ArrayList<Camp> staffCreatedCamps = campsData.values().stream()
 				.filter(camp -> camp.getCampInformation().getCampStaffInCharge().equals(staff.getName()))
-				.collect(Collectors.toList());
+				.collect(Collectors.toCollection(ArrayList::new));
 
 		return staffCreatedCamps;
 	}
@@ -111,19 +111,19 @@ public class CampStaffService implements ICampStaffService {
      * @return an {@link List} of {@link Student} objects representing attendees
      */
 	@Override
-	public List<Student> getCampAttendeeList(Camp camp) {
+	public ArrayList<Student> getCampAttendeeList(Camp camp) {
 		Map<String, List<String>> campToRegisteredStudentData = DataStore.getCampToRegisteredStudentData();
 		Map<String, Student> allStudentsData = DataStore.getStudentData();
 		String campName = camp.getCampInformation().getCampName();
 
-		//retrieves the list of registered student names for the specified camp. If the camp is not found in the map, it defaults to an empty list.
+		// Retrieves the list of registered student names for the specified camp. If the camp is not found in the map, it defaults to an empty list.
 		List<String> registeredStudents = campToRegisteredStudentData.getOrDefault(campName, Collections.emptyList());
 
-		//returns the list of students attending the specified camp.
-		List<Student> campAttendeeList = registeredStudents.stream()
+		// Returns the list of students attending the specified camp.
+		ArrayList<Student> campAttendeeList = registeredStudents.stream()
 				.map(allStudentsData::get)
 				.filter(Objects::nonNull) // Filter out null students if any
-				.collect(Collectors.toList());
+				.collect(Collectors.toCollection(ArrayList::new));
 
 		return campAttendeeList;
 	}
@@ -135,7 +135,7 @@ public class CampStaffService implements ICampStaffService {
      * @return an {@link List} of {@link Student} objects representing CampCommittee
      */
 	@Override
-	public List<Student> getCampCommitteeList(Camp camp){
+	public ArrayList<Student> getCampCommitteeList(Camp camp){
 		Map<String, List<String>> campToRegisteredCampCommitteeData = DataStore.getCampToRegisteredCampCommitteeData();
 		Map<String, Student> allStudentsData = DataStore.getStudentData();
 		String campName = camp.getCampInformation().getCampName();
@@ -144,207 +144,233 @@ public class CampStaffService implements ICampStaffService {
 		List<String> registeredCampCommittee = campToRegisteredCampCommitteeData.getOrDefault(campName, Collections.emptyList());
 
 		//returns the list of CampCommittee attending the specified camp.
-		List<Student> campCommitteeList = registeredCampCommittee.stream()
+		ArrayList<Student> campCommitteeList = registeredCampCommittee.stream()
 				.map(allStudentsData::get)
 				.filter(Objects::nonNull) // Filter out null students if any
-				.collect(Collectors.toList());
+				.collect(Collectors.toCollection(ArrayList::new));
 
 		return campCommitteeList;
 	}
 
 	// ---------- Service method implementation ---------- //
 
+
 	/**
-     * Creates new camps from the provided list of camps.
+     * Creates new camps and adds them to the data store.
      *
-     * @param staffID the ID of the {@link Staff} creating the camp
-     * @return true if the camps were created successfully, false otherwise
+     * @param camps the list of {@link Camp} objects to create
+     * @return true if camps are created successfully, false otherwise
      */
-    public boolean createCamp(Staff staff) {
+    public boolean createCamp(ArrayList<Camp> camps) {
         Map<String, Camp> campData = DataStore.getCampData();
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		System.out.println("Creating a new camp...");
-        Camp newCamp = InputSelectionUtility.createCampInput(getAllCamps(),staff,dateFormat);
-        campData.put(newCamp.getCampInformation().getCampName().toUpperCase(), newCamp);
-        System.out.println("Created " + newCamp.getCampInformation().getCampName());
+		Map<String, Camp> newCampData = new HashMap<String, Camp>();
+
+		for (Camp camp : camps) {
+			newCampData.put(camp.getCampInformation().getCampName(), camp);
+		}
+
+		campData.putAll(newCampData);
+		DataStore.setCampData(campData);
         return true;
     }
-	
+
 	/**
-     * Updates the details of the specified camp if the staff ID matches the
-     * camp's creator.
-	 * 
-     * @param staffID the ID of the {@link Staff} making the update
-     * @return true if the camp details were updated successfully, false otherwise
+     * Checks if a camp name is unique among existing camps.
+     *
+     * @param existingCamps the list of existing {@link Camp} objects
+     * @param newCampName   the new camp name to check
+     * @return true if the camp name is unique, false otherwise
      */
-    public boolean updateCampDetails(Staff staff){
-		System.out.println("Updating camp Details...");
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		List<Camp> staffCreatedCamps = getStaffCreatedCamps(staff);
-		view.viewCamps(staffCreatedCamps, " - Choose Camp to Update - ");
-		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
-		if (camp != null) {
-			view.editCampView();
-			boolean success = InputSelectionUtility.updateCampInput(camp,staff,dateFormat);
-			return success;
-		} else {
-			return false;
+	public boolean isValidName(List<Camp> existingCamps, String newCampName) {
+		for (Camp camp : existingCamps) {
+			if (camp.getCampInformation().getCampName().equalsIgnoreCase(newCampName)) {
+				return false;
+			}
 		}
+		return true;
+	}
+
+	/**
+     * Updates the name of a camp if the new name is unique.
+     *
+     * @param camp        the {@link Camp} object to update
+     * @param newCampName the new camp name
+     * @return true if the camp name is updated successfully, false otherwise
+     * @throws IllegalArgumentException if the new camp name is not unique
+     */
+	public boolean updateCampName(Camp camp, String newCampName) {
+		ArrayList<Camp> existingCamps = getAllCamps();
+		boolean isUniqueName = isValidName(existingCamps,newCampName);
+		if(isUniqueName){
+			camp.getCampInformation().setCampName(newCampName);
+		}else{
+			throw new IllegalArgumentException("Camp with the same name already exists. Please choose a different name.");
+		}
+		return isUniqueName;
+	}
+
+	/**
+	 * Updates the start date of a camp if the new date is valid.
+	 *
+	 * @param camp           the {@link Camp} object to update
+	 * @param newStartDate   the new start date
+	 * @throws IllegalArgumentException if the new start date is invalid
+	 */
+	public void updateCampStartDate(Camp camp, Date newStartDate) throws IllegalArgumentException {
+		if (newStartDate.after(camp.getCampInformation().getCampEndDate())) {
+			throw new IllegalArgumentException("Invalid start date. The new start date must be before the current end date.");
+		} else if (newStartDate.before(camp.getCampInformation().getCampRegistrationClosingDate())) {
+			throw new IllegalArgumentException("Invalid start date. The new start date must be after the registration end date.");
+		} else {
+			camp.getCampInformation().setCampStartDate(newStartDate);
+		}
+	}
+
+	/**
+	 * Updates the end date of a camp if the new date is valid.
+	 *
+	 * @param camp         the {@link Camp} object to update
+	 * @param newEndDate   the new end date
+	 * @throws IllegalArgumentException if the new end date is invalid
+	 */
+	public void updateCampEndDate(Camp camp, Date newEndDate) throws IllegalArgumentException {
+		if (newEndDate.before(camp.getCampInformation().getCampStartDate())) {
+			throw new IllegalArgumentException("Invalid End date. The new End date must be after the current start date.");
+		} else if (newEndDate.before(camp.getCampInformation().getCampRegistrationClosingDate())) {
+			throw new IllegalArgumentException("Invalid End date. The new End date must be after the registration end date.");
+		} else {
+			camp.getCampInformation().setCampEndDate(newEndDate);
+		}
+	}	
+
+	/**
+	 * Updates the registration closing date of a camp if the new date is valid.
+	 *
+	 * @param camp                    the {@link Camp} object to update
+	 * @param newRegistrationClosingDate the new registration closing date
+	 * @throws IllegalArgumentException if the new registration closing date is invalid
+	 */
+	public void updateRegistrationEndDate(Camp camp, Date newRegistrationClosingDate) throws IllegalArgumentException {
+		if (newRegistrationClosingDate.after(camp.getCampInformation().getCampStartDate())) {
+			throw new IllegalArgumentException("Invalid registration closing date. The new date must be before the current start date.");
+		} else if (newRegistrationClosingDate.after(camp.getCampInformation().getCampEndDate())) {
+			throw new IllegalArgumentException("Invalid registration closing date. The new date must be before the current end date.");
+		} else {
+			camp.getCampInformation().setCampRegistrationClosingDate(newRegistrationClosingDate);
+		}
+	}	
+
+	/**
+	 * Updates the location of a camp.
+	 *
+	 * @param camp       the {@link Camp} object to update
+	 * @param newLocation the new location
+	 * @throws IllegalArgumentException if the new location is invalid
+	 */
+	public void updateCampLocation(Camp camp, String newLocation) throws IllegalArgumentException {
+		// Add validation logic to check if newLocation is valid
+		if (newLocation == null || newLocation.trim().isEmpty()) {
+			throw new IllegalArgumentException("Invalid location. Location cannot be empty or null.");
+		}
+	
+		// Update the camp location
+		camp.getCampInformation().setCampLocation(newLocation);
+	}
+
+	/**
+	 * Updates the total slots of a camp if the new total slots are valid.
+	 *
+	 * @param camp              the {@link Camp} object to update
+	 * @param newCampTotalSlots the new total slots
+	 * @throws IllegalArgumentException if the new total slots are invalid
+	 */
+	public void updateCampTotalSlot(Camp camp, int newCampTotalSlots) throws IllegalArgumentException {
+		if (newCampTotalSlots < camp.getCampInformation().getCampCommitteeSlots()) {
+			throw new IllegalArgumentException("Total slots must be greater than or equal to camp committee slots.");
+		}
+		camp.getCampInformation().setCampTotalSlots(newCampTotalSlots);
 	}
 	
 	/**
-     * Deletes the specified camp if the staff ID matches the camp's creator.
+	 * Updates the committee slots of a camp if the new committee slots are valid.
+	 *
+	 * @param camp             the {@link Camp} object to update
+	 * @param newCommitteeSlots the new committee slots
+	 * @throws IllegalArgumentException if the new committee slots are invalid
+	 */
+	public void updateCampCommitteeSlots(Camp camp, int newCommitteeSlots) throws IllegalArgumentException {
+		if (newCommitteeSlots > camp.getCampInformation().getCampTotalSlots()) {
+			throw new IllegalArgumentException("Committee slots must be less than or equal to total slots.");
+		}else if(newCommitteeSlots > MAX_COMMITTEE_SLOTS){
+			newCommitteeSlots = MAX_COMMITTEE_SLOTS;
+			camp.getCampInformation().setCampCommitteeSlots(newCommitteeSlots);
+			throw new IllegalArgumentException("Committee slots must be less than allowed maximum camp committe slots. Max default of 10 set.");
+		}
+		camp.getCampInformation().setCampCommitteeSlots(newCommitteeSlots);
+	}
+	
+	
+	/**
+	 * Updates the description of a camp.
+	 *
+	 * @param camp             the {@link Camp} object to update
+	 * @param newDescription   the new description
+	 * @throws IllegalArgumentException if the new description is invalid
+	 */
+	public void updateCampDescription(Camp camp, String newDescription) throws IllegalArgumentException {
+		// Add validation logic to check if newLocation is valid
+		if (newDescription == null || newDescription.trim().isEmpty()) {
+			throw new IllegalArgumentException("Invalid Description. Description cannot be empty or null.");
+		}
+	
+		// Update the camp location
+		camp.getCampInformation().setCampDescription(newDescription);
+	}
+
+	/**
+	 * Updates the faculty group of a camp if the new faculty group is valid.
+	 *
+	 * @param camp        the {@link Camp} object to update
+	 * @param userInput   the new faculty group input
+	 * @throws IllegalArgumentException if the new faculty group is invalid
+	 */
+	public void updateCampFacultyGroup(Camp camp, String userInput) throws IllegalArgumentException {
+		// Add validation logic to check if userInput is valid
+		if (userInput == null || userInput.trim().isEmpty()) {
+			throw new IllegalArgumentException("Invalid Input. Input cannot be empty or null.");
+		}
+	
+		try {
+			// Validate userInput against valid FacultyGroups
+			FacultyGroups newFacultyGroup = FacultyGroups.valueOf(userInput.toUpperCase());
+			// Update the camp faculty group
+			camp.getCampInformation().setFacultyGroup(newFacultyGroup);
+		} catch (IllegalArgumentException e) {
+			// Throw a specific exception indicating an invalid faculty group
+			throw new IllegalArgumentException("Invalid faculty group. Please enter a valid faculty group.", e);
+		}
+	}
+
+	/**
+     * Deletes a camp if it is not registered by students or camp committees.
      *
-     * @param staffID the ID of the {@link Staff} making the delete request
-     * @return true if the camp was deleted successfully, false otherwise
+     * @param camp the {@link Camp} object to delete
+     * @return true if the camp is deleted successfully, false otherwise
      */
-    public boolean deleteCamp(Staff staff){
+    public boolean deleteCamp(Camp camp){
 		Map<String, Camp> campData = DataStore.getCampData();
-		List<Camp> staffCreatedCamps = getStaffCreatedCamps(staff);
-		view.viewCamps(staffCreatedCamps, " - Choose Camp to Delete - ");
-		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
 		if (camp != null) {
 			String campName = camp.getCampInformation().getCampName();
-			
 			if(campIsRegistered(camp)){
-				System.out.println("Error deleting " + campName);
-				System.out.println("Students have registered for the camp!");
+				System.out.println("Students have registered for this Camp!");
 				return false;
 			}else{
-				System.out.println("Deleted " + campName);
 				campData.remove(campName);
 				return true;
 			}
 		} else {
 			return false;
 		}
-	}
-    
-    /**
-     * Shows all camps in the system.
-     */
-    public void viewAllCamps() {
-    	while (true) {
-    		view.viewCamps(getAllCamps(), " - List of Camps - ");
-    		Camp c = InputSelectionUtility.campSelector(getAllCamps());
-    		if (c != null) {
-	    		view.viewCampInformation(c);
-	    		scanner.nextLine();
-    		} else {
-    			return;
-    		}
-    	}
-    }
-    
-    /**
-     * Shows all camps created by the Staff user
-     */
-    public void viewCreatedCamps(Staff staff) {
-		List<Camp> staffCreatedCamps = getStaffCreatedCamps(staff);
-		view.viewCamps(staffCreatedCamps, " - Camps Created by " + AuthStore.getCurrentUser().getName() + " - ");
-		System.out.print("(Press Enter to return) ");
-		scanner.nextLine();
-    }
-
-    /**
-     * Shows the list of students registered in each Camp
-     */
-	public void viewStudentList() {
-		while (true) {
-    		view.viewCamps(getAllCamps(), " - Choose Camp to view Student list - ");
-    		Camp c = InputSelectionUtility.campSelector(getAllCamps());
-    		if (c != null) {
-    			Map<String, List<String>> listOfStudentsInCamps = DataStore.getCampToRegisteredStudentData();
-    			List<String> students = listOfStudentsInCamps.get(c.getCampInformation().getCampName());
-    			
-    			Map<String, List<String>> listOfCommitteeInCamps = DataStore.getCampToRegisteredCampCommitteeData();
-    			List<String> committeeMembers = listOfCommitteeInCamps.get(c.getCampInformation().getCampName());
-
-	    		view.viewStudentList(students, committeeMembers, c);
-    		} else {
-    			return;
-    		}
-    	}
-	}
-	
-	/**
-     * Shows the list of camps using user specified filter
-     */
-	public void viewAllCampsWithFilters() {
-		
-		// Various filters for camps
-    	String filterBy = null; 		// Type of filter
-    	Date filterDate = null;			// Filter date
-    	String locationFilter = null;	// Filter location
-
-    	System.out.println("Filter Options:");
-    	System.out.println("1. Filter by Date");
-    	System.out.println("2. Filter by Location");
-    	System.out.println("3. Sort by Name (Alphabetical Order)");
-    	
-    	int option = 0;
-    	do {
-	    	option = InputSelectionUtility.getIntInput("Enter the filter option (1/2/3): ");
-	    	switch (option) {
-	    		case 1:
-	    			filterBy = "date";
-		        	filterDate = InputSelectionUtility.getDateInput("Enter the start date to filter by (dd/MM/yyyy): ", new SimpleDateFormat("dd/MM/yyyy"));
-					break;
-	    		case 2:
-	    			filterBy = "location";
-		        	locationFilter = InputSelectionUtility.getStringInput("Enter the location to filter by: ");
-		        	break;
-	        	case 3:
-	        		System.out.println("Sorting by alphabetical order..."); // Sort by alphabetical order
-	        		break;
-	        	default: System.out.println("Invalid option."); 
-	        		break;
-	    	}
-    	} while (option != 0 && option > 3);
-    	
-    	List<Camp> filteredCamps = new ArrayList<>(); // The filtered list
-    	
-    	// Chooses to add each camp to filtered list based on filtering criteria chosen
-    	for (Camp c : getAllCamps()) {
-        	if (filterBy == null) {
-            	// Default sorting by name
-            	filteredCamps.add(c);
-        	} else if (filterBy.equals("date")) {
-            	if (filterDate != null) {
-                	Date campDate = c.getCampInformation().getCampStartDate();
-                	if (campDate.equals(filterDate)) {
-                		System.out.println("Added " + c.getCampInformation().getCampName());
-                    	filteredCamps.add(c);
-                	}
-            	}
-        	} else if (filterBy.equals("location")) {
-            	String campLocation = c.getCampInformation().getCampLocation();
-            	if (campLocation.equalsIgnoreCase(locationFilter)) { // Compare with the provided location filter
-                	filteredCamps.add(c);
-            	}
-        	}
-    	}
-    	
-    	if (filteredCamps.isEmpty()) {
-        	System.out.println("No matching camps found.");
-    	} else {
-    		System.out.println("Not empty");
-    		// Displays the filtered list of camps
-    		switch (option) {
-	    		case 1:
-	    			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-	    			view.viewCamps(filteredCamps, " - List of Camps starting on " + dateFormat.format(filterDate) + " - ");
-					break;
-	    		case 2:
-	    			view.viewCamps(filteredCamps, " - List of Camps in " + locationFilter + " - ");
-		        	break;
-	        	default: 
-	        		view.viewCamps(filteredCamps, " - List of Camps - "); 
-	        		break;
-    		}
-    	}
-    	System.out.println("(Press Enter to return)");
-    	scanner.nextLine();
 	}
 }
 
