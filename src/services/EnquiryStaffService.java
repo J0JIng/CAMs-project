@@ -1,5 +1,6 @@
 package services;
 
+<<<<<<< HEAD
 public class EnquiryStaffService {
     /* 
 	public boolean respondToEnquiry() {
@@ -39,6 +40,7 @@ public class EnquiryStaffService {
 
     	return responseResult;
 	}*/
+=======
 import models.Enquiry;
 import stores.DataStore;
 import enums.MessageStatus;
@@ -66,4 +68,5 @@ public class EnquiryStaffService {
         }
         return false;
     } */
+>>>>>>> hq
 }

@@ -14,16 +14,22 @@ import java.util.Date;
 import models.Staff;
 import models.Camp;
 import models.CampInformation;
+<<<<<<< HEAD
 import services.CampStaffService;
+=======
 import models.Enquiry;
 import models.Suggestion;
+>>>>>>> hq
 import stores.AuthStore;
 
 public class InputSelectionUtility {
 
     private static final Scanner sc = new Scanner(System.in);
+<<<<<<< HEAD
     private static final int MAX_COMMITTEE_SLOTS = 10;  
     private static final CampStaffService campStaffService = new CampStaffService();
+=======
+>>>>>>> hq
 
     public InputSelectionUtility() {
     };
@@ -51,7 +57,11 @@ public class InputSelectionUtility {
                 sc.next(); // Consume the invalid input
             }
         }
+<<<<<<< HEAD
         sc.nextLine(); // Consumes the nextline character
+=======
+        sc.nextLine();
+>>>>>>> hq
         return value;
     }
 
@@ -77,7 +87,12 @@ public class InputSelectionUtility {
         String campName = "";
 
         while (!isUniqueName) {
+<<<<<<< HEAD
             String campNameCheck = getStringInput("Enter camp name: ");
+=======
+            System.out.print("Enter camp name: ");
+            String campNameCheck = sc.nextLine();
+>>>>>>> hq
             campName = campNameCheck;
 
             boolean nameExists = existingCamps.stream()

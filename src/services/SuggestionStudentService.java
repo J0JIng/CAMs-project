@@ -1,6 +1,9 @@
 package services;
 
+<<<<<<< HEAD
+=======
 import models.Enquiry;
+>>>>>>> hq
 import models.Suggestion;
 import stores.DataStore;
 import enums.MessageStatus;
@@ -17,10 +20,13 @@ public class SuggestionStudentService {
     }
 
     public int submitSuggestion(String senderID, String campName, String suggestionDetails, boolean isDraft) {
+<<<<<<< HEAD
         int suggestionID = UUID.randomUUID().hashCode();
         Suggestion suggestion = new Suggestion(suggestionID, campName, senderID, MessageStatus.DRAFT, suggestionDetails);
+=======
         int suggestionID = Math.abs(UUID.randomUUID().hashCode());
         Suggestion suggestion = new Suggestion(suggestionID, senderID, campName, suggestionDetails);
+>>>>>>> hq
         if (isDraft) {
             suggestion.setSuggestionStatus(MessageStatus.DRAFT);
         } else {
@@ -32,12 +38,14 @@ public class SuggestionStudentService {
         return suggestionID;
     }
 
+<<<<<<< HEAD
     public boolean editSuggestion(int suggestionID, String senderID, String newDetails) {
         Suggestion suggestion = suggestionData.get(suggestionID);
         if (suggestion != null && suggestion.getSenderID().equals(senderID) && suggestion.getSuggestionStatus() == MessageStatus.DRAFT) {
             suggestion.setSuggestionMessage(newDetails);
             DataStore.setSuggestionData(suggestionData);
             return true;
+=======
     public Map<Integer, Suggestion> viewDraftSuggestion(String studentID) {
         return suggestionData.values().stream()
                 .filter(suggestion -> suggestion.getSenderID().equals(studentID) && suggestion.getSuggestionStatus() == MessageStatus.DRAFT)
@@ -70,10 +78,12 @@ public class SuggestionStudentService {
                 DataStore.setSuggestionData(suggestionData);
                 return true;
             }
+>>>>>>> hq
         }
         return false;
     }
 
+<<<<<<< HEAD
     // public boolean confirmSuggestion(int suggestionID, String senderID, String campName, String suggestionDetails, boolean isDraft) {
     //     if (suggestionData.containsKey(suggestionID)) {
     //         Suggestion enquiry = Suggestion(suggestionID, senderID, campName, enquiryMessage);
@@ -90,7 +100,9 @@ public class SuggestionStudentService {
     // }
 
     public boolean deleteSuggestion(int suggestionID, String senderID) {
+=======
     public boolean deleteDraftSuggestion(int suggestionID, String senderID) {
+>>>>>>> hq
         Suggestion suggestion = suggestionData.get(suggestionID);
         if (suggestion != null && suggestion.getSenderID().equals(senderID) && suggestion.getSuggestionStatus() == MessageStatus.DRAFT) {
             suggestionData.remove(suggestionID);
@@ -100,10 +112,12 @@ public class SuggestionStudentService {
         return false;
     }
 
+<<<<<<< HEAD
     public boolean reviewSuggestion(int suggestionID, MessageStatus suggestionStatus) {
         Suggestion suggestion = suggestionData.get(suggestionID);
         if (suggestion != null) {
             suggestion.setSuggestionStatus(suggestionStatus);
+=======
     public boolean reviewSuggestion(int suggestionID, boolean suggestionStatus) {
         Suggestion suggestion = suggestionData.get(suggestionID);
         if (suggestion != null) {
@@ -112,6 +126,7 @@ public class SuggestionStudentService {
             } else {
                 suggestion.setSuggestionStatus(MessageStatus.REJECTED);
             }
+>>>>>>> hq
             DataStore.setSuggestionData(suggestionData);
             return true;
         }

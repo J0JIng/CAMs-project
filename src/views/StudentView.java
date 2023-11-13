@@ -8,7 +8,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
+<<<<<<< HEAD
 import enums.UserRole;
+=======
+>>>>>>> hq
 import interfaces.IMenuView;
 import models.Camp;
 import models.CampInformation;
@@ -26,6 +29,7 @@ public class StudentView implements IMenuView{
 		int totalLength = welcomeMessage.length();
 		int spaces = (58 - totalLength) / 2;
 
+<<<<<<< HEAD
 		System.out.println("╔══════════════════════════════════════════════════════════╗");
         System.out.println("║                                                          ║");   
 		System.out.println("║             ██████╗ █████╗ ███╗   ███╗███████╗           ║");
@@ -68,6 +72,31 @@ public class StudentView implements IMenuView{
         }
         
         System.out.println("╚══════════════════════════════════════════════════════════╝");
+=======
+		System.out.println("|" + " ".repeat(spaces) + welcomeMessage + " ".repeat(33 - totalLength - spaces) + "|");
+        System.out.println("|           Student Menu          |");
+        System.out.println("|---------------------------------|");
+        System.out.println("| 1. View All Camps               |");
+        System.out.println("| 2. View Camps with Filters      |");
+        System.out.println("| 3. Register for Camp            |");
+        System.out.println("| 4. Withdraw from Camp           |");
+        System.out.println("| 5. View Remaining Slots of Camp |");
+        System.out.println("| 6. Register as Committee        |");
+        System.out.println("| 7. Withdraw from Committee      |");
+        System.out.println("| 8. View Registered Camps        |");
+        System.out.println("| 9. Submit Enquiry               |");
+        System.out.println("| 10. View Enquiry                |");
+        System.out.println("| 11. Edit Enquiry                |");
+        System.out.println("| 12. Delete Enquiry              |");
+        System.out.println("| 13. View Enquiries for Camp     |");
+        System.out.println("| 14. Respond to Enquiries        |");
+        System.out.println("| 15. Submit Suggestion           |");
+        System.out.println("| 16. View Suggestions            |");
+        System.out.println("| 17. Edit Suggestion             |");
+        System.out.println("| 18. Delete Suggestion           |");
+        System.out.println("| 19. Logout                      |");
+        System.out.println("-----------------------------------");
+>>>>>>> hq
         System.out.print("Select an option: ");
 	}
 	

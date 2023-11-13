@@ -1,6 +1,7 @@
 package controllers;
 
 import java.util.Scanner;
+<<<<<<< HEAD
 
 import enums.UserRole;
 import views.StudentView;
@@ -9,6 +10,14 @@ import models.Student;
 import services.CampStudentService;
 import stores.AuthStore;
 
+=======
+import views.StudentView;
+import interfaces.ICampStudentService;
+import models.Student;
+import services.CampStudentService;
+import stores.AuthStore;
+
+>>>>>>> hq
 public class StudentController extends UserController {
 	public void start() {
     	Scanner scanner = new Scanner(System.in);
@@ -18,6 +27,7 @@ public class StudentController extends UserController {
 	    StudentView view = new StudentView();
 	    while (true) {
             view.displayMenuView();
+
             
             // Checks for invalid inputs
             while (!scanner.hasNextInt()) {
@@ -27,6 +37,7 @@ public class StudentController extends UserController {
             }
 
             int choice = scanner.nextInt();
+<<<<<<< HEAD
             
             if (student.getUserRole() == UserRole.STUDENT) {
             	// Student selection menu
@@ -147,6 +158,36 @@ public class StudentController extends UserController {
 	                    AuthController.endSession();
 	                    return;
 	            }
+=======
+            scanner.nextLine();
+
+            // choice  // fix this @ ojing
+        
+            switch (choice) {
+                case 1:
+                    //controller.campStudentService.viewAllCamps(null, null, null);
+                    break;
+                case 2: 
+                	//controller.campStudentService.viewAllCampsWithFilters();
+                	break;
+                case 3:
+                	service.registerCamp();
+                    break;
+                case 4:
+                	service.withdrawCamp();
+                    break;
+                case 5:
+                	//controller.campStudentService.viewRemainingSlots();
+                    break;
+                case 6:
+                	service.registerAsCommittee();
+                    break;
+                case 7:
+                	//controller.campStudentService.withdrawFromCommittee();
+                    break;
+                case 8:
+                	//controller.campStudentService.viewRegisteredCamps();
+                    break;
                 case 9: 
                 	service.submitEnquiry();
                 	break;
@@ -177,6 +218,12 @@ public class StudentController extends UserController {
                 case 18:
                     service.deleteSuggestion();
                     break;
+                default: 
+                    System.out.println("Exiting student menu");
+                    AuthController.endSession();
+                    return;
+               
+>>>>>>> hq
             }
              
         }

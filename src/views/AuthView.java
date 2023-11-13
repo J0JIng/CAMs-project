@@ -9,8 +9,10 @@ import models.Camp;
 
 public class AuthView implements IMenuView {
 
+
 	@Override
 	public void displayMenuView() {
+<<<<<<< HEAD
 		ViewUtility.clearScreen();
 		System.out.println("╔══════════════════════════════════════════════════════════╗");
         System.out.println("║                                                          ║");   
@@ -21,6 +23,28 @@ public class AuthView implements IMenuView {
 		System.out.println("║            ╚██████╗██║  ██║██║ ╚═╝ ██║███████║           ║");
 		System.out.println("║             ╚═════╝╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝           ║");
         System.out.println("║                                                          ║");                                      
+=======
+
+        /* 
+		System.out.println("-----------------------------------");
+        System.out.println("|           Login Screen          |");
+        System.out.println("|---------------------------------|");
+        System.out.println("| 1. Login as Staff               |");
+        System.out.println("| 2. Login as Student Bob         |");
+        System.out.println("| 3. Quit                         |");
+        System.out.println("-----------------------------------");
+        System.out.print("Select an option: ");
+        */
+        
+        System.out.println("╔══════════════════════════════════════════════════════════╗");
+        System.out.println("║                                                          ║");
+        System.out.println("║          ░█████╗░░█████╗░███╗░░░███╗░██████╗             ║");
+        System.out.println("║          ██╔══██╗██╔══██╗████╗░████║██╔════╝             ║");
+        System.out.println("║          ██║░░╚═╝███████║██╔████╔██║╚█████╗░             ║");
+        System.out.println("║          ██║░░██╗██╔══██║██║╚██╔╝██║░╚═══██╗             ║");
+        System.out.println("║          ╚█████╔╝██║░░██║██║░╚═╝░██║██████╔╝             ║");
+        System.out.println("║           ░╚════╝░╚═╝░░╚═╝╚═╝░░░░░╚═╝╚═════╝░            ║");                                      
+>>>>>>> hq
         System.out.println("╠══════════════════════════════════════════════════════════╣");
         System.out.println("║                    - User Selection -                    ║");
         System.out.println("╠══════════════════════════════════════════════════════════╣");
@@ -48,4 +72,5 @@ public class AuthView implements IMenuView {
         System.out.println("║                     - Student Login -                    ║");
         System.out.println("╚══════════════════════════════════════════════════════════╝");
 	}
+    
 }
