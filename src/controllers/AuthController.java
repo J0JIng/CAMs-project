@@ -3,9 +3,12 @@ package controllers;
 import java.util.Scanner;
 
 import interfaces.IAuthService;
-
+import models.User;
 import services.AuthStudentService;
+import stores.AuthStore;
 import services.AuthStaffService;
+import views.AuthView;
+import utility.InputSelectionUtility;
 
 /**
  *  class provides utility methods for managing user authentication within the application. 
@@ -30,42 +33,24 @@ public class AuthController {
     public static void startSession() {
         int choice;
         boolean authenticated = false;
-
+        AuthView view = new AuthView();
+        view.displayMenuView();
         do {
-
-            while (true) {
-                System.out.println("<Enter 0 to EXIT>\n");
-                System.out.println("Login as:");
-                System.out.println("1. Student");
-                System.out.println("2. Staff");
-
-                String input = sc.nextLine();
-
-                if (input.matches("[0-9]+")) { // If the input is an integer, proceed with the code
-                    choice = Integer.parseInt(input);
-
-                    if (choice < 0 || choice > 3) {
-                        System.out.println("Invalid input. Please enter 0-3!");
-                    } else {
-                        break;
-                    }
-                } else { // If the input is not an integer, prompt the user to enter again
-                    System.out.println("Invalid input. Please enter an integer.\n");
-                }
-
-            }
+        	choice = InputSelectionUtility.getIntInput("Enter your user type: ");
 
             switch (choice) {
-                case 0:
-                    System.out.println("Shutting down CAMs...");
-                    return;
                 case 1:
-                    authService = new AuthStudentService();
-                    break;
-                case 2:
                     authService = new AuthStaffService();
                     break;
-            }
+                case 2:
+                    authService = new AuthStudentService();
+                    break;
+                case 3:
+                    System.out.println("Shutting down CAMs...");
+                    AuthView.quitApp();
+                    authService = null; // Set authService to null    
+                    return;
+        	}
 
             String userID, password;
 
@@ -81,6 +66,16 @@ public class AuthController {
                 // secure
                 System.out.println("Credentials invalid! Note that UserID and Password are case-sensitive.\n");
             }
+
+            if(authenticated){
+                User user = (User) AuthStore.getCurrentUser();
+                if(!user.getIsPasswordChanged()){
+                    System.out.println("Please Change the Default Password.\n");
+                    UserController.changePassword();
+                    user.setIsPasswordChanged(true);
+                }
+            }
+
         } while (!authenticated);
     }
 
@@ -89,7 +84,15 @@ public class AuthController {
      * logout message.
      */
     public static void endSession() {
-        authService.logout();
-        System.out.println("User logged out!");
+        // Check if authService is not null before calling methods on it
+        if (authService != null) {
+            authService.logout();
+            System.out.println("User logged out successfully. (Press Enter)");
+        } else {
+            System.out.println("Error: AuthService is null.");
+        }
+
+        // Reset the input stream (System.in) to avoid potential issues
+        sc.nextLine();
     }
 }

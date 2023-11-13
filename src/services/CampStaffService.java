@@ -6,417 +6,346 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Scanner;
-import controllers.CampServiceController;
-import enums.MessageStatus;
+import java.util.stream.Collectors;
+
+import interfaces.ICampStaffService;
+
+import enums.UserRole;
+import enums.FacultyGroups;
 import models.Camp;
 import models.CampInformation;
-import models.Enquiry;
+import models.Staff;
 import models.Student;
 import stores.AuthStore;
+import stores.DataStore;
+import views.StaffView;
 
-public class CampStaffService {
+import utility.InputSelectionUtility;
+
+public class CampStaffService implements ICampStaffService {
 	Scanner scanner = new Scanner(System.in);
+	StaffView view = new StaffView();
+
+	// ---------- Helper Function ---------- //
+
+	/**
+     * Toggles the visibility of the specified camp to "on" or "off".
+     *
+     * @param camp      the {@link Camp} object to update
+     * @param visibility the new visibility status ("on" or "off")
+     * @return true if the camp visibility was updated successfully, false otherwise
+     */
+	public void toggleCampVisibility(Staff staff){
+		List<Camp> staffCreatedCamps = getStaffCreatedCamps(staff);
+		view.viewCamps(staffCreatedCamps, " - Choose Camp to Toggle Visibility - ");
+		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
+		if (camp != null) {
+			boolean on = InputSelectionUtility.toggleSelector(camp);	
+			if(on) {
+				camp.setVisibility(true);
+			}else if(!on && !campIsRegistered(camp)) {
+				camp.setVisibility(false);
+			}
+		} else {
+			return;
+		}
+	}
+
+	public boolean campIsRegistered(Camp camp) {
+		Map<String, List<String>> registeredStudents = DataStore.getCampToRegisteredStudentData();
+		Map<String, List<String>> registeredCampCommittees = DataStore.getCampToRegisteredCampCommitteeData();
 	
-	public void editCamp() {
-		scanner.nextLine();
-    	System.out.print("Enter Camp Name: ");
-    	String campName = scanner.nextLine();
-		for (Camp c : CampServiceController.camps) {
-			if (c.getCampInformation().getCampName().equalsIgnoreCase(campName)) {
-				String newCampName = null;
-            	boolean isUniqueName = false;
-
-            	while (!isUniqueName) {
-                	System.out.print("Enter new camp name: ");
-                	String newCampNameCheck = scanner.nextLine(); // Created for checking if camp name is already chosen
-                	newCampName = newCampNameCheck;
-                	isUniqueName = CampServiceController.camps.stream().noneMatch(existingCamp -> existingCamp.getCampInformation().getCampName().equalsIgnoreCase(newCampNameCheck));
-
-                	if (!isUniqueName) {
-                    	System.out.println("Camp name is not unique. Please choose a different name.");
-                	}
-            	}
-
-				SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-    			Date campStartDate = null;
-    			while (campStartDate == null) {
-    				System.out.print("Enter camp start date (dd/MM/yyyy): ");
-    				String StartDateOfCamp = scanner.nextLine();
-    				try {
-        				campStartDate = dateFormat.parse(StartDateOfCamp);
-    				} catch (Exception e) {
-        				System.out.println("Invalid date format for camp start date. Please try again.");
-    				}
-				}
-
-    			Date campEndDate = null;
-    			while (campEndDate == null) {
-    				System.out.print("Enter camp end date (dd/MM/yyyy): ");
-    				String EndDateOfCamp = scanner.nextLine();
-    				try {
-        				campEndDate = dateFormat.parse(EndDateOfCamp);
-    				} catch (Exception e) {
-        				System.out.println("Invalid date format for camp end date. Please try again.");
-    				}
-				}
-
-    			Date campRegistrationClosingDate = null;
-    			while (campRegistrationClosingDate == null) {
-    				System.out.print("Enter registration closing date (dd/MM/yyyy): ");
-    				String closingDate = scanner.nextLine();
-    				try {
-        				campRegistrationClosingDate = dateFormat.parse(closingDate);
-    				} catch (Exception e) {
-        				System.out.println("Invalid date format for camp closing date. Please try again.");
-    				}
-				}
-
-		        System.out.print("Enter user group: ");
-		        String campUserGroup = scanner.nextLine();
-
-		        System.out.print("Enter camp location: ");
-		        String campLocation = scanner.nextLine();
-
-		        System.out.print("Enter camp description: ");
-		        String campDescription = scanner.nextLine();
-
-		        System.out.print("Enter total slots: ");
-		        int campTotalSlots = scanner.nextInt();
-
-		        System.out.print("Enter committee slots: ");
-		        int campCommitteeSlots = scanner.nextInt();
-		        
-				c.setCampInformation(new CampInformation(newCampName, campStartDate, campEndDate, campRegistrationClosingDate, campUserGroup, campLocation, campTotalSlots, campCommitteeSlots, campDescription, AuthStore.getCurrentUser().getName()));
-				System.out.println("Edited " + c.getCampInformation().getCampName());
-                return;
-            }
-        }
-		System.out.println("Cannot find " + campName);
+		String campName = camp.getCampInformation().getCampName();
+		
+		// Check if the camp has registered students
+		List<String> registeredStudentList = registeredStudents.get(campName);
+		boolean hasRegisteredStudents = registeredStudentList != null && !registeredStudentList.isEmpty();
+	
+		// Check if the camp has registered camp committees
+		List<String> registeredCampCommitteeList = registeredCampCommittees.get(campName);
+		boolean hasRegisteredCampCommittees = registeredCampCommitteeList != null && !registeredCampCommitteeList.isEmpty();
+	
+		// Return true if the camp has both registered students and camp committees
+		return hasRegisteredStudents && hasRegisteredCampCommittees;
 	}
 	
-	public void viewCreatedCamps() {
-    	System.out.println("----------------------------");
-    	System.out.println("|    Camps under " + AuthStore.getCurrentUser().getName() + "    |");
-    	System.out.println("----------------------------");
 
-    	List<Camp> userCamps = new ArrayList<>();
-    
-    	for (Camp camp : CampServiceController.camps) {
-        	CampInformation campInfo = camp.getCampInformation();
-        	if (campInfo.getCampStaffInCharge().equals(AuthStore.getCurrentUser().getName())) {
-            	userCamps.add(camp);
-        	}
-    	}
-    	// Sort the userCamps alphabetically based on camp name
-    	Collections.sort(userCamps, (camp1, camp2) -> {
-        	String name1 = camp1.getCampInformation().getCampName();
-        	String name2 = camp2.getCampInformation().getCampName();
-        	return name1.compareTo(name2);
-    	});
-    	for (Camp camp : userCamps) {
-        	CampInformation campInfo = camp.getCampInformation();
-        	System.out.println("----------------------------");
-        	System.out.println("Name: " + campInfo.getCampName());
-        	System.out.println("Start Date: " + campInfo.getCampStartDate());
-			System.out.println("End Date: " + campInfo.getCampEndDate());
-        	System.out.println("Registration Closing Date: " + campInfo.getCampRegistrationClosingDate());
-        	System.out.println("User Group: " + campInfo.getCampUserGroup());
-        	System.out.println("Location: " + campInfo.getCampLocation());
-        	System.out.println("Total Slots: " + campInfo.getCampTotalSlots());
-        	System.out.println("Committee Slots: " + campInfo.getCampCommitteeSlots());
-        	System.out.println("Description: " + campInfo.getCampDescription());
-        	System.out.println("Staff In Charge: " + campInfo.getCampStaffInCharge());
-        	System.out.println("Camp Visibility: " + camp.getVisibility());
-			}
-		System.out.println("----------------------------");
+	// ---------- interface method implementation ---------- //
+
+	/**
+     * Retrieves a list of all camps.
+     *
+     * @return an {@link List} of {@link Camp} objects representing all camps
+     */
+	@Override
+	public List<Camp> getAllCamps() {
+    	Map<String, Camp> campsData = DataStore.getCampData();
+    	List<Camp> allCamps = new ArrayList<>(campsData.values());
+    	return allCamps;
+	}
+	
+	/**
+     * Retrieves a list of camps created by the staff with the specified ID.
+     *
+     * @param staffID the ID of the {@link Staff}
+     * @return an {@link List} of {@link Camp} objects representing the created camps
+     */
+	@Override
+	public List<Camp> getStaffCreatedCamps(Staff staff) {
+		Map<String, Camp> campsData = DataStore.getCampData();
+
+		List<Camp> staffCreatedCamps = campsData.values().stream()
+				.filter(camp -> camp.getCampInformation().getCampStaffInCharge().equals(staff.getName()))
+				.collect(Collectors.toList());
+
+		return staffCreatedCamps;
+	}
+
+	/**
+     * Retrieves a list of students attending a specific camp as an Attendee .
+     *
+     * @param camp the {@link Camp} object for which to retrieve the attendee list
+     * @return an {@link List} of {@link Student} objects representing attendees
+     */
+	@Override
+	public List<Student> getCampAttendeeList(Camp camp) {
+		Map<String, List<String>> campToRegisteredStudentData = DataStore.getCampToRegisteredStudentData();
+		Map<String, Student> allStudentsData = DataStore.getStudentData();
+		String campName = camp.getCampInformation().getCampName();
+
+		//retrieves the list of registered student names for the specified camp. If the camp is not found in the map, it defaults to an empty list.
+		List<String> registeredStudents = campToRegisteredStudentData.getOrDefault(campName, Collections.emptyList());
+
+		//returns the list of students attending the specified camp.
+		List<Student> campAttendeeList = registeredStudents.stream()
+				.map(allStudentsData::get)
+				.filter(Objects::nonNull) // Filter out null students if any
+				.collect(Collectors.toList());
+
+		return campAttendeeList;
+	}
+
+	/**
+     * Retrieves a list of students attending a specific camp as a Camp Committee.
+     *
+     * @param camp the {@link Camp} object for which to retrieve the attendee list
+     * @return an {@link List} of {@link Student} objects representing CampCommittee
+     */
+	@Override
+	public List<Student> getCampCommitteeList(Camp camp){
+		Map<String, List<String>> campToRegisteredCampCommitteeData = DataStore.getCampToRegisteredCampCommitteeData();
+		Map<String, Student> allStudentsData = DataStore.getStudentData();
+		String campName = camp.getCampInformation().getCampName();
+
+		//retrieves the list of registered CampCommittee names for the specified camp. If the camp is not found in the map, it defaults to an empty list.
+		List<String> registeredCampCommittee = campToRegisteredCampCommitteeData.getOrDefault(campName, Collections.emptyList());
+
+		//returns the list of CampCommittee attending the specified camp.
+		List<Student> campCommitteeList = registeredCampCommittee.stream()
+				.map(allStudentsData::get)
+				.filter(Objects::nonNull) // Filter out null students if any
+				.collect(Collectors.toList());
+
+		return campCommitteeList;
+	}
+
+	// ---------- Service method implementation ---------- //
+
+	/**
+     * Creates new camps from the provided list of camps.
+     *
+     * @param staffID the ID of the {@link Staff} creating the camp
+     * @return true if the camps were created successfully, false otherwise
+     */
+    public boolean createCamp(Staff staff) {
+        Map<String, Camp> campData = DataStore.getCampData();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		System.out.println("Creating a new camp...");
+        Camp newCamp = InputSelectionUtility.createCampInput(getAllCamps(),staff,dateFormat);
+        campData.put(newCamp.getCampInformation().getCampName().toUpperCase(), newCamp);
+        System.out.println("Created " + newCamp.getCampInformation().getCampName());
+        return true;
     }
-    	
+	
+	/**
+     * Updates the details of the specified camp if the staff ID matches the
+     * camp's creator.
+	 * 
+     * @param staffID the ID of the {@link Staff} making the update
+     * @return true if the camp details were updated successfully, false otherwise
+     */
+    public boolean updateCampDetails(Staff staff){
+		System.out.println("Updating camp Details...");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		List<Camp> staffCreatedCamps = getStaffCreatedCamps(staff);
+		view.viewCamps(staffCreatedCamps, " - Choose Camp to Update - ");
+		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
+		if (camp != null) {
+			view.editCampView();
+			boolean success = InputSelectionUtility.updateCampInput(camp,staff,dateFormat);
+			return success;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+     * Deletes the specified camp if the staff ID matches the camp's creator.
+     *
+     * @param staffID the ID of the {@link Staff} making the delete request
+     * @return true if the camp was deleted successfully, false otherwise
+     */
+    public boolean deleteCamp(Staff staff){
+		Map<String, Camp> campData = DataStore.getCampData();
+		List<Camp> staffCreatedCamps = getStaffCreatedCamps(staff);
+		view.viewCamps(staffCreatedCamps, " - Choose Camp to Delete - ");
+		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
+		if (camp != null) {
+			String campName = camp.getCampInformation().getCampName();
+			
+			if(campIsRegistered(camp)){
+				System.out.println("Error deleting " + campName);
+				System.out.println("Students have registered for the camp!");
+				return false;
+			}else{
+				System.out.println("Deleted " + campName);
+				campData.remove(campName);
+				return true;
+			}
+		} else {
+			return false;
+		}
+	}
+    
+    /**
+     * Shows all camps in the system.
+     */
+    public void viewAllCamps() {
+    	while (true) {
+    		view.viewCamps(getAllCamps(), " - List of Camps - ");
+    		Camp c = InputSelectionUtility.campSelector(getAllCamps());
+    		if (c != null) {
+	    		view.viewCampInformation(c);
+	    		scanner.nextLine();
+    		} else {
+    			return;
+    		}
+    	}
+    }
+    
+    /**
+     * Shows all camps created by the Staff user
+     */
+    public void viewCreatedCamps(Staff staff) {
+		List<Camp> staffCreatedCamps = getStaffCreatedCamps(staff);
+		view.viewCamps(staffCreatedCamps, " - Camps Created by " + AuthStore.getCurrentUser().getName() + " - ");
+		System.out.print("(Press Enter to return) ");
+		scanner.nextLine();
+    }
+
+    /**
+     * Shows the list of students registered in each Camp
+     */
+	public void viewStudentList() {
+		while (true) {
+    		view.viewCamps(getAllCamps(), " - Choose Camp to view Student list - ");
+    		Camp c = InputSelectionUtility.campSelector(getAllCamps());
+    		if (c != null) {
+    			Map<String, List<String>> listOfStudentsInCamps = DataStore.getCampToRegisteredStudentData();
+    			List<String> students = listOfStudentsInCamps.get(c.getCampInformation().getCampName());
+    			
+    			Map<String, List<String>> listOfCommitteeInCamps = DataStore.getCampToRegisteredCampCommitteeData();
+    			List<String> committeeMembers = listOfCommitteeInCamps.get(c.getCampInformation().getCampName());
+
+	    		view.viewStudentList(students, committeeMembers, c);
+    		} else {
+    			return;
+    		}
+    	}
+	}
+	
+	/**
+     * Shows the list of camps using user specified filter
+     */
 	public void viewAllCampsWithFilters() {
-    	Scanner scanner = new Scanner(System.in);
+		
+		// Various filters for camps
+    	String filterBy = null; 		// Type of filter
+    	Date filterDate = null;			// Filter date
+    	String locationFilter = null;	// Filter location
 
     	System.out.println("Filter Options:");
     	System.out.println("1. Filter by Date");
     	System.out.println("2. Filter by Location");
     	System.out.println("3. Sort by Name (Alphabetical Order)");
-    	System.out.print("Enter the filter option (1/2/3): ");
-
-    	int option = scanner.nextInt();
-    	scanner.nextLine(); // Consume the newline character
-
-    	if (option == 1) {
-        	SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        	Date filterDate = null;
-        	while (filterDate == null) {
-            	System.out.print("Enter the date to filter by (dd/MM/yyyy): ");
-            	String dateFilter = scanner.nextLine();
-            	try {
-                	filterDate = dateFormat.parse(dateFilter);
-            	} catch (ParseException e) {
-                	System.out.println("Invalid date format. Please enter a date in the format dd/MM/yyyy.");
-            	}
-        	}
-			viewAllCamps("date", filterDate, null); 
-    	} else if (option == 2) {
-        	System.out.print("Enter the location to filter by: ");
-        	String locationFilter = scanner.nextLine();
-        	viewAllCamps("location", null, locationFilter); // Pass the location filter
-    	} else if (option == 3) {
-        	viewAllCamps(null, null, null); // Sort by alphabetical order
-    	} else {
-        	System.out.println("Invalid option.");
-    	}
-	}
-
-	public void viewAllCamps(String filterBy, Date filterDate, String locationFilter) {
-    	List<Camp> filteredCamps = new ArrayList<>();
-    	for (Camp c : CampServiceController.camps) {
-        	//if (c.getVisibility()) {
-            	if (filterBy == null) {
-                	// Default sorting by name
-                	filteredCamps.add(c);
-            	} else if (filterBy.equals("date")) {
-                	if (filterDate != null) {
-                    	Date campDate = c.getCampInformation().getCampStartDate();
-                    	if (campDate.equals(filterDate)) {
-                        	filteredCamps.add(c);
-                    	}
-                	}
-            	} else if (filterBy.equals("location")) {
-                	String campLocation = c.getCampInformation().getCampLocation();
-                	if (campLocation.equalsIgnoreCase(locationFilter)) { // Compare with the provided location filter
+    	
+    	int option = 0;
+    	do {
+	    	option = InputSelectionUtility.getIntInput("Enter the filter option (1/2/3): ");
+	    	switch (option) {
+	    		case 1:
+	    			filterBy = "date";
+		        	filterDate = InputSelectionUtility.getDateInput("Enter the start date to filter by (dd/MM/yyyy): ", new SimpleDateFormat("dd/MM/yyyy"));
+					break;
+	    		case 2:
+	    			filterBy = "location";
+		        	locationFilter = InputSelectionUtility.getStringInput("Enter the location to filter by: ");
+		        	break;
+	        	case 3:
+	        		System.out.println("Sorting by alphabetical order..."); // Sort by alphabetical order
+	        		break;
+	        	default: System.out.println("Invalid option."); 
+	        		break;
+	    	}
+    	} while (option != 0 && option > 3);
+    	
+    	List<Camp> filteredCamps = new ArrayList<>(); // The filtered list
+    	
+    	// Chooses to add each camp to filtered list based on filtering criteria chosen
+    	for (Camp c : getAllCamps()) {
+        	if (filterBy == null) {
+            	// Default sorting by name
+            	filteredCamps.add(c);
+        	} else if (filterBy.equals("date")) {
+            	if (filterDate != null) {
+                	Date campDate = c.getCampInformation().getCampStartDate();
+                	if (campDate.equals(filterDate)) {
+                		System.out.println("Added " + c.getCampInformation().getCampName());
                     	filteredCamps.add(c);
                 	}
             	}
-        	//}
+        	} else if (filterBy.equals("location")) {
+            	String campLocation = c.getCampInformation().getCampLocation();
+            	if (campLocation.equalsIgnoreCase(locationFilter)) { // Compare with the provided location filter
+                	filteredCamps.add(c);
+            	}
+        	}
     	}
-    	// Sort filteredCamps here based on the chosen filter (e.g., by name, date, or location)
-		Collections.sort(filteredCamps, (camp1, camp2) -> {
-    		String name1 = camp1.getCampInformation().getCampName();
-    		String name2 = camp2.getCampInformation().getCampName();
-    		return name1.compareTo(name2);
-		});
+    	
     	if (filteredCamps.isEmpty()) {
         	System.out.println("No matching camps found.");
     	} else {
-        	// Print the filtered and sorted camps
-        	System.out.println("----------------------------");
-        	System.out.println("|          Camps           |");
-        	System.out.println("----------------------------");
-
-        	int i = 1;
-        	for (Camp c : filteredCamps) {
-            	CampInformation campInfo = c.getCampInformation();
-            	System.out.println("----------------------------");
-            	System.out.println("Camp " + (i) + ":");
-            	System.out.println("Name: " + campInfo.getCampName());
-            	System.out.println("Start Date: " + campInfo.getCampStartDate());
-				System.out.println("End Date: " + campInfo.getCampEndDate());
-            	System.out.println("Registration Closing Date: " + campInfo.getCampRegistrationClosingDate());
-            	System.out.println("User Group: " + campInfo.getCampUserGroup());
-            	System.out.println("Location: " + campInfo.getCampLocation());
-            	System.out.println("Total Slots: " + campInfo.getCampTotalSlots());
-            	System.out.println("Committee Slots: " + campInfo.getCampCommitteeSlots());
-            	System.out.println("Description: " + campInfo.getCampDescription());
-            	System.out.println("Staff In Charge: " + campInfo.getCampStaffInCharge());
-				System.out.println("Camp Visibility: " + c.getVisibility());
-            	i++;
-        	}
-    	}
-	}
-	
-	public void createCamp() {
-		boolean isUniqueName = false;
-    	String campName = "";
-		
-		while (!isUniqueName) {
-        	System.out.print("Enter camp name: ");
-        	String campNameCheck = scanner.nextLine();
-        	campName = campNameCheck; // Created for checking if camp name is already chosen
-        	// Check if a camp with the same name already exists
-        	boolean nameExists = CampServiceController.camps.stream().anyMatch(existingCamp -> existingCamp.getCampInformation().getCampName().equalsIgnoreCase(campNameCheck));
-
-        	if (!nameExists) {
-            	isUniqueName = true;
-        	} else {
-            	System.out.println("Camp with the same name already exists. Please choose a different name.");
-        	}
-    	}
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-    	Date campStartDate = null;
-    	while (campStartDate == null) {
-    		System.out.print("Enter camp start date (dd/MM/yyyy): ");
-    		String StartDateOfCamp = scanner.nextLine();
-    		try {
-        		campStartDate = dateFormat.parse(StartDateOfCamp);
-    		} catch (Exception e) {
-        		System.out.println("Invalid date format for camp start date. Please try again.");
+    		System.out.println("Not empty");
+    		// Displays the filtered list of camps
+    		switch (option) {
+	    		case 1:
+	    			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+	    			view.viewCamps(filteredCamps, " - List of Camps starting on " + dateFormat.format(filterDate) + " - ");
+					break;
+	    		case 2:
+	    			view.viewCamps(filteredCamps, " - List of Camps in " + locationFilter + " - ");
+		        	break;
+	        	default: 
+	        		view.viewCamps(filteredCamps, " - List of Camps - "); 
+	        		break;
     		}
-		}
-
-    	Date campEndDate = null;
-    	while (campEndDate == null) {
-    		System.out.print("Enter camp end date (dd/MM/yyyy): ");
-    		String EndDateOfCamp = scanner.nextLine();
-    		try {
-        		campEndDate = dateFormat.parse(EndDateOfCamp);
-    		} catch (Exception e) {
-        		System.out.println("Invalid date format for camp end date. Please try again.");
-    		}
-		}
-
-    	Date campRegistrationClosingDate = null;
-    	while (campRegistrationClosingDate == null) {
-    		System.out.print("Enter registration closing date (dd/MM/yyyy): ");
-    		String closingDate = scanner.nextLine();
-    		try {
-        		campRegistrationClosingDate = dateFormat.parse(closingDate);
-    		} catch (Exception e) {
-        		System.out.println("Invalid date format for camp closing date. Please try again.");
-    		}
-		}
-
-        System.out.print("Enter user group: ");
-        String campUserGroup = scanner.nextLine();
-
-        System.out.print("Enter camp location: ");
-        String campLocation = scanner.nextLine();
-
-        System.out.print("Enter camp description: ");
-        String campDescription = scanner.nextLine();
-
-        System.out.print("Enter total slots: ");
-        int campTotalSlots = scanner.nextInt();
-
-        System.out.print("Enter committee slots: ");
-        int campCommitteeSlots = scanner.nextInt();
-        
-		Camp c = new Camp(new CampInformation(campName, campStartDate, campEndDate, campRegistrationClosingDate, campUserGroup, campLocation, campTotalSlots, campCommitteeSlots, campDescription, AuthStore.getCurrentUser().getName()));
-		CampServiceController.camps.add(c);
-        System.out.println("Created " + c.getCampInformation().getCampName());
+    	}
+    	System.out.println("(Press Enter to return)");
+    	scanner.nextLine();
 	}
-	
-	public void deleteCamp() {
-		scanner.nextLine();
-    	System.out.print("Enter Camp Name: ");
-    	String campName = scanner.nextLine();
-		for (Camp c : CampServiceController.camps) {
-			if (c.getCampInformation().getCampName().equalsIgnoreCase(campName)) {
-                CampServiceController.camps.remove(c);
-                System.out.println("Deleted " + campName);
-                return;
-            }
-        }
-        System.out.println("Error deleting " + campName);
-	}
-	
-	public void setVisibility() {
-		scanner.nextLine();
-    	System.out.print("Enter Camp Name: ");
-    	String campName = scanner.nextLine();
-    	System.out.print("Enter Visibility: ");
-    	boolean b = scanner.nextBoolean();
-        for (Camp c : CampServiceController.camps) {
-			if (c.getCampInformation().getCampName().equalsIgnoreCase(campName)) {
-                c.setVisibility(b);
-                System.out.println(c.getCampInformation().getCampName() +" visibility set to " + b);
-                return;
-            }
-        }
-        System.out.println("Cannot find camp " + campName);
-	}
-	
-	public void viewStudentList() {
-		scanner.nextLine();
-    	System.out.print("Enter Camp Name: ");
-    	String campName = scanner.nextLine();
-        for (Camp c : CampServiceController.camps) {
-			if (c.getCampInformation().getCampName().equalsIgnoreCase(campName)) {
-				Student s;
-				if (c.getRegisteredStudents().size() != 0) {
-					for (int i = 1; i <= c.getRegisteredStudents().size(); i++) {
-						s = c.getRegisteredStudents().get(i);
-						System.out.println(i + s.getName());
-					}
-				} else {System.out.println("No students registered");}
-                return;
-            }
-        }
-        System.out.println("Cannot find camp " + campName);
-	}
-
-	public void viewEnquiriesForCamp() {
-		System.out.print("Enter Camp Name: ");
-    	String campName = scanner.nextLine();
-    	// Get the camp object by campName
-    	Camp camp = null;
-    	for (Camp c : CampServiceController.camps) {
-        	if (c.getCampInformation().getCampName().equalsIgnoreCase(campName) && c.getCampInformation().getCampStaffInCharge().equals(AuthStore.getCurrentUser().getName())) {
-            	camp = c;
-            	break;
-        	}
-    	}
-    	if (camp == null) {
-        	System.out.println("Camp not found or you are not the staff in charge.");
-        	return;
-    	}
-    	// Retrieve and display enquiries for the camp
-    	List<Enquiry> enquiries = EnquiryService.getEnquiriesForCamp(camp);
-
-    	if (enquiries.isEmpty()) {
-        	System.out.println("No enquiries for this camp.");
-    	} else {
-        	System.out.println("Enquiries for Camp: " + campName);
-        	for (Enquiry enquiry : enquiries) {
-            	System.out.println("Enquiry ID: " + enquiry.getEnquiryID());
-            	System.out.println("Student Name: " + enquiry.getStudentName());
-            	System.out.println("Enquiry Date: " + enquiry.getEnquiryDate());
-            	System.out.println("Enquiry Message: " + enquiry.getEnquiryMessage());
-            	System.out.println("Enquiry Status: " + enquiry.getEnquiryStatus());
-            	System.out.println("Response: " + enquiry.getEnquiryResponse());
-            	System.out.println("-----------------------");
-        	}
-    	}
-	}
-
-	public boolean respondToEnquiry() {
-		System.out.print("Enter EnquiryID: ");
-    	int enquiryID = scanner.nextInt();
-    	// Check if the current user is the staff in charge of the camp
-    	// if (!AuthStore.getCurrentUser().getRole().equals("staff")) {
-        // 	System.out.println("You must be a staff member to respond to enquiries.");
-        // 	return false;
-    	// }
-    	Camp camp = null;
-    	for (Camp c : CampServiceController.camps) {
-        	if (c.getCampInformation().getCampName().equalsIgnoreCase(campName) && c.getCampInformation().getCampStaffInCharge().equals(AuthStore.getCurrentUser().getName())) {
-            	camp = c;
-            	break;
-        	}
-    	}
-    	if (camp == null) {
-        	System.out.println("Camp not found or you are not the staff in charge.");
-        	return false;
-    	}
-    	// Check if the enquiry belongs to the camp
-    	Enquiry enquiry = EnquiryService.getEnquiry(enquiryID);
-    	if (enquiry == null || !enquiry.getCampName().equalsIgnoreCase(camp.getCampInformation().getCampName())) {
-        	System.out.println("Enquiry not found or does not belong to the camp.");
-        	return false;
-    	}
-    	System.out.print("Enter your response to the enquiry: ");
-    	scanner.nextLine(); // Consume the newline character
-    	String response = scanner.nextLine();
-    	boolean responseResult = EnquiryService.respondToEnquiry(enquiryID, AuthStore.getCurrentUser().getName(), MessageStatus.ACCEPTED, response);
-    	if (responseResult) {
-        	System.out.println("Enquiry response sent successfully.");
-    	} else {
-        	System.out.println("Failed to send the response.");
-    	}
-
-    	return responseResult;
-	}
-
 }
 
+	
