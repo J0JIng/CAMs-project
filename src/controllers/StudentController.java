@@ -147,6 +147,36 @@ public class StudentController extends UserController {
 	                    AuthController.endSession();
 	                    return;
 	            }
+                case 9: 
+                	service.submitEnquiry();
+                	break;
+                case 10: 
+                	service.viewEnquiries();
+                	break;
+                case 11: 
+                	service.editEnquiry();
+                	break;
+                case 12: 
+                	service.deleteEnquiry();
+                	break;
+                case 13: 
+                	service.viewEnquiriesForCamp();
+                	break;
+                case 14: 
+                	service.respondEnquiry();
+                	break;
+                case 15:
+                    service.submitSuggestion();
+                    break;
+                case 16:
+                    service.viewSuggestions();
+                    break;
+                case 17:
+                    service.editSuggestion();
+                    break;
+                case 18:
+                    service.deleteSuggestion();
+                    break;
             }
              
         }

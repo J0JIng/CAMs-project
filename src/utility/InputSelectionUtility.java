@@ -15,6 +15,8 @@ import models.Staff;
 import models.Camp;
 import models.CampInformation;
 import services.CampStaffService;
+import models.Enquiry;
+import models.Suggestion;
 import stores.AuthStore;
 
 public class InputSelectionUtility {
@@ -114,6 +116,7 @@ public class InputSelectionUtility {
         return date;
     }
 
+<<<<<<< HEAD
      private static FacultyGroups validateFacultyGroup(String userInput) {
         try {
             return FacultyGroups.valueOf(userInput.toUpperCase());
@@ -122,6 +125,8 @@ public class InputSelectionUtility {
         }
     }
 
+=======
+>>>>>>> hq
     // ---------- Utility method implementation ---------- //
 
     /**
@@ -134,7 +139,15 @@ public class InputSelectionUtility {
         while (true) {
             System.out.println("Select a Camp:");
     
+<<<<<<< HEAD
             //System.out.print("Enter the index of the camp (or press Enter to return): ");
+=======
+            for (int i = 0; i < camps.size(); i++) {
+                System.out.printf("%d. %s\n", i + 1, camps.get(i).getCampInformation().getCampName());
+            }
+    
+            System.out.print("Enter the index of the camp (or press Enter to return): ");
+>>>>>>> hq
             String campIndexInput = sc.nextLine();
     
             if (campIndexInput.isEmpty()) { // If the input is empty (user pressed Enter), return
@@ -157,9 +170,45 @@ public class InputSelectionUtility {
     }
       
     
+<<<<<<< HEAD
     public static boolean toggleSelector(Camp selectedCamp) {
         while (true) {
             
+=======
+    public static boolean toggleSelector(List<Camp> camps) {
+        while (true) {
+            System.out.println("Select a Camp by entering its index [Exit press Enter]:");
+    
+            for (int i = 0; i < camps.size(); i++) {
+                System.out.printf("%d. %s\n", i + 1, camps.get(i).getCampInformation().getCampName());
+            }
+    
+            System.out.print("Enter the index of the camp you want to update (or press Enter to return): ");
+            String campIndexInput = sc.nextLine();
+    
+            if (campIndexInput.isEmpty()) { // If the input is empty (user pressed Enter), return
+                return false;
+            }
+    
+            int campIndex;
+            try {
+                campIndex = Integer.parseInt(campIndexInput) - 1; // Adjust index to start from 0
+                if (campIndex < 0 || campIndex >= camps.size()) {
+                    throw new NumberFormatException(); // Out of bounds
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid index. Please enter a valid index or press Enter to return.\n");
+                continue;
+            }
+    
+            Camp selectedCamp = camps.get(campIndex);
+    
+            // Print menu
+            System.out.println("Select Camp Visibility [Exit press Enter]:");
+            System.out.println("1. On");
+            System.out.println("0. Off");
+    
+>>>>>>> hq
             // Get user input
             String visibilityInput = sc.nextLine();
             int choice;
@@ -187,6 +236,7 @@ public class InputSelectionUtility {
             }
         }
     }
+<<<<<<< HEAD
  
     /**
     * Takes in Inputs for creation of camp
@@ -251,6 +301,39 @@ public class InputSelectionUtility {
     
         return new CampInformation(campName, campStartDate, campEndDate, campRegistrationClosingDate,
                 campLocation, campTotalSlots, campCommitteeSlots, campDescription, staff.getName(), faculty);
+=======
+
+    private static FacultyGroups validateFacultyGroup(String userInput) {
+        try {
+            return FacultyGroups.valueOf(userInput.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
+
+    public static Camp createCampInput(List<Camp> camps, Staff staff, SimpleDateFormat dateFormat) {
+        System.out.println("Creating a new camp...");
+
+        String campName = getUniqueCampName(camps);
+        Date campStartDate = InputSelectionUtility.getDateInput("Enter camp start date (dd/MM/yyyy): ", dateFormat);
+        Date campEndDate = InputSelectionUtility.getDateInput("Enter camp end date (dd/MM/yyyy): ", dateFormat);
+        Date campRegistrationClosingDate = InputSelectionUtility.getDateInput("Enter registration closing date (dd/MM/yyyy): ", dateFormat);
+        String campLocation = InputSelectionUtility.getStringInput("Enter camp location: ");
+        String campDescription = InputSelectionUtility.getStringInput("Enter camp description: ");
+        int campTotalSlots = InputSelectionUtility.getIntInput("Enter total slots: ");
+        int campCommitteeSlots = InputSelectionUtility.getIntInput("Enter committee slots: ");
+        String campUserGroup = InputSelectionUtility.getStringInput("Enter user group:");
+        FacultyGroups faculty = validateFacultyGroup(campUserGroup);
+
+        while (faculty == null) {
+            System.out.println("Invalid user group. Please Enter a valid user group.");
+            campUserGroup = InputSelectionUtility.getStringInput("Enter user group:");
+            faculty = validateFacultyGroup(campUserGroup);
+        }
+
+        return new Camp(new CampInformation(campName, campStartDate, campEndDate, campRegistrationClosingDate, 
+        campLocation, campTotalSlots, campCommitteeSlots, campDescription, staff.getName(), faculty));
+>>>>>>> hq
     }
 
     /**
@@ -277,13 +360,27 @@ public class InputSelectionUtility {
 
         while (!exit) {
             // Print menu for updating camp details
+<<<<<<< HEAD
         	
+=======
+            System.out.println("Select a field to update:");
+            System.out.println("1. Camp Name");
+            System.out.println("2. Camp Start Date");
+            System.out.println("3. Camp End Date");
+            System.out.println("4. Camp Registration Closing Date");
+            System.out.println("5. Camp Location");
+            System.out.println("6. Camp Total Slots");
+            System.out.println("7. Camp Description");
+            System.out.println("8. Camp User Group");
+            System.out.println("9. Exit");
+>>>>>>> hq
     
             int choice = InputSelectionUtility.getIntInput("Enter your choice: ");
     
             switch (choice) {
                 case 1:
                     // Update Camp Name
+<<<<<<< HEAD
                     try {
                         String newCampName = getStringInput("Enter new camp name: ");
                         campStaffService.updateCampName(camp, newCampName);
@@ -323,11 +420,34 @@ public class InputSelectionUtility {
                     } catch (IllegalArgumentException e) {
                         System.out.println("Error updating camp End date: " + e.getMessage());
                     }
+=======
+                    String newCampName = getStringInput("Enter new camp name: ");
+                    camp.getCampInformation().setCampName(newCampName);
+                    break;
+    
+                case 2:
+                    // Update Camp Start Date
+                    Date newStartDate = getDateInput("Enter new camp start date (dd/MM/yyyy): ", dateFormat);
+                    camp.getCampInformation().setCampStartDate(newStartDate);
+                    break;
+    
+                case 3:
+                    // Update Camp End Date
+                    Date newEndDate = getDateInput("Enter new camp end date (dd/MM/yyyy): ", dateFormat);
+                    camp.getCampInformation().setCampEndDate(newEndDate);
+                    break;
+    
+                case 4:
+                    // Update Camp Registration Closing Date
+                    Date newClosingDate = getDateInput("Enter new camp registration closing date (dd/MM/yyyy): ", dateFormat);
+                    camp.getCampInformation().setCampRegistrationClosingDate(newClosingDate);
+>>>>>>> hq
                     break;
     
                 case 5:
                     // Update Camp Location
                     String newLocation = getStringInput("Enter new camp location: ");
+<<<<<<< HEAD
 
                     // Validate the new location
                     try {
@@ -335,11 +455,15 @@ public class InputSelectionUtility {
                     } catch (IllegalArgumentException e) {
                         System.out.println(e.getMessage());  
                     }
+=======
+                    camp.getCampInformation().setCampLocation(newLocation);
+>>>>>>> hq
                     break;
     
                 case 6:
                     // Update Camp Total Slots
                     int newTotalSlots = getIntInput("Enter new camp total slots: ");
+<<<<<<< HEAD
                 
                     try {
                         campStaffService.updateCampTotalSlot(camp, newTotalSlots);
@@ -382,6 +506,24 @@ public class InputSelectionUtility {
                     }
 
                 case 10:
+=======
+                    camp.getCampInformation().setCampTotalSlots(newTotalSlots);
+                    break;
+    
+                case 7:
+                    // Update Camp Description
+                    String newDescription = getStringInput("Enter new camp description: ");
+                    camp.getCampInformation().setCampDescription(newDescription);
+                    break;
+    
+                case 8:
+                    String campUserGroup = InputSelectionUtility.getStringInput("Enter user group:");
+		            FacultyGroups faculty = FacultyGroups.valueOf(campUserGroup.toUpperCase());
+                    camp.getCampInformation().setFacultyGroup(faculty);
+                    break;
+
+                case 9:
+>>>>>>> hq
                     // Exit editing loop
                     exit = true;
                     break;
@@ -395,4 +537,54 @@ public class InputSelectionUtility {
         System.out.println("Camp details updated successfully.");
         return true;
     }
+<<<<<<< HEAD
+=======
+
+    /**
+     * Selects an Enquiry from a map of Enquiries by getting user input.
+     *
+     * @param enquiries is the map of available Enquiries (ID to Enquiry)
+     * @return the selected enquiry or null if no enquiry is selected
+     */
+    public static Enquiry enquirySelector(Map<Integer, Enquiry> enquiries) {
+        while (true) {
+            System.out.println("Select an Enquiry:");
+
+            for (Map.Entry<Integer, Enquiry> entry : enquiries.entrySet()) {
+                System.out.println(entry.getKey() + ". " + entry.getValue().getEnquiryMessage());
+            }
+
+            int enquiryID = getIntInput("Enter the ID of the enquiry (or press Enter to return): ");
+            Enquiry selectedEnquiry = enquiries.get(enquiryID);
+
+            if (selectedEnquiry != null) {
+                return selectedEnquiry;
+            } else {
+                System.out.println("Invalid ID. Please enter a valid ID or press Enter to return.\n");
+            }
+        }
+    }
+
+    public static Suggestion suggestionSelector(Map<Integer, Suggestion> suggestions) {
+        while (true) {
+            System.out.println("Select a Suggestion:");
+
+            for (Map.Entry<Integer, Suggestion> entry : suggestions.entrySet()) {
+                System.out.println(entry.getKey() + ". " + entry.getValue().getSuggestionMessage());
+            }
+
+            int suggestionID = getIntInput("Enter the ID of the suggestion (or press Enter to return): ");
+            Suggestion selectedSuggestion = suggestions.get(suggestionID);
+
+            if (selectedSuggestion != null) {
+                return selectedSuggestion;
+            } else {
+                System.out.println("Invalid ID. Please enter a valid ID or press Enter to return.\n");
+            }
+        }
+    }
+
+
+
+>>>>>>> hq
 }

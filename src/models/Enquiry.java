@@ -14,6 +14,7 @@ public class Enquiry {
     public Enquiry(int enquiryID, String senderID, String campName, String message){
         this.enquiryID = enquiryID;
         this.senderID = senderID;
+        this.campName = campName;
         this.enquiryMessage = message;
         this.enquiryStatus = MessageStatus.DRAFT;
         this.enquiryResponse = null;  

@@ -21,11 +21,6 @@ import views.Boundary;
  * 
  */
 public class CAMs {
-	/**
-	 * Private constructor to prevent instantiation of the class.
-	 */
-	private CAMs() {
-	};
 
 	/**
 	 * The entry point for the CAMS application. This method is responsible for

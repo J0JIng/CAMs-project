@@ -99,6 +99,15 @@ public class StaffController extends UserController {
                     System.out.println("Exiting Staff menu");
                     AuthController.endSession();
                     return;  
+                case 9:
+                	service.viewEnquiriesForCamp(staff);
+                	break;
+                case 10:
+                	service.respondToEnquiry(staff);
+                	break;
+                case 11:
+                    service.respondToSuggestion(staff);
+                    break;
             }
         }
     }

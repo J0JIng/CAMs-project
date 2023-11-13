@@ -1,7 +1,11 @@
 package views;
 
 import interfaces.IMenuView;
+<<<<<<< HEAD
 import utility.ViewUtility;
+=======
+import models.Camp;
+>>>>>>> hq
 
 public class AuthView implements IMenuView {
 
