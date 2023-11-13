@@ -30,7 +30,6 @@ public class EnquiryStudentService {
     }
 
     public int createEnquiry(String senderID, String campName, String enquiryMessage, boolean isDraft) {
-        int enquiryID = UUID.randomUUID().hashCode();
         int enquiryID = Math.abs(UUID.randomUUID().hashCode());
         Enquiry enquiry = new Enquiry(enquiryID, senderID, campName, enquiryMessage);
         if (isDraft) {
@@ -49,7 +48,6 @@ public class EnquiryStudentService {
                  .filter(enquiry -> enquiry.getSenderID().equals(studentID) && enquiry.getEnquiryStatus() == MessageStatus.DRAFT)
                  .collect(Collectors.toMap(Enquiry::getEnquiryID, enquiry -> enquiry));
         }
-
     public Map<Integer, Enquiry> viewSubmittedEnquiries(String studentID) {
         return enquiryData.values().stream()
                 .filter(enquiry -> enquiry.getSenderID().equals(studentID) && enquiry.getEnquiryStatus() == MessageStatus.PENDING)
