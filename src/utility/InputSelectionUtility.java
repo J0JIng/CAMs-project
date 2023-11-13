@@ -196,7 +196,7 @@ public class InputSelectionUtility {
         String campName = getUniqueCampName(allCamps);
     
         // get the registration closing date
-        Date campRegistrationClosingDate = getDateInput("Enter camp start date (dd/MM/yyyy): ", dateFormat);
+        Date campRegistrationClosingDate = getDateInput("Enter camp registration closing date (dd/MM/yyyy): ", dateFormat);
     
         // Validate and get the camp start date
         Date campStartDate;
@@ -241,7 +241,7 @@ public class InputSelectionUtility {
         // Validate and get the faculty User Group
         FacultyGroups faculty;
         do {
-            String campUserGroup = getStringInput("Enter user group:");
+            String campUserGroup = getStringInput("Enter user group: ");
             faculty = validateFacultyGroup(campUserGroup);
     
             if (faculty == null) {
