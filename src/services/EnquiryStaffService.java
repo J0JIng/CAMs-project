@@ -40,6 +40,8 @@ public class EnquiryStaffService {
 
     	return responseResult;
 	}*/
+<<<<<<< HEAD
+<<<<<<< HEAD
 =======
 import models.Enquiry;
 import stores.DataStore;
@@ -69,4 +71,8 @@ public class EnquiryStaffService {
         return false;
     } */
 >>>>>>> hq
+=======
+>>>>>>> parent of b566f67 (Resolve merge conflicts from hq branch)
+=======
+>>>>>>> parent of b566f67 (Resolve merge conflicts from hq branch)
 }

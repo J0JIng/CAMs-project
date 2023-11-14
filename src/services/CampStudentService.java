@@ -13,12 +13,18 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import enums.FacultyGroups;
+<<<<<<< HEAD
+<<<<<<< HEAD
 =======
 import java.util.stream.Collectors;
 
 import enums.FacultyGroups;
 import enums.MessageStatus;
 >>>>>>> hq
+=======
+>>>>>>> parent of b566f67 (Resolve merge conflicts from hq branch)
+=======
+>>>>>>> parent of b566f67 (Resolve merge conflicts from hq branch)
 import enums.UserRole;
 import interfaces.ICampStudentService;
 import models.Camp;
@@ -28,6 +34,8 @@ import stores.AuthStore;
 import stores.DataStore;
 import utility.InputSelectionUtility;
 import views.StudentView;
+<<<<<<< HEAD
+<<<<<<< HEAD
 =======
 import models.Enquiry;
 import models.Suggestion;
@@ -35,6 +43,10 @@ import stores.AuthStore;
 import stores.DataStore;
 import utility.InputSelectionUtility;
 >>>>>>> hq
+=======
+>>>>>>> parent of b566f67 (Resolve merge conflicts from hq branch)
+=======
+>>>>>>> parent of b566f67 (Resolve merge conflicts from hq branch)
 
 /**
  * The {@code CampStudentService} class implements the {@link ICampStudentService} interface
@@ -703,6 +715,8 @@ public class CampStudentService implements ICampStudentService {
 		scanner.nextLine();
 	}
 
+<<<<<<< HEAD
+<<<<<<< HEAD
 =======
 	}
 
@@ -1370,4 +1384,8 @@ public class CampStudentService implements ICampStudentService {
 
 
 >>>>>>> hq
+=======
+>>>>>>> parent of b566f67 (Resolve merge conflicts from hq branch)
+=======
+>>>>>>> parent of b566f67 (Resolve merge conflicts from hq branch)
 }

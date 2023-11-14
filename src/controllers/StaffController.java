@@ -121,6 +121,8 @@ public class StaffController extends UserController {
                     System.out.println("Exiting Staff menu");
                     AuthController.endSession();
                     return;  
+<<<<<<< HEAD
+<<<<<<< HEAD
 =======
                     System.out.println("create camp");
             	    service.createCamp(staff); 
@@ -163,6 +165,10 @@ public class StaffController extends UserController {
                     AuthController.endSession();
                     return;   
 >>>>>>> hq
+=======
+>>>>>>> parent of b566f67 (Resolve merge conflicts from hq branch)
+=======
+>>>>>>> parent of b566f67 (Resolve merge conflicts from hq branch)
             }
         }
     }

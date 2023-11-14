@@ -37,11 +37,11 @@ public class AuthController {
         AuthView view = new AuthView();
         view.displayMenuView();
         do {
-<<<<<<< HEAD
         	choice = InputSelectionUtility.getIntInput("Enter your user type: ");
 
             switch (choice) {
-=======
+            
+            }
             while (true) {
                 System.out.println("<Enter 0 to EXIT>\n");
                 System.out.println("Login as:");
@@ -69,7 +69,6 @@ public class AuthController {
                     System.out.println("Shutting down CAMs...");
                     authService = null; // Set authService to null    
                     return;
->>>>>>> hq
                 case 1:
                     authService = new AuthStaffService();
                     break;
@@ -118,11 +117,8 @@ public class AuthController {
         // Check if authService is not null before calling methods on it
         if (authService != null) {
             authService.logout();
-<<<<<<< HEAD
             System.out.println("User logged out successfully. (Press Enter)");
-=======
             System.out.println("User logged out successfully.");
->>>>>>> hq
         } else {
             System.out.println("Error: AuthService is null.");
         }

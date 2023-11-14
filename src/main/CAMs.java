@@ -30,11 +30,25 @@ import views.Boundary;
 >>>>>>> hq
  */
 public class CAMs {
+<<<<<<< HEAD
+<<<<<<< HEAD
     /**
      * Private constructor to prevent instantiation of the class.
      */
     private CAMs() {
     };
+=======
+=======
+>>>>>>> parent of b566f67 (Resolve merge conflicts from hq branch)
+	/**
+	 * Private constructor to prevent instantiation of the class.
+	 */
+	private CAMs() {
+	};
+<<<<<<< HEAD
+>>>>>>> parent of b566f67 (Resolve merge conflicts from hq branch)
+=======
+>>>>>>> parent of b566f67 (Resolve merge conflicts from hq branch)
 
 <<<<<<< HEAD
 	/**

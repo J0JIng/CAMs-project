@@ -158,6 +158,8 @@ public class StudentController extends UserController {
 	                    AuthController.endSession();
 	                    return;
 	            }
+<<<<<<< HEAD
+<<<<<<< HEAD
 =======
             scanner.nextLine();
 
@@ -224,6 +226,10 @@ public class StudentController extends UserController {
                     return;
                
 >>>>>>> hq
+=======
+>>>>>>> parent of b566f67 (Resolve merge conflicts from hq branch)
+=======
+>>>>>>> parent of b566f67 (Resolve merge conflicts from hq branch)
             }
              
         }

@@ -1,9 +1,15 @@
 package services;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
 =======
 import models.Enquiry;
 >>>>>>> hq
+=======
+>>>>>>> parent of b566f67 (Resolve merge conflicts from hq branch)
+=======
+>>>>>>> parent of b566f67 (Resolve merge conflicts from hq branch)
 import models.Suggestion;
 import stores.DataStore;
 import enums.MessageStatus;
@@ -23,10 +29,16 @@ public class SuggestionStudentService {
 <<<<<<< HEAD
         int suggestionID = UUID.randomUUID().hashCode();
         Suggestion suggestion = new Suggestion(suggestionID, campName, senderID, MessageStatus.DRAFT, suggestionDetails);
+<<<<<<< HEAD
+<<<<<<< HEAD
 =======
         int suggestionID = Math.abs(UUID.randomUUID().hashCode());
         Suggestion suggestion = new Suggestion(suggestionID, senderID, campName, suggestionDetails);
 >>>>>>> hq
+=======
+>>>>>>> parent of b566f67 (Resolve merge conflicts from hq branch)
+=======
+>>>>>>> parent of b566f67 (Resolve merge conflicts from hq branch)
         if (isDraft) {
             suggestion.setSuggestionStatus(MessageStatus.DRAFT);
         } else {
@@ -45,6 +57,8 @@ public class SuggestionStudentService {
             suggestion.setSuggestionMessage(newDetails);
             DataStore.setSuggestionData(suggestionData);
             return true;
+<<<<<<< HEAD
+<<<<<<< HEAD
 =======
     public Map<Integer, Suggestion> viewDraftSuggestion(String studentID) {
         return suggestionData.values().stream()
@@ -79,6 +93,10 @@ public class SuggestionStudentService {
                 return true;
             }
 >>>>>>> hq
+=======
+>>>>>>> parent of b566f67 (Resolve merge conflicts from hq branch)
+=======
+>>>>>>> parent of b566f67 (Resolve merge conflicts from hq branch)
         }
         return false;
     }
@@ -100,9 +118,15 @@ public class SuggestionStudentService {
     // }
 
     public boolean deleteSuggestion(int suggestionID, String senderID) {
+<<<<<<< HEAD
+<<<<<<< HEAD
 =======
     public boolean deleteDraftSuggestion(int suggestionID, String senderID) {
 >>>>>>> hq
+=======
+>>>>>>> parent of b566f67 (Resolve merge conflicts from hq branch)
+=======
+>>>>>>> parent of b566f67 (Resolve merge conflicts from hq branch)
         Suggestion suggestion = suggestionData.get(suggestionID);
         if (suggestion != null && suggestion.getSenderID().equals(senderID) && suggestion.getSuggestionStatus() == MessageStatus.DRAFT) {
             suggestionData.remove(suggestionID);
@@ -117,6 +141,8 @@ public class SuggestionStudentService {
         Suggestion suggestion = suggestionData.get(suggestionID);
         if (suggestion != null) {
             suggestion.setSuggestionStatus(suggestionStatus);
+<<<<<<< HEAD
+<<<<<<< HEAD
 =======
     public boolean reviewSuggestion(int suggestionID, boolean suggestionStatus) {
         Suggestion suggestion = suggestionData.get(suggestionID);
@@ -127,6 +153,10 @@ public class SuggestionStudentService {
                 suggestion.setSuggestionStatus(MessageStatus.REJECTED);
             }
 >>>>>>> hq
+=======
+>>>>>>> parent of b566f67 (Resolve merge conflicts from hq branch)
+=======
+>>>>>>> parent of b566f67 (Resolve merge conflicts from hq branch)
             DataStore.setSuggestionData(suggestionData);
             return true;
         }
