@@ -40,14 +40,9 @@ public class CampStudentService implements ICampStudentService {
      * @param newCamp The new {@link camp} for which to check date clashes.
      * @return {@code true} if there is a date clash, {@code false} otherwise.
      */
-	private boolean hasDateClash(Student student, Camp newCamp) {
+	public boolean hasDateClash(Student student, Camp newCamp) {
 		List<Camp> registeredCamps = getRegisteredCamps();
-    	for (Camp camp : registeredCamps) {
-        	if (dateClashExists(camp, newCamp)) {
-            	return true;
-        	}
-    	}
-    	return false;
+		return registeredCamps.stream().anyMatch(camp -> dateClashExists(camp, newCamp));
 	}
 
 	/**
@@ -57,7 +52,7 @@ public class CampStudentService implements ICampStudentService {
      * @param camp2 The second {@link camp} .
      * @return {@code true} if there is a date clash, {@code false} otherwise.
      */
-	private boolean dateClashExists(Camp camp1, Camp camp2) {
+	public boolean dateClashExists(Camp camp1, Camp camp2) {
     	Date camp1StartDate = camp1.getCampInformation().getCampStartDate();
     	Date camp1EndDate = camp1.getCampInformation().getCampEndDate();
     	Date camp2StartDate = camp2.getCampInformation().getCampStartDate();
@@ -74,10 +69,10 @@ public class CampStudentService implements ICampStudentService {
 	 * @param camp The {@link camp}  to check.
 	 * @return {@code true} if the {@link camp} is over, {@code false} otherwise.
 	 */
-	private boolean isCampOver(Date currentDate ,Camp camp) {
-		if(currentDate.after(camp.getCampInformation().getCampRegistrationClosingDate())) return true;
-		return false;
+	public boolean isCampOver(Date currentDate, Camp camp) {
+		return currentDate.after(camp.getCampInformation().getCampRegistrationClosingDate());
 	}
+	
 
 	/**
 	 * Checks if the {@link camp} is full by comparing the number of registered students with the maximum allowed slots.
@@ -85,15 +80,12 @@ public class CampStudentService implements ICampStudentService {
 	 * @param camp The {@link camp} to check.
 	 * @return {@code true} if the {@link camp} is full, {@code false} otherwise.
 	 */
-	private boolean isCampFull(Camp camp){
+	public boolean isCampFull(Camp camp) {
 		Map<String, List<String>> registeredStudentData = DataStore.getCampToRegisteredStudentData();
 		String campName = camp.getCampInformation().getCampName();
 		int maxCampSlots = camp.getCampInformation().getCampTotalSlots();
-		if(registeredStudentData.containsKey(campName) && registeredStudentData.get(campName).size() >= maxCampSlots ){
-			return true ;
-		}else{
-			return false;
-		}	
+
+		return registeredStudentData.containsKey(campName) && registeredStudentData.get(campName).size() >= maxCampSlots;
 	}
 
 	/**
@@ -103,17 +95,14 @@ public class CampStudentService implements ICampStudentService {
 	 * @param camp The {@link camp} to check.
 	 * @return {@code true} if the camp committee slots are full, {@code false} otherwise.
 	 */
-	private boolean isCampCommitteeFull(Camp camp){
+	public boolean isCampCommitteeFull(Camp camp) {
 		Map<String, List<String>> registeredCampCommitteeData = DataStore.getCampToRegisteredCampCommitteeData();
 		String campName = camp.getCampInformation().getCampName();
 		int maxCampCommitteeSlots = camp.getCampInformation().getCampCommitteeSlots();
 
-		if(registeredCampCommitteeData.containsKey(campName) && registeredCampCommitteeData.get(campName).size() >= maxCampCommitteeSlots ){
-			return true ;
-		}else{
-			return false;
-		}		
+		return registeredCampCommitteeData.containsKey(campName) && registeredCampCommitteeData.get(campName).size() >= maxCampCommitteeSlots;
 	}
+	
 
 	/**
 	 * Checks if the {@link student} is the camp committee member for the specified camp.
@@ -122,19 +111,14 @@ public class CampStudentService implements ICampStudentService {
 	 * @param camp The {@link camp} to check.
 	 * @return {@code true} if the {@link student} is a camp committee member for the specified {@link camp}, {@code false} otherwise.
 	 */
-	private boolean isUserCampCommitteeForCamp(Student student, Camp camp) {
+	public boolean isUserCampCommitteeForCamp(Student student, Camp camp) {
 		Map<String, String> campCommitteeData = DataStore.getCampCommitteeToCampRegisteredData();
 		String studentName = student.getName();
 		String campName = camp.getCampInformation().getCampName();
-	
-		if (campCommitteeData.containsKey(studentName) && campCommitteeData.get(studentName).equals(campName)) {
-			// The student is a camp committee member for the specified camp
-			return true;
-		} else {
-			// The student is not a camp committee member for the specified camp
-			return false;
-		}
+
+		return campCommitteeData.containsKey(studentName) && campCommitteeData.get(studentName).equals(campName);
 	}
+
 
 	/**
 	 * Checks if the {@link student} is a camp committee member for any {@link camp}.
@@ -142,19 +126,13 @@ public class CampStudentService implements ICampStudentService {
 	 * @param student The {@link student} to check.
 	 * @return {@code true} if the {@link student} is a camp committee member, {@code false} otherwise.
 	 */
-	private boolean isUserCampCommittee(Student student) {
+	public boolean isUserCampCommittee(Student student) {
 		Map<String, String> campCommitteeData = DataStore.getCampCommitteeToCampRegisteredData();
 		String studentName = student.getName();
-
-		if (campCommitteeData.containsKey(studentName)) {
-			// The student is a camp committee member for the specified camp
-			return true;
-		} else {
-			// The student is not a camp committee member for the specified camp
-			return false;
-		}
+	
+		return campCommitteeData.containsKey(studentName);
 	}
-
+	
 	/**
 	 * Checks if the {@link Student} has withdrawn from the specified {@link Camp}.
 	 *
@@ -162,7 +140,7 @@ public class CampStudentService implements ICampStudentService {
 	 * @param camp The {@link Camp} to check.
 	 * @return {@code true} if the {@link Student} has withdrawn from the specified {@link Camp}, {@code false} otherwise.
 	 */
-	private boolean isUserWithdrawnFromCamp(Student student, Camp camp) {
+	public boolean isUserWithdrawnFromCamp(Student student, Camp camp) {
 		Map<String, List<String>> withdrawnCampData = DataStore.getStudentToCampsWithdrawnData();
 		String studentName = student.getName();
 		String campName = camp.getCampInformation().getCampName();
@@ -177,7 +155,7 @@ public class CampStudentService implements ICampStudentService {
 	 * @param camp The {@link camp} to check.
 	 * @return {@code true} if the {@link student} is registered with the specified {@link camp}, {@code false} otherwise.
  	*/
-	private boolean isUserRegisteredWithCamp(Student student, Camp camp) {
+	public boolean isUserRegisteredWithCamp(Student student, Camp camp) {
 		Map<String, List<String>> registeredCampData = DataStore.getStudentsToCampsRegisteredData();
 		String studentName = student.getName();
 		String campName = camp.getCampInformation().getCampName();
@@ -193,7 +171,7 @@ public class CampStudentService implements ICampStudentService {
      * @return List of available camps.
      */
 	@Override
-	public List<Camp> getAvailableCamps(){
+	public List<Camp> getAvailableCampsToRegister(){
 		Student student = (Student) AuthStore.getCurrentUser();
 		Map<String, Camp> campsData = DataStore.getCampData();
 		//Date currentDate = new Date();
@@ -202,11 +180,7 @@ public class CampStudentService implements ICampStudentService {
 		.filter(camp -> (camp.getCampInformation().getFacultyGroup() == student.getFaculty()
 					  ||camp.getCampInformation().getFacultyGroup() == FacultyGroups.ALL)
 					  &&camp.getVisibility() == true
-					  &&!isCampFull(camp)
-					  //&&!isCampOver(currentDate,camp)
-					  //&&!isUserWithdrawnFromCamp(withdrawnCampsData, camp)
-					  //&&!hasDateClash(student, camp)
-					  )
+					  &&!isCampFull(camp))
 		.collect(Collectors.toCollection(ArrayList::new));
 
 		return availableCamps;		
@@ -225,11 +199,7 @@ public class CampStudentService implements ICampStudentService {
 		List<Camp> availableCamps = campsData.values().stream()
 		.filter(camp -> (camp.getCampInformation().getFacultyGroup() == student.getFaculty()
 					  ||camp.getCampInformation().getFacultyGroup() == FacultyGroups.ALL)
-					  &&camp.getVisibility() == true
-					  //&&!isCampOver(currentDate,camp)
-					  //&&!isUserWithdrawnFromCamp(withdrawnCampsData, camp)
-					  //&&!hasDateClash(student, camp)
-					  )
+					  &&camp.getVisibility() == true)
 		.collect(Collectors.toCollection(ArrayList::new));
 
 		return availableCamps;		
@@ -268,11 +238,6 @@ public class CampStudentService implements ICampStudentService {
 	    	    .flatMap(entry -> entry.getValue().stream())
 	    	    .map(campName -> DataStore.getCampData().get(campName))
 	    	    .collect(Collectors.toList());
-		
-//		List<Camp> registeredCamps = registeredCampsData.entrySet().stream()
-//				.filter(entry -> entry.getValue().contains(student.getName()))
-//				.map(entry -> DataStore.getCampData().get(entry.getKey()))
-//				.collect(Collectors.toList());
 	
 		return registeredCamps;
 	}
@@ -284,52 +249,12 @@ public class CampStudentService implements ICampStudentService {
      *
      * @return {@code true} if registration is successful, {@code false} otherwise.
      */
-	public boolean registerCamp() {
-
-		Student student = (Student) AuthStore.getCurrentUser();
-		Date currentDate = new Date();
-
-		// Get Data
-		List<Camp> availableCamps = getAvailableCamps();
-		Map<String, List<String>> registeredCampsData = DataStore.getStudentsToCampsRegisteredData();
-		Map<String, List<String>> registeredStudentData = DataStore.getCampToRegisteredStudentData();
-
-		// Display available camps to register
-		view.viewCamps(availableCamps, " - Choose Camp to Register - ");
-		
-		// Get User input
-		Camp camp = InputSelectionUtility.campSelector(availableCamps);
-        if (camp == null) {
-            return false;
-        }
-
-		if(isUserWithdrawnFromCamp(student,camp)){
-			System.out.println("You are not allowed to register for a camp you have withdrawn!");
-			return false;
-		}
-
-		if(isUserRegisteredWithCamp(student,camp)){
-			System.out.println("You are already registered for the camp!");
-			return false;
-		}
-
-		if(isCampOver(currentDate,camp)){
-			System.out.println("The camp chosen is over!");
-			return false;
-		}
-
-		if(hasDateClash(student,camp)){
-			System.out.println("The camp chosen conflict with registered camp !");
-			return false;
-		}
-
-		if(isUserCampCommitteeForCamp(student, camp)){
-			System.out.println("You are already registered for the camp as a camp committee member!");
-			return false;
-		}
+	public boolean registerCamp(Student student,Camp camp) {
 		
 		String studentName = student.getName();
 		String campName = camp.getCampInformation().getCampName();
+		Map<String, List<String>> registeredCampsData = DataStore.getStudentsToCampsRegisteredData();
+		Map<String, List<String>> registeredStudentData = DataStore.getCampToRegisteredStudentData();
 
 		// Add the camp name to the list of registered camps for the current user
 		if (!registeredCampsData.containsKey(studentName)) {
@@ -342,9 +267,6 @@ public class CampStudentService implements ICampStudentService {
 			registeredStudentData.put(campName, new ArrayList<String>());
 		}
 		registeredStudentData.get(campName).add(studentName);
-		
-		// Reduce no. of slots
-		camp.getCampInformation().setCampTotalSlots(camp.getCampInformation().getCampTotalSlots()-1);
 	
 		// Save into DataStore
 		DataStore.setStudentsToCampsRegisteredData(registeredCampsData);
@@ -359,37 +281,13 @@ public class CampStudentService implements ICampStudentService {
      *
      * @return {@code true} if withdrawal is successful, {@code false} otherwise.
      */
-	public boolean withdrawCamp() {
+	public boolean withdrawCamp(Student student,Camp camp) {
 		
-		Student student = (Student) AuthStore.getCurrentUser();
-
-		// Get Data
-		List<Camp> RegisteredCamps = getRegisteredCamps();
+		String studentName = student.getName();
+		String campName = camp.getCampInformation().getCampName();
 		Map<String, List<String>> withdrawnCampsData = DataStore.getStudentToCampsWithdrawnData();
 		Map<String, List<String>> registeredCampsData = DataStore.getStudentsToCampsRegisteredData();
 		Map<String, List<String>> registeredStudentData = DataStore.getCampToRegisteredStudentData();
-
-		// Display available camps to register
-		view.viewCamps(RegisteredCamps, " - Choose Camp to Withdraw - ");
-		
-		// Get user input
-    	Camp camp = InputSelectionUtility.campSelector(RegisteredCamps);
-        if (camp == null) {
-            return false;
-        }
-
-		if(isUserWithdrawnFromCamp(student,camp)){
-			System.out.println("You are have already withdrawn from the camp!");
-			return false;
-		}
-
-		if(isUserCampCommitteeForCamp(student,camp)){
-			System.out.println("You are not allowed to withdraw from a camp you have registered as a camp committee member!");
-			return false;
-		}
-
-		String studentName = student.getName();
-		String campName = camp.getCampInformation().getCampName();
 
 		// remove the camp name from the list of registered camps for the current user
 		registeredCampsData.get(studentName).remove(campName);
@@ -402,16 +300,11 @@ public class CampStudentService implements ICampStudentService {
 			withdrawnCampsData.put(studentName, new ArrayList<String>());
 		}
 		withdrawnCampsData.get(studentName).add(campName);
-		
-		// Increase no. of slots
-		camp.getCampInformation().setCampTotalSlots(camp.getCampInformation().getCampTotalSlots()+1);
 
 		// Save into DataStore
 		DataStore.setStudentsToCampsRegisteredData(registeredCampsData);
 		DataStore.setCampToRegisteredStudentData(registeredStudentData);
 		DataStore.setStudentToCampsWithdrawnData(withdrawnCampsData);
-		
-		System.out.println("Withdrawn from chosen camp successfully!");
 		return true;
 	}
 
@@ -420,54 +313,10 @@ public class CampStudentService implements ICampStudentService {
      *
      * @return {@code true} if registration as a committee member is successful, {@code false} otherwise.
      */
-	public boolean registerAsCommittee(){
+	public boolean registerAsCommittee(Student student,Camp camp){
 
-		Student student = (Student) AuthStore.getCurrentUser();
-		Date currentDate = new Date();
-
-		// Get Data
-		List<Camp> availableCamps = getAvailableCamps();
 		Map<String, List<String>> registeredCampCommitteeData = DataStore.getCampToRegisteredCampCommitteeData();
 		Map<String, String> campCommitteeData = DataStore.getCampCommitteeToCampRegisteredData();
-
-		// Display available camps to register
-		view.viewCamps(availableCamps, " - Choose Camp to join as Committee Member - ");
-		
-		// Get User input
-		Camp camp = InputSelectionUtility.campSelector(availableCamps);
-        if (camp == null) {
-            return false;
-        }
-
-		if(isUserRegisteredWithCamp(student,camp)){
-			System.out.println("You are already registered for the camp!");
-			return false;
-		}
-
-		if(isUserWithdrawnFromCamp(student,camp)){
-			System.out.println("You are not allowed to register for a camp you have withdrawn!");
-			return false;
-		}
-
-		if(isCampOver(currentDate,camp)){
-			System.out.println("The camp chosen is over!");
-			return false;
-		}
-
-		if(hasDateClash(student,camp)){
-			System.out.println("The camp chosen conflict with registered camp !");
-			return false;
-		}
-
-		if(isUserCampCommittee(student)){
-			System.out.println("You are not allowed to register as a Camp committee for more than one camp!");
-			return false;
-		}
-
-		if(isCampCommitteeFull(camp)){
-			System.out.println("You are not allowed to register as a Camp committee slots is full!");
-			return false;
-		}
 		
 		String campCommitteeName = student.getName();
 		String campName = camp.getCampInformation().getCampName();
@@ -481,131 +330,10 @@ public class CampStudentService implements ICampStudentService {
 		// Add the camp as the value of student-campcommitee key pair 
 		campCommitteeData.put(campCommitteeName,campName);
 		
-		// Increase no. of slots
-		camp.getCampInformation().setCampTotalSlots(camp.getCampInformation().getCampTotalSlots()-1);
-		// Reduce no. of committee slots
-		camp.getCampInformation().setCampCommitteeSlots(camp.getCampInformation().getCampCommitteeSlots()-1);
-		
 		// Save into DataStore
 		DataStore.setCampToRegisteredCampCommitteeData(registeredCampCommitteeData);
 		DataStore.setCampCommitteeToCampRegisteredData(campCommitteeData);
-		System.out.println("Registered to chosen camp successfully as Committee Member!");
-		AuthStore.getCurrentUser().setRole(UserRole.COMMITTEE);
 		return true;
-	}
-	
-	/**
-     * Shows all no. of remaining slots for all the camps.
-     */
-    public void viewRemainingSlots() {
-    	view.viewCampsSlots(getAllCamps());
-    	scanner.nextLine();
-    }
-	
-	/**
-     * Shows all camps viewable by the student.
-     */
-    public void viewAllCamps() {
-    	while (true) {
-    		view.viewCamps(getAllCamps(), " - List of Camps - ");
-    		Camp c = InputSelectionUtility.campSelector(getAllCamps());
-    		if (c != null) {
-	    		view.viewCampInformation(c);
-	    		scanner.nextLine();
-    		} else {
-    			return;
-    		}
-    	}
-    }
-    
-    /**
-     * Shows the list of camps using user specified filter
-     */
-	public void viewAllCampsWithFilters() {
-		
-		// Various filters for camps
-    	String filterBy = null; 		// Type of filter
-    	Date filterDate = null;			// Filter date
-    	String locationFilter = null;	// Filter location
-
-    	System.out.println("Filter Options:");
-    	System.out.println("1. Filter by Date");
-    	System.out.println("2. Filter by Location");
-    	System.out.println("3. Sort by Name (Alphabetical Order)");
-    	
-    	int option = 0;
-    	do {
-	    	option = InputSelectionUtility.getIntInput("Enter the filter option (1/2/3): ");
-	    	switch (option) {
-	    		case 1:
-	    			filterBy = "date";
-		        	filterDate = InputSelectionUtility.getDateInput("Enter the start date to filter by (dd/MM/yyyy): ", new SimpleDateFormat("dd/MM/yyyy"));
-					break;
-	    		case 2:
-	    			filterBy = "location";
-		        	locationFilter = InputSelectionUtility.getStringInput("Enter the location to filter by: ");
-		        	break;
-	        	case 3:
-	        		System.out.println("Sorting by alphabetical order..."); // Sort by alphabetical order
-	        		break;
-	        	default: System.out.println("Invalid option."); 
-	        		break;
-	    	}
-    	} while (option != 0 && option > 3);
-    	
-    	List<Camp> filteredCamps = new ArrayList<>(); // The filtered list
-    	
-    	// Chooses to add each camp to filtered list based on filtering criteria chosen
-    	for (Camp c : getAllCamps()) {
-        	if (filterBy == null) {
-            	// Default sorting by name
-            	filteredCamps.add(c);
-        	} else if (filterBy.equals("date")) {
-            	if (filterDate != null) {
-                	Date campDate = c.getCampInformation().getCampStartDate();
-                	if (campDate.equals(filterDate)) {
-                		System.out.println("Added " + c.getCampInformation().getCampName());
-                    	filteredCamps.add(c);
-                	}
-            	}
-        	} else if (filterBy.equals("location")) {
-            	String campLocation = c.getCampInformation().getCampLocation();
-            	if (campLocation.equalsIgnoreCase(locationFilter)) { // Compare with the provided location filter
-                	filteredCamps.add(c);
-            	}
-        	}
-    	}
-    	
-    	if (filteredCamps.isEmpty()) {
-        	System.out.println("No matching camps found.");
-    	} else {
-    		System.out.println("Not empty");
-    		// Displays the filtered list of camps
-    		switch (option) {
-	    		case 1:
-	    			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-	    			view.viewCamps(filteredCamps, " - List of Camps starting on " + dateFormat.format(filterDate) + " - ");
-					break;
-	    		case 2:
-	    			view.viewCamps(filteredCamps, " - List of Camps in " + locationFilter + " - ");
-		        	break;
-	        	default: 
-	        		view.viewCamps(filteredCamps, " - List of Camps - "); 
-	        		break;
-    		}
-    	}
-    	System.out.println("(Press Enter to return)");
-    	scanner.nextLine();
-	}
-	
-	/**
-	 * Shows the camps that the student is registered in.
-	 */
-	public void viewRegisteredCamps() {
-		List<Camp> list = getRegisteredCamps();
-		view.viewCamps(list, " - Camps registered by " + AuthStore.getCurrentUser().getName() + " - ");
-		System.out.print("(Press Enter to return) ");
-		scanner.nextLine();
 	}
 
 }
