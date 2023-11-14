@@ -6,6 +6,7 @@ import interfaces.IAuthService;
 import models.User;
 import services.AuthStudentService;
 import stores.AuthStore;
+import services.AuthCampCommitteeService;
 import services.AuthStaffService;
 import views.AuthView;
 import utility.InputSelectionUtility;
@@ -46,6 +47,9 @@ public class AuthController {
                     authService = new AuthStudentService();
                     break;
                 case 3:
+                    authService = new AuthCampCommitteeService();
+                    break;
+                case 4:
                     System.out.println("Shutting down CAMs...");
                     AuthView.quitApp();
                     authService = null; // Set authService to null    

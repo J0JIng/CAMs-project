@@ -13,7 +13,9 @@ import enums.UserRole;
 import interfaces.IMenuView;
 import models.Camp;
 import models.CampInformation;
+import models.Enquiry;
 import models.Student;
+import models.Suggestion;
 import stores.AuthStore;
 import stores.DataStore;
 import utility.ViewUtility;
@@ -47,28 +49,54 @@ public class StudentView implements IMenuView{
         System.out.println("║[3]  Register for Camp                                    ║");
         System.out.println("║[4]  Withdraw from Camp                                   ║");
         System.out.println("║[5]  View Remaining Slots of Camp                         ║");
-        System.out.println("║[6]  Register as Committee                                ║");
-        System.out.println("║[7]  Withdraw from Committee                              ║");
-        System.out.println("║[8]  View Registered Camps                                ║");
-        System.out.println("║[9]  Submit Enquiry                                       ║");
-        System.out.println("║[10] View Enquiry                                         ║");
-        System.out.println("║[11] Edit Enquiry                                         ║");
-        System.out.println("║[12] Delete Enquiry                                       ║");
-        System.out.println("║[13] Change Password                                      ║");
-        if (AuthStore.getCurrentUser().getUserRole() == UserRole.COMMITTEE) {
-        // Committee Specific Functions:
-        System.out.println("║[14] View Enquiries for Camp                              ║");
-        System.out.println("║[15] Reply Enquiries for Camp                             ║");
-        System.out.println("║[16] View Suggestion                                      ║");
-        System.out.println("║[17] Edit Suggestion                                      ║");
-        System.out.println("║[18] Delete Suggestion                                    ║");
-        System.out.println("║[19] Submit Suggestion                                    ║");
-        System.out.println("║[20] Generate Camp Report                                 ║");
-        System.out.println("║[21] Logout                                               ║");
-        } else {
-        System.out.println("║[14] Logout                                               ║");
-        }
-        
+        System.out.println("║[6]  View Registered Camps                                ║");
+        System.out.println("║[7]  Submit Enquiry                                       ║");
+        System.out.println("║[8]  View Enquiry                                         ║");
+        System.out.println("║[9]  Edit Enquiry                                         ║");
+        System.out.println("║[10] Delete Enquiry                                       ║");
+        System.out.println("║[11] Register as Committee                                ║");
+        System.out.println("║[12] Change Password                                      ║");
+        System.out.println("║[13] Logout     				                             ║");
+        System.out.println("╚══════════════════════════════════════════════════════════╝");
+        System.out.print("Select an option: ");
+	}
+
+	public void displayCampComitteeMenuView() {
+		ViewUtility.clearScreen();
+		
+		String welcomeMessage = "Welcome " + AuthStore.getCurrentUser().getName();
+		int totalLength = welcomeMessage.length();
+		int spaces = (58 - totalLength) / 2;
+
+		System.out.println("╔══════════════════════════════════════════════════════════╗");
+        System.out.println("║                                                          ║");   
+		System.out.println("║             ██████╗ █████╗ ███╗   ███╗███████╗           ║");
+		System.out.println("║            ██╔════╝██╔══██╗████╗ ████║██╔════╝           ║");
+		System.out.println("║            ██║     ███████║██╔████╔██║███████╗           ║");
+		System.out.println("║            ██║     ██╔══██║██║╚██╔╝██║╚════██║           ║");
+		System.out.println("║            ╚██████╗██║  ██║██║ ╚═╝ ██║███████║           ║");
+		System.out.println("║             ╚═════╝╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝           ║");
+        System.out.println("║                                                          ║");   
+        System.out.println("╠══════════════════════════════════════════════════════════╣");
+        System.out.println("║                  - Camp Committee Menu -                 ║");
+        System.out.println("╠══════════════════════════════════════════════════════════╣");
+        System.out.println("║" + " ".repeat(spaces) + welcomeMessage + " ".repeat(58 - totalLength - spaces) + "║");
+        System.out.println("╠══════════════════════════════════════════════════════════╣");
+        System.out.println("║[1]  View All Camps                                       ║");
+        System.out.println("║[2]  View Camps with Filters                              ║");
+        System.out.println("║[3]  Register for Camp                                    ║");
+        System.out.println("║[4]  Withdraw from Camp                                   ║");
+        System.out.println("║[5]  View Remaining Slots of Camp                         ║");
+        System.out.println("║[6]  View Registered Camps                                ║");
+        System.out.println("║[7]  View Enquiries For Camp                              ║");
+        System.out.println("║[8]  Respond to Enquiry                                   ║");
+        System.out.println("║[9]  Submit Suggestion                                    ║");
+        System.out.println("║[10] Edit Suggestion                                      ║");
+        System.out.println("║[11] Delete Suggestion                                    ║");
+        System.out.println("║[12] View Suggestion                                      ║");
+        System.out.println("║[13] Generate Report                                      ║");
+		System.out.println("║[14] Change Password                                      ║");
+		System.out.println("║[15] Logout                                               ║");
         System.out.println("╚══════════════════════════════════════════════════════════╝");
         System.out.print("Select an option: ");
 	}
@@ -169,4 +197,34 @@ public class StudentView implements IMenuView{
     	System.out.println("║   3. Sort by Name (Alphabetical Order)					 ║");
 		System.out.println("╚══════════════════════════════════════════════════════════╝");
 	}
+
+	public void displayEnquiries(Map<Integer, Enquiry> enquiries) {
+		if (enquiries.isEmpty()) {
+			System.out.println("No enquiries to display.");
+			return;
+		}
+		for (Enquiry enquiry : enquiries.values()) {
+			System.out.println("Enquiry ID: " + enquiry.getEnquiryID());
+			System.out.println("Camp Name: " + enquiry.getCampName());
+			System.out.println("Message: " + enquiry.getEnquiryMessage());
+			System.out.println("Status: " + enquiry.getEnquiryStatus());
+			System.out.println("Response: " + enquiry.getEnquiryResponse());
+			System.out.println("Responder ID: " + enquiry.getResponderID());
+			System.out.println("------");
+		}
+	}
+
+	public void displaySuggestion(Map<Integer, Suggestion> suggestions) {
+        if (suggestions.isEmpty()) {
+            System.out.println("No suggestions to display.");
+            return;
+        }
+        for (Suggestion suggestion : suggestions.values()) {
+            System.out.println("Suggestion ID: " + suggestion.getSuggestionID());
+            System.out.println("Camp Name: " + suggestion.getCampName());
+            System.out.println("Message: " + suggestion.getSuggestionMessage());
+            System.out.println("Status: " + suggestion.getSuggestionStatus());
+            System.out.println("------");
+        }
+    }
 }

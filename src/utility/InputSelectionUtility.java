@@ -12,8 +12,10 @@ import enums.FacultyGroups;
 import java.util.Date;
 
 import models.Staff;
+import models.Suggestion;
 import models.Camp;
 import models.CampInformation;
+import models.Enquiry;
 import services.CampStaffService;
 import stores.AuthStore;
 
@@ -394,5 +396,43 @@ public class InputSelectionUtility {
 
         System.out.println("Camp details updated successfully.");
         return true;
+    }
+
+    public static Enquiry enquirySelector(Map<Integer, Enquiry> enquiries) {
+        while (true) {
+            System.out.println("Select an Enquiry:");
+
+            for (Map.Entry<Integer, Enquiry> entry : enquiries.entrySet()) {
+                System.out.println(entry.getKey() + ". " + entry.getValue().getEnquiryMessage());
+            }
+
+            int enquiryID = getIntInput("Enter the ID of the enquiry (or press Enter to return): ");
+            Enquiry selectedEnquiry = enquiries.get(enquiryID);
+
+            if (selectedEnquiry != null) {
+                return selectedEnquiry;
+            } else {
+                System.out.println("Invalid ID. Please enter a valid ID or press Enter to return.\n");
+            }
+        }
+    }
+
+    public static Suggestion suggestionSelector(Map<Integer, Suggestion> suggestions) {
+        while (true) {
+            System.out.println("Select a Suggestion:");
+
+            for (Map.Entry<Integer, Suggestion> entry : suggestions.entrySet()) {
+                System.out.println(entry.getKey() + ". " + entry.getValue().getSuggestionMessage());
+            }
+
+            int suggestionID = getIntInput("Enter the ID of the suggestion (or press Enter to return): ");
+            Suggestion selectedSuggestion = suggestions.get(suggestionID);
+
+            if (selectedSuggestion != null) {
+                return selectedSuggestion;
+            } else {
+                System.out.println("Invalid ID. Please enter a valid ID or press Enter to return.\n");
+            }
+        }
     }
 }
