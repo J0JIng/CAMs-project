@@ -183,29 +183,33 @@ public class StaffView implements IMenuView {
 	}
 
 	public void displayEnquiries(Map<Integer, Enquiry> enquiries) {
+		System.out.println("╔════════════════════════════════════════════════════════════════════════════════════════════╗");
+        System.out.println("║                                                                                            ║"); 
+	    System.out.println("║             ███████╗███╗   ██╗ ██████╗ ██╗   ██╗██╗██████╗ ██╗███████╗███████╗             ║");
+	    System.out.println("║             ██╔════╝████╗  ██║██╔═══██╗██║   ██║██║██╔══██╗██║██╔════╝██╔════╝             ║");
+	    System.out.println("║             █████╗  ██╔██╗ ██║██║   ██║██║   ██║██║██████╔╝██║█████╗  ███████╗             ║");
+	    System.out.println("║             ██╔══╝  ██║╚██╗██║██║▄▄ ██║██║   ██║██║██╔══██╗██║██╔══╝  ╚════██║             ║");
+	    System.out.println("║             ███████╗██║ ╚████║╚██████╔╝╚██████╔╝██║██║  ██║██║███████╗███████║             ║");
+	    System.out.println("║             ╚══════╝╚═╝  ╚═══╝ ╚══▀▀═╝  ╚═════╝ ╚═╝╚═╝  ╚═╝╚═╝╚══════╝╚══════╝             ║");
+        System.out.println("║                                                                                            ║");
 		if (enquiries.isEmpty()) {
-			System.out.println("No enquiries to display.");
-			return;
+			System.out.println("╠════════════════════════════════════════════════════════════════════════════════════════════╣");
+			System.out.println("║                                   No Enquiries to Display.                                 ║");
+		} else {
+			System.out.println("╠════════════════════════════════════════════════════════════════════════════════════════════╣");
+			for (Enquiry enquiry : enquiries.values()) {
+				ViewUtility.displayInMenuBulletLarge("Camp Name: " + enquiry.getCampName());
+				ViewUtility.displayInMenuBulletLarge("Message: " + enquiry.getEnquiryMessage());
+				ViewUtility.displayInMenuBulletLarge("Status: " + enquiry.getEnquiryStatus());
+				ViewUtility.displayInMenuBulletLarge("Response: " + enquiry.getEnquiryResponse());
+				ViewUtility.displayInMenuBulletLarge("Responder ID: " + enquiry.getResponderID());
+				System.out.println("╠════════════════════════════════════════════════════════════════════════════════════════════╣");
+			}
 		}
-		System.out.println("╔══════════════════════════════════════════════════════════╗");
-		ViewUtility.displayInMenuCentered(" - Enquiries - ");
-		System.out.println("╠══════════════════════════════════════════════════════════╣");
-		for (Enquiry enquiry : enquiries.values()) {
-			ViewUtility.displayInMenuBullet("Camp Name: " + enquiry.getCampName());
-			ViewUtility.displayInMenuBullet("Message: " + enquiry.getEnquiryMessage());
-			ViewUtility.displayInMenuBullet("Status: " + enquiry.getEnquiryStatus());
-			ViewUtility.displayInMenuBullet("Response: " + enquiry.getEnquiryResponse());
-			ViewUtility.displayInMenuBullet("Responder ID: " + enquiry.getResponderID());
-			System.out.println("╠══════════════════════════════════════════════════════════╣");
-		}
-		System.out.println("╚══════════════════════════════════════════════════════════╝");
+		System.out.println("╚════════════════════════════════════════════════════════════════════════════════════════════╝");
 	}
 
-	public void displaySuggestions(Map<Integer, Suggestion> suggestions) {
-	    if (suggestions.isEmpty()) {
-	        System.out.println("No suggestions to display.");
-	        return;
-	    }
+	public void displaySuggestions(Map<Integer, Suggestion> suggestions) {	    
 	    System.out.println("╔════════════════════════════════════════════════════════════════════════════════════════════╗");
         System.out.println("║                                                                                            ║"); 
 	    System.out.println("║ ███████╗██╗   ██╗ ██████╗  ██████╗ ███████╗███████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗ ║");
@@ -214,15 +218,20 @@ public class StaffView implements IMenuView {
 	    System.out.println("║ ╚════██║██║   ██║██║   ██║██║   ██║██╔══╝  ╚════██║   ██║   ██║██║   ██║██║╚██╗██║╚════██║ ║");
 	    System.out.println("║ ███████║╚██████╔╝╚██████╔╝╚██████╔╝███████╗███████║   ██║   ██║╚██████╔╝██║ ╚████║███████║ ║");
 	    System.out.println("║ ╚══════╝ ╚═════╝  ╚═════╝  ╚═════╝ ╚══════╝╚══════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝ ║");
-        System.out.println("║                                                                                            ║"); 
-		System.out.println("╚════════════════════════════════════════════════════════════════════════════════════════════╝");
-		for (Suggestion suggestion : suggestions.values()) {
-	        ViewUtility.displayInMenuBulletLarge("Suggestion ID: " + suggestion.getSuggestionID());
-	        ViewUtility.displayInMenuBulletLarge("Camp Name: " + suggestion.getCampName());
-	        ViewUtility.displayInMenuBulletLarge("Message: " + suggestion.getSuggestionMessage());
-	        ViewUtility.displayInMenuBulletLarge("Status: " + suggestion.getSuggestionStatus());
-	        System.out.println("╠════════════════════════════════════════════════════════════════════════════════════════════╣");
-	    }
+        System.out.println("║                                                                                            ║");
+		if (suggestions.isEmpty()) {
+			System.out.println("╠════════════════════════════════════════════════════════════════════════════════════════════╣");
+			System.out.println("║                                  No Suggestions to Display.                                ║");
+        } else {
+        	System.out.println("╠════════════════════════════════════════════════════════════════════════════════════════════╣");
+		    for (Suggestion suggestion : suggestions.values()) {
+		        ViewUtility.displayInMenuBulletLarge("Suggestion ID: " + suggestion.getSuggestionID());
+		        ViewUtility.displayInMenuBulletLarge("Camp Name: " + suggestion.getCampName());
+		        ViewUtility.displayInMenuBulletLarge("Message: " + suggestion.getSuggestionMessage());
+		        ViewUtility.displayInMenuBulletLarge("Status: " + suggestion.getSuggestionStatus());
+		        System.out.println("╠════════════════════════════════════════════════════════════════════════════════════════════╣");
+		    }
+        }
 	    System.out.println("╚════════════════════════════════════════════════════════════════════════════════════════════╝");
 	}
 

@@ -213,19 +213,31 @@ public class StudentView implements IMenuView{
 	}
 
 	public void displayEnquiries(Map<Integer, Enquiry> enquiries) {
+		System.out.println("╔════════════════════════════════════════════════════════════════════════════════════════════╗");
+        System.out.println("║                                                                                            ║"); 
+	    System.out.println("║             ███████╗███╗   ██╗ ██████╗ ██╗   ██╗██╗██████╗ ██╗███████╗███████╗             ║");
+	    System.out.println("║             ██╔════╝████╗  ██║██╔═══██╗██║   ██║██║██╔══██╗██║██╔════╝██╔════╝             ║");
+	    System.out.println("║             █████╗  ██╔██╗ ██║██║   ██║██║   ██║██║██████╔╝██║█████╗  ███████╗             ║");
+	    System.out.println("║             ██╔══╝  ██║╚██╗██║██║▄▄ ██║██║   ██║██║██╔══██╗██║██╔══╝  ╚════██║             ║");
+	    System.out.println("║             ███████╗██║ ╚████║╚██████╔╝╚██████╔╝██║██║  ██║██║███████╗███████║             ║");
+	    System.out.println("║             ╚══════╝╚═╝  ╚═══╝ ╚══▀▀═╝  ╚═════╝ ╚═╝╚═╝  ╚═╝╚═╝╚══════╝╚══════╝             ║");
+        System.out.println("║                                                                                            ║");
 		if (enquiries.isEmpty()) {
-			System.out.println("No enquiries to display.");
-			return;
+			System.out.println("╠════════════════════════════════════════════════════════════════════════════════════════════╣");
+			System.out.println("║                                   No Enquiries to Display.                                 ║");
+		} else {
+			System.out.println("╠════════════════════════════════════════════════════════════════════════════════════════════╣");
+			for (Enquiry enquiry : enquiries.values()) {
+				ViewUtility.displayInMenuBulletLarge("Enquiry ID: " + enquiry.getEnquiryID());
+				ViewUtility.displayInMenuBulletLarge("Camp Name: " + enquiry.getCampName());
+				ViewUtility.displayInMenuBulletLarge("Message: " + enquiry.getEnquiryMessage());
+				ViewUtility.displayInMenuBulletLarge("Status: " + enquiry.getEnquiryStatus());
+				ViewUtility.displayInMenuBulletLarge("Response: " + enquiry.getEnquiryResponse());
+				ViewUtility.displayInMenuBulletLarge("Responder ID: " + enquiry.getResponderID());
+				System.out.println("╠════════════════════════════════════════════════════════════════════════════════════════════╣");
+			}
 		}
-		for (Enquiry enquiry : enquiries.values()) {
-			System.out.println("Enquiry ID: " + enquiry.getEnquiryID());
-			System.out.println("Camp Name: " + enquiry.getCampName());
-			System.out.println("Message: " + enquiry.getEnquiryMessage());
-			System.out.println("Status: " + enquiry.getEnquiryStatus());
-			System.out.println("Response: " + enquiry.getEnquiryResponse());
-			System.out.println("Responder ID: " + enquiry.getResponderID());
-			System.out.println("------");
-		}
+		System.out.println("╚════════════════════════════════════════════════════════════════════════════════════════════╝");
 	}
 
 	public void displaySuggestions(Map<Integer, Suggestion> draftSuggestions, Map<Integer, Suggestion> submittedSuggestions,
@@ -253,11 +265,12 @@ public class StudentView implements IMenuView{
 				case 3: suggestions = rejectedSuggestions;
 				System.out.println("║                                     Rejected Suggestions                                   ║"); break;
 			}
-			System.out.println("╠════════════════════════════════════════════════════════════════════════════════════════════╣");
 			if (suggestions.isEmpty()) {
+				System.out.println("╠════════════════════════════════════════════════════════════════════════════════════════════╣");
 				System.out.println("║                                  No Suggestions to Display.                                ║");
 	        } else {
 			    for (Suggestion suggestion : suggestions.values()) {
+			    	System.out.println("╠════════════════════════════════════════════════════════════════════════════════════════════╣");
 			        ViewUtility.displayInMenuBulletLarge("Suggestion ID: " + suggestion.getSuggestionID());
 			        ViewUtility.displayInMenuBulletLarge("Camp Name: " + suggestion.getCampName());
 			        ViewUtility.displayInMenuBulletLarge("Message: " + suggestion.getSuggestionMessage());
