@@ -15,7 +15,7 @@ public interface ICampStudentService {
      *
      * @return a {@link List} of {@link Camp} objects representing the available camps
      */
-    public List<Camp> getAvailableCamps();
+    public List<Camp> getAvailableCampsToRegister();
 
     /**
      * Retrieves a list of camps from which the student has withdrawn.

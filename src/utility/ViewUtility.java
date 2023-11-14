@@ -44,8 +44,8 @@ public class ViewUtility {
      * @param s the string in the entry
      * @param index the numbered index
      */
-    public static void displayInMenuNumberedTwoColumns(String s, int index, int colValue) {
+    public static void displayInMenuNumberedTwoColumns(String s, int index, int colValue1 , int colValue2) {
     	System.out.println("╠══════════════════════════════════════════════════╬═══════╣");
-    	System.out.println("║[" + (index) + "] " + s + " ".repeat(46- s.length()) + "║ " + colValue + " ".repeat(6- String.valueOf(colValue).length()) + "║");
+    	System.out.println("║[" + (index) + "] " + s + " ".repeat(46- s.length()) + "║ " + colValue1 + " / " + colValue2 + " ║");
     }
 }

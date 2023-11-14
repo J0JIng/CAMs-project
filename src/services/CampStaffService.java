@@ -70,8 +70,8 @@ public class CampStaffService implements ICampStaffService {
 		List<String> registeredCampCommitteeList = registeredCampCommittees.get(campName);
 		boolean hasRegisteredCampCommittees = registeredCampCommitteeList != null && !registeredCampCommitteeList.isEmpty();
 	
-		// Return true if the camp has both registered students and camp committees
-		return hasRegisteredStudents && hasRegisteredCampCommittees;
+		// Return true if the camp has either registered students or camp committees
+		return hasRegisteredStudents || hasRegisteredCampCommittees;
 	}
 	
 

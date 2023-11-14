@@ -78,12 +78,16 @@ public class StaffController extends UserController {
                 	//controller.campStaffService.respondToEnquiry(); 
                 	break;
                 case 11:
+                    // suggestion view
                 	break;
                 case 12:
+                    // suggestion respond
                 	break;
                 case 13:
+                    // report generate camp 
                 	break;
                 case 14:
+                    // performance report Camp committee
                 	break;
                 case 15:
                 	break;
