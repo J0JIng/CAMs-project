@@ -6,6 +6,8 @@ import java.util.Map;
 import interfaces.IMenuView;
 import models.Camp;
 import models.CampInformation;
+import models.Enquiry;
+import models.Suggestion;
 import stores.AuthStore;
 import stores.DataStore;
 import utility.ViewUtility;
@@ -179,5 +181,36 @@ public class StaffView implements IMenuView {
 		System.out.println("╚══════════════════════════════════════════════════════════╝");
 		System.out.println("Select option: ");
 	}
+
+	public void displayEnquiries(Map<Integer, Enquiry> enquiries) {
+		if (enquiries.isEmpty()) {
+			System.out.println("No enquiries to display.");
+			return;
+		}
+		for (Enquiry enquiry : enquiries.values()) {
+			System.out.println("Enquiry ID: " + enquiry.getEnquiryID());
+			System.out.println("Camp Name: " + enquiry.getCampName());
+			System.out.println("Message: " + enquiry.getEnquiryMessage());
+			System.out.println("Status: " + enquiry.getEnquiryStatus());
+			System.out.println("Response: " + enquiry.getEnquiryResponse());
+			System.out.println("Responder ID: " + enquiry.getResponderID());
+			System.out.println("------");
+		}
+	}
+
+	public void displaySuggestions(Map<Integer, Suggestion> suggestions) {
+    if (suggestions.isEmpty()) {
+        System.out.println("No suggestions to display.");
+        return;
+    }
+    for (Suggestion suggestion : suggestions.values()) {
+        System.out.println("Suggestion ID: " + suggestion.getSuggestionID());
+        System.out.println("Camp Name: " + suggestion.getCampName());
+        System.out.println("Message: " + suggestion.getSuggestionMessage());
+        System.out.println("Status: " + suggestion.getSuggestionStatus());
+        System.out.println("------");
+    }
+}
+
 	
 }

@@ -241,7 +241,19 @@ public class CampStudentService implements ICampStudentService {
 	
 		return registeredCamps;
 	}
+
+	public Camp getCampCommitteeCamp(Student student) {
+		Map<String, String> registeredCamp = DataStore.getCampCommitteeToCampRegisteredData();
+		String campID = registeredCamp.get(student.getStudentID());
+		Map<String, Camp> campData = DataStore.getCampData();
 	
+		if (campID != null && campData.containsKey(campID)) {
+			return campData.get(campID);
+		} else {
+			return null; 
+		}
+	}
+
 	// ---------- Service method implementation ---------- //
 
 	/**

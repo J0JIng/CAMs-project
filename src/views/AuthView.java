@@ -22,7 +22,8 @@ public class AuthView implements IMenuView {
         System.out.println("╠══════════════════════════════════════════════════════════╣");
         System.out.println("║[1] Staff Login                                           ║");
         System.out.println("║[2] Student Login                                         ║");
-        System.out.println("║[3] Quit                                                  ║");
+		System.out.println("║[3] Camp Committee Login                                  ║");
+        System.out.println("║[4] Quit                                                  ║");
         System.out.println("╚══════════════════════════════════════════════════════════╝");
 	}
 	
@@ -42,6 +43,30 @@ public class AuthView implements IMenuView {
 	public static void studentLoginView() {
 		System.out.println("╔══════════════════════════════════════════════════════════╗");
         System.out.println("║                     - Student Login -                    ║");
+        System.out.println("╚══════════════════════════════════════════════════════════╝");
+	}
+
+	public static void CampCommitteeLoginView() {
+		System.out.println("╔══════════════════════════════════════════════════════════╗");
+        System.out.println("║                 - Camp Committee Login -                 ║");
+        System.out.println("╚══════════════════════════════════════════════════════════╝");
+	}
+
+	public static void staffLogoutView() {
+		System.out.println("╔══════════════════════════════════════════════════════════╗");
+        System.out.println("║                      - Staff Logout -                    ║");
+        System.out.println("╚══════════════════════════════════════════════════════════╝");
+	}
+	
+	public static void studentLogoutView() {
+		System.out.println("╔══════════════════════════════════════════════════════════╗");
+        System.out.println("║                     - Student Logout -                   ║");
+        System.out.println("╚══════════════════════════════════════════════════════════╝");
+	}
+
+	public static void CampCommitteeLogoutView() {
+		System.out.println("╔══════════════════════════════════════════════════════════╗");
+        System.out.println("║                 - Camp Committee Logout -                ║");
         System.out.println("╚══════════════════════════════════════════════════════════╝");
 	}
 }

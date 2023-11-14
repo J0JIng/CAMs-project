@@ -17,7 +17,9 @@ import views.StudentView;
 import interfaces.ICampStudentService;
 import models.Student;
 import models.Camp;
+import models.Enquiry;
 import services.CampStudentService;
+import services.EnquirySenderService;
 import stores.AuthStore;
 import stores.DataStore;
 import views.StudentView;
@@ -26,6 +28,7 @@ import utility.InputSelectionUtility;
 public class StudentController extends UserController {
 
 	private final CampStudentService campStudentService = new CampStudentService();
+	private final EnquirySenderService enquiryStudentService = new EnquirySenderService();
 	private final StudentView view = new StudentView();
 	private final Scanner scanner = new Scanner(System.in);
 
@@ -43,6 +46,7 @@ public class StudentController extends UserController {
 
             int choice = scanner.nextInt();
             
+			// sanity check 
             if (student.getUserRole() == UserRole.STUDENT) {
             	// Student selection menu
 	            switch (choice) {
@@ -53,117 +57,52 @@ public class StudentController extends UserController {
 	                	viewAllCampsWithFilters();
 	                	break;
 	                case 3:
-	                	registerCamp();
+						registerCamp();
 	                    break;
 	                case 4:
-	                	withdrawCamp();
+						withdrawCamp();
 	                    break;
 	                case 5:
-	                	viewRemainingSlots();
+						viewRemainingSlots();
 	                    break;
 	                case 6:
-	                	registerAsCommittee();
+						viewRegisteredCamps();
 	                    break;
 	                case 7:
-	                	System.out.println("debug");
-	                	//controller.campStudentService.withdrawFromCommittee();
+	                	submitEnquiry();
 	                    break;
 	                case 8:
-	                	viewRegisteredCamps();
+	                	viewEnquiries();
 	                    break;
 	                case 9: 
-	                	//controller.campStudentService.submitEnquiry();
+	                	editEnquiry();
 	                	break;
 	                case 10: 
-	                	//controller.campStudentService.viewEnquiries();
+	                	deleteEnquiry();
 	                	break;
 	                case 11: 
-	                	//controller.campStudentService.editEnquiry();
-	                	break;
+	                	registerAsCommittee();
+						AuthController.endSession();
+	                	return;
 	                case 12: 
-	                	//controller.campStudentService.deleteEnquiry();
-	                	break;
-	                case 13: 
-	                	// Change password
-						super.changePassword();
-	                	break;
+						// change password
+						if (changePassword()) {
+							// Restart session by logging out
+							AuthController.endSession();
+							return;
+						}
+						break;
 	                default: 
 	                    System.out.println("Exiting student menu");
 	                    AuthController.endSession();
 	                    return;
 	            }
-            } else if (student.getUserRole() == UserRole.COMMITTEE) {
-            	// Student selection menu
-	            switch (choice) {
-		            case 1: // View all camps viewable by Student
-	                    viewAllCamps();
-	                    break;
-	                case 2: // View all camps viewable by Student with Filters
-	                	viewAllCampsWithFilters();
-	                	break;
-	                case 3:
-	                	registerCamp();
-	                    break;
-	                case 4:
-	                	withdrawCamp();
-	                    break;
-	                case 5:
-	                	viewRemainingSlots();
-	                    break;
-	                case 6:
-	                	registerAsCommittee();
-	                    break;
-	                case 7:
-	                	System.out.println("Cannot withdraw from Committee");
-	                	//controller.campStudentService.withdrawFromCommittee();
-	                    break;
-	                case 8:
-	                	viewRegisteredCamps();
-	                    break;
-	                case 9: 
-	                	//controller.campStudentService.submitEnquiry();
-	                	break;
-	                case 10: 
-	                	//controller.campStudentService.viewEnquiries();
-	                	break;
-	                case 11: 
-	                	//controller.campStudentService.editEnquiry();
-	                	break;
-	                case 12: 
-	                	//controller.campStudentService.deleteEnquiry();
-	                	break;
-	                case 13: 
-	                	//Change password
-						super.changePassword();
-	                	break;
-	                case 14:
-	                	// View enquiries for camp
-	                	break;
-	                case 15:
-	                	// Reply enquiries for camp
-	                	break;
-	                case 16:
-	                	// View suggestion for camp
-	                	break;
-	                case 17:
-	                	// Edit suggestion for camp
-	                	break;
-	                case 18:
-	                	// Delete suggestion for camp
-	                	break;
-	                case 19:
-	                	// Submit suggestion for camp
-	                	break;
-	                case 20:
-	                	// Generate camp report
-	                	break;
-	                default: 
-	                    System.out.println("Exiting student menu");
-	                    AuthController.endSession();
-	                    return;
-	            }
-            }
-             
+            } 
+			else{
+				// REMOVE ONCE DONE 
+				System.out.println("Error Debug");
+				AuthController.endSession();
+			}
         }
 	}
 
@@ -421,5 +360,119 @@ public class StudentController extends UserController {
 		System.out.print("(Press Enter to return) ");
 		scanner.nextLine();
 	}
+
+	public void submitEnquiry() {
+    	Student student = (Student) AuthStore.getCurrentUser();
+        
+        //Get Data
+        List<Camp> availableCamps = campStudentService.getRegisteredCamps();
+
+		// Get User input
+		Camp selectedCamp = InputSelectionUtility.campSelector(availableCamps);
+        assert selectedCamp != null;
+        String campName = selectedCamp.getCampInformation().getCampName();
+		String enquiryMessage = InputSelectionUtility.getStringInput("Enter enquiry message: ");
+		// Prompt the user whether they'd like the enquiry to be saved as draft (1: Yes, 2: No)
+	    int draftChoice = InputSelectionUtility.getIntInput("Do you want to save the enquiry as a draft? (1: Yes, 2: No): ");
+	    boolean isDraft = (draftChoice == 1);
+
+        // Create a new enquiry using EnquiryStudentService
+        int enquiryID = enquiryStudentService.createEnquiry(student.getStudentID(), campName, enquiryMessage, isDraft);
+
+        System.out.println("Enquiry submitted with ID: " + enquiryID);
+    }
+
+	/**
+	 * Displays the draft, pending and responded enquiries for the current student.
+	 * Draft enquiries are those that have not been submitted, and responded enquiries
+	 * are those that have received a response.
+	 */
+	public void viewEnquiries() {
+		Student student = (Student) AuthStore.getCurrentUser();
+
+		// Get draft, pending and responded enquiries
+		Map<Integer, Enquiry> draftEnquiries = enquiryStudentService.getStudentDraftEnquiries(student.getStudentID());
+		Map<Integer, Enquiry> submittedEnquiries = enquiryStudentService.getStudentDraftEnquiries(student.getStudentID());
+		Map<Integer, Enquiry> respondedEnquiries = enquiryStudentService.getStudentDraftEnquiries(student.getStudentID());
+
+		// Display draft enquiries
+		System.out.println("Draft Enquiries:");
+		view.displayEnquiries(draftEnquiries);
+
+		// Display submitted enquiries
+		System.out.println("\nSubmitted Enquiries:");
+		view.displayEnquiries(submittedEnquiries);
+
+		// Display responded enquiries
+		System.out.println("\nResponded Enquiries:");
+		view.displayEnquiries(respondedEnquiries);
+	}
+
+	/**
+	 * Handles the editing of draft enquiries.
+	 *
+	 * @return {@code true} if editing is successful, {@code false} otherwise.
+	 */
+	public boolean editEnquiry() {
+		Student student = (Student) AuthStore.getCurrentUser();
+		
+
+		// Get Data
+		Map<Integer, Enquiry> draftEnquiries = enquiryStudentService.getStudentDraftEnquiries(student.getStudentID());
+
+		// Check if there are draft enquiries to edit
+		if (draftEnquiries.isEmpty()) {
+			System.out.println("You have no draft enquiries to edit.");
+			return false;
+		}
+
+		// Get User input
+		Enquiry selectedEnquiry = InputSelectionUtility.enquirySelector(draftEnquiries);
+
+		if (selectedEnquiry != null) {
+			String newMessage = InputSelectionUtility.getStringInput("Enter the new enquiry message: ");
+
+			// Prompt the user whether they'd like the enquiry to be saved as draft (1: Yes, 2: No)
+			int draftChoice = InputSelectionUtility.getIntInput("Do you want to save the enquiry as a draft? (1: Yes, 2: No): ");
+			boolean isDraft = (draftChoice == 1);
+
+			// Edit the selected draft enquiry using EnquiryStudentService
+			return enquiryStudentService.editDraftEnquiry(selectedEnquiry.getEnquiryID(), student.getStudentID(), newMessage, isDraft);
+		}
+		return false;
+	}
+
+	public void deleteEnquiry() {
+		Student student = (Student) AuthStore.getCurrentUser();
+
+		// Get Data
+		Map<Integer, Enquiry> draftEnquiries = enquiryStudentService.getStudentDraftEnquiries(student.getStudentID());
+
+		// Check if there are draft enquiries to delete
+		if (draftEnquiries.isEmpty()) {
+			System.out.println("You have no draft enquiries to delete.");
+			return;
+		}
+
+		// Get User input
+		Enquiry selectedEnquiry = InputSelectionUtility.enquirySelector(draftEnquiries);
+
+		if (selectedEnquiry != null) {
+			// Confirm deletion
+			int confirmChoice = InputSelectionUtility.getIntInput("Are you sure you want to delete this enquiry? (1: Yes, 2: No): ");
+			if (confirmChoice == 1) {
+				// Delete the selected draft enquiry using EnquiryStudentService
+				boolean deleted = enquiryStudentService.deleteDraftEnquiry(selectedEnquiry.getEnquiryID(), student.getStudentID());
+				if (deleted) {
+					System.out.println("Enquiry deleted successfully.");
+				} else {
+					System.out.println("Failed to delete the enquiry. Please try again.");
+				}
+			} else {
+				System.out.println("Enquiry deletion canceled.");
+			}
+		}
+	}
+
 }
 

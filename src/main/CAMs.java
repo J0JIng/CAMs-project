@@ -2,6 +2,7 @@ package main;
 
 
 import controllers.AuthController;
+import controllers.CampCommitteeController;
 import controllers.StudentController;
 import controllers.StaffController;
 import models.User;
@@ -47,8 +48,12 @@ public class CAMs {
 				// Start session
 				User user = AuthStore.getCurrentUser();
 				switch (user.getUserRole()) {
-					case STUDENT: case COMMITTEE:
+					case STUDENT:
 						new StudentController().start();
+						break;
+
+					case COMMITTEE:
+						new CampCommitteeController().start();
 						break;
 
 					case STAFF:

@@ -1,3 +1,4 @@
+
 package services;
 
 import java.util.Map;
@@ -11,11 +12,11 @@ import enums.UserRole;
  * The AuthStudentService class extends AuthService and
  * provides the login functionality for students.
  */
-public class AuthStudentService extends AuthService {
+public class AuthCampCommitteeService extends AuthService {
     /**
      * Constructs an instance of the AuthStudentService class.
      */
-    public AuthStudentService() {
+    public AuthCampCommitteeService() {
     };
 
     @Override
@@ -34,7 +35,7 @@ public class AuthStudentService extends AuthService {
         if (authenticate(student, password) == false)
             return false;
 
-        if(student.getUserRole()!=UserRole.STUDENT){
+        if(student.getUserRole()!=UserRole.COMMITTEE){
             return false;
         }
 

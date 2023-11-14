@@ -13,12 +13,17 @@ import java.util.Objects;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
+import enums.MessageStatus;
 import enums.UserRole;
 import models.Camp;
 import models.CampInformation;
+import models.Enquiry;
 import models.Student;
+import models.Suggestion;
 import models.Staff;
 import services.CampStaffService;
+import services.EnquiryResponderService;
+import services.SuggestionResponderService;
 import stores.AuthStore;
 import stores.DataStore;
 import utility.InputSelectionUtility;
@@ -29,6 +34,8 @@ public class StaffController extends UserController {
 
     private final Scanner scanner = new Scanner(System.in);
     private final CampStaffService campStaffService = new CampStaffService();
+    private final EnquiryResponderService enquiryStaffService = new EnquiryResponderService();
+    private final SuggestionResponderService suggestionStaffService = new SuggestionResponderService();
     private final StaffView view = new StaffView();
 
     public StaffController() {
@@ -72,24 +79,25 @@ public class StaffController extends UserController {
                     viewStudentList();
                     break;
                 case 9:
-                	//controller.campStaffService.viewEnquiriesForCamp(); 
+                	viewEnquiriesForCamp(); 
                 	break;
                 case 10:
-                	//controller.campStaffService.respondToEnquiry(); 
+                	respondToEnquiry(); 
                 	break;
                 case 11:
-                    // suggestion view
+                    viewSuggestionForCamp();
                 	break;
                 case 12:
-                    // suggestion respond
+                    respondToSuggestion();
                 	break;
                 case 13:
-                    // report generate camp 
+                    // Generate camp Report with filters 
                 	break;
                 case 14:
-                    // performance report Camp committee
+                    // Camp enquiry report
                 	break;
                 case 15:
+
                 	break;
                 case 16:
                 	// Change password
@@ -223,7 +231,7 @@ public class StaffController extends UserController {
     /**
      * Shows the list of camps using user specified filter
      */
-	public void viewAllCampsWithFilters() {
+	protected void viewAllCampsWithFilters() {
 		
 		// Various filters for camps
     	String filterBy = null; 		// Type of filter
@@ -296,5 +304,75 @@ public class StaffController extends UserController {
     	System.out.println("(Press Enter to return)");
     	scanner.nextLine();
 	}
+
+	protected void viewEnquiriesForCamp() {
+		// Get list of Staff created camps
+        Staff staff = (Staff) AuthStore.getCurrentUser();
+		List<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
+		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
+		Map<Integer, Enquiry> campEnquiries = enquiryStaffService.getAllEnquiriesForCamp(camp);
+		view.displayEnquiries(campEnquiries);
+	}
+
+	protected void respondToEnquiry() {
+        Staff staff = (Staff) AuthStore.getCurrentUser();
+		// Get list of Staff created camps
+		List<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
+		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
+
+		// Get enquiries for the selected camp
+		Map<Integer, Enquiry> campEnquiries = enquiryStaffService.getAllEnquiriesForCamp(camp);
+		// Check if there are draft enquiries to edit
+		if (campEnquiries.isEmpty()) {
+			System.out.println("You have no student enquiries to reply to.");
+			return;
+		}
+
+		// Get User input
+		Enquiry selectedEnquiry = InputSelectionUtility.enquirySelector(campEnquiries);
+		String response = InputSelectionUtility.getStringInput("Enter response: ");
+
+		// Respond using EnquiryStudentService
+		boolean success = enquiryStaffService.respondToEnquiry(selectedEnquiry.getEnquiryID(), staff.getStaffID(), MessageStatus.ACCEPTED, response);
+        System.out.println(success? "Suggestion responded successfully" :"Error responding to suggestion ");
+    }
+
+    protected void viewSuggestionForCamp() {
+		// Get list of Staff created camps
+        Staff staff = (Staff) AuthStore.getCurrentUser();
+		List<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
+        // Display all the camps with suggestion @ToImplement 
+		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
+		Map<Integer, Suggestion> campSuggestion = suggestionStaffService.getAllSuggestionsForCamp(camp);
+		view.displaySuggestions(campSuggestion);
+	}
+
+    public void respondToSuggestion() {
+        Staff staff = (Staff) AuthStore.getCurrentUser();
+		// Get list of Staff created camps
+		List<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
+		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
+
+		// Get Suggestion for the selected camp
+		Map<Integer, Suggestion> campSuggestions = suggestionStaffService.getAllSuggestionsForCamp(camp);
+		// Check if there are draft suggestions to respond
+		if (campSuggestions.isEmpty()) {
+			System.out.println("You have no suggestions to review.");
+			return;
+		}
+
+		// Get User input
+		Suggestion selectedSuggestion = InputSelectionUtility.suggestionSelector(campSuggestions);
+		int reviewOption = InputSelectionUtility.getIntInput("Do you want to accept this suggestion? (1: Yes, 2: No): ");
+		boolean suggestionStatus = (reviewOption == 1);
+		Map<String, Student> students = DataStore.getStudentData();
+		Student sender = students.get(selectedSuggestion.getSenderID());
+		if (suggestionStatus){sender.incrementStudentPoints();}
+
+		// Respond using EnquiryStudentService
+        boolean success = suggestionStaffService.reviewSuggestion(selectedSuggestion.getSuggestionID(), suggestionStatus);
+		System.out.println(success? "Suggestion responded successfully" :"Error responding to suggestion ");
+	}
+
     
 }

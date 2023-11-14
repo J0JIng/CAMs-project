@@ -27,9 +27,7 @@ import utility.InputSelectionUtility;
 
 public class CampStaffService implements ICampStaffService {
 	private static final int MAX_COMMITTEE_SLOTS = 10; 
-	Scanner scanner = new Scanner(System.in);
-	StaffView view = new StaffView();
-
+	
 	// ---------- Helper Function ---------- //
 
 	/**

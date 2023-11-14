@@ -9,17 +9,7 @@ import models.Suggestion;
 
 public interface IRequestStaffService {
 
-    /**
-     * Retrieves a list of all enquiries related to camps.
-     * 
-     * This method returns a list containing all the enquiries submitted by students
-     * for various camps. Each element in the list represents an {@link Enquiry} object.
-     * The list may be empty if there are no enquiries recorded.
-     * 
-     * @return a {@link List} of {@link Enquiry} objects representing all camp enquiries
-     *
-     */
-    public List<Enquiry> getAllCampEnquiry();
+   
 
     /**
      * Retrieves a list of all suggestions related to camps.
