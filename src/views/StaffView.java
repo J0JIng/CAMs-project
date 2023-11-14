@@ -162,11 +162,11 @@ public class StaffView implements IMenuView {
 	public void viewFliterOption() {
     	// Print the filtered and sorted camps
 		System.out.println("╔══════════════════════════════════════════════════════════╗");
-		System.out.println("║      				Filter Options:						 ║");
+		ViewUtility.displayInMenuCentered(" - Filter Options - ");
 		System.out.println("╠══════════════════════════════════════════════════════════╣");
-    	System.out.println("║   1. Filter by Date										 ║");
-    	System.out.println("║   2. Filter by Location								     ║");	
-    	System.out.println("║   3. Sort by Name (Alphabetical Order)					 ║");
+    	System.out.println("║[1] Filter by Date							    		   ║");
+    	System.out.println("║[2] Filter by Location						    		   ║");	
+    	System.out.println("║[3] Sort by Name (Alphabetical Order)		    		   ║");
 		System.out.println("╚══════════════════════════════════════════════════════════╝");
 	}
 
@@ -187,30 +187,44 @@ public class StaffView implements IMenuView {
 			System.out.println("No enquiries to display.");
 			return;
 		}
+		System.out.println("╔══════════════════════════════════════════════════════════╗");
+		ViewUtility.displayInMenuCentered(" - Enquiries - ");
+		System.out.println("╠══════════════════════════════════════════════════════════╣");
 		for (Enquiry enquiry : enquiries.values()) {
-			System.out.println("Enquiry ID: " + enquiry.getEnquiryID());
-			System.out.println("Camp Name: " + enquiry.getCampName());
-			System.out.println("Message: " + enquiry.getEnquiryMessage());
-			System.out.println("Status: " + enquiry.getEnquiryStatus());
-			System.out.println("Response: " + enquiry.getEnquiryResponse());
-			System.out.println("Responder ID: " + enquiry.getResponderID());
-			System.out.println("------");
+			ViewUtility.displayInMenuBullet("Camp Name: " + enquiry.getCampName());
+			ViewUtility.displayInMenuBullet("Message: " + enquiry.getEnquiryMessage());
+			ViewUtility.displayInMenuBullet("Status: " + enquiry.getEnquiryStatus());
+			ViewUtility.displayInMenuBullet("Response: " + enquiry.getEnquiryResponse());
+			ViewUtility.displayInMenuBullet("Responder ID: " + enquiry.getResponderID());
+			System.out.println("╠══════════════════════════════════════════════════════════╣");
 		}
+		System.out.println("╚══════════════════════════════════════════════════════════╝");
 	}
 
 	public void displaySuggestions(Map<Integer, Suggestion> suggestions) {
-    if (suggestions.isEmpty()) {
-        System.out.println("No suggestions to display.");
-        return;
-    }
-    for (Suggestion suggestion : suggestions.values()) {
-        System.out.println("Suggestion ID: " + suggestion.getSuggestionID());
-        System.out.println("Camp Name: " + suggestion.getCampName());
-        System.out.println("Message: " + suggestion.getSuggestionMessage());
-        System.out.println("Status: " + suggestion.getSuggestionStatus());
-        System.out.println("------");
-    }
-}
+	    if (suggestions.isEmpty()) {
+	        System.out.println("No suggestions to display.");
+	        return;
+	    }
+	    System.out.println("╔════════════════════════════════════════════════════════════════════════════════════════════╗");
+        System.out.println("║                                                                                            ║"); 
+	    System.out.println("║ ███████╗██╗   ██╗ ██████╗  ██████╗ ███████╗███████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗ ║");
+	    System.out.println("║ ██╔════╝██║   ██║██╔════╝ ██╔════╝ ██╔════╝██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║██╔════╝ ║");
+	    System.out.println("║ ██████╗ ██║   ██║██║  ███╗██║  ███╗█████╗  ███████╗   ██║   ██║██║   ██║██╔██╗ ██║███████╗ ║");
+	    System.out.println("║ ╚════██║██║   ██║██║   ██║██║   ██║██╔══╝  ╚════██║   ██║   ██║██║   ██║██║╚██╗██║╚════██║ ║");
+	    System.out.println("║ ███████║╚██████╔╝╚██████╔╝╚██████╔╝███████╗███████║   ██║   ██║╚██████╔╝██║ ╚████║███████║ ║");
+	    System.out.println("║ ╚══════╝ ╚═════╝  ╚═════╝  ╚═════╝ ╚══════╝╚══════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝ ║");
+        System.out.println("║                                                                                            ║"); 
+		System.out.println("╚════════════════════════════════════════════════════════════════════════════════════════════╝");
+		for (Suggestion suggestion : suggestions.values()) {
+	        ViewUtility.displayInMenuBulletLarge("Suggestion ID: " + suggestion.getSuggestionID());
+	        ViewUtility.displayInMenuBulletLarge("Camp Name: " + suggestion.getCampName());
+	        ViewUtility.displayInMenuBulletLarge("Message: " + suggestion.getSuggestionMessage());
+	        ViewUtility.displayInMenuBulletLarge("Status: " + suggestion.getSuggestionStatus());
+	        System.out.println("╠════════════════════════════════════════════════════════════════════════════════════════════╣");
+	    }
+	    System.out.println("╚════════════════════════════════════════════════════════════════════════════════════════════╝");
+	}
 
 	
 }

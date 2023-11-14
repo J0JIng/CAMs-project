@@ -41,7 +41,7 @@ public class CampCommitteeController extends StudentController {
     public void start() {
         Student student = (Student) AuthStore.getCurrentUser();
         while (true) {
-            view.displayMenuView();
+            view.displayCampComitteeMenuView();
 
             // Checks for invalid inputs
             while (!scanner.hasNextInt()) {
@@ -191,21 +191,8 @@ public class CampCommitteeController extends StudentController {
 		Map<Integer, Suggestion> acceptedSuggestions = suggestionCampComitteeService.viewAcceptedSuggestion(student.getStudentID());
 		Map<Integer, Suggestion> rejectedSuggestions = suggestionCampComitteeService.viewRejectedSuggestion(student.getStudentID());
 
-		// Display draft Suggestions
-		System.out.println("Draft Suggestions:");
-		view.displaySuggestion(draftSuggestions);
-
-		// Display submitted Suggestions
-		System.out.println("\nSubmitted Suggestions:");
-		view.displaySuggestion(submittedSuggestions);
-
-		// Display accepted Suggestions
-		System.out.println("\nAccepted Suggestions:");
-		view.displaySuggestion(acceptedSuggestions);
-
-		// Display rejected Suggestions
-		System.out.println("\nRejected Suggestions:");
-		view.displaySuggestion(rejectedSuggestions);
+		// Display Suggestions
+		view.displaySuggestions(draftSuggestions, submittedSuggestions, acceptedSuggestions, rejectedSuggestions);
 	}
 
 	protected boolean editSuggestion() {
