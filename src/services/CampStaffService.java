@@ -6,66 +6,35 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-<<<<<<< HEAD
 import java.util.HashMap;
-=======
->>>>>>> hq
 import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-import enums.MessageStatus;
->>>>>>> hq
-=======
->>>>>>> parent of b566f67 (Resolve merge conflicts from hq branch)
-=======
->>>>>>> parent of b566f67 (Resolve merge conflicts from hq branch)
 import interfaces.ICampStaffService;
 
 import enums.UserRole;
 import enums.FacultyGroups;
-<<<<<<< HEAD
 import models.Camp;
 import models.Staff;
 import models.Student;
 import stores.AuthStore;
 import stores.DataStore;
 import views.StaffView;
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-import services.*;
-import models.*;
-import stores.AuthStore;
-import stores.DataStore;
->>>>>>> hq
-=======
->>>>>>> parent of b566f67 (Resolve merge conflicts from hq branch)
-=======
->>>>>>> parent of b566f67 (Resolve merge conflicts from hq branch)
 
 import utility.InputSelectionUtility;
 
 public class CampStaffService implements ICampStaffService {
-<<<<<<< HEAD
 	private static final int MAX_COMMITTEE_SLOTS = 10; 
 	Scanner scanner = new Scanner(System.in);
 	StaffView view = new StaffView();
-=======
-	Scanner scanner = new Scanner(System.in);
->>>>>>> hq
 
 	// ---------- Helper Function ---------- //
 
 	/**
      * Toggles the visibility of the specified camp to "on" or "off".
      *
-<<<<<<< HEAD
      * @param camp the {@link Camp} object to update
      */
 	public void toggleCampVisibility(Camp camp){
