@@ -243,7 +243,7 @@ public class InputSelectionUtility {
         // Validate and get the faculty User Group
         FacultyGroups faculty;
         do {
-            String campUserGroup = getStringInput("Enter user group:");
+            String campUserGroup = getStringInput("Enter user group: ");
             faculty = validateFacultyGroup(campUserGroup);
     
             if (faculty == null) {

@@ -342,6 +342,7 @@ public class StaffController extends UserController {
         Staff staff = (Staff) AuthStore.getCurrentUser();
 		List<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
         // Display all the camps with suggestion @ToImplement 
+		view.viewCamps(staffCreatedCamps, " - Choose Camp to view Suggestions - ");
 		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
 		Map<Integer, Suggestion> campSuggestion = suggestionStaffService.getAllSuggestionsForCamp(camp);
 		view.displaySuggestions(campSuggestion);
@@ -351,6 +352,7 @@ public class StaffController extends UserController {
         Staff staff = (Staff) AuthStore.getCurrentUser();
 		// Get list of Staff created camps
 		List<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
+		view.viewCamps(staffCreatedCamps, " - Choose Camp to Respond to Suggestions - ");
 		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
 
 		// Get Suggestion for the selected camp
