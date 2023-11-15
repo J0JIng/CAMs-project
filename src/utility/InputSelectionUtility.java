@@ -198,7 +198,13 @@ public class InputSelectionUtility {
         String campName = getUniqueCampName(allCamps);
     
         // get the registration closing date
-        Date campRegistrationClosingDate = getDateInput("Enter camp registration closing date (dd/MM/yyyy): ", dateFormat);
+        Date campRegistrationClosingDate;
+        do {
+            campRegistrationClosingDate = getDateInput("Enter camp registration closing date (dd/MM/yyyy ", dateFormat);
+            if (campRegistrationClosingDate.before(new Date())) {
+                System.out.println("Camp registration closing date must be in the present. Please enter a valid date.");
+            }
+        } while (campRegistrationClosingDate.before(new Date()));
     
         // Validate and get the camp start date
         Date campStartDate;

@@ -125,6 +125,10 @@ public class StaffController extends UserController {
         Staff staff = (Staff) AuthStore.getCurrentUser();
         List<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
         view.viewCamps(staffCreatedCamps, " - Choose Camp to Toggle Visibility - ");
+        if(staffCreatedCamps.isEmpty()){
+            scanner.nextLine();
+            return;
+        }
         Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
         view.viewToggleOption(camp);
         campStaffService.toggleCampVisibility(camp);
@@ -157,6 +161,7 @@ public class StaffController extends UserController {
         ArrayList<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
         viewCreatedCamps();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        
         Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
         if (camp != null) {
 			view.editCampView();
@@ -183,6 +188,7 @@ public class StaffController extends UserController {
      * Shows the list of all camps
      */
     protected void viewAllCamps() {
+        scanner.nextLine();
         while (true) {
             view.viewCamps(campStaffService.getAllCamps(), " - List of Camps - ");
             Camp selectedCamp = InputSelectionUtility.campSelector(campStaffService.getAllCamps());
@@ -199,6 +205,7 @@ public class StaffController extends UserController {
      * Shows the list of camps created
      */
     protected void viewCreatedCamps() {
+        scanner.nextLine();
         Staff staff = (Staff) AuthStore.getCurrentUser();
         view.viewCamps(campStaffService.getStaffCreatedCamps(staff),
                 " - Camps Created by " + AuthStore.getCurrentUser().getName() + " - ");
@@ -210,6 +217,7 @@ public class StaffController extends UserController {
      * Shows the list of Students
      */
     protected void viewStudentList() {
+        scanner.nextLine();
         while (true) {
             view.viewCamps(campStaffService.getAllCamps(), " - Choose Camp to view Student list - ");
             Camp selectedCamp = InputSelectionUtility.campSelector(campStaffService.getAllCamps());
@@ -232,7 +240,7 @@ public class StaffController extends UserController {
      * Shows the list of camps using user specified filter
      */
 	protected void viewAllCampsWithFilters() {
-		
+		scanner.nextLine();
 		// Various filters for camps
     	String filterBy = null; 		// Type of filter
     	Date filterDate = null;			// Filter date
@@ -307,6 +315,7 @@ public class StaffController extends UserController {
 
 	protected void viewEnquiriesForCamp() {
 		// Get list of Staff created camps
+        scanner.nextLine();
         Staff staff = (Staff) AuthStore.getCurrentUser();
 		List<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
 		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
@@ -339,6 +348,7 @@ public class StaffController extends UserController {
 
     protected void viewSuggestionForCamp() {
 		// Get list of Staff created camps
+        scanner.nextLine();
         Staff staff = (Staff) AuthStore.getCurrentUser();
 		List<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
         // Display all the camps with suggestion @ToImplement 
