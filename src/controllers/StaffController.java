@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import enums.MessageStatus;
 import enums.UserRole;
@@ -24,6 +25,7 @@ import models.Staff;
 import services.CampStaffService;
 import services.EnquiryResponderService;
 import services.SuggestionResponderService;
+import services.ReportStaffService;
 import stores.AuthStore;
 import stores.DataStore;
 import utility.InputSelectionUtility;
@@ -36,6 +38,7 @@ public class StaffController extends UserController {
     private final CampStaffService campStaffService = new CampStaffService();
     private final EnquiryResponderService enquiryStaffService = new EnquiryResponderService();
     private final SuggestionResponderService suggestionStaffService = new SuggestionResponderService();
+    private final ReportStaffService reportStaffService = new ReportStaffService();
     private final StaffView view = new StaffView();
 
     public StaffController() {
@@ -91,10 +94,10 @@ public class StaffController extends UserController {
                     respondToSuggestion();
                 	break;
                 case 13:
-                    // Generate camp Report with filters 
+                    generateReport();
                 	break;
                 case 14:
-                    // Camp enquiry report
+                    generatePerformanceReport();
                 	break;
                 case 15:
 
@@ -358,7 +361,8 @@ public class StaffController extends UserController {
 		view.displaySuggestions(campSuggestion);
 	}
 
-    public void respondToSuggestion() {
+  
+    protected void respondToSuggestion() {
         Staff staff = (Staff) AuthStore.getCurrentUser();
 		// Get list of Staff created camps
 		List<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
@@ -386,5 +390,70 @@ public class StaffController extends UserController {
 		System.out.println(success? "Suggestion responded successfully" :"Error responding to suggestion ");
 	}
 
+
+    // Generate report by filter
+
+    protected void generateReport(){
+
+    }
+
+    // Generate performance report
+
+    protected void generatePerformanceReport() {
+        scanner.nextLine();
+        Staff staff = (Staff) AuthStore.getCurrentUser();
+        List<Camp> allCreatedCamps = campStaffService.getAllCamps();
+        List<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
+        List<String> filters;
+    
+        System.out.println("--- Camp Report ---");
+        System.out.println("1. Generate Reports For ALL Camps ");
+        System.out.println("2. Generate Reports For Staff Camps");
+        System.out.println("3. Generate Report For Selected Camp ");
+    
+        int option = 0;
+        boolean success;
+        do {
+            option = InputSelectionUtility.getIntInput("Enter the filter option (1/2/3, 0 to exit): ");
+            switch (option) {
+                case 1:
+                    // get the filters
+                    filters = InputSelectionUtility.getFilterInput();
+                    success = reportStaffService.generateReport(filters, allCreatedCamps);
+                    break;
+    
+                case 2:
+                    // get the filters
+                    filters = InputSelectionUtility.getFilterInput();
+                    success = reportStaffService.generateReport(filters, staffCreatedCamps);
+                    break;
+    
+                case 3:
+                    // Show ALL camps to select from
+                    viewCreatedCamps();
+                    Camp camp = InputSelectionUtility.campSelector(allCreatedCamps);
+                    if (camp == null) {
+                        System.out.println("Invalid camp selection.");
+                        success = false;
+                    } else {
+                        filters = InputSelectionUtility.getFilterInput();
+                        ArrayList<Student> combinedStudentList = Stream.concat(
+                                                    campStaffService.getCampAttendeeList(camp).stream(),
+                                                    campStaffService.getCampCommitteeList(camp).stream())
+                                                    .collect(Collectors.toCollection(ArrayList::new));
+                        success = reportStaffService.generateReport(filters,combinedStudentList,camp);
+                    }
+                    break;
+    
+                default:
+                    System.out.println("Invalid option.");
+                    success = false;
+                    break;
+            }
+        } while (option != 0 && option <= 3);
+    
+        System.out.println(success ? "Report generated successfully" : "Error generating report ");
+    }
+    
     
 }

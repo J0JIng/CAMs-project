@@ -6,10 +6,13 @@ import java.text.SimpleDateFormat;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
+import java.util.Set;
 
 import enums.FacultyGroups;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 
 import models.Staff;
 import models.Suggestion;
@@ -441,4 +444,54 @@ public class InputSelectionUtility {
             }
         }
     }
+
+    public static List<String> getFilterInput() {
+        Set<String> selectedFilters = new HashSet<>(); // Use a Set to automatically handle duplicates
+
+        System.out.println("--- Filters ---");
+        System.out.println("1. No Filter ");
+        System.out.println("2. Attendee ");
+        System.out.println("3. Camp Committee ");
+        System.out.println("4. Location ");
+        System.out.println("5. Date of Camp ");
+
+        int option = 0;
+        do {
+            option = InputSelectionUtility.getIntInput("Enter the filter option (1/2/3/4/5, 0 to finish): ");
+            switch (option) {
+                case 1:
+                    selectedFilters.clear(); // Clear the set for "No Filter"
+                    selectedFilters.add("No Filter");
+                    break;
+                case 2:
+                    selectedFilters.add("Attendee");
+                    break;
+                case 3:
+                    selectedFilters.add("Camp Committee");
+                    break;
+                case 4:
+                    selectedFilters.add("Location");
+                    break;
+                case 5:
+                    selectedFilters.add("Date");
+                    break;
+                case 0:
+                    // User chose to finish entering filters
+                    break;
+                default:
+                    System.out.println("Invalid option. Please enter a valid filter option.");
+            }
+
+            // Print selected filters after each choice
+            if (option != 0) {
+                System.out.println("Selected Filters: " + selectedFilters);
+            }
+
+        } while (option != 0);
+
+        return new ArrayList<>(selectedFilters);
+    }
+
+
+    
 }

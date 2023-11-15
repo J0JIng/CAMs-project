@@ -110,6 +110,7 @@ public class StudentController extends UserController {
 
 	protected void registerCamp() {
 		// Get the current student
+		scanner.nextLine();
 		Student student = (Student) AuthStore.getCurrentUser();
 		// Get the current date
 		Date currentDate = new Date();
@@ -197,7 +198,7 @@ public class StudentController extends UserController {
 
 
 	protected boolean registerAsCommittee(){
-
+		scanner.nextLine();
 		Student student = (Student) AuthStore.getCurrentUser();
 		Date currentDate = new Date();
 
@@ -263,8 +264,12 @@ public class StudentController extends UserController {
      * Shows all no. of remaining slots for all the camps.
      */
     protected void viewRemainingSlots() {
-    	view.viewCampsSlots(campStudentService.getAllCamps());
-    	scanner.nextLine();
+		scanner.nextLine();
+		String userInput;
+        do {
+            view.viewCampsSlots(campStudentService.getAllCamps());
+            userInput = scanner.nextLine().trim();
+        } while (!userInput.isEmpty());
     }
 	
 	/**

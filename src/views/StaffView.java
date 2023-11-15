@@ -16,7 +16,7 @@ public class StaffView implements IMenuView {
 
 	@Override
 	public void displayMenuView() {
-		ViewUtility.clearScreen();
+		//ViewUtility.clearScreen();
 
 		System.out.println("╔══════════════════════════════════════════════════════════╗");
         System.out.println("║                                                          ║");   
