@@ -380,6 +380,7 @@ public class StudentController extends UserController {
         
         //Get Data
         List<Camp> availableCamps = campStudentService.getRegisteredCamps();
+        view.viewCamps(availableCamps, " - Choose a camp to submit enquiry - ");
 
 		// Get User input
 		Camp selectedCamp = InputSelectionUtility.campSelector(availableCamps);

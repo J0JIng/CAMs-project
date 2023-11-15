@@ -32,23 +32,23 @@ public class StaffView implements IMenuView {
         System.out.println("╠══════════════════════════════════════════════════════════╣");
         ViewUtility.displayInMenuCentered("Welcome " + AuthStore.getCurrentUser().getName());
         System.out.println("╠══════════════════════════════════════════════════════════╣");
-        System.out.println("║[1]  Create Camp                                          ║");
-        System.out.println("║[2]  Delete Camp                                          ║");
-        System.out.println("║[3]  Edit Camp                                            ║");
-        System.out.println("║[4]  Set Camp Visibility                                  ║");
-        System.out.println("║[5]  View All Camps                                       ║");
-        System.out.println("║[6]  View Camps with Filters                              ║");
-        System.out.println("║[7]  View Created Camps                                   ║");
-        System.out.println("║[8]  View Student List                                    ║");
-        System.out.println("║[9]  View Enquiries for Camp                              ║");
-        System.out.println("║[10] Respond to Enquiries to Camp                         ║");
-        System.out.println("║[11] View Suggestions                                     ║");
-        System.out.println("║[12] Respond to Suggestions                               ║");
-        System.out.println("║[13] Generate Camp Report                                 ║");
-        System.out.println("║[14] Generate Camp Committee Performance Report           ║");
-        System.out.println("║[15] Generate Camp Student's Enquiry Report               ║");
-        System.out.println("║[16] Change Password                                      ║");
-        System.out.println("║[17] Logout                                               ║");
+        ViewUtility.displayInMenuNumbered("Create Camp", 1);
+        ViewUtility.displayInMenuNumbered("Delete Camp", 2);
+        ViewUtility.displayInMenuNumbered("Edit Camp", 3);
+        ViewUtility.displayInMenuNumbered("Set Camp Visibility", 4);
+        ViewUtility.displayInMenuNumbered("View All Camps", 5);
+        ViewUtility.displayInMenuNumbered("View Camps with Filters", 6);
+        ViewUtility.displayInMenuNumbered("View Created Camps", 7);
+        ViewUtility.displayInMenuNumbered("View Student List", 8);
+        ViewUtility.displayInMenuNumbered("View Enquiries for Camp", 9);
+        ViewUtility.displayInMenuNumbered("Respond to Enquiries to Camp", 10);
+        ViewUtility.displayInMenuNumbered("View Suggestions", 11);
+        ViewUtility.displayInMenuNumbered("Respond to Suggestions", 12);
+        ViewUtility.displayInMenuNumbered("Generate Camp Report", 13);
+        ViewUtility.displayInMenuNumbered("Generate Camp Committee Performance Report", 14);
+        ViewUtility.displayInMenuNumbered("Generate Camp Student's Enquiry Report", 15);
+        ViewUtility.displayInMenuNumbered("Change Password", 16);
+        ViewUtility.displayInMenuNumbered("Logout", 17);
         System.out.println("╚══════════════════════════════════════════════════════════╝");
         System.out.print("Select an option: ");
 	}
@@ -57,8 +57,8 @@ public class StaffView implements IMenuView {
 		System.out.println("╔══════════════════════════════════════════════════════════╗");
 		System.out.println("║                   - Choose List Type -                   ║");
         System.out.println("╠══════════════════════════════════════════════════════════╣");
-        System.out.println("║[1] Registered Students                                   ║");
-        System.out.println("║[2] Committe Members                                      ║");
+        ViewUtility.displayInMenuNumbered("Registered Students", 1);
+        ViewUtility.displayInMenuNumbered("Committee Members", 2);
         System.out.println("╚══════════════════════════════════════════════════════════╝");
         System.out.print("Select an option: ");
 	}
@@ -67,16 +67,16 @@ public class StaffView implements IMenuView {
 		System.out.println("╔══════════════════════════════════════════════════════════╗");
 		System.out.println("║                 Select a field to update:                ║");
         System.out.println("╠══════════════════════════════════════════════════════════╣");
-        System.out.println("║[1] Camp Name                                             ║");
-        System.out.println("║[2] Camp Start Date                                       ║");
-        System.out.println("║[3] Camp End Date                                         ║");
-        System.out.println("║[4] Camp Registration Closing Date                        ║");
-        System.out.println("║[5] Camp Location                                         ║");
-        System.out.println("║[6] Camp Total Slots                                      ║");
-        System.out.println("║[7] Camp Camp Committee Slots                             ║");
-        System.out.println("║[8] Description                                           ║");
-        System.out.println("║[9] User Group                                            ║");
-		System.out.println("║[10] Exit User                                            ║");
+        ViewUtility.displayInMenuNumbered("Camp Name", 1);
+        ViewUtility.displayInMenuNumbered("Camp Start Date", 2);
+        ViewUtility.displayInMenuNumbered("Camp End Date", 3);
+        ViewUtility.displayInMenuNumbered("Camp Registration Closing Date", 4);
+        ViewUtility.displayInMenuNumbered("Camp Location", 5);
+        ViewUtility.displayInMenuNumbered("Camp Total Slots", 6);
+        ViewUtility.displayInMenuNumbered("Camp Committee Slots", 7);
+        ViewUtility.displayInMenuNumbered("Description", 8);
+        ViewUtility.displayInMenuNumbered("User Group", 9);
+        ViewUtility.displayInMenuNumbered("Exit User", 10);
         System.out.println("╚══════════════════════════════════════════════════════════╝");
 	}
 	
@@ -102,6 +102,7 @@ public class StaffView implements IMenuView {
     	    }
         }
         System.out.println("╚══════════════════════════════════════════════════════════╝");
+        System.out.println("(Press Enter to return) ");
 	}
 	
 	/**
@@ -164,9 +165,9 @@ public class StaffView implements IMenuView {
 		System.out.println("╔══════════════════════════════════════════════════════════╗");
 		ViewUtility.displayInMenuCentered(" - Filter Options - ");
 		System.out.println("╠══════════════════════════════════════════════════════════╣");
-    	System.out.println("║[1] Filter by Date                                        ║");
-    	System.out.println("║[2] Filter by Location                                    ║");	
-    	System.out.println("║[3] Sort by Name (Alphabetical Order)                     ║");
+    	ViewUtility.displayInMenuNumbered("Filter by Date", 1);
+    	ViewUtility.displayInMenuNumbered("Filter by Location", 2);
+    	ViewUtility.displayInMenuNumbered("Sort by Name (Alphabetical Order)", 3);
 		System.out.println("╚══════════════════════════════════════════════════════════╝");
 	}
 
@@ -233,6 +234,35 @@ public class StaffView implements IMenuView {
 		    }
         }
 	    System.out.println("╚════════════════════════════════════════════════════════════════════════════════════════════╝");
+	}
+
+	public void viewReportMenu() {
+		System.out.println("╔══════════════════════════════════════════════════════════╗");
+		System.out.println("║                                                          ║");
+		System.out.println("║██████╗ ███████╗██████╗  ██████╗ ██████╗ ████████╗███████╗║");
+		System.out.println("║██╔══██╗██╔════╝██╔══██╗██╔═══██╗██╔══██╗╚══██╔══╝██╔════╝║");
+		System.out.println("║██████╔╝█████╗  ██████╔╝██║   ██║██████╔╝   ██║   ███████╗║");
+		System.out.println("║██╔══██╗██╔══╝  ██╔═══╝ ██║   ██║██╔══██╗   ██║   ╚════██║║");
+		System.out.println("║██║  ██║███████╗██║     ╚██████╔╝██║  ██║   ██║   ███████║║");
+		System.out.println("║╚═╝  ╚═╝╚══════╝╚═╝      ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚══════╝║");
+        System.out.println("║                                                          ║");
+		System.out.println("╠══════════════════════════════════════════════════════════╣");
+        ViewUtility.displayInMenuNumbered("Generate Reports For ALL Camps", 1);
+        ViewUtility.displayInMenuNumbered("Generate Reports For Staff Camps", 2);
+        ViewUtility.displayInMenuNumbered("Generate Report For Selected Camp", 3);
+		System.out.println("╚══════════════════════════════════════════════════════════╝");
+	}
+
+	public void showFilterInput() {
+		System.out.println("╔══════════════════════════════════════════════════════════╗");
+		ViewUtility.displayInMenuCentered(" - Choose Filters - ");
+		System.out.println("╠══════════════════════════════════════════════════════════╣");
+		ViewUtility.displayInMenuNumbered("No Filter", 1);
+		ViewUtility.displayInMenuNumbered("Attendee", 2);
+		ViewUtility.displayInMenuNumbered("Camp Committee", 3);
+		ViewUtility.displayInMenuNumbered("Location", 4);
+		ViewUtility.displayInMenuNumbered("Date of Camp", 5);
+		System.out.println("╚══════════════════════════════════════════════════════════╝");
 	}
 
 	
