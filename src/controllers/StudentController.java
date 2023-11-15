@@ -253,8 +253,8 @@ public class StudentController extends UserController {
 		// Register the student for the selected camp
 		String campName = camp.getCampInformation().getCampName();
 		boolean success = campStudentService.registerAsCommittee(student, camp);
-		System.out.println(success ? "Camp committe registration for " + campName + " successful!" : 
-									 "Camp committe registration for " + campName + " unsuccessful!");
+		System.out.println(success ? "Camp committee registration for " + campName + " successful!, Please Relogin" : 
+									 "Camp committee registration for " + campName + " unsuccessful!");
 		AuthStore.getCurrentUser().setRole(UserRole.COMMITTEE);
 		return true;
 	}
@@ -276,6 +276,7 @@ public class StudentController extends UserController {
      * Shows all camps viewable by the student.
      */
     protected void viewAllCamps() {
+    	scanner.nextLine();
     	while (true) {
     		view.viewCamps(campStudentService.getAllCamps(), " - List of Camps - ");
     		Camp c = InputSelectionUtility.campSelector(campStudentService.getAllCamps());
@@ -292,7 +293,7 @@ public class StudentController extends UserController {
      * Shows the list of camps using user specified filter
      */
 	protected void viewAllCampsWithFilters() {
-		
+		scanner.nextLine();
 		// Various filters for camps
     	String filterBy = null; 		// Type of filter
     	Date filterDate = null;			// Filter date
@@ -331,7 +332,6 @@ public class StudentController extends UserController {
             	if (filterDate != null) {
                 	Date campDate = c.getCampInformation().getCampStartDate();
                 	if (campDate.equals(filterDate)) {
-                		System.out.println("Added " + c.getCampInformation().getCampName());
                     	filteredCamps.add(c);
                 	}
             	}
@@ -346,7 +346,7 @@ public class StudentController extends UserController {
     	if (filteredCamps.isEmpty()) {
         	System.out.println("No matching camps found.");
     	} else {
-    		System.out.println("Not empty");
+    		//System.out.println("Not empty");
     		// Displays the filtered list of camps
     		switch (option) {
 	    		case 1:
@@ -371,7 +371,7 @@ public class StudentController extends UserController {
 	protected void viewRegisteredCamps() {
 		List<Camp> list = campStudentService.getRegisteredCamps();
 		view.viewCamps(list, " - Camps registered by " + AuthStore.getCurrentUser().getName() + " - ");
-		System.out.print("(Press Enter to return) ");
+		System.out.println("(Press Enter to return) ");
 		scanner.nextLine();
 	}
 
@@ -421,6 +421,9 @@ public class StudentController extends UserController {
 		// Display responded enquiries
 		System.out.println("\nResponded Enquiries:");
 		view.displayEnquiries(respondedEnquiries);
+		
+		System.out.println("(Press Enter to Return)");
+		scanner.nextLine();
 	}
 
 	/**

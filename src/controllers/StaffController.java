@@ -185,10 +185,12 @@ public class StaffController extends UserController {
         List<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
 		view.viewCamps(staffCreatedCamps, " - Choose Camp to Delete - ");
 		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
-        String campName = camp.getCampInformation().getCampName();
-        
-        boolean success = campStaffService.deleteCamp(camp);
-        System.out.println(success? "Deleted "+campName+" successfully" :"Error deleting " +campName);
+		if (camp != null) {
+	        String campName = camp.getCampInformation().getCampName();
+	        
+	        boolean success = campStaffService.deleteCamp(camp);
+	        System.out.println(success? "Deleted "+campName+" successfully" :"Error deleting " +campName);
+		}
     }
     
     /**
