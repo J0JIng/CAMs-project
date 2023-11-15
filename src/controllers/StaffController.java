@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import enums.MessageStatus;
 import enums.UserRole;
@@ -24,6 +25,7 @@ import models.Staff;
 import services.CampStaffService;
 import services.EnquiryResponderService;
 import services.SuggestionResponderService;
+import services.ReportStaffService;
 import stores.AuthStore;
 import stores.DataStore;
 import utility.InputSelectionUtility;
@@ -36,6 +38,7 @@ public class StaffController extends UserController {
     private final CampStaffService campStaffService = new CampStaffService();
     private final EnquiryResponderService enquiryStaffService = new EnquiryResponderService();
     private final SuggestionResponderService suggestionStaffService = new SuggestionResponderService();
+    private final ReportStaffService reportStaffService = new ReportStaffService();
     private final StaffView view = new StaffView();
 
     public StaffController() {
@@ -91,10 +94,10 @@ public class StaffController extends UserController {
                     respondToSuggestion();
                 	break;
                 case 13:
-                    // Generate camp Report with filters 
+                    generateReport();
                 	break;
                 case 14:
-                    // Camp enquiry report
+                    generatePerformanceReport();
                 	break;
                 case 15:
 
@@ -125,6 +128,10 @@ public class StaffController extends UserController {
         Staff staff = (Staff) AuthStore.getCurrentUser();
         List<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
         view.viewCamps(staffCreatedCamps, " - Choose Camp to Toggle Visibility - ");
+        if(staffCreatedCamps.isEmpty()){
+            scanner.nextLine();
+            return;
+        }
         Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
         view.viewToggleOption(camp);
         campStaffService.toggleCampVisibility(camp);
@@ -157,6 +164,7 @@ public class StaffController extends UserController {
         ArrayList<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
         viewCreatedCamps();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        
         Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
         if (camp != null) {
 			view.editCampView();
@@ -183,6 +191,7 @@ public class StaffController extends UserController {
      * Shows the list of all camps
      */
     protected void viewAllCamps() {
+        scanner.nextLine();
         while (true) {
             view.viewCamps(campStaffService.getAllCamps(), " - List of Camps - ");
             Camp selectedCamp = InputSelectionUtility.campSelector(campStaffService.getAllCamps());
@@ -199,6 +208,7 @@ public class StaffController extends UserController {
      * Shows the list of camps created
      */
     protected void viewCreatedCamps() {
+        scanner.nextLine();
         Staff staff = (Staff) AuthStore.getCurrentUser();
         view.viewCamps(campStaffService.getStaffCreatedCamps(staff),
                 " - Camps Created by " + AuthStore.getCurrentUser().getName() + " - ");
@@ -210,6 +220,7 @@ public class StaffController extends UserController {
      * Shows the list of Students
      */
     protected void viewStudentList() {
+        scanner.nextLine();
         while (true) {
             view.viewCamps(campStaffService.getAllCamps(), " - Choose Camp to view Student list - ");
             Camp selectedCamp = InputSelectionUtility.campSelector(campStaffService.getAllCamps());
@@ -232,7 +243,7 @@ public class StaffController extends UserController {
      * Shows the list of camps using user specified filter
      */
 	protected void viewAllCampsWithFilters() {
-		
+		scanner.nextLine();
 		// Various filters for camps
     	String filterBy = null; 		// Type of filter
     	Date filterDate = null;			// Filter date
@@ -307,6 +318,7 @@ public class StaffController extends UserController {
 
 	protected void viewEnquiriesForCamp() {
 		// Get list of Staff created camps
+        scanner.nextLine();
         Staff staff = (Staff) AuthStore.getCurrentUser();
 		List<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
 		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
@@ -339,6 +351,7 @@ public class StaffController extends UserController {
 
     protected void viewSuggestionForCamp() {
 		// Get list of Staff created camps
+        scanner.nextLine();
         Staff staff = (Staff) AuthStore.getCurrentUser();
 		List<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
         // Display all the camps with suggestion @ToImplement 
@@ -348,7 +361,8 @@ public class StaffController extends UserController {
 		view.displaySuggestions(campSuggestion);
 	}
 
-    public void respondToSuggestion() {
+  
+    protected void respondToSuggestion() {
         Staff staff = (Staff) AuthStore.getCurrentUser();
 		// Get list of Staff created camps
 		List<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
@@ -376,5 +390,70 @@ public class StaffController extends UserController {
 		System.out.println(success? "Suggestion responded successfully" :"Error responding to suggestion ");
 	}
 
+
+    // Generate report by filter
+
+    protected void generateReport(){
+
+    }
+
+    // Generate performance report
+
+    protected void generatePerformanceReport() {
+        scanner.nextLine();
+        Staff staff = (Staff) AuthStore.getCurrentUser();
+        List<Camp> allCreatedCamps = campStaffService.getAllCamps();
+        List<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
+        List<String> filters;
+    
+        System.out.println("--- Camp Report ---");
+        System.out.println("1. Generate Reports For ALL Camps ");
+        System.out.println("2. Generate Reports For Staff Camps");
+        System.out.println("3. Generate Report For Selected Camp ");
+    
+        int option = 0;
+        boolean success;
+        do {
+            option = InputSelectionUtility.getIntInput("Enter the filter option (1/2/3, 0 to exit): ");
+            switch (option) {
+                case 1:
+                    // get the filters
+                    filters = InputSelectionUtility.getFilterInput();
+                    success = reportStaffService.generateReport(filters, allCreatedCamps);
+                    break;
+    
+                case 2:
+                    // get the filters
+                    filters = InputSelectionUtility.getFilterInput();
+                    success = reportStaffService.generateReport(filters, staffCreatedCamps);
+                    break;
+    
+                case 3:
+                    // Show ALL camps to select from
+                    viewCreatedCamps();
+                    Camp camp = InputSelectionUtility.campSelector(allCreatedCamps);
+                    if (camp == null) {
+                        System.out.println("Invalid camp selection.");
+                        success = false;
+                    } else {
+                        filters = InputSelectionUtility.getFilterInput();
+                        ArrayList<Student> combinedStudentList = Stream.concat(
+                                                    campStaffService.getCampAttendeeList(camp).stream(),
+                                                    campStaffService.getCampCommitteeList(camp).stream())
+                                                    .collect(Collectors.toCollection(ArrayList::new));
+                        success = reportStaffService.generateReport(filters,combinedStudentList,camp);
+                    }
+                    break;
+    
+                default:
+                    System.out.println("Invalid option.");
+                    success = false;
+                    break;
+            }
+        } while (option != 0 && option <= 3);
+    
+        System.out.println(success ? "Report generated successfully" : "Error generating report ");
+    }
+    
     
 }

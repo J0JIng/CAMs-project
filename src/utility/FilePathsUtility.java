@@ -30,6 +30,8 @@ public class FilePathsUtility {
 		// Initialize filePathsMap
 		filePathsMap.put("student", "data/student_list.csv");
 		filePathsMap.put("staff", "data/staff_list.csv");
+		filePathsMap.put("reportCommittee", "report/committee_report.csv");
+		filePathsMap.put("reportStaff", "report/staff_report.csv");
 		return filePathsMap;
 	}
 }

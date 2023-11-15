@@ -3,6 +3,7 @@ package services;
 import interfaces.IAuthService;
 import models.User;
 import stores.AuthStore;
+import views.AuthView;
 
 /**
  * The AuthService class is an abstract class that implements the
@@ -33,10 +34,12 @@ public abstract class AuthService implements IAuthService {
      * @return true if the user is authenticated successfully, false otherwise
      */
     protected boolean authenticate(User user, String password) {
-        if (user == null)
+        if (user == null){
             return false;
-        if (!user.getPassword().equals(password))
+        }
+        if (!user.getPassword().equals(password)){
             return false;
+        }
         return true;
     }
 }

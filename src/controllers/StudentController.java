@@ -81,9 +81,11 @@ public class StudentController extends UserController {
 	                	deleteEnquiry();
 	                	break;
 	                case 11: 
-	                	registerAsCommittee();
-						AuthController.endSession();
-	                	return;
+	                	if(registerAsCommittee()){
+							AuthController.endSession();
+							return;
+						}
+	                	break;
 	                case 12: 
 						// change password
 						if (changePassword()) {
@@ -108,6 +110,7 @@ public class StudentController extends UserController {
 
 	protected void registerCamp() {
 		// Get the current student
+		scanner.nextLine();
 		Student student = (Student) AuthStore.getCurrentUser();
 		// Get the current date
 		Date currentDate = new Date();
@@ -194,13 +197,19 @@ public class StudentController extends UserController {
 	}
 
 
-	protected void registerAsCommittee(){
-
+	protected boolean registerAsCommittee(){
+		scanner.nextLine();
 		Student student = (Student) AuthStore.getCurrentUser();
 		Date currentDate = new Date();
 
 		// Get Data
 		List<Camp> availableCamps = campStudentService.getAvailableCampsToRegister();
+
+		// check no camps
+		if (availableCamps.isEmpty()) {
+			System.out.println("There are currently no available camps to join");
+			return false;
+		}
 
 		// Display available camps to register
 		view.viewCamps(availableCamps, " - Choose Camp to join as Committee Member - ");
@@ -208,37 +217,37 @@ public class StudentController extends UserController {
 		// Get User input
 		Camp camp = InputSelectionUtility.campSelector(availableCamps);
         if (camp == null) {
-            return;
+            return false;
         }
 
 		if(campStudentService.isUserRegisteredWithCamp(student,camp)){
 			System.out.println("You are already registered for the camp!");
-			return;
+			return false;
 		}
 
 		if(campStudentService.isUserWithdrawnFromCamp(student,camp)){
 			System.out.println("You are not allowed to register for a camp you have withdrawn!");
-			return;
+			return false;
 		}
 
 		if(campStudentService.isCampOver(currentDate,camp)){
 			System.out.println("The camp chosen is over!");
-			return;
+			return false; 
 		}
 
 		if(campStudentService.hasDateClash(student,camp)){
 			System.out.println("The camp chosen conflict with registered camp !");
-			return;
+			return false;
 		}
 
 		if(campStudentService.isUserCampCommittee(student)){
 			System.out.println("You are not allowed to register as a Camp committee for more than one camp!");
-			return;
+			return false;
 		}
 
 		if(campStudentService.isCampCommitteeFull(camp)){
 			System.out.println("You are not allowed to register as a Camp committee slots is full!");
-			return;
+			return false;
 		}
 		
 		// Register the student for the selected camp
@@ -247,6 +256,7 @@ public class StudentController extends UserController {
 		System.out.println(success ? "Camp committe registration for " + campName + " successful!" : 
 									 "Camp committe registration for " + campName + " unsuccessful!");
 		AuthStore.getCurrentUser().setRole(UserRole.COMMITTEE);
+		return true;
 	}
 	
 
@@ -254,8 +264,12 @@ public class StudentController extends UserController {
      * Shows all no. of remaining slots for all the camps.
      */
     protected void viewRemainingSlots() {
-    	view.viewCampsSlots(campStudentService.getAllCamps());
-    	scanner.nextLine();
+		scanner.nextLine();
+		String userInput;
+        do {
+            view.viewCampsSlots(campStudentService.getAllCamps());
+            userInput = scanner.nextLine().trim();
+        } while (!userInput.isEmpty());
     }
 	
 	/**
