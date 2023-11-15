@@ -206,9 +206,9 @@ public class StudentView implements IMenuView{
 		System.out.println("╔══════════════════════════════════════════════════════════╗");
 		ViewUtility.displayInMenuCentered(" - Filter Options - ");
 		System.out.println("╠══════════════════════════════════════════════════════════╣");
-    	System.out.println("║[1] Filter by Date							    		   ║");
-    	System.out.println("║[2] Filter by Location						    		   ║");	
-    	System.out.println("║[3] Sort by Name (Alphabetical Order)		    		   ║");
+    	System.out.println("║[1] Filter by Date                                        ║");
+    	System.out.println("║[2] Filter by Location                                    ║");	
+    	System.out.println("║[3] Sort by Name (Alphabetical Order)                     ║");
 		System.out.println("╚══════════════════════════════════════════════════════════╝");
 	}
 
