@@ -279,7 +279,7 @@ public class CampStudentService implements ICampStudentService {
 			registeredStudentData.put(campName, new ArrayList<String>());
 		}
 		registeredStudentData.get(campName).add(studentName);
-	
+				
 		// Save into DataStore
 		DataStore.setStudentsToCampsRegisteredData(registeredCampsData);
 		DataStore.setCampToRegisteredStudentData(registeredStudentData);

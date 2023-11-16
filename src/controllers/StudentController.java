@@ -160,6 +160,7 @@ public class StudentController extends UserController {
 		// Register the student for the selected camp
 		String campName = camp.getCampInformation().getCampName();
 		boolean success = campStudentService.registerCamp(student, camp);
+		
 		System.out.println(success ? "Registration for " + campName + " successful!" : "Registration for " + campName + " unsuccessful!");
 	}
 	

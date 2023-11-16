@@ -247,7 +247,6 @@ public class StaffController extends UserController {
                 List<String> committeeMembers = campStaffService.getCampCommitteeList(selectedCamp).stream()
                         .map(Student::getName)
                         .collect(Collectors.toList());
-
                 view.viewStudentList(students, committeeMembers, selectedCamp);
                 scanner.nextLine();
             } else {
