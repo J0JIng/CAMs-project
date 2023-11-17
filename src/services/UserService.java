@@ -24,6 +24,7 @@ public class UserService implements IUserService {
         if (!user.setPassword(oldPassword, newPassword))
             return false;
 
+        user.setIsPasswordChanged(true);
         DataStore.saveData(); // save new password to database
 
         return true;

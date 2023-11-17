@@ -3,8 +3,6 @@ package services;
 import interfaces.IAuthService;
 import models.User;
 import stores.AuthStore;
-import views.AuthView;
-
 /**
  * The AuthService class is an abstract class that implements the
  * IAuthService interface.

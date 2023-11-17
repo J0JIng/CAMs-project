@@ -2,6 +2,7 @@ package services;
 
 import java.util.Map;
 
+import enums.UserRole;
 import models.Staff;
 import stores.AuthStore;
 import stores.DataStore;
@@ -25,8 +26,13 @@ public class AuthStaffService extends AuthService {
 
         Staff staff = staffData.get(userID);
 
-        if (authenticate(staff, password) == false)
+        if (authenticate(staff, password) == false){
             return false;
+        }
+
+        if(staff.getUserRole()!=UserRole.STAFF){
+            return false;
+        }
 
         AuthStore.setCurrentUser(staff);
         return true;

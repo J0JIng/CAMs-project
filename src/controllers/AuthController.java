@@ -35,8 +35,8 @@ public class AuthController {
         int choice;
         boolean authenticated = false;
         AuthView view = new AuthView();
-        view.displayMenuView();
         do {
+            view.displayMenuView();
         	choice = InputSelectionUtility.getIntInput("Enter your user type: ");
 
             switch (choice) {
@@ -75,8 +75,11 @@ public class AuthController {
                 User user = (User) AuthStore.getCurrentUser();
                 if(!user.getIsPasswordChanged()){
                     System.out.println("Please Change the Default Password.\n");
-                    UserController.changePassword();
-                    user.setIsPasswordChanged(true);
+                    if(!UserController.changePassword()){
+                       System.out.println("Password change cancelled. Returning to main menu");
+                       authService = null;
+                       authenticated = false;
+                    }
                 }
             }
 
