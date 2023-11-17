@@ -4,23 +4,18 @@ import java.util.List;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Scanner;
-import java.util.Set;
-
 import enums.FacultyGroups;
-
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 
 import models.Staff;
 import models.Suggestion;
 import models.Camp;
 import models.CampInformation;
 import models.Enquiry;
+
 import services.CampStaffService;
-import stores.AuthStore;
+
 
 public class InputSelectionUtility {
 

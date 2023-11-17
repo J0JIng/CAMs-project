@@ -1,7 +1,5 @@
 package utility;
 
-import stores.AuthStore;
-
 public class ViewUtility {
 	/**
      *  Clears the console
