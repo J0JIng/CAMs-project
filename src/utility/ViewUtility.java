@@ -17,7 +17,11 @@ public class ViewUtility {
      * @param index the numbered index
      */
     public static void displayInMenuNumbered(String s, int index) {
-    	System.out.println("║[" + (index) + "] " + s + " ".repeat(54- s.length()) + "║");
+    	if (index > 9) {
+    		System.out.println("║[" + (index) + "] " + s + " ".repeat(53- s.length()) + "║");
+    	} else {
+    		System.out.println("║[" + (index) + "] " + s + " ".repeat(54- s.length()) + "║");
+    	}
     }
     
     /**

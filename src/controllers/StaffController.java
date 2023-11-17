@@ -143,18 +143,22 @@ public class StaffController extends UserController {
         int campCount =  InputSelectionUtility.getIntInput("Enter the number of Camps to create: ");
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         ArrayList<Camp> listNewCamps = new ArrayList<Camp>();
-
-        for(int i = 0 ; i<campCount ; i++){
-            CampInformation campInfo = InputSelectionUtility.getCampInput(campStaffService.getAllCamps(),staff,dateFormat);
-            Camp newCamp= new Camp(campInfo);
-            System.out.println("Created " + newCamp.getCampInformation().getCampName());
-            listNewCamps.add(newCamp);
-        }        
-
-        if (campStaffService.createCamp(listNewCamps)) {
-            System.out.println("Camps created successfully!");
-        } else { //debug
-            System.out.println("Error creating camps. Please check your input and try again.");
+        
+        if (campCount != 0) {
+	        for(int i = 0 ; i<campCount ; i++){
+	            CampInformation campInfo = InputSelectionUtility.getCampInput(campStaffService.getAllCamps(),staff,dateFormat);
+	            Camp newCamp= new Camp(campInfo);
+	            System.out.println("Created " + newCamp.getCampInformation().getCampName());
+	            listNewCamps.add(newCamp);
+	        }        
+	
+	        if (campStaffService.createCamp(listNewCamps)) {
+	            System.out.println("Camps created successfully!");
+	        } else { //debug
+	            System.out.println("Error creating camps. Please check your input and try again.");
+	        }
+        } else {
+        	System.out.println("No Camps created");
         }
 
     }
@@ -162,14 +166,14 @@ public class StaffController extends UserController {
     protected void updateCampDetails() {
         Staff staff = (Staff) AuthStore.getCurrentUser();
         ArrayList<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
-        viewCreatedCamps();
+        viewEditableCamps();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         
         Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
         if (camp != null) {
 			view.editCampView();
 			boolean success = InputSelectionUtility.updateCampInput(camp,staff,dateFormat);
-			System.out.println(success ? "Camp  updated successfully!" : "Camp update fail!");
+			System.out.println(success ? "Camp updated successfully!" : "Camp update fail!");
 		} else {
 			System.out.println("No camps updated.");;
 		}
@@ -181,10 +185,12 @@ public class StaffController extends UserController {
         List<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
 		view.viewCamps(staffCreatedCamps, " - Choose Camp to Delete - ");
 		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
-        String campName = camp.getCampInformation().getCampName();
-        
-        boolean success = campStaffService.deleteCamp(camp);
-        System.out.println(success? "Deleted "+campName+" successfully" :"Error deleting " +campName);
+		if (camp != null) {
+	        String campName = camp.getCampInformation().getCampName();
+	        
+	        boolean success = campStaffService.deleteCamp(camp);
+	        System.out.println(success? "Deleted "+campName+" successfully" :"Error deleting " +campName);
+		}
     }
     
     /**
@@ -215,6 +221,16 @@ public class StaffController extends UserController {
         System.out.print("(Press Enter to return) ");
         scanner.nextLine();
     }
+    
+    /**
+     * Shows the list of camps editable by staff
+     */
+    protected void viewEditableCamps() {
+        scanner.nextLine();
+        Staff staff = (Staff) AuthStore.getCurrentUser();
+        view.viewCamps(campStaffService.getStaffCreatedCamps(staff),
+                " - Choose camp to edit - ");
+    }
 
     /**
      * Shows the list of Students
@@ -231,8 +247,8 @@ public class StaffController extends UserController {
                 List<String> committeeMembers = campStaffService.getCampCommitteeList(selectedCamp).stream()
                         .map(Student::getName)
                         .collect(Collectors.toList());
-
                 view.viewStudentList(students, committeeMembers, selectedCamp);
+                scanner.nextLine();
             } else {
                 return;
             }
@@ -282,7 +298,6 @@ public class StaffController extends UserController {
             	if (filterDate != null) {
                 	Date campDate = c.getCampInformation().getCampStartDate();
                 	if (campDate.equals(filterDate)) {
-                		System.out.println("Added " + c.getCampInformation().getCampName());
                     	filteredCamps.add(c);
                 	}
             	}
@@ -297,7 +312,6 @@ public class StaffController extends UserController {
     	if (filteredCamps.isEmpty()) {
         	System.out.println("No matching camps found.");
     	} else {
-    		System.out.println("Not empty");
     		// Displays the filtered list of camps
     		switch (option) {
 	    		case 1:
@@ -321,32 +335,51 @@ public class StaffController extends UserController {
         scanner.nextLine();
         Staff staff = (Staff) AuthStore.getCurrentUser();
 		List<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
+		// Display all the camps with enquiries
+		view.viewCamps(staffCreatedCamps, " - Choose Camp to view Enquiries - ");
 		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
-		Map<Integer, Enquiry> campEnquiries = enquiryStaffService.getAllEnquiriesForCamp(camp);
-		view.displayEnquiries(campEnquiries);
+		if (camp != null) {
+			Map<Integer, Enquiry> campEnquiries = enquiryStaffService.getAllEnquiriesForCamp(camp);
+			view.displayEnquiries(campEnquiries);
+			System.out.println("(Press Enter to return)");
+	    	scanner.nextLine();
+		} else {
+			System.out.println("No camp selected");
+		}
 	}
 
 	protected void respondToEnquiry() {
         Staff staff = (Staff) AuthStore.getCurrentUser();
 		// Get list of Staff created camps
 		List<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
+		// Display all the camps
+		view.viewCamps(staffCreatedCamps, " - Choose Camp to respond Enquiries - ");
 		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
 
-		// Get enquiries for the selected camp
-		Map<Integer, Enquiry> campEnquiries = enquiryStaffService.getAllEnquiriesForCamp(camp);
-		// Check if there are draft enquiries to edit
-		if (campEnquiries.isEmpty()) {
-			System.out.println("You have no student enquiries to reply to.");
-			return;
+		if (camp != null) {
+			// Get enquiries for the selected camp
+			Map<Integer, Enquiry> campEnquiries = enquiryStaffService.getAllEnquiriesForCamp(camp);
+			// Check if there are draft enquiries to edit
+			if (campEnquiries.isEmpty()) {
+				System.out.println("You have no student enquiries to reply to.");
+				scanner.nextLine();
+				System.out.println("(Press Enter to return)");
+		    	scanner.nextLine();
+				return;
+			}
+	
+			// Get User input
+			Enquiry selectedEnquiry = InputSelectionUtility.enquirySelector(campEnquiries);
+			String response = InputSelectionUtility.getStringInput("Enter response: ");
+	
+			// Respond using EnquiryStudentService
+			boolean success = enquiryStaffService.respondToEnquiry(selectedEnquiry.getEnquiryID(), staff.getStaffID(), MessageStatus.ACCEPTED, response);
+	        System.out.println(success? "Suggestion responded successfully" :"Error responding to suggestion ");
+	        System.out.println("(Press Enter to return)");
+	    	scanner.nextLine();
+		} else {
+			System.out.println("No camp selected");
 		}
-
-		// Get User input
-		Enquiry selectedEnquiry = InputSelectionUtility.enquirySelector(campEnquiries);
-		String response = InputSelectionUtility.getStringInput("Enter response: ");
-
-		// Respond using EnquiryStudentService
-		boolean success = enquiryStaffService.respondToEnquiry(selectedEnquiry.getEnquiryID(), staff.getStaffID(), MessageStatus.ACCEPTED, response);
-        System.out.println(success? "Suggestion responded successfully" :"Error responding to suggestion ");
     }
 
     protected void viewSuggestionForCamp() {
@@ -357,8 +390,14 @@ public class StaffController extends UserController {
         // Display all the camps with suggestion @ToImplement 
 		view.viewCamps(staffCreatedCamps, " - Choose Camp to view Suggestions - ");
 		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
-		Map<Integer, Suggestion> campSuggestion = suggestionStaffService.getAllSuggestionsForCamp(camp);
-		view.displaySuggestions(campSuggestion);
+		if (camp != null) {
+			Map<Integer, Suggestion> campSuggestion = suggestionStaffService.getAllSuggestionsForCamp(camp);
+			view.displaySuggestions(campSuggestion);
+			System.out.println("(Press Enter to return)");
+	    	scanner.nextLine();
+		} else {
+			System.out.println("No camp selected");
+		}
 	}
 
   
@@ -368,26 +407,35 @@ public class StaffController extends UserController {
 		List<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
 		view.viewCamps(staffCreatedCamps, " - Choose Camp to Respond to Suggestions - ");
 		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
-
-		// Get Suggestion for the selected camp
-		Map<Integer, Suggestion> campSuggestions = suggestionStaffService.getAllSuggestionsForCamp(camp);
-		// Check if there are draft suggestions to respond
-		if (campSuggestions.isEmpty()) {
-			System.out.println("You have no suggestions to review.");
-			return;
+		
+		if (camp != null) {
+			// Get Suggestion for the selected camp
+			Map<Integer, Suggestion> campSuggestions = suggestionStaffService.getAllSuggestionsForCamp(camp);
+			// Check if there are draft suggestions to respond
+			if (campSuggestions.isEmpty()) {
+				System.out.println("You have no suggestions to review.");
+				scanner.nextLine();
+				System.out.println("(Press Enter to return)");
+		    	scanner.nextLine();
+				return;
+			}
+	
+			// Get User input
+			Suggestion selectedSuggestion = InputSelectionUtility.suggestionSelector(campSuggestions);
+			int reviewOption = InputSelectionUtility.getIntInput("Do you want to accept this suggestion? (1: Yes, 2: No): ");
+			boolean suggestionStatus = (reviewOption == 1);
+			Map<String, Student> students = DataStore.getStudentData();
+			Student sender = students.get(selectedSuggestion.getSenderID());
+			if (suggestionStatus){sender.incrementStudentPoints();}
+	
+			// Respond using EnquiryStudentService
+	        boolean success = suggestionStaffService.reviewSuggestion(selectedSuggestion.getSuggestionID(), suggestionStatus);
+			System.out.println(success? "Suggestion responded successfully" :"Error responding to suggestion ");
+			System.out.println("(Press Enter to return)");
+	    	scanner.nextLine();
+		} else {
+			System.out.println("No camp selected");
 		}
-
-		// Get User input
-		Suggestion selectedSuggestion = InputSelectionUtility.suggestionSelector(campSuggestions);
-		int reviewOption = InputSelectionUtility.getIntInput("Do you want to accept this suggestion? (1: Yes, 2: No): ");
-		boolean suggestionStatus = (reviewOption == 1);
-		Map<String, Student> students = DataStore.getStudentData();
-		Student sender = students.get(selectedSuggestion.getSenderID());
-		if (suggestionStatus){sender.incrementStudentPoints();}
-
-		// Respond using EnquiryStudentService
-        boolean success = suggestionStaffService.reviewSuggestion(selectedSuggestion.getSuggestionID(), suggestionStatus);
-		System.out.println(success? "Suggestion responded successfully" :"Error responding to suggestion ");
 	}
 
 
@@ -405,11 +453,9 @@ public class StaffController extends UserController {
         List<Camp> allCreatedCamps = campStaffService.getAllCamps();
         List<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
         List<String> filters;
-    
-        System.out.println("--- Camp Report ---");
-        System.out.println("1. Generate Reports For ALL Camps ");
-        System.out.println("2. Generate Reports For Staff Camps");
-        System.out.println("3. Generate Report For Selected Camp ");
+        
+        // View report menu
+        view.viewReportMenu();
     
         int option = 0;
         boolean success;
@@ -418,12 +464,14 @@ public class StaffController extends UserController {
             switch (option) {
                 case 1:
                     // get the filters
+                	view.showFilterInput();
                     filters = InputSelectionUtility.getFilterInput();
                     success = reportStaffService.generateReport(filters, allCreatedCamps);
                     break;
     
                 case 2:
                     // get the filters
+                	view.showFilterInput();
                     filters = InputSelectionUtility.getFilterInput();
                     success = reportStaffService.generateReport(filters, staffCreatedCamps);
                     break;
@@ -436,6 +484,7 @@ public class StaffController extends UserController {
                         System.out.println("Invalid camp selection.");
                         success = false;
                     } else {
+                    	view.showFilterInput();
                         filters = InputSelectionUtility.getFilterInput();
                         ArrayList<Student> combinedStudentList = Stream.concat(
                                                     campStaffService.getCampAttendeeList(camp).stream(),

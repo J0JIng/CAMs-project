@@ -137,7 +137,7 @@ public class InputSelectionUtility {
      */
     public static Camp campSelector(List<Camp> camps) {
         while (true) {
-            System.out.println("Select a Camp:");
+            System.out.println("Select a Camp: (Press Enter to Return)");
     
             //System.out.print("Enter the index of the camp (or press Enter to return): ");
             String campIndexInput = sc.nextLine();
@@ -203,7 +203,7 @@ public class InputSelectionUtility {
         // get the registration closing date
         Date campRegistrationClosingDate;
         do {
-            campRegistrationClosingDate = getDateInput("Enter camp registration closing date (dd/MM/yyyy ", dateFormat);
+            campRegistrationClosingDate = getDateInput("Enter camp registration closing date (dd/MM/yyyy) ", dateFormat);
             if (campRegistrationClosingDate.before(new Date())) {
                 System.out.println("Camp registration closing date must be in the present. Please enter a valid date.");
             }
@@ -233,7 +233,7 @@ public class InputSelectionUtility {
         int campCommitteeSlots = getIntInput("Enter committee slots: ");
         if (campCommitteeSlots > MAX_COMMITTEE_SLOTS) {
             campCommitteeSlots = MAX_COMMITTEE_SLOTS;
-            System.out.println("Input camp committee slots greater than allowed camp committee slots. Maximum default of 10 is set");
+            System.out.println("Input camp committee slots greater than allowed camp committee slots. Maximum default of 10 is set.");
         }
     
         // validate and get total camp slots
@@ -447,13 +447,6 @@ public class InputSelectionUtility {
 
     public static List<String> getFilterInput() {
         Set<String> selectedFilters = new HashSet<>(); // Use a Set to automatically handle duplicates
-
-        System.out.println("--- Filters ---");
-        System.out.println("1. No Filter ");
-        System.out.println("2. Attendee ");
-        System.out.println("3. Camp Committee ");
-        System.out.println("4. Location ");
-        System.out.println("5. Date of Camp ");
 
         int option = 0;
         do {

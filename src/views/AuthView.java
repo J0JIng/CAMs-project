@@ -20,10 +20,10 @@ public class AuthView implements IMenuView {
         System.out.println("╠══════════════════════════════════════════════════════════╣");
         System.out.println("║                    - User Selection -                    ║");
         System.out.println("╠══════════════════════════════════════════════════════════╣");
-        System.out.println("║[1] Staff Login                                           ║");
-        System.out.println("║[2] Student Login                                         ║");
-		System.out.println("║[3] Camp Committee Login                                  ║");
-        System.out.println("║[4] Quit                                                  ║");
+        ViewUtility.displayInMenuNumbered("Staff Login", 1);
+        ViewUtility.displayInMenuNumbered("Student Login", 2);
+        ViewUtility.displayInMenuNumbered("Camp Committee Login", 3);
+        ViewUtility.displayInMenuNumbered("Quit", 4);
         System.out.println("╚══════════════════════════════════════════════════════════╝");
 	}
 	

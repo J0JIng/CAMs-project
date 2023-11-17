@@ -106,6 +106,21 @@ public class CampStaffService implements ICampStaffService {
 
 		return staffCreatedCamps;
 	}
+	
+	// Convert map keys from userID to studentName
+    public Map<String, Student> convertMapKey(Map<String, Student> inputMap) {
+        Map<String, Student> convertedMap = new HashMap<>();
+
+        // Populate the converted map using student names as keys
+        inputMap.forEach((key, student) -> {
+            // Assuming User is the superclass of Student and it has a 'name' attribute
+            String studentName = student.getName();
+            convertedMap.put(studentName, student);
+        });
+
+        // Return the converted map
+        return convertedMap;
+    }
 
 	/**
      * Retrieves a list of students attending a specific camp as an Attendee .
@@ -121,10 +136,11 @@ public class CampStaffService implements ICampStaffService {
 
 		// Retrieves the list of registered student names for the specified camp. If the camp is not found in the map, it defaults to an empty list.
 		List<String> registeredStudents = campToRegisteredStudentData.getOrDefault(campName, Collections.emptyList());
-
+		Map<String, Student> allStudentsDataNames = convertMapKey(allStudentsData);
+        
 		// Returns the list of students attending the specified camp.
 		ArrayList<Student> campAttendeeList = registeredStudents.stream()
-				.map(allStudentsData::get)
+				.map(allStudentsDataNames::get)
 				.filter(Objects::nonNull) // Filter out null students if any
 				.collect(Collectors.toCollection(ArrayList::new));
 
@@ -145,10 +161,11 @@ public class CampStaffService implements ICampStaffService {
 
 		//retrieves the list of registered CampCommittee names for the specified camp. If the camp is not found in the map, it defaults to an empty list.
 		List<String> registeredCampCommittee = campToRegisteredCampCommitteeData.getOrDefault(campName, Collections.emptyList());
+		Map<String, Student> allStudentsDataNames = convertMapKey(allStudentsData);
 
 		//returns the list of CampCommittee attending the specified camp.
 		ArrayList<Student> campCommitteeList = registeredCampCommittee.stream()
-				.map(allStudentsData::get)
+				.map(allStudentsDataNames::get)
 				.filter(Objects::nonNull) // Filter out null students if any
 				.collect(Collectors.toCollection(ArrayList::new));
 
