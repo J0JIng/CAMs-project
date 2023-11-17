@@ -41,21 +41,30 @@ public class ReportStaffService {
                 case "Attendee":
                     // generate report of ALL camps with Attendee Name
                     headers.add("Attendee Names");
-
+                    // ask for name
+                    // get all camps with the person name
                     break;
                 case "Camp Committee":
                     // generate report of ALL camps with Camp Committee Name
+                    // ask for name
+                    // get all camps with the person name
                     
                     break;
                 case "Location":
                     // generate report of ALL camps with Camp Committee Name
+                    // ask for Location
+                    // get all camps with the person name
                
                     break;
                 case "Date":
                     // generate report of ALL camps Starting from the Date
+                    // ask for Location
+                    // get all camps with the person name
 
+                default :
                     break;
                 // Add more cases for additional filters as needed
+
             }
         }
 
