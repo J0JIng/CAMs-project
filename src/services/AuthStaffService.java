@@ -17,11 +17,11 @@ public class AuthStaffService extends AuthService {
      * Constructs an instance of the AuthSupervisorService class.
      */
     public AuthStaffService() {
+        AuthView.staffLoginView();
     };
 
     @Override
     public boolean login(String userID, String password) {
-        AuthView.staffLoginView();
         Map<String, Staff> staffData = DataStore.getStaffData();
 
         Staff staff = staffData.get(userID);

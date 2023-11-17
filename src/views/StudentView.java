@@ -24,7 +24,7 @@ public class StudentView implements IMenuView{
 
 	@Override
 	public void displayMenuView() {
-		ViewUtility.clearScreen();
+		//ViewUtility.clearScreen(); comment to debug
 		
 		String welcomeMessage = "Welcome " + AuthStore.getCurrentUser().getName();
 		int totalLength = welcomeMessage.length();

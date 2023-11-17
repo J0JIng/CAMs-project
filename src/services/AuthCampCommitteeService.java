@@ -6,6 +6,7 @@ import java.util.Map;
 import models.Student;
 import stores.AuthStore;
 import stores.DataStore;
+import views.AuthView;
 import enums.UserRole;
 
 /**
@@ -17,12 +18,12 @@ public class AuthCampCommitteeService extends AuthService {
      * Constructs an instance of the AuthStudentService class.
      */
     public AuthCampCommitteeService() {
+        AuthView.studentLoginView();
     };
 
     @Override
     public boolean login(String userID, String password) {
         Map<String, Student> studentData = DataStore.getStudentData();
-
         Student student = studentData.get(userID);
         
         if (student == null) {

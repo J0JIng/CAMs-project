@@ -1,6 +1,5 @@
 package services;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -9,13 +8,15 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import enums.FacultyGroups;
-import enums.UserRole;
+
 import interfaces.ICampStudentService;
+
 import models.Camp;
 import models.Student;
+
 import stores.AuthStore;
 import stores.DataStore;
-import utility.InputSelectionUtility;
+
 import views.StudentView;
 
 /**

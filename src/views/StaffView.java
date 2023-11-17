@@ -258,10 +258,39 @@ public class StaffView implements IMenuView {
 		ViewUtility.displayInMenuCentered(" - Choose Filters - ");
 		System.out.println("╠══════════════════════════════════════════════════════════╣");
 		ViewUtility.displayInMenuNumbered("No Filter", 1);
-		ViewUtility.displayInMenuNumbered("Attendee", 2);
-		ViewUtility.displayInMenuNumbered("Camp Committee", 3);
-		ViewUtility.displayInMenuNumbered("Location", 4);
-		ViewUtility.displayInMenuNumbered("Date of Camp", 5);
+		ViewUtility.displayInMenuNumbered("Camp Information", 2);
+		ViewUtility.displayInMenuNumbered("Attendee", 3);
+		ViewUtility.displayInMenuNumbered("Camp Committee", 4);
+		ViewUtility.displayInMenuNumbered("Location", 5);
+		ViewUtility.displayInMenuNumbered("Date of Camp", 6);
+		System.out.println("╚══════════════════════════════════════════════════════════╝");
+	}
+
+	public void viewPerformanceReportMenu() {
+		System.out.println("╔══════════════════════════════════════════════════════════╗");
+		System.out.println("║                                                          ║");
+		System.out.println("║██████╗ ███████╗██████╗  ██████╗ ██████╗ ████████╗███████╗║");
+		System.out.println("║██╔══██╗██╔════╝██╔══██╗██╔═══██╗██╔══██╗╚══██╔══╝██╔════╝║");
+		System.out.println("║██████╔╝█████╗  ██████╔╝██║   ██║██████╔╝   ██║   ███████╗║");
+		System.out.println("║██╔══██╗██╔══╝  ██╔═══╝ ██║   ██║██╔══██╗   ██║   ╚════██║║");
+		System.out.println("║██║  ██║███████╗██║     ╚██████╔╝██║  ██║   ██║   ███████║║");
+		System.out.println("║╚═╝  ╚═╝╚══════╝╚═╝      ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚══════╝║");
+        System.out.println("║                                                          ║");
+		System.out.println("╠══════════════════════════════════════════════════════════╣");
+        ViewUtility.displayInMenuNumbered("Generate Reports For ALL Camps", 1);
+        ViewUtility.displayInMenuNumbered("Generate Reports For Staff Camps", 2);
+        ViewUtility.displayInMenuNumbered("Generate Report For Selected Camp", 3);
+		System.out.println("╚══════════════════════════════════════════════════════════╝");
+	}
+
+	public void showPerformanceFilterInput() {
+		System.out.println("╔══════════════════════════════════════════════════════════╗");
+		ViewUtility.displayInMenuCentered(" - Choose Filters - ");
+		System.out.println("╠══════════════════════════════════════════════════════════╣");
+		ViewUtility.displayInMenuNumbered("No Filter", 1);
+		ViewUtility.displayInMenuNumbered("Committee ID", 2);
+		ViewUtility.displayInMenuNumbered("Committee Name", 3);
+		ViewUtility.displayInMenuNumbered("Committee Point", 4);
 		System.out.println("╚══════════════════════════════════════════════════════════╝");
 	}
 

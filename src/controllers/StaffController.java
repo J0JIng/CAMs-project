@@ -1,35 +1,32 @@
 package controllers;
 
-//import static controllers.UserController.sc;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Scanner;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import enums.MessageStatus;
-import enums.UserRole;
+
 import models.Camp;
 import models.CampInformation;
 import models.Enquiry;
 import models.Student;
 import models.Suggestion;
 import models.Staff;
+
 import services.CampStaffService;
 import services.EnquiryResponderService;
 import services.SuggestionResponderService;
 import services.ReportStaffService;
+
 import stores.AuthStore;
 import stores.DataStore;
+
 import utility.InputSelectionUtility;
-import utility.ViewUtility;
+
 import views.StaffView;
 
 public class StaffController extends UserController {
@@ -100,7 +97,7 @@ public class StaffController extends UserController {
                     generatePerformanceReport();
                 	break;
                 case 15:
-
+                    // enquiry ?
                 	break;
                 case 16:
                 	// Change password
@@ -438,68 +435,150 @@ public class StaffController extends UserController {
 		}
 	}
 
-
-    // Generate report by filter
-
-    protected void generateReport(){
-
-    }
-
     // Generate performance report
 
-    protected void generatePerformanceReport() {
+    protected void generateReport() {
         scanner.nextLine();
         Staff staff = (Staff) AuthStore.getCurrentUser();
         List<Camp> allCreatedCamps = campStaffService.getAllCamps();
         List<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
-        List<String> filters;
-        
-        // View report menu
-        view.viewReportMenu();
-    
+
         int option = 0;
         boolean success;
+        String filter;
+
         do {
-            option = InputSelectionUtility.getIntInput("Enter the filter option (1/2/3, 0 to exit): ");
+            // View report menu
+            view.viewReportMenu();
+            option = InputSelectionUtility.getIntInput("Enter the filter option (1/2/3, 4 to exit): ");
             switch (option) {
                 case 1:
                     // get the filters
-                	view.showFilterInput();
-                    filters = InputSelectionUtility.getFilterInput();
-                    success = reportStaffService.generateReport(filters, allCreatedCamps);
+                    if (allCreatedCamps != null && !allCreatedCamps.isEmpty()) {
+                        view.showFilterInput();
+                        filter = InputSelectionUtility.getFilterInput();
+                        success = reportStaffService.generateReport(filter, allCreatedCamps);
+                    }else{
+                        success = false;
+                        System.out.println("Error: allCreatedCamps is null or empty");
+                    }
                     break;
-    
+
                 case 2:
                     // get the filters
-                	view.showFilterInput();
-                    filters = InputSelectionUtility.getFilterInput();
-                    success = reportStaffService.generateReport(filters, staffCreatedCamps);
+                	if (staffCreatedCamps != null && !staffCreatedCamps.isEmpty()) {
+                        view.showFilterInput();
+                        filter = InputSelectionUtility.getFilterInput();
+                        success = reportStaffService.generateReport(filter, staffCreatedCamps);
+                    }else{
+                        success = false;
+                        System.out.println("Error: staffCreatedCamps is null or empty");
+                    }
+
                     break;
     
                 case 3:
                     // Show ALL camps to select from
-                    viewCreatedCamps();
-                    Camp camp = InputSelectionUtility.campSelector(allCreatedCamps);
-                    if (camp == null) {
+                    viewAllCamps();
+                    List<Camp> camps = new ArrayList<>();
+                    Camp selectedCamp = InputSelectionUtility.campSelector(allCreatedCamps);
+                    camps.add(selectedCamp);
+
+                    if (selectedCamp == null) {
                         System.out.println("Invalid camp selection.");
                         success = false;
                     } else {
                     	view.showFilterInput();
-                        filters = InputSelectionUtility.getFilterInput();
-                        ArrayList<Student> combinedStudentList = Stream.concat(
-                                                    campStaffService.getCampAttendeeList(camp).stream(),
-                                                    campStaffService.getCampCommitteeList(camp).stream())
-                                                    .collect(Collectors.toCollection(ArrayList::new));
-                        success = reportStaffService.generateReport(filters,combinedStudentList,camp);
+                        filter = InputSelectionUtility.getFilterInput();
+                        success = reportStaffService.generateReport(filter,camps);
                     }
                     break;
+                
+                case 4: 
+                    System.out.println("Exiting From Report Generation");
+                    return;
     
                 default:
                     System.out.println("Invalid option.");
                     success = false;
                     break;
             }
-        } while (option != 0 && option <= 3);
+        } while (option >= 0 && option <= 3);
+    
+        System.out.println(success ? "Report generated successfully" : "Error generating report ");
+    }
+
+
+    // Generate Performance report
+
+    protected void generatePerformanceReport() {
+        scanner.nextLine();
+        Staff staff = (Staff) AuthStore.getCurrentUser();
+        List<Camp> allCreatedCamps = campStaffService.getAllCamps();
+        List<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
+
+        int option = 0;
+        boolean success;
+        String filter;
+
+        do {
+            // View report menu
+            view.viewPerformanceReportMenu();
+            option = InputSelectionUtility.getIntInput("Enter the filter option (1/2/3, 4 to exit): ");
+            switch (option) {
+                case 1:
+                    // get the filters
+                    if (allCreatedCamps != null && !allCreatedCamps.isEmpty()) {
+                        view.showPerformanceFilterInput();
+                        filter = InputSelectionUtility.getPerformanceFilterInput();
+                        success = reportStaffService.generatePerformanceReport(filter, allCreatedCamps);
+                    }else{
+                        success = false;
+                        System.out.println("Error: allCreatedCamps is null or empty");
+                    }
+                	
+                    break;
+    
+                case 2:
+                    // get the filters
+                    if (staffCreatedCamps != null && !staffCreatedCamps.isEmpty()) {
+                        view.showPerformanceFilterInput();
+                        filter = InputSelectionUtility.getPerformanceFilterInput();
+                        success = reportStaffService.generatePerformanceReport(filter, staffCreatedCamps);
+                    }else{
+                        success = false;
+                        System.out.println("Error: staffCreatedCamps is null or empty");
+                    }
+
+                    break;
+    
+                case 3:
+                    // Show ALL camps to select from
+                    viewAllCamps();
+                    List<Camp> camps = new ArrayList<>();
+                    Camp selectedCamp = InputSelectionUtility.campSelector(allCreatedCamps);
+                    camps.add(selectedCamp);
+
+                    if (selectedCamp == null) {
+                        System.out.println("Invalid camp selection.");
+                        success = false;
+                    } else {
+                    	view.showFilterInput();
+                        filter = InputSelectionUtility.getPerformanceFilterInput();
+                        success = reportStaffService.generatePerformanceReport(filter,camps);
+                    }
+                    break;
+                
+                case 4: 
+                    System.out.println("Exiting From Report Generation");
+                    return;
+    
+                default:
+                    System.out.println("Invalid option.");
+                    success = false;
+                    break;
+            }
+        } while (option >= 0 && option <= 3);
     
         System.out.println(success ? "Report generated successfully" : "Error generating report ");
     }

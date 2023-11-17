@@ -14,19 +14,25 @@ import java.util.stream.Collectors;
 
 import enums.MessageStatus;
 import enums.UserRole;
+
 import views.StudentView;
+
 import interfaces.ICampStudentService;
+
 import models.Student;
 import models.Suggestion;
 import models.Camp;
 import models.Enquiry;
 import models.Staff;
+
 import services.CampStudentService;
 import services.EnquiryResponderService;
 import services.SuggestionSenderService;
+import services.ReportStudentService;
+
 import stores.AuthStore;
 import stores.DataStore;
-import views.StudentView;
+
 import utility.InputSelectionUtility;
 
 
@@ -35,6 +41,7 @@ public class CampCommitteeController extends StudentController {
     private final CampStudentService campStudentService = new CampStudentService();
     private final EnquiryResponderService enquiryCampComitteeService = new EnquiryResponderService();
     private final SuggestionSenderService suggestionCampComitteeService = new SuggestionSenderService();
+	private final ReportStudentService reportStudentService = new ReportStudentService();
 	private final StudentView view = new StudentView();
 	private final Scanner scanner = new Scanner(System.in);
 
@@ -262,9 +269,17 @@ public class CampCommitteeController extends StudentController {
 		}
 	}
 
-
-
-
-
-
+	protected void generateReport() {
+        scanner.nextLine();
+        Student student = (Student) AuthStore.getCurrentUser();
+        Camp camp = campStudentService.getCampCommitteeCamp(student);
+		if (camp == null) {
+			System.out.println("Invalid camp selection. Exiting From Report Generation");
+			return;
+		} 
+        boolean success;
+        String filter = InputSelectionUtility.getFilterInput();
+		success = reportStudentService.generateReport(filter,camp);
+        System.out.println(success ? "Report generated successfully" : "Error generating report ");
+    }
 }

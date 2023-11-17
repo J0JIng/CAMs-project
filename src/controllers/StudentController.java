@@ -370,10 +370,17 @@ public class StudentController extends UserController {
 	 * Shows the camps that the student is registered in.
 	 */
 	protected void viewRegisteredCamps() {
-		List<Camp> list = campStudentService.getRegisteredCamps();
-		view.viewCamps(list, " - Camps registered by " + AuthStore.getCurrentUser().getName() + " - ");
-		System.out.println("(Press Enter to return) ");
 		scanner.nextLine();
+    	while (true) {
+    		view.viewCamps(campStudentService.getRegisteredCamps()," - Camps registered by " + AuthStore.getCurrentUser().getName() + " - ");
+    		Camp camp = InputSelectionUtility.campSelector(campStudentService.getAllCamps());
+    		if (camp != null) {
+	    		view.viewCampInformation(camp);
+	    		scanner.nextLine();
+    		} else {
+    			return;
+    		}
+    	}
 	}
 
 	public void submitEnquiry() {

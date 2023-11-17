@@ -57,7 +57,6 @@ public class AuthController {
         	}
 
             String userID, password;
-
             System.out.print("UserID: ");
             userID = sc.nextLine();
 
@@ -71,6 +70,8 @@ public class AuthController {
                 System.out.println("Credentials invalid! Note that UserID and Password are case-sensitive.\n");
             }
 
+            //debug remove when done
+            /*
             if(authenticated){
                 User user = (User) AuthStore.getCurrentUser();
                 if(!user.getIsPasswordChanged()){
@@ -82,7 +83,7 @@ public class AuthController {
                     }
                 }
             }
-
+            */
         } while (!authenticated);
     }
 

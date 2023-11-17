@@ -5,6 +5,7 @@ import java.util.Map;
 import models.Student;
 import stores.AuthStore;
 import stores.DataStore;
+import views.AuthView;
 import enums.UserRole;
 
 /**
@@ -16,6 +17,7 @@ public class AuthStudentService extends AuthService {
      * Constructs an instance of the AuthStudentService class.
      */
     public AuthStudentService() {
+        AuthView.studentLoginView();
     };
 
     @Override
