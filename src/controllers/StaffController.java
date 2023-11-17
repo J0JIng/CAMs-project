@@ -133,8 +133,10 @@ public class StaffController extends UserController {
             return;
         }
         Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
-        view.viewToggleOption(camp);
-        campStaffService.toggleCampVisibility(camp);
+        if (camp != null) {
+	        view.viewToggleOption(camp);
+	        campStaffService.toggleCampVisibility(camp);
+        }
     }
 
     protected void createCamp() {
