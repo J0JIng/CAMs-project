@@ -365,6 +365,12 @@ public class StudentController extends UserController {
 	 * Shows the camps that the student is registered in.
 	 */
 	protected void viewRegisteredCamps() {
+		List<Camp> list = campStudentService.getRegisteredCamps();
+		view.viewCamps(list, " - Camps registered by " + AuthStore.getCurrentUser().getName() + " - ");
+		if (scanner.hasNextLine()) { 
+			scanner.nextLine();
+		}
+		System.out.print("(Press Enter to return) ");
 		scanner.nextLine();
     	while (true) {
     		view.viewCamps(campStudentService.getRegisteredCamps()," - Camps registered by " + AuthStore.getCurrentUser().getName() + " - ");
@@ -387,17 +393,19 @@ public class StudentController extends UserController {
 
 		// Get User input
 		Camp selectedCamp = InputSelectionUtility.campSelector(availableCamps);
-        assert selectedCamp != null;
-        String campName = selectedCamp.getCampInformation().getCampName();
-		String enquiryMessage = InputSelectionUtility.getStringInput("Enter enquiry message: ");
-		// Prompt the user whether they'd like the enquiry to be saved as draft (1: Yes, 2: No)
-	    int draftChoice = InputSelectionUtility.getIntInput("Do you want to save the enquiry as a draft? (1: Yes, 2: No): ");
-	    boolean isDraft = (draftChoice == 1);
-
-        // Create a new enquiry using EnquiryStudentService
-        int enquiryID = enquiryStudentService.createEnquiry(student.getStudentID(), campName, enquiryMessage, isDraft);
-
-        System.out.println("Enquiry submitted with ID: " + enquiryID);
+        
+		if (selectedCamp != null) {
+	        String campName = selectedCamp.getCampInformation().getCampName();
+			String enquiryMessage = InputSelectionUtility.getStringInput("Enter enquiry message: ");
+			// Prompt the user whether they'd like the enquiry to be saved as draft (1: Yes, 2: No)
+		    int draftChoice = InputSelectionUtility.getIntInput("Do you want to save the enquiry as a draft? (1: Yes, 2: No): ");
+		    boolean isDraft = (draftChoice == 1);
+	
+	        // Create a new enquiry using EnquiryStudentService
+	        int enquiryID = enquiryStudentService.createEnquiry(student.getStudentID(), campName, enquiryMessage, isDraft);
+	
+	        System.out.println("Enquiry submitted with ID: " + enquiryID);
+		}
     }
 
 	/**
@@ -425,6 +433,9 @@ public class StudentController extends UserController {
 		System.out.println("\nResponded Enquiries:");
 		view.displayEnquiries(respondedEnquiries);
 		
+		if (scanner.hasNextLine()) { 
+			scanner.nextLine();
+		}
 		System.out.println("(Press Enter to Return)");
 		scanner.nextLine();
 	}
