@@ -370,17 +370,18 @@ public class StudentController extends UserController {
 	 */
 	protected void viewRegisteredCamps() {
 		List<Camp> list = campStudentService.getRegisteredCamps();
-		view.viewCamps(list, " - Camps registered by " + AuthStore.getCurrentUser().getName() + " - ");
-		if (scanner.hasNextLine()) { 
-			scanner.nextLine();
-		}
-		System.out.print("(Press Enter to return) ");
-		scanner.nextLine();
+//		view.viewCamps(list, " - Camps registered by " + AuthStore.getCurrentUser().getName() + " - ");
+//		if (scanner.hasNextLine()) { 
+//			scanner.nextLine();
+//		}
+//		System.out.print("(Press Enter to return) ");
+//		scanner.nextLine();
     	while (true) {
-    		view.viewCamps(campStudentService.getRegisteredCamps()," - Camps registered by " + AuthStore.getCurrentUser().getName() + " - ");
-    		Camp camp = InputSelectionUtility.campSelector(campStudentService.getAllCamps());
+    		view.viewCamps(list," - Camps registered by " + AuthStore.getCurrentUser().getName() + " - ");
+    		Camp camp = InputSelectionUtility.campSelector(list);
     		if (camp != null) {
 	    		view.viewCampInformation(camp);
+	    		scanner.nextLine();
 	    		scanner.nextLine();
     		} else {
     			return;
@@ -407,13 +408,17 @@ public class StudentController extends UserController {
         String campName = selectedCamp.getCampInformation().getCampName();
 		String enquiryMessage = InputSelectionUtility.getStringInput("Enter enquiry message: ");
 		// Prompt the user whether they'd like the enquiry to be saved as draft (1: Yes, 2: No)
-	    int draftChoice = InputSelectionUtility.getIntInput("Do you want to save the enquiry as a draft? (1: Yes, 2: No): ");
+	    int draftChoice = InputSelectionUtility.getIntInput("Do you want to save the enquiry as a draft or submit? (1: Draft, 2: Submit): ");
 	    boolean isDraft = (draftChoice == 1);
 
         // Create a new enquiry using EnquiryStudentService
         int enquiryID = enquiryStudentService.createEnquiry(student.getStudentID(), campName, enquiryMessage, isDraft);
 
-        System.out.println("Enquiry submitted with ID: " + enquiryID);
+        if (isDraft) {
+        	System.out.println("Saved Draft Enquiry with ID: " + enquiryID);
+        } else {
+        	System.out.println("Enquiry submitted with ID: " + enquiryID);
+        }
     }
 
 	/**
@@ -429,23 +434,10 @@ public class StudentController extends UserController {
 		Map<Integer, Enquiry> submittedEnquiries = enquiryStudentService.getSubmittedEnquiries(student.getStudentID());
 		Map<Integer, Enquiry> respondedEnquiries = enquiryStudentService.getRespondedEnquiries(student.getStudentID());
 
-		// Display draft enquiries
-		System.out.println("Draft Enquiries:");
-		view.displayEnquiries(draftEnquiries);
+		// Display enquiries
+		view.displayStudentEnquiries(draftEnquiries, submittedEnquiries, respondedEnquiries);
 
-		// Display submitted enquiries
-		System.out.println("\nSubmitted Enquiries:");
-		view.displayEnquiries(submittedEnquiries);
-
-		// Display responded enquiries
-		System.out.println("\nResponded Enquiries:");
-		view.displayEnquiries(respondedEnquiries);
-
-		if (scanner.hasNextLine()) { 
-			scanner.nextLine();
-		}
-		System.out.println("(Press Enter to Return)");
-		scanner.nextLine();
+		askUserEnter(scanner);
 	}
 
 	/**
@@ -463,9 +455,13 @@ public class StudentController extends UserController {
 		// Check if there are draft enquiries to edit
 		if (draftEnquiries.isEmpty()) {
 			System.out.println("You have no draft enquiries to edit.");
+			askUserEnter(scanner);
 			return false;
 		}
-
+		
+		// Display draft enquiries
+		view.displayEnquiries(draftEnquiries);
+		
 		// Get User input
 		Enquiry selectedEnquiry = InputSelectionUtility.enquirySelector(draftEnquiries);
 
@@ -494,6 +490,9 @@ public class StudentController extends UserController {
 			return;
 		}
 
+		// Display draft enquiries
+		view.displayEnquiries(draftEnquiries);
+		
 		// Get User input
 		Enquiry selectedEnquiry = InputSelectionUtility.enquirySelector(draftEnquiries);
 
