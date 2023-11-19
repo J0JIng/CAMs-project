@@ -59,11 +59,4 @@ public class UserController {
         return true;
     }
     
-    public void askUserEnter(Scanner s) {
-    	if (s.hasNextLine()) { 
-			s.nextLine();
-		}
-		System.out.println("(Press Enter to Return)");
-		s.nextLine();
-    }
 }

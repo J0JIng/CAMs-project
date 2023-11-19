@@ -21,6 +21,7 @@ import services.EnquirySenderService;
 import stores.AuthStore;
 
 import views.StudentView;
+import views.MessageView;
 
 import utility.InputSelectionUtility;
 
@@ -437,7 +438,7 @@ public class StudentController extends UserController {
 		// Display enquiries
 		view.displayStudentEnquiries(draftEnquiries, submittedEnquiries, respondedEnquiries);
 
-		askUserEnter(scanner);
+		MessageView.endMessage(scanner, null, true);
 	}
 
 	/**
@@ -454,8 +455,7 @@ public class StudentController extends UserController {
 
 		// Check if there are draft enquiries to edit
 		if (draftEnquiries.isEmpty()) {
-			System.out.println("You have no draft enquiries to edit.");
-			askUserEnter(scanner);
+			MessageView.endMessage(scanner, "You have no draft enquiries to edit.", false);
 			return false;
 		}
 		
@@ -469,9 +469,10 @@ public class StudentController extends UserController {
 			String newMessage = InputSelectionUtility.getStringInput("Enter the new enquiry message: ");
 
 			// Prompt the user whether they'd like the enquiry to be saved as draft (1: Yes, 2: No)
-			int draftChoice = InputSelectionUtility.getIntInput("Do you want to save the enquiry as a draft? (1: Yes, 2: No): ");
+			int draftChoice = InputSelectionUtility.getIntInput("Do you want to save the enquiry as a draft or submit? (1: Draft, 2: Submit): ");
 			boolean isDraft = (draftChoice == 1);
 
+			MessageView.endMessage(scanner, null, true);
 			// Edit the selected draft enquiry using EnquiryStudentService
 			return enquiryStudentService.editDraftEnquiry(selectedEnquiry.getEnquiryID(), student.getStudentID(), newMessage, isDraft);
 		}

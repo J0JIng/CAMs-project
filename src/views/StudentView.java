@@ -78,7 +78,7 @@ public class StudentView implements IMenuView{
         ViewUtility.displayInMenuNumbered("View Camps with Filters", 2);
         ViewUtility.displayInMenuNumbered("Register for Camp", 3);
         ViewUtility.displayInMenuNumbered("Withdraw from Camp", 4);
-        ViewUtility.displayInMenuNumbered("View Remaining Slots of Camp", 5);
+        ViewUtility.displayInMenuNumbered("View Registered Slots of Camp", 5);
         ViewUtility.displayInMenuNumbered("View Registered Camps", 6);
         ViewUtility.displayInMenuNumbered("View Enquiries For Camp", 7);
         ViewUtility.displayInMenuNumbered("Respond to Enquiry", 8);
