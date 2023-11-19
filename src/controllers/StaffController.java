@@ -335,8 +335,6 @@ public class StaffController extends UserController {
 		List<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
 		view.viewCamps(campStaffService.getStaffCreatedCamps(staff),
 	                " - Camps by " + AuthStore.getCurrentUser().getName() + " - ");
-	    System.out.print("(Press Enter to return) ");
-	    scanner.nextLine();
 		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
 		if (camp == null) {
 			// Invalid input, exit the process
@@ -344,6 +342,9 @@ public class StaffController extends UserController {
 		}
 		Map<Integer, Enquiry> campEnquiries = enquiryStaffService.getAllPendingEnquiriesForCamp(camp);
 		view.displayEnquiries(campEnquiries);
+		scanner.nextLine();
+	    System.out.print("(Press Enter to return) ");
+	    scanner.nextLine();
 	}
 
 	protected void respondToEnquiry() {

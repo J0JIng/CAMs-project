@@ -51,6 +51,16 @@ public class ViewUtility {
     }
     
     /**
+     * Displays string at the center of the large menu
+     * @param s the string to be centered
+     */
+    public static void displayInLargeMenuCentered(String s) {
+		int totalLength = s.length();
+		int spaces = (92 - totalLength) / 2;
+    	System.out.println("║" + " ".repeat(spaces) + s + " ".repeat(92 - totalLength - spaces) + "║");
+    }
+    
+    /**
      * Displays string as a numbered entry in the menu
      * @param s the string in the entry
      * @param index the numbered index

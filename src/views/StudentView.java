@@ -78,7 +78,7 @@ public class StudentView implements IMenuView{
         ViewUtility.displayInMenuNumbered("View Camps with Filters", 2);
         ViewUtility.displayInMenuNumbered("Register for Camp", 3);
         ViewUtility.displayInMenuNumbered("Withdraw from Camp", 4);
-        ViewUtility.displayInMenuNumbered("View Remaining Slots of Camp", 5);
+        ViewUtility.displayInMenuNumbered("View Registered Slots of Camp", 5);
         ViewUtility.displayInMenuNumbered("View Registered Camps", 6);
         ViewUtility.displayInMenuNumbered("View Enquiries For Camp", 7);
         ViewUtility.displayInMenuNumbered("Respond to Enquiry", 8);
@@ -231,6 +231,46 @@ public class StudentView implements IMenuView{
 		}
 		System.out.println("╚════════════════════════════════════════════════════════════════════════════════════════════╝");
 	}
+	
+	public void displayStudentEnquiries(Map<Integer, Enquiry> draftEnquiries, Map<Integer, Enquiry> submittedEnquiries, Map<Integer, Enquiry> respondedEnquiries) {
+		System.out.println("╔════════════════════════════════════════════════════════════════════════════════════════════╗");
+        System.out.println("║                                                                                            ║"); 
+	    System.out.println("║             ███████╗███╗   ██╗ ██████╗ ██╗   ██╗██╗██████╗ ██╗███████╗███████╗             ║");
+	    System.out.println("║             ██╔════╝████╗  ██║██╔═══██╗██║   ██║██║██╔══██╗██║██╔════╝██╔════╝             ║");
+	    System.out.println("║             █████╗  ██╔██╗ ██║██║   ██║██║   ██║██║██████╔╝██║█████╗  ███████╗             ║");
+	    System.out.println("║             ██╔══╝  ██║╚██╗██║██║▄▄ ██║██║   ██║██║██╔══██╗██║██╔══╝  ╚════██║             ║");
+	    System.out.println("║             ███████╗██║ ╚████║╚██████╔╝╚██████╔╝██║██║  ██║██║███████╗███████║             ║");
+	    System.out.println("║             ╚══════╝╚═╝  ╚═══╝ ╚══▀▀═╝  ╚═════╝ ╚═╝╚═╝  ╚═╝╚═╝╚══════╝╚══════╝             ║");
+        System.out.println("║                                                                                            ║");
+        Map<Integer, Enquiry> enquiries = null;
+		for (int i = 0; i < 3; i++) {
+			System.out.println("╠════════════════════════════════════════════════════════════════════════════════════════════╣");
+			switch (i) {
+				case 0: enquiries = draftEnquiries; 
+				System.out.println("║                                   --- Draft Enquiries ---                                  ║"); break;
+				case 1: enquiries = submittedEnquiries; 
+				System.out.println("║                                 --- Submitted Enquiries ---                                ║"); break;
+				case 2: enquiries = respondedEnquiries;
+				System.out.println("║                                 --- Responded Enquiries ---                                ║"); break;
+			}
+			if (enquiries.isEmpty()) {
+				System.out.println("╠════════════════════════════════════════════════════════════════════════════════════════════╣");
+				System.out.println("║                                   No Enquiries to Display.                                 ║");
+	        } else {
+	        	for (Enquiry enquiry : enquiries.values()) {
+			    	System.out.println("╠════════════════════════════════════════════════════════════════════════════════════════════╣");
+			    	ViewUtility.displayInMenuBulletLarge("Enquiry ID: " + enquiry.getEnquiryID());
+					ViewUtility.displayInMenuBulletLarge("Camp Name: " + enquiry.getCampName());
+					ViewUtility.displayInMenuBulletLarge("Message: " + enquiry.getEnquiryMessage());
+					ViewUtility.displayInMenuBulletLarge("Status: " + enquiry.getEnquiryStatus());
+					ViewUtility.displayInMenuBulletLarge("Response: " + enquiry.getEnquiryResponse());
+					ViewUtility.displayInMenuBulletLarge("Responder ID: " + enquiry.getResponderID());
+			        System.out.println("╠════════════════════════════════════════════════════════════════════════════════════════════╣");
+			    }
+	        }
+		}
+		System.out.println("╚════════════════════════════════════════════════════════════════════════════════════════════╝");
+	}
 
 	public void displaySuggestions(Map<Integer, Suggestion> draftSuggestions, Map<Integer, Suggestion> submittedSuggestions,
 									Map<Integer, Suggestion> acceptedSuggestions, Map<Integer, Suggestion> rejectedSuggestions) {
@@ -249,13 +289,13 @@ public class StudentView implements IMenuView{
 			System.out.println("╠════════════════════════════════════════════════════════════════════════════════════════════╣");
 			switch (i) {
 				case 0: suggestions = draftSuggestions; 
-				System.out.println("║                                      Draft Suggestions                                     ║"); break;
+				System.out.println("║                                  --- Draft Suggestions ---                                 ║"); break;
 				case 1: suggestions = submittedSuggestions; 
-				System.out.println("║                                    Submitted Suggestions                                   ║"); break;
+				System.out.println("║                                --- Submitted Suggestions ---                               ║"); break;
 				case 2: suggestions = acceptedSuggestions;
-				System.out.println("║                                     Accepted Suggestions                                   ║"); break;
+				System.out.println("║                                 --- Accepted Suggestions ---                               ║"); break;
 				case 3: suggestions = rejectedSuggestions;
-				System.out.println("║                                     Rejected Suggestions                                   ║"); break;
+				System.out.println("║                                 --- Rejected Suggestions ---                               ║"); break;
 			}
 			if (suggestions.isEmpty()) {
 				System.out.println("╠════════════════════════════════════════════════════════════════════════════════════════════╣");

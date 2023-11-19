@@ -418,19 +418,24 @@ public class InputSelectionUtility {
 
     public static Enquiry enquirySelector(Map<Integer, Enquiry> enquiries) {
         while (true) {
-            System.out.println("Select an Enquiry:");
+//
+//            for (Map.Entry<Integer, Enquiry> entry : enquiries.entrySet()) {
+//                System.out.println(entry.getKey() + ". " + entry.getValue().getEnquiryMessage());
+//            }
 
-            for (Map.Entry<Integer, Enquiry> entry : enquiries.entrySet()) {
-                System.out.println(entry.getKey() + ". " + entry.getValue().getEnquiryMessage());
-            }
-
-            int enquiryID = getIntInput("Enter the ID of the enquiry (or press Enter to return): ");
-            Enquiry selectedEnquiry = enquiries.get(enquiryID);
-
-            if (selectedEnquiry != null) {
-                return selectedEnquiry;
+            int enquiryID = getIntInput("Enter the ID of the enquiry (Enter 0 to return): ");
+            
+            if (enquiryID != 0) {
+	            Enquiry selectedEnquiry = enquiries.get(enquiryID);
+	
+	            if (selectedEnquiry != null) {
+	                return selectedEnquiry;
+	            } else {
+	                System.out.println("Invalid ID. Please enter a valid ID or Enter 0 to return.\n");
+	            }
             } else {
-                System.out.println("Invalid ID. Please enter a valid ID or press Enter to return.\n");
+            	System.out.println("No enquiry selected\n");
+            	return null;
             }
         }
     }

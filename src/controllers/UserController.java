@@ -59,4 +59,5 @@ public class UserController {
         System.out.println("Password changed!");
         return true;
     }
+    
 }
