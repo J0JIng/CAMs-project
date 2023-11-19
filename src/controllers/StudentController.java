@@ -20,9 +20,9 @@ import services.EnquirySenderService;
 
 import stores.AuthStore;
 
-import views.StudentView;
-
 import utility.InputSelectionUtility;
+
+import views.StudentView;
 
 public class StudentController extends UserController {
 

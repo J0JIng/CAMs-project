@@ -3,12 +3,12 @@ package controllers;
 import java.util.Scanner;
 import java.util.Map;
 
+import interfaces.ICampStudentService;
+
 import enums.MessageStatus;
 import enums.UserRole;
 
 import views.StudentView;
-
-import interfaces.ICampStudentService;
 
 import models.Student;
 import models.Suggestion;

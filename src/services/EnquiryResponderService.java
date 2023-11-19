@@ -3,11 +3,14 @@ package services;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import interfaces.IEnquiryStaffService;
+
 import models.Camp;
 import models.Enquiry;
+
 import stores.DataStore;
+
 import enums.MessageStatus;
-import interfaces.IEnquiryStaffService;
 
 public class EnquiryResponderService implements IEnquiryStaffService {
 
