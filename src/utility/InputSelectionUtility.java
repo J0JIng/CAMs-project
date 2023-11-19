@@ -518,4 +518,49 @@ public class InputSelectionUtility {
         return selectedFilter;
     }
 
+    public static String getEnquiryFilterInput() {
+        String selectedFilter = null;
+        
+        int option;
+        do {
+            option = InputSelectionUtility.getIntInput("Enter the filter option (1/2/3/4/5/6/7, 0 to exit): ");
+            switch (option) {
+                case 1:
+                    selectedFilter = "No Filter";
+                    break;
+                case 2:
+                    selectedFilter = "Enquiry ID";
+                    break;
+                case 3:
+                    selectedFilter = "Sender ID";
+                    break;
+                case 4:
+                    selectedFilter = "Responder ID";
+                    break;
+                case 5:
+                    selectedFilter = "Enquiry Status";
+                    break;
+                case 6:
+                    selectedFilter = "Enquiry Message";
+                    break;
+                case 7:
+                    selectedFilter = "Enquiry Response";
+                    break;
+                case 0:
+                    // User chose to finish entering filters
+                    break;
+                default:
+                    System.out.println("Invalid option. Please enter a valid filter option.");
+                    break;
+            }
+    
+            // Print selected filter after each choice
+            if (option != 0) {
+                System.out.println("Selected Filter: " + selectedFilter);
+            }
+        } while (option != 0);
+    
+        return selectedFilter;
+    }
+
 }

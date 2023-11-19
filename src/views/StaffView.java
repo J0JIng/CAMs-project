@@ -276,9 +276,9 @@ public class StaffView implements IMenuView {
 		System.out.println("║╚═╝  ╚═╝╚══════╝╚═╝      ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚══════╝║");
         System.out.println("║                                                          ║");
 		System.out.println("╠══════════════════════════════════════════════════════════╣");
-        ViewUtility.displayInMenuNumbered("Generate Reports For ALL Camps", 1);
-        ViewUtility.displayInMenuNumbered("Generate Reports For Staff Camps", 2);
-        ViewUtility.displayInMenuNumbered("Generate Report For Selected Camp", 3);
+        ViewUtility.displayInMenuNumbered("Generate Performance Reports For ALL Camps", 1);
+        ViewUtility.displayInMenuNumbered("Generate Performance Reports For Staff Camps", 2);
+        ViewUtility.displayInMenuNumbered("Generate Performance Report For Selected Camp", 3);
 		System.out.println("╚══════════════════════════════════════════════════════════╝");
 	}
 
@@ -290,6 +290,37 @@ public class StaffView implements IMenuView {
 		ViewUtility.displayInMenuNumbered("Committee ID", 2);
 		ViewUtility.displayInMenuNumbered("Committee Name", 3);
 		ViewUtility.displayInMenuNumbered("Committee Point", 4);
+		System.out.println("╚══════════════════════════════════════════════════════════╝");
+	}
+
+	public void viewEnquiryReportMenu() {
+		System.out.println("╔══════════════════════════════════════════════════════════╗");
+		System.out.println("║                                                          ║");
+		System.out.println("║██████╗ ███████╗██████╗  ██████╗ ██████╗ ████████╗███████╗║");
+		System.out.println("║██╔══██╗██╔════╝██╔══██╗██╔═══██╗██╔══██╗╚══██╔══╝██╔════╝║");
+		System.out.println("║██████╔╝█████╗  ██████╔╝██║   ██║██████╔╝   ██║   ███████╗║");
+		System.out.println("║██╔══██╗██╔══╝  ██╔═══╝ ██║   ██║██╔══██╗   ██║   ╚════██║║");
+		System.out.println("║██║  ██║███████╗██║     ╚██████╔╝██║  ██║   ██║   ███████║║");
+		System.out.println("║╚═╝  ╚═╝╚══════╝╚═╝      ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚══════╝║");
+        System.out.println("║                                                          ║");
+		System.out.println("╠══════════════════════════════════════════════════════════╣");
+        ViewUtility.displayInMenuNumbered("Generate Enquiry Reports For ALL Camps", 1);
+        ViewUtility.displayInMenuNumbered("Generate Enquiry Reports For Staff Camps", 2);
+        ViewUtility.displayInMenuNumbered("Generate Enquiry Report For Selected Camp", 3);
+		System.out.println("╚══════════════════════════════════════════════════════════╝");
+	}
+
+	public void showEnquiryFilterInput() {
+		System.out.println("╔══════════════════════════════════════════════════════════╗");
+		ViewUtility.displayInMenuCentered(" - Choose Filters - ");
+		System.out.println("╠══════════════════════════════════════════════════════════╣");
+		ViewUtility.displayInMenuNumbered("No Filter", 1);
+		ViewUtility.displayInMenuNumbered("Enquiry ID", 2);
+		ViewUtility.displayInMenuNumbered("Sender Name", 3);
+		ViewUtility.displayInMenuNumbered("Responder Point", 4);
+		ViewUtility.displayInMenuNumbered("Enquiry Status", 5);
+		ViewUtility.displayInMenuNumbered("Enquiry Message", 6);
+		ViewUtility.displayInMenuNumbered("Enquiry Response", 7);
 		System.out.println("╚══════════════════════════════════════════════════════════╝");
 	}
 
