@@ -331,54 +331,50 @@ public class StaffController extends UserController {
 
 	protected void viewEnquiriesForCamp() {
 		// Get list of Staff created camps
-        scanner.nextLine();
         Staff staff = (Staff) AuthStore.getCurrentUser();
 		List<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
-		// Display all the camps with enquiries
-		view.viewCamps(staffCreatedCamps, " - Choose Camp to view Enquiries - ");
+		view.viewCamps(campStaffService.getStaffCreatedCamps(staff),
+	                " - Camps by " + AuthStore.getCurrentUser().getName() + " - ");
+	    System.out.print("(Press Enter to return) ");
+	    scanner.nextLine();
 		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
-		if (camp != null) {
-			Map<Integer, Enquiry> campEnquiries = enquiryStaffService.getAllEnquiriesForCamp(camp);
-			view.displayEnquiries(campEnquiries);
-			System.out.println("(Press Enter to return)");
-	    	scanner.nextLine();
-		} else {
-			System.out.println("No camp selected");
+		if (camp == null) {
+			// Invalid input, exit the process
+			return;
 		}
+		Map<Integer, Enquiry> campEnquiries = enquiryStaffService.getAllEnquiriesForCamp(camp);
+		view.displayEnquiries(campEnquiries);
 	}
 
 	protected void respondToEnquiry() {
         Staff staff = (Staff) AuthStore.getCurrentUser();
 		// Get list of Staff created camps
 		List<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
-		// Display all the camps
-		view.viewCamps(staffCreatedCamps, " - Choose Camp to respond Enquiries - ");
+		view.viewCamps(campStaffService.getStaffCreatedCamps(staff),
+                " - Camps by " + AuthStore.getCurrentUser().getName() + " - ");
+		System.out.print("(Press Enter to return) ");
+		scanner.nextLine();
 		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
-
-		if (camp != null) {
-			// Get enquiries for the selected camp
-			Map<Integer, Enquiry> campEnquiries = enquiryStaffService.getAllEnquiriesForCamp(camp);
-			// Check if there are draft enquiries to edit
-			if (campEnquiries.isEmpty()) {
-				System.out.println("You have no student enquiries to reply to.");
-				scanner.nextLine();
-				System.out.println("(Press Enter to return)");
-		    	scanner.nextLine();
-				return;
-			}
-	
-			// Get User input
-			Enquiry selectedEnquiry = InputSelectionUtility.enquirySelector(campEnquiries);
-			String response = InputSelectionUtility.getStringInput("Enter response: ");
-	
-			// Respond using EnquiryStudentService
-			boolean success = enquiryStaffService.respondToEnquiry(selectedEnquiry.getEnquiryID(), staff.getStaffID(), MessageStatus.ACCEPTED, response);
-	        System.out.println(success? "Suggestion responded successfully" :"Error responding to suggestion ");
-	        System.out.println("(Press Enter to return)");
-	    	scanner.nextLine();
-		} else {
-			System.out.println("No camp selected");
+		if (camp == null) {
+			// Invalid input, exit the process
+			return;
 		}
+
+		// Get enquiries for the selected camp
+		Map<Integer, Enquiry> campEnquiries = enquiryStaffService.getAllEnquiriesForCamp(camp);
+		// Check if there are draft enquiries to edit
+		if (campEnquiries.isEmpty()) {
+			System.out.println("You have no student enquiries to reply to.");
+			return;
+		}
+
+		// Get User input
+		Enquiry selectedEnquiry = InputSelectionUtility.enquirySelector(campEnquiries);
+		String response = InputSelectionUtility.getStringInput("Enter response: ");
+
+		// Respond using EnquiryStudentService
+		boolean success = enquiryStaffService.respondToEnquiry(selectedEnquiry.getEnquiryID(), staff.getStaffID(), MessageStatus.ACCEPTED, response);
+        System.out.println(success? "Suggestion responded successfully" :"Error responding to suggestion ");
     }
 
     protected void viewSuggestionForCamp() {

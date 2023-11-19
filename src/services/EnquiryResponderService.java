@@ -20,7 +20,7 @@ public class EnquiryResponderService implements IEnquiryStaffService {
 
 		// Returns a Map<Integer, Enquiry> with Enquiries having the specified Camp name.
 		Map<Integer, Enquiry> enquiriesForCampMap = enquiryData.values().stream()
-				.filter(enquiry -> campName.equals(enquiry.getCampName()))
+				.filter(enquiry -> campName.equals(enquiry.getCampName()) && enquiry.getEnquiryStatus() == MessageStatus.PENDING)
 				.collect(Collectors.toMap(Enquiry::getEnquiryID, enquiry -> enquiry));
 
 		return enquiriesForCampMap;

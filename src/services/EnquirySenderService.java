@@ -4,6 +4,8 @@ import models.Enquiry;
 import stores.DataStore;
 import enums.MessageStatus;
 import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -19,6 +21,13 @@ public class EnquirySenderService {
                  .filter(enquiry -> enquiry.getSenderID().equals(studentID) && enquiry.getEnquiryStatus() == MessageStatus.ACCEPTED)
                  .collect(Collectors.toMap(Enquiry::getEnquiryID, enquiry -> enquiry));
     }
+    
+    public Map<Integer, Enquiry> getSubmittedEnquiries(String studentID) {
+        Map<Integer, Enquiry> enquiryData = DataStore.getEnquiryData();
+         return enquiryData.values().stream()
+                 .filter(enquiry -> enquiry.getSenderID().equals(studentID) && enquiry.getEnquiryStatus() == MessageStatus.PENDING)
+                 .collect(Collectors.toMap(Enquiry::getEnquiryID, enquiry -> enquiry));
+    }
 
     public Map<Integer, Enquiry> getStudentDraftEnquiries(String studentID) {
         Map<Integer, Enquiry> enquiryData = DataStore.getEnquiryData();
@@ -29,7 +38,7 @@ public class EnquirySenderService {
 
     public int createEnquiry(String senderID, String campName, String enquiryMessage, boolean isDraft) {
         Map<Integer, Enquiry> enquiryData = DataStore.getEnquiryData();
-        int enquiryID = UUID.randomUUID().hashCode();
+        int enquiryID = Math.abs(UUID.randomUUID().hashCode());
         Enquiry enquiry = new Enquiry(enquiryID, senderID, campName, enquiryMessage);
         if (isDraft) {
             enquiry.setEnquiryStatus(MessageStatus.DRAFT);
@@ -70,5 +79,8 @@ public class EnquirySenderService {
         }
         return false;
     }
+   
+	
+    
+    
 }
-

@@ -392,24 +392,28 @@ public class StudentController extends UserController {
     	Student student = (Student) AuthStore.getCurrentUser();
         
         //Get Data
-        List<Camp> availableCamps = campStudentService.getRegisteredCamps();
-        view.viewCamps(availableCamps, " - Choose a camp to submit enquiry - ");
+        List<Camp> availableCamps = campStudentService.getAllCamps();
 
 		// Get User input
+		view.viewCamps(availableCamps, " - Choose Camp to send enquiry - ");
+		// Select a camp for withdrawal
+		//Camp camp = InputSelectionUtility.campSelector(registeredCamps);
 		Camp selectedCamp = InputSelectionUtility.campSelector(availableCamps);
-        
-		if (selectedCamp != null) {
-	        String campName = selectedCamp.getCampInformation().getCampName();
-			String enquiryMessage = InputSelectionUtility.getStringInput("Enter enquiry message: ");
-			// Prompt the user whether they'd like the enquiry to be saved as draft (1: Yes, 2: No)
-		    int draftChoice = InputSelectionUtility.getIntInput("Do you want to save the enquiry as a draft? (1: Yes, 2: No): ");
-		    boolean isDraft = (draftChoice == 1);
-	
-	        // Create a new enquiry using EnquiryStudentService
-	        int enquiryID = enquiryStudentService.createEnquiry(student.getStudentID(), campName, enquiryMessage, isDraft);
-	
-	        System.out.println("Enquiry submitted with ID: " + enquiryID);
+        assert selectedCamp != null;
+        if (selectedCamp == null) {
+			// Invalid input, exit the withdrawal process
+			return;
 		}
+        String campName = selectedCamp.getCampInformation().getCampName();
+		String enquiryMessage = InputSelectionUtility.getStringInput("Enter enquiry message: ");
+		// Prompt the user whether they'd like the enquiry to be saved as draft (1: Yes, 2: No)
+	    int draftChoice = InputSelectionUtility.getIntInput("Do you want to save the enquiry as a draft? (1: Yes, 2: No): ");
+	    boolean isDraft = (draftChoice == 1);
+
+        // Create a new enquiry using EnquiryStudentService
+        int enquiryID = enquiryStudentService.createEnquiry(student.getStudentID(), campName, enquiryMessage, isDraft);
+
+        System.out.println("Enquiry submitted with ID: " + enquiryID);
     }
 
 	/**
@@ -422,8 +426,8 @@ public class StudentController extends UserController {
 
 		// Get draft, pending and responded enquiries
 		Map<Integer, Enquiry> draftEnquiries = enquiryStudentService.getStudentDraftEnquiries(student.getStudentID());
-		Map<Integer, Enquiry> submittedEnquiries = enquiryStudentService.getStudentDraftEnquiries(student.getStudentID());
-		Map<Integer, Enquiry> respondedEnquiries = enquiryStudentService.getStudentDraftEnquiries(student.getStudentID());
+		Map<Integer, Enquiry> submittedEnquiries = enquiryStudentService.getSubmittedEnquiries(student.getStudentID());
+		Map<Integer, Enquiry> respondedEnquiries = enquiryStudentService.getRespondedEnquiries(student.getStudentID());
 
 		// Display draft enquiries
 		System.out.println("Draft Enquiries:");
@@ -436,7 +440,7 @@ public class StudentController extends UserController {
 		// Display responded enquiries
 		System.out.println("\nResponded Enquiries:");
 		view.displayEnquiries(respondedEnquiries);
-		
+
 		if (scanner.hasNextLine()) { 
 			scanner.nextLine();
 		}
