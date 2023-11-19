@@ -374,7 +374,7 @@ public class StaffController extends UserController {
 
 		// Respond using EnquiryStudentService
 		boolean success = enquiryStaffService.respondToEnquiry(selectedEnquiry.getEnquiryID(), staff.getStaffID(), MessageStatus.ACCEPTED, response);
-        System.out.println(success? "Suggestion responded successfully" :"Error responding to suggestion ");
+        System.out.println(success? "Enquiry responded successfully" :"Error responding to suggestion ");
     }
 
     protected void viewSuggestionForCamp() {
@@ -442,10 +442,15 @@ public class StaffController extends UserController {
         List<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
 
         int option = 0;
-        boolean success;
-        String filter;
+        boolean success = false;
+        String filter = null;
 
         do {
+            if (filter != null) {
+            	System.out.println(success ? "Report generated successfully" : "Error generating report ");
+            	System.out.println("(Press Enter to return)");
+            	scanner.nextLine();
+            }
             // View report menu
             view.viewReportMenu();
             option = InputSelectionUtility.getIntInput("Enter the filter option (1/2/3, 4 to exit): ");
@@ -455,7 +460,7 @@ public class StaffController extends UserController {
                     if (allCreatedCamps != null && !allCreatedCamps.isEmpty()) {
                         view.showFilterInput();
                         filter = InputSelectionUtility.getFilterInput();
-                        success = reportStaffService.generateReport(filter, allCreatedCamps);
+                        if (filter != null) success = reportStaffService.generateReport(filter, allCreatedCamps);
                     }else{
                         success = false;
                         System.out.println("Error: allCreatedCamps is null or empty");
@@ -467,7 +472,7 @@ public class StaffController extends UserController {
                 	if (staffCreatedCamps != null && !staffCreatedCamps.isEmpty()) {
                         view.showFilterInput();
                         filter = InputSelectionUtility.getFilterInput();
-                        success = reportStaffService.generateReport(filter, staffCreatedCamps);
+                        if (filter != null) success = reportStaffService.generateReport(filter, staffCreatedCamps);
                     }else{
                         success = false;
                         System.out.println("Error: staffCreatedCamps is null or empty");
@@ -477,7 +482,7 @@ public class StaffController extends UserController {
     
                 case 3:
                     // Show ALL camps to select from
-                    viewAllCamps();
+            		view.viewCamps(allCreatedCamps, " - Choose Camp to Generate Report - ");
                     List<Camp> camps = new ArrayList<>();
                     Camp selectedCamp = InputSelectionUtility.campSelector(allCreatedCamps);
                     camps.add(selectedCamp);
@@ -488,13 +493,13 @@ public class StaffController extends UserController {
                     } else {
                     	view.showFilterInput();
                         filter = InputSelectionUtility.getFilterInput();
-                        success = reportStaffService.generateReport(filter,camps);
+                        if (filter != null) success = reportStaffService.generateReport(filter,camps);
                     }
                     break;
                 
                 case 4: 
                     System.out.println("Exiting From Report Generation");
-                    return;
+                    break;
     
                 default:
                     System.out.println("Invalid option.");
@@ -502,8 +507,9 @@ public class StaffController extends UserController {
                     break;
             }
         } while (option >= 0 && option <= 3);
-    
-        System.out.println(success ? "Report generated successfully" : "Error generating report ");
+        
+        System.out.println("(Press Enter to return)");
+    	scanner.nextLine();
     }
 
 
@@ -516,10 +522,15 @@ public class StaffController extends UserController {
         List<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
 
         int option = 0;
-        boolean success;
-        String filter;
+        boolean success = false;
+        String filter = null;
 
         do {
+            if (filter != null) {
+            	System.out.println(success ? "Report generated successfully" : "Error generating report ");
+            	System.out.println("(Press Enter to return)");
+            	scanner.nextLine();
+            }
             // View report menu
             view.viewPerformanceReportMenu();
             option = InputSelectionUtility.getIntInput("Enter the filter option (1/2/3, 4 to exit): ");
@@ -529,7 +540,7 @@ public class StaffController extends UserController {
                     if (allCreatedCamps != null && !allCreatedCamps.isEmpty()) {
                         view.showPerformanceFilterInput();
                         filter = InputSelectionUtility.getPerformanceFilterInput();
-                        success = reportStaffService.generatePerformanceReport(filter, allCreatedCamps);
+                        if (filter != null) success = reportStaffService.generatePerformanceReport(filter, allCreatedCamps);
                     }else{
                         success = false;
                         System.out.println("Error: allCreatedCamps is null or empty");
@@ -542,7 +553,7 @@ public class StaffController extends UserController {
                     if (staffCreatedCamps != null && !staffCreatedCamps.isEmpty()) {
                         view.showPerformanceFilterInput();
                         filter = InputSelectionUtility.getPerformanceFilterInput();
-                        success = reportStaffService.generatePerformanceReport(filter, staffCreatedCamps);
+                        if (filter != null) success = reportStaffService.generatePerformanceReport(filter, staffCreatedCamps);
                     }else{
                         success = false;
                         System.out.println("Error: staffCreatedCamps is null or empty");
@@ -563,13 +574,13 @@ public class StaffController extends UserController {
                     } else {
                     	view.showFilterInput();
                         filter = InputSelectionUtility.getPerformanceFilterInput();
-                        success = reportStaffService.generatePerformanceReport(filter,camps);
+                        if (filter != null) success = reportStaffService.generatePerformanceReport(filter,camps);
                     }
                     break;
                 
                 case 4: 
                     System.out.println("Exiting From Report Generation");
-                    return;
+                    break;
     
                 default:
                     System.out.println("Invalid option.");
@@ -577,8 +588,9 @@ public class StaffController extends UserController {
                     break;
             }
         } while (option >= 0 && option <= 3);
-    
-        System.out.println(success ? "Report generated successfully" : "Error generating report ");
+        
+        System.out.println("(Press Enter to return)");
+    	scanner.nextLine();
     }
     
     

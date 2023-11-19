@@ -474,7 +474,7 @@ public class InputSelectionUtility {
             }
     
             // Print selected filter after each choice
-            if (option != 0) {
+            if (option > 0 && option < 7) {
                 System.out.println("Selected Filter: " + selectedFilter);
             }
         } while (option != 0);
