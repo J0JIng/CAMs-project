@@ -342,7 +342,7 @@ public class StaffController extends UserController {
 			// Invalid input, exit the process
 			return;
 		}
-		Map<Integer, Enquiry> campEnquiries = enquiryStaffService.getAllEnquiriesForCamp(camp);
+		Map<Integer, Enquiry> campEnquiries = enquiryStaffService.getAllPendingEnquiriesForCamp(camp);
 		view.displayEnquiries(campEnquiries);
 	}
 
@@ -361,7 +361,7 @@ public class StaffController extends UserController {
 		}
 
 		// Get enquiries for the selected camp
-		Map<Integer, Enquiry> campEnquiries = enquiryStaffService.getAllEnquiriesForCamp(camp);
+		Map<Integer, Enquiry> campEnquiries = enquiryStaffService.getAllPendingEnquiriesForCamp(camp);
 		// Check if there are draft enquiries to edit
 		if (campEnquiries.isEmpty()) {
 			System.out.println("You have no student enquiries to reply to.");
@@ -618,7 +618,7 @@ public class StaffController extends UserController {
                 case 1:
                     // get the filters
                     if (allCreatedCamps != null && !allCreatedCamps.isEmpty()) {
-                        view.showPerformanceFilterInput();
+                        view.showEnquiryFilterInput();
                         filter = InputSelectionUtility.getEnquiryFilterInput();
                         if (filter != null) success = reportStaffService.generateEnquiryReport(filter, allCreatedCamps);
                     }else{
@@ -631,7 +631,7 @@ public class StaffController extends UserController {
                 case 2:
                     // get the filters
                     if (staffCreatedCamps != null && !staffCreatedCamps.isEmpty()) {
-                        view.showPerformanceFilterInput();
+                        view.showEnquiryFilterInput();
                         filter = InputSelectionUtility.getEnquiryFilterInput();
                         if (filter != null) success = reportStaffService.generateEnquiryReport(filter, staffCreatedCamps);
                     }else{
@@ -652,7 +652,7 @@ public class StaffController extends UserController {
                         System.out.println("Invalid camp selection.");
                         success = false;
                     } else {
-                    	view.showFilterInput();
+                    	view.showEnquiryFilterInput();
                         filter = InputSelectionUtility.getEnquiryFilterInput();
                         if (filter != null) success = reportStaffService.generateEnquiryReport(filter,camps);
                     }
