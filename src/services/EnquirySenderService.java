@@ -70,9 +70,5 @@ public class EnquirySenderService {
         }
         return false;
     }
-   
-	
-    
-    
 }
 
