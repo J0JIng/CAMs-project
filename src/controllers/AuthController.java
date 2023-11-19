@@ -3,11 +3,11 @@ package controllers;
 import java.util.Scanner;
 
 import interfaces.IAuthService;
-import models.User;
+
 import services.AuthStudentService;
-import stores.AuthStore;
 import services.AuthCampCommitteeService;
 import services.AuthStaffService;
+
 import views.AuthView;
 import utility.InputSelectionUtility;
 
