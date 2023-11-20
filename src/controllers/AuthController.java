@@ -5,11 +5,14 @@ import java.util.Scanner;
 import interfaces.IAuthService;
 
 import services.AuthStudentService;
+import stores.AuthStore;
 import services.AuthCampCommitteeService;
 import services.AuthStaffService;
 
 import views.AuthView;
 import utility.InputSelectionUtility;
+
+import enums.UserRole;
 
 /**
  *  class provides utility methods for managing user authentication within the application. 
@@ -95,7 +98,20 @@ public class AuthController {
         // Check if authService is not null before calling methods on it
         if (authService != null) {
             authService.logout();
-            System.out.println("User logged out successfully. (Press Enter)");
+            switch (authService.getClass().getName()) {
+            case "services.AuthStaffService":
+            	AuthView.staffLogoutView();
+            	break;
+            case "services.AuthStudentService":
+            	AuthView.studentLogoutView();
+            	break;
+            case "services.AuthCampCommitteeService":
+            	AuthView.CampCommitteeLogoutView();
+            	break;
+			default:
+				break;
+            }
+            //System.out.println("User logged out successfully. (Press Enter)");
         } else {
             System.out.println("Error: AuthService is null.");
         }

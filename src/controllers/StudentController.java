@@ -162,8 +162,9 @@ public class StudentController extends UserController {
 		// Register the student for the selected camp
 		String campName = camp.getCampInformation().getCampName();
 		boolean success = campStudentService.registerCamp(student, camp);
-		
-		MessageView.endMessage(scanner, success ? "Registration for " + campName + " successful!" : "Registration for " + campName + " unsuccessful!", false);
+		String message;
+		if (success) message = "Registration for " + campName + " successful!"; else message = "Registration for " + campName + " unsuccessful!";
+		MessageView.endMessage(scanner, message, false);
 		//System.out.println(success ? "Registration for " + campName + " successful!" : "Registration for " + campName + " unsuccessful!");
 	}
 	
@@ -197,7 +198,9 @@ public class StudentController extends UserController {
 		// Withdraw the student from the selected camp
 		String campName = camp.getCampInformation().getCampName();
 		boolean success = campStudentService.withdrawCamp(student, camp);
-		MessageView.endMessage(scanner, success ? "Withdrawal from " + campName + " successful!" : "Withdrawal from " + campName + " unsuccessful!", false);
+		String message;
+		if (success) message = "Withdrawal from " + campName + " successful!"; else message = "Withdrawal from " + campName + " unsuccessful!";
+		MessageView.endMessage(scanner, message, false);
 		//System.out.println(success ? "Withdrawal from " + campName + " successful!" : "Withdrawal from " + campName + " unsuccessful!");
 	}
 
@@ -258,10 +261,12 @@ public class StudentController extends UserController {
 		// Register the student for the selected camp
 		String campName = camp.getCampInformation().getCampName();
 		boolean success = campStudentService.registerAsCommittee(student, camp);
-		MessageView.endMessage(scanner, success ? "Camp committee registration for " + campName + " successful!, Please Relogin" : "Camp committee registration for " + campName + " unsuccessful!", false);
-
-//		System.out.println(success ? "Camp committee registration for " + campName + " successful!, Please Relogin" : 
+		String message;
+		if(success) message = "Registration for " + campName + " successful!"; else message = "Registration for " + campName + " unsuccessful!";
+		MessageView.endMessage(scanner, message, false);
+		//		System.out.println(success ? "Camp committee registration for " + campName + " successful!, Please Relogin" : 
 //									 "Camp committee registration for " + campName + " unsuccessful!");
+		
 		AuthStore.getCurrentUser().setRole(UserRole.COMMITTEE);
 		return true;
 	}

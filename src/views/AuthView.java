@@ -46,7 +46,7 @@ public class AuthView implements IMenuView {
         System.out.println("╚══════════════════════════════════════════════════════════╝");
 	}
 
-	public static void CampCommitteeLoginView() {
+	public static void campCommitteeLoginView() {
 		System.out.println("╔══════════════════════════════════════════════════════════╗");
         System.out.println("║                 - Camp Committee Login -                 ║");
         System.out.println("╚══════════════════════════════════════════════════════════╝");
@@ -54,19 +54,22 @@ public class AuthView implements IMenuView {
 
 	public static void staffLogoutView() {
 		System.out.println("╔══════════════════════════════════════════════════════════╗");
-        System.out.println("║                      - Staff Logout -                    ║");
+        System.out.println("║                     - Staff Logout -                     ║");
+        System.out.println("║                       (Press Enter)                      ║");
         System.out.println("╚══════════════════════════════════════════════════════════╝");
 	}
 	
 	public static void studentLogoutView() {
 		System.out.println("╔══════════════════════════════════════════════════════════╗");
-        System.out.println("║                     - Student Logout -                   ║");
+        System.out.println("║                    - Student Logout -                    ║");
+        System.out.println("║                       (Press Enter)                      ║");
         System.out.println("╚══════════════════════════════════════════════════════════╝");
 	}
 
 	public static void CampCommitteeLogoutView() {
 		System.out.println("╔══════════════════════════════════════════════════════════╗");
         System.out.println("║                 - Camp Committee Logout -                ║");
+        System.out.println("║                       (Press Enter)                      ║");
         System.out.println("╚══════════════════════════════════════════════════════════╝");
 	}
 }

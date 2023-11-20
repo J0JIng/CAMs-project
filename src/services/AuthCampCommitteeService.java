@@ -18,7 +18,7 @@ public class AuthCampCommitteeService extends AuthService {
      * Constructs an instance of the AuthStudentService class.
      */
     public AuthCampCommitteeService() {
-        AuthView.studentLoginView();
+        AuthView.campCommitteeLoginView();
     };
 
     @Override
