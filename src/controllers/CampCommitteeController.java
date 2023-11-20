@@ -3,12 +3,12 @@ package controllers;
 import java.util.Scanner;
 import java.util.Map;
 
+import interfaces.ICampStudentService;
+
 import enums.MessageStatus;
 import enums.UserRole;
 
 import views.StudentView;
-
-import interfaces.ICampStudentService;
 
 import models.Student;
 import models.Suggestion;
@@ -120,7 +120,7 @@ public class CampCommitteeController extends StudentController {
             System.out.println("You are not registered as a camp comittee for any camp.");
             return;
         } 
-		Map<Integer, Enquiry> campEnquiries = enquiryCampComitteeService.getAllEnquiriesForCamp(camp);
+		Map<Integer, Enquiry> campEnquiries = enquiryCampComitteeService.getAllPendingEnquiriesForCamp(camp);
 		view.displayEnquiries(campEnquiries);
 	}
 
@@ -134,7 +134,7 @@ public class CampCommitteeController extends StudentController {
         } 
 
 		// Get enquiries for the selected camp
-		Map<Integer, Enquiry> campEnquiries = enquiryCampComitteeService.getAllEnquiriesForCamp(camp);
+		Map<Integer, Enquiry> campEnquiries = enquiryCampComitteeService.getAllPendingEnquiriesForCamp(camp);
 		// Check if there are draft enquiries to edit
 		if (campEnquiries.isEmpty()) {
 			System.out.println("You have no student enquiries to reply to.");

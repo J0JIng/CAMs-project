@@ -5,17 +5,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.ArrayList;
+import java.util.Map;
 
 import enums.UserRole;
 
-
+import models.Enquiry;
 import models.Camp;
 import models.Student;
 
 public class ReportStaffService {
-
     private CsvFileDataService csvFileDataService = new CsvFileDataService();
     private CampStaffService campStaffService = new CampStaffService();
+    private EnquiryResponderService enquiryResponderService = new EnquiryResponderService();
 
     // generate Report for camps
     public boolean generateReport(String filter,List<Camp> camps) {
@@ -57,6 +58,25 @@ public class ReportStaffService {
             .collect(Collectors.toCollection(ArrayList::new));
 
             csvLines.add(generatePerformanceReportCsvLine(filter, camp, combinedStudentList));
+        }
+    
+        // Write to CSV file
+        boolean success = csvFileDataService.writeCsvFile("report/staff_report.csv", headers,csvLines);
+        return success;
+    }
+
+    public boolean generateEnquiryReport(String filter,List<Camp> camps) {
+
+        // Get headers for CSV file
+        List<String> headers = generateEnquiryReportHeaderLine(filter);
+    
+        // Get CSV line for CSV file
+        List<String> csvLines = new ArrayList<>();
+
+        for (Camp camp : camps) {
+            // Get map of Enquiries
+            Map<Integer,Enquiry> enquiryData = enquiryResponderService.getAllEnquiriesForCamp(camp);
+            csvLines.add(generateEnquiryReportCsvLine(filter, camp, enquiryData));
         }
     
         // Write to CSV file
@@ -291,6 +311,142 @@ public class ReportStaffService {
                     break;
     
     
+                default:
+                    break;
+            }
+        }
+
+        return csvLines.toString();
+    }
+
+    public List<String> generateEnquiryReportHeaderLine(String filter){
+        List<String> headers = new ArrayList<>();
+        switch (filter) {
+            case "No Filter":
+                headers.addAll(List.of(
+                    "Camp Name",
+                    "Enquiry ID",
+                    "Sender ID",
+                    "Responder ID",
+                    "Enquiry Status",
+                    "Enquiry Message",
+                    "Enquiry Response"));
+                break;
+            
+            case "Enquiry ID":
+                headers.addAll(List.of(
+                    "Camp Name",
+                    "Enquiry ID"));
+                break;
+    
+            case "Sender ID":
+                headers.addAll(List.of(
+                    "Camp Name",
+                    "Enquiry ID",
+                    "Sender ID"));
+                break;
+    
+            case "Responder ID":
+                headers.addAll(List.of(
+                    "Camp Name",
+                    "Enquiry ID",
+                    "Responder ID"));
+                break;
+
+            case "Enquiry Status":
+                headers.addAll(List.of(
+                    "Camp Name",
+                    "Enquiry ID",
+                    "Enquiry Status"));
+                break;
+            
+            case "Enquiry Message":
+                headers.addAll(List.of(
+                    "Camp Name",
+                    "Enquiry ID",
+                    "Enquiry Status"));
+                break;
+
+            case "Enquiry Response":
+                headers.addAll(List.of(
+                    "Camp Name",
+                    "Enquiry ID",
+                    "Enquiry Status"));
+                break;
+
+            default:
+                break;
+        }
+    
+        return headers;
+    }
+
+    public String generateEnquiryReportCsvLine(String filter, Camp camp, Map<Integer, Enquiry> enquiries) {
+        StringBuilder csvLines = new StringBuilder();
+        boolean firstEnquiry = true;
+    
+        for (Enquiry enquiry : enquiries.values()) {
+            if (!firstEnquiry) {
+                csvLines.append(System.lineSeparator()); // Add a new line for each student
+            } else {
+                firstEnquiry = false;
+            }
+    
+            switch (filter) {
+                case "No Filter":
+                    csvLines.append(String.join(",",
+                            camp.getCampInformation().getCampName(),
+                            (enquiry.getEnquiryID() != 0 ? String.valueOf(enquiry.getEnquiryID()) : "N/A"),
+                            enquiry.getSenderID(),
+                            enquiry.getResponderID(),
+                            enquiry.getEnquiryStatus().toString(),
+                            enquiry.getEnquiryMessage(),
+                            (enquiry.getEnquiryResponse()!= null && 
+                            !enquiry.getEnquiryMessage().isEmpty() ? enquiry.getEnquiryResponse() : "NA")));
+                    break;
+    
+                case "Enquiry ID":
+                    csvLines.append(String.join(",",
+                            camp.getCampInformation().getCampName(),
+                            (enquiry.getEnquiryID() != 0 ? String.valueOf(enquiry.getEnquiryID()) : "N/A")));
+                    break;
+
+                case "Sender ID":
+                    csvLines.append(String.join(",",
+                            camp.getCampInformation().getCampName(),
+                            (enquiry.getEnquiryID() != 0 ? String.valueOf(enquiry.getEnquiryID()) : "N/A"),
+                            enquiry.getSenderID()));
+                    break;
+
+                case "Responder ID":
+                    csvLines.append(String.join(",",
+                            camp.getCampInformation().getCampName(),
+                            (enquiry.getEnquiryID() != 0 ? String.valueOf(enquiry.getEnquiryID()) : "N/A"),
+                            enquiry.getResponderID()));
+                    break;
+                
+                case "Enquiry Status":
+                    csvLines.append(String.join(",",
+                            camp.getCampInformation().getCampName(),
+                            (enquiry.getEnquiryID() != 0 ? String.valueOf(enquiry.getEnquiryID()) : "N/A"),
+                            enquiry.getEnquiryStatus().toString()));
+                    break;
+                
+                case "Enquiry Message":
+                    csvLines.append(String.join(",",
+                            camp.getCampInformation().getCampName(),
+                            (enquiry.getEnquiryID() != 0 ? String.valueOf(enquiry.getEnquiryID()) : "N/A"),
+                            enquiry.getEnquiryMessage()));
+                    break;
+
+                case "Enquiry Response":
+                    csvLines.append(String.join(",",
+                            camp.getCampInformation().getCampName(),
+                            (enquiry.getEnquiryID() != 0 ? String.valueOf(enquiry.getEnquiryID()) : "N/A"),
+                            (enquiry.getEnquiryResponse()!= null && 
+                            !enquiry.getEnquiryMessage().isEmpty() ? enquiry.getEnquiryResponse() : "NA")));
+                    break;
+
                 default:
                     break;
             }

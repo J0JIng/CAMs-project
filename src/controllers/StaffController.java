@@ -97,7 +97,7 @@ public class StaffController extends UserController {
                     generatePerformanceReport();
                 	break;
                 case 15:
-                    // enquiry ?
+                    generateEnquiryReport();
                 	break;
                 case 16:
                 	// Change password
@@ -340,7 +340,7 @@ public class StaffController extends UserController {
 			// Invalid input, exit the process
 			return;
 		}
-		Map<Integer, Enquiry> campEnquiries = enquiryStaffService.getAllEnquiriesForCamp(camp);
+		Map<Integer, Enquiry> campEnquiries = enquiryStaffService.getAllPendingEnquiriesForCamp(camp);
 		view.displayEnquiries(campEnquiries);
 		scanner.nextLine();
 	    System.out.print("(Press Enter to return) ");
@@ -362,7 +362,7 @@ public class StaffController extends UserController {
 		}
 
 		// Get enquiries for the selected camp
-		Map<Integer, Enquiry> campEnquiries = enquiryStaffService.getAllEnquiriesForCamp(camp);
+		Map<Integer, Enquiry> campEnquiries = enquiryStaffService.getAllPendingEnquiriesForCamp(camp);
 		// Check if there are draft enquiries to edit
 		if (campEnquiries.isEmpty()) {
 			System.out.println("You have no student enquiries to reply to.");
@@ -434,7 +434,7 @@ public class StaffController extends UserController {
 		}
 	}
 
-    // Generate performance report
+    // Generate report
 
     protected void generateReport() {
         scanner.nextLine();
@@ -576,6 +576,86 @@ public class StaffController extends UserController {
                     	view.showFilterInput();
                         filter = InputSelectionUtility.getPerformanceFilterInput();
                         if (filter != null) success = reportStaffService.generatePerformanceReport(filter,camps);
+                    }
+                    break;
+                
+                case 4: 
+                    System.out.println("Exiting From Report Generation");
+                    break;
+    
+                default:
+                    System.out.println("Invalid option.");
+                    success = false;
+                    break;
+            }
+        } while (option >= 0 && option <= 3);
+        
+        System.out.println("(Press Enter to return)");
+    	scanner.nextLine();
+    }
+
+    // Generate Enquiry report
+
+    protected void generateEnquiryReport() {
+        scanner.nextLine();
+        Staff staff = (Staff) AuthStore.getCurrentUser();
+        List<Camp> allCreatedCamps = campStaffService.getAllCamps();
+        List<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
+
+        int option = 0;
+        boolean success = false;
+        String filter = null;
+
+        do {
+            if (filter != null) {
+            	System.out.println(success ? "Report generated successfully" : "Error generating report ");
+            	System.out.println("(Press Enter to return)");
+            	scanner.nextLine();
+            }
+            // View report menu
+            view.viewEnquiryReportMenu();
+            option = InputSelectionUtility.getIntInput("Enter the filter option (1/2/3, 4 to exit): ");
+            switch (option) {
+                case 1:
+                    // get the filters
+                    if (allCreatedCamps != null && !allCreatedCamps.isEmpty()) {
+                        view.showEnquiryFilterInput();
+                        filter = InputSelectionUtility.getEnquiryFilterInput();
+                        if (filter != null) success = reportStaffService.generateEnquiryReport(filter, allCreatedCamps);
+                    }else{
+                        success = false;
+                        System.out.println("Error: allCreatedCamps is null or empty");
+                    }
+                	
+                    break;
+    
+                case 2:
+                    // get the filters
+                    if (staffCreatedCamps != null && !staffCreatedCamps.isEmpty()) {
+                        view.showEnquiryFilterInput();
+                        filter = InputSelectionUtility.getEnquiryFilterInput();
+                        if (filter != null) success = reportStaffService.generateEnquiryReport(filter, staffCreatedCamps);
+                    }else{
+                        success = false;
+                        System.out.println("Error: staffCreatedCamps is null or empty");
+                    }
+
+                    break;
+    
+                case 3:
+                    // Show ALL camps to select from
+                    viewAllCamps();
+                    List<Camp> camps = new ArrayList<>();
+                    Camp selectedCamp = InputSelectionUtility.campSelector(allCreatedCamps);
+                    camps.add(selectedCamp);
+
+                    if (selectedCamp == null) {
+                        System.out.println("Invalid camp selection.");
+                        success = false;
+                    } else {
+                    	view.showEnquiryFilterInput();
+                        filter = InputSelectionUtility.getEnquiryFilterInput();
+                        if (filter != null) success = reportStaffService.generateEnquiryReport(filter,camps);
                     }
                     break;
                 

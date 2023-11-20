@@ -41,7 +41,7 @@ public class ReportStudentService {
         csvLines.add(generateReportCsvLine(filter, camp, combinedRegisteredList));
         
         // Write to CSV file
-        boolean success = csvFileDataService.writeCsvFile("report/staff_report.csv", headers,csvLines);
+        boolean success = csvFileDataService.writeCsvFile("report/committee_report.csv", headers,csvLines);
         return success;
     }
 

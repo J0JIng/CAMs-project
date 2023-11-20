@@ -155,7 +155,21 @@ public class InputSelectionUtility {
             return camps.get(campIndex);
         }
     }
-      
+
+    public static boolean getYesNoInput(String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            String input = sc.nextLine().trim().toLowerCase();
+
+            if (input.equals("y")) {
+                return true;
+            } else if (input.equals("n")) {
+                return false;
+            } else {
+                System.out.println("Invalid input. Please enter 'y' for yes or 'n' for no.");
+            }
+        }
+    }
     
     public static boolean toggleSelector(Camp selectedCamp) {
         while (true) {
@@ -450,7 +464,7 @@ public class InputSelectionUtility {
         int option;
     
         do {
-            option = InputSelectionUtility.getIntInput("Enter the filter option (1/2/3/4/5/6, 0 to exit): ");
+            option = InputSelectionUtility.getIntInput("Enter the filter option (1/2/3/4/5/6): ");
     
             switch (option) {
                 case 1:
@@ -471,28 +485,32 @@ public class InputSelectionUtility {
                 case 6:
                     selectedFilter = "Date";
                     break;
-                case 0:
-                    break;
                 default:
                     System.out.println("Invalid option. Please enter a valid filter option.");
-                    break;
+                    continue;
             }
     
             // Print selected filter after each choice
-            if (option > 0 && option < 7) {
-                System.out.println("Selected Filter: " + selectedFilter);
+            System.out.println("Selected Filter: " + selectedFilter);
+    
+            // Ask for confirmation
+            boolean confirmed = InputSelectionUtility.getYesNoInput("Confirm your selection? (y/n): ");
+            if (confirmed) {
+                break; // Exit the loop if confirmed
             }
-        } while (option != 0);
+    
+        } while (true);
     
         return selectedFilter;
     }
     
+    
     public static String getPerformanceFilterInput() {
         String selectedFilter = null;
-        
+    
         int option;
         do {
-            option = InputSelectionUtility.getIntInput("Enter the filter option (1/2/3/4, 0 to exit): ");
+            option = InputSelectionUtility.getIntInput("Enter the filter option (1/2/3/4): ");
             switch (option) {
                 case 1:
                     selectedFilter = "No Filter";
@@ -506,21 +524,71 @@ public class InputSelectionUtility {
                 case 4:
                     selectedFilter = "Committee Points";
                     break;
-                case 0:
-                    // User chose to finish entering filters
-                    break;
                 default:
                     System.out.println("Invalid option. Please enter a valid filter option.");
-                    break;
+                    continue;
             }
     
             // Print selected filter after each choice
-            if (option != 0) {
-                System.out.println("Selected Filter: " + selectedFilter);
+            System.out.println("Selected Filter: " + selectedFilter);
+    
+            // Ask for confirmation
+            boolean confirmed = InputSelectionUtility.getYesNoInput("Confirm your selection? (y/n): ");
+            if (confirmed) {
+                break; // Exit the loop if confirmed
             }
-        } while (option != 0);
+    
+        } while (true);
+    
+        return selectedFilter;
+    }    
+
+    public static String getEnquiryFilterInput() {
+        String selectedFilter = null;
+    
+        int option;
+        do {
+            option = InputSelectionUtility.getIntInput("Enter the filter option (1/2/3/4/5/6/7): ");
+            switch (option) {
+                case 1:
+                    selectedFilter = "No Filter";
+                    break;
+                case 2:
+                    selectedFilter = "Enquiry ID";
+                    break;
+                case 3:
+                    selectedFilter = "Sender ID";
+                    break;
+                case 4:
+                    selectedFilter = "Responder ID";
+                    break;
+                case 5:
+                    selectedFilter = "Enquiry Status";
+                    break;
+                case 6:
+                    selectedFilter = "Enquiry Message";
+                    break;
+                case 7:
+                    selectedFilter = "Enquiry Response";
+                    break;
+                default:
+                    System.out.println("Invalid option. Please enter a valid filter option.");
+                    continue;
+            }
+    
+            // Print selected filter after each choice
+            System.out.println("Selected Filter: " + selectedFilter);
+    
+            // Ask for confirmation
+            boolean confirmed = InputSelectionUtility.getYesNoInput("Confirm your selection? (y/n): ");
+            if (confirmed) {
+                break; // Exit the loop if confirmed
+            }
+    
+        } while (true);
     
         return selectedFilter;
     }
+    
 
 }
