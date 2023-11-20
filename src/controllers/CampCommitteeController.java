@@ -7,7 +7,7 @@ import interfaces.ICampStudentService;
 
 import enums.MessageStatus;
 import enums.UserRole;
-
+import views.MessageView;
 import views.StudentView;
 
 import models.Student;
@@ -195,7 +195,7 @@ public class CampCommitteeController extends StudentController {
 		Student student = (Student) AuthStore.getCurrentUser();
 
 		if(!campStudentService.isUserCampCommittee(student)){
-			System.out.println("Only committee members can edit suggestions!");
+			MessageView.endMessage(scanner, "Only committee members can edit suggestions!", false);
 			return false;
 		}
 		// Get Data
@@ -203,7 +203,7 @@ public class CampCommitteeController extends StudentController {
 
 		// Check if there are draft suggestions to edit
 		if (draftSuggestions.isEmpty()) {
-			System.out.println("You have no draft suggestions to edit.");
+			MessageView.endMessage(scanner, "You have no draft suggestions to edit.", false);
 			return false;
 		}
 		// Get User input
@@ -227,7 +227,7 @@ public class CampCommitteeController extends StudentController {
 		Student student = (Student) AuthStore.getCurrentUser();
 
 		if(!campStudentService.isUserCampCommittee(student)){
-			System.out.println("Only committee members can delete suggestions!");
+			MessageView.endMessage(scanner, "Only committee members can delete suggestions!", false);
 			return;
 		}
 		// Get Data
@@ -235,7 +235,7 @@ public class CampCommitteeController extends StudentController {
 
 		// Check if there are draft suggestions to delete
 		if (draftSuggestions.isEmpty()) {
-			System.out.println("You have no draft suggestions to delete.");
+			MessageView.endMessage(scanner, "You have no draft suggestions to delete.", false);
 			return;
 		}
 		// Get User input
@@ -248,12 +248,12 @@ public class CampCommitteeController extends StudentController {
 				// Delete the selected draft enquiry using EnquiryStudentService
 				boolean deleted = suggestionCampComitteeService.deleteDraftSuggestion(selectedSuggestion.getSuggestionID(), student.getStudentID());
 				if (deleted) {
-					System.out.println("Suggestion deleted successfully.");
+					MessageView.endMessage(scanner, "Suggestion deleted successfully.", true);
 				} else {
-					System.out.println("Failed to delete the suggestion. Please try again.");
+					MessageView.endMessage(scanner, "Failed to delete the suggestion. Please try again.", true);
 				}
 			} else {
-				System.out.println("Suggestion deletion canceled.");
+				MessageView.endMessage(scanner, "Suggestion deletion canceled.", true);
 			}
 		}
 	}
@@ -269,6 +269,6 @@ public class CampCommitteeController extends StudentController {
         boolean success;
         String filter = InputSelectionUtility.getFilterInput();
 		success = reportStudentService.generateReport(filter,camp);
-        System.out.println(success ? "Report generated successfully" : "Error generating report ");
+		MessageView.endMessage(scanner, success ? "Report generated successfully" : "Error generating report", false);
     }
 }

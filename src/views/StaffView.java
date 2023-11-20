@@ -101,7 +101,7 @@ public class StaffView implements IMenuView {
     	    }
         }
         System.out.println("╚══════════════════════════════════════════════════════════╝");
-        System.out.println("(Press Enter to return) ");
+        //System.out.println("(Press Enter to return) ");
 	}
 	
 	/**
@@ -156,7 +156,7 @@ public class StaffView implements IMenuView {
         	i++;
     	//}
         System.out.println("╚══════════════════════════════════════════════════════════╝");
-        System.out.print("(Press Enter to return) ");
+        //System.out.print("(Press Enter to return) ");
 	}
 
 	public void viewFliterOption() {
