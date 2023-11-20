@@ -16,7 +16,7 @@ public class SuggestionSenderService {
 
     public int submitSuggestion(String senderID, String campName, String suggestionDetails, boolean isDraft) {
         int suggestionID = Math.abs(UUID.randomUUID().hashCode());
-        Suggestion suggestion = new Suggestion(suggestionID, senderID, campName, suggestionDetails);
+        Suggestion suggestion = new Suggestion(suggestionID, campName, senderID, suggestionDetails);
         if (isDraft) {
             suggestion.setSuggestionStatus(MessageStatus.DRAFT);
         } else {
@@ -24,12 +24,13 @@ public class SuggestionSenderService {
             suggestion.setSuggestionStatus(MessageStatus.PENDING);
         }
         suggestionData.put(suggestionID, suggestion);
+        
         DataStore.setSuggestionData(suggestionData);
         return suggestionID;
     }
 
     public Map<Integer, Suggestion> viewDraftSuggestion(String studentID) {
-        return suggestionData.values().stream()
+    	return suggestionData.values().stream()
                 .filter(suggestion -> suggestion.getSenderID().equals(studentID) && suggestion.getSuggestionStatus() == MessageStatus.DRAFT)
                 .collect(Collectors.toMap(Suggestion::getSuggestionID, suggestion -> suggestion));
     }

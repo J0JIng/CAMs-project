@@ -404,19 +404,20 @@ public class StaffController extends UserController {
 				return;
 			}
 	
+			view.displaySuggestions(campSuggestions);
 			// Get User input
 			Suggestion selectedSuggestion = InputSelectionUtility.suggestionSelector(campSuggestions);
-			int reviewOption = InputSelectionUtility.getIntInput("Do you want to accept this suggestion? (1: Yes, 2: No): ");
-			boolean suggestionStatus = (reviewOption == 1);
-			Map<String, Student> students = DataStore.getStudentData();
-			Student sender = students.get(selectedSuggestion.getSenderID());
-			if (suggestionStatus){sender.incrementStudentPoints();}
-	
-			// Respond using EnquiryStudentService
-	        boolean success = suggestionStaffService.reviewSuggestion(selectedSuggestion.getSuggestionID(), suggestionStatus);
-	        MessageView.endMessage(scanner, success ? "Suggestion responded successfully" : "Error responding to suggestion", true);	
-		} else {
-			System.out.println("No camp selected");
+			if (selectedSuggestion != null) {
+				int reviewOption = InputSelectionUtility.getIntInput("Do you want to accept this suggestion? (1: Yes, 2: No): ");
+				boolean suggestionStatus = (reviewOption == 1);
+				Map<String, Student> students = DataStore.getStudentData();
+				Student sender = students.get(selectedSuggestion.getSenderID());
+				if (suggestionStatus){sender.incrementStudentPoints();}
+		
+				// Respond using EnquiryStudentService
+		        boolean success = suggestionStaffService.reviewSuggestion(selectedSuggestion.getSuggestionID(), suggestionStatus);
+		        MessageView.endMessage(scanner, success ? "Suggestion responded successfully" : "Error responding to suggestion", true);
+			}
 		}
 	}
 
