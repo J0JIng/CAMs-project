@@ -313,4 +313,27 @@ public class StudentView implements IMenuView{
 		}
 	    System.out.println("╚════════════════════════════════════════════════════════════════════════════════════════════╝");
 	}
+
+	public void showFilterInput() {
+		System.out.println("╔══════════════════════════════════════════════════════════╗");
+		System.out.println("║                                                          ║");
+		System.out.println("║██████╗ ███████╗██████╗  ██████╗ ██████╗ ████████╗███████╗║");
+		System.out.println("║██╔══██╗██╔════╝██╔══██╗██╔═══██╗██╔══██╗╚══██╔══╝██╔════╝║");
+		System.out.println("║██████╔╝█████╗  ██████╔╝██║   ██║██████╔╝   ██║   ███████╗║");
+		System.out.println("║██╔══██╗██╔══╝  ██╔═══╝ ██║   ██║██╔══██╗   ██║   ╚════██║║");
+		System.out.println("║██║  ██║███████╗██║     ╚██████╔╝██║  ██║   ██║   ███████║║");
+		System.out.println("║╚═╝  ╚═╝╚══════╝╚═╝      ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚══════╝║");
+        System.out.println("║                                                          ║");
+		System.out.println("╠══════════════════════════════════════════════════════════╣");
+		ViewUtility.displayInMenuCentered(" - Choose Filters - ");
+		System.out.println("╠══════════════════════════════════════════════════════════╣");
+		ViewUtility.displayInMenuNumbered("No Filter", 1);
+		ViewUtility.displayInMenuNumbered("Camp Information", 2);
+		ViewUtility.displayInMenuNumbered("Attendee", 3);
+		ViewUtility.displayInMenuNumbered("Camp Committee", 4);
+		ViewUtility.displayInMenuNumbered("Location", 5);
+		ViewUtility.displayInMenuNumbered("Date of Camp", 6);
+		System.out.println("╚══════════════════════════════════════════════════════════╝");
+	}
+
 }

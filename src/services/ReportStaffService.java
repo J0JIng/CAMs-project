@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Map;
 
 import enums.UserRole;
@@ -20,6 +21,8 @@ public class ReportStaffService {
 
     // generate Report for camps
     public boolean generateReport(List<String> filter,List<Camp> camps,Map<String, String> filePathsMap) {
+        // Sort camps alphabetically based on their names
+        camps.sort(Comparator.comparing(camp -> camp.getCampInformation().getCampName()));
 
         // Get headers for CSV file
         List<String> headers = generateReportHeaderLine(filter);
@@ -43,6 +46,8 @@ public class ReportStaffService {
     }
 
     public boolean generatePerformanceReport(List<String> filter,List<Camp> camps,Map<String, String> filePathsMap) {
+        // Sort camps alphabetically based on their names
+        camps.sort(Comparator.comparing(camp -> camp.getCampInformation().getCampName()));
 
         // Get headers for CSV file
         List<String> headers = generatePerformanceReportHeaderLine(filter);
@@ -66,6 +71,8 @@ public class ReportStaffService {
     }
 
     public boolean generateEnquiryReport(List<String> filter,List<Camp> camps,Map<String, String> filePathsMap) {
+        // Sort camps alphabetically based on their names
+        camps.sort(Comparator.comparing(camp -> camp.getCampInformation().getCampName()));
 
         // Get headers for CSV file
         List<String> headers = generateEnquiryReportHeaderLine(filter);
@@ -172,7 +179,7 @@ public class ReportStaffService {
     
         if (!filter.isEmpty()) {
             String firstFilter = filter.get(0);
-    
+            
             for (Student student : students) {
                 if (!firstStudent) {
                     csvLines.append(System.lineSeparator()); // Add a new line for each student

@@ -268,9 +268,9 @@ public class CampCommitteeController extends StudentController {
 			System.out.println("Invalid camp selection. Exiting From Report Generation");
 			return;
 		} 
-        boolean success;
+		view.showFilterInput();
         List<String> filter = InputSelectionUtility.getFilterInput();
-		success = reportStudentService.generateReport(filter,camp,FilePathsUtility.csvFilePaths());
+		boolean success = reportStudentService.generateReport(filter,camp,FilePathsUtility.csvFilePaths());
         System.out.println(success ? "Report generated successfully" : "Error generating report ");
     }
 }

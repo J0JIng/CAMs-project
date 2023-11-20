@@ -1,15 +1,21 @@
 package views;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
 import interfaces.IMenuView;
+
 import models.Camp;
 import models.CampInformation;
 import models.Enquiry;
 import models.Suggestion;
+
 import stores.AuthStore;
+
 import utility.ViewUtility;
+import utility.SortUtility;
 
 public class StaffView implements IMenuView {
 
@@ -86,6 +92,7 @@ public class StaffView implements IMenuView {
 		if (students == null || students.size() == 0) {
 			ViewUtility.displayInMenuCentered(" - No Students Registered in " + c.getCampInformation().getCampName() + " - ");
 		} else {
+			SortUtility.alphabeticalSort(students);
 			for (int i = 0; i < students.size(); i++) {
 		        ViewUtility.displayInMenuNumbered(students.get(i), i+1);
 		    }
@@ -96,6 +103,7 @@ public class StaffView implements IMenuView {
         if (committeeMembers == null || committeeMembers.size() == 0) {
         	ViewUtility.displayInMenuCentered(" - No Committe Members in " + c.getCampInformation().getCampName() + " - ");
         } else {
+			SortUtility.alphabeticalSort(committeeMembers);
         	for (int i = 0; i < committeeMembers.size(); i++) {
     	        ViewUtility.displayInMenuNumbered(committeeMembers.get(i), i+1);
     	    }
@@ -123,6 +131,7 @@ public class StaffView implements IMenuView {
         ViewUtility.displayInMenuCentered(title);
         System.out.println("╠══════════════════════════════════════════════════════════╣");
         int i = 1;
+		Collections.sort(campData, Comparator.comparing(c -> c.getCampInformation().getCampName()));
     	for (Camp c : campData) {
     		ViewUtility.displayInMenuNumbered(c.getCampInformation().getCampName(), i);
         	i++;

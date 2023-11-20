@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.Objects;
 
@@ -133,6 +134,9 @@ public class ReportStudentService {
     
         if (!filter.isEmpty()) {
             String firstFilter = filter.get(0);
+
+            // Sort students based on their names
+            students.sort(Comparator.comparing(Student::getName));
     
             for (Student student : students) {
                 if (!firstStudent) {
