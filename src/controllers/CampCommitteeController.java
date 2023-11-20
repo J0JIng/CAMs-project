@@ -8,7 +8,7 @@ import interfaces.ICampStudentService;
 
 import enums.MessageStatus;
 import enums.UserRole;
-
+import views.MessageView;
 import views.StudentView;
 
 import models.Student;
@@ -119,11 +119,12 @@ public class CampCommitteeController extends StudentController {
         Student student = (Student) AuthStore.getCurrentUser();
         Camp camp = campStudentService.getCampCommitteeCamp(student);
         if (camp == null) {
-            System.out.println("You are not registered as a camp comittee for any camp.");
+            System.out.println("You are not registered as a camp committee for any camp.");
             return;
         } 
 		Map<Integer, Enquiry> campEnquiries = enquiryCampComitteeService.getAllPendingEnquiriesForCamp(camp);
 		view.displayEnquiries(campEnquiries);
+		MessageView.endMessage(scanner, null, true);
 	}
 
 	protected void respondToEnquiry() {
@@ -143,13 +144,17 @@ public class CampCommitteeController extends StudentController {
 			return;
 		}
 
+		view.displayEnquiries(campEnquiries);
 		// Get User input
 		Enquiry selectedEnquiry = InputSelectionUtility.enquirySelector(campEnquiries);
-		String response = InputSelectionUtility.getStringInput("Enter response: ");
-
-		// Respond using EnquiryStudentService
-		boolean success = enquiryCampComitteeService.respondToEnquiry(selectedEnquiry.getEnquiryID(), student.getStudentID(), MessageStatus.ACCEPTED, response);
-        System.out.println(success? "Suggestion responded successfully" :"Error responding to suggestion ");
+		
+		if (selectedEnquiry != null) {
+			String response = InputSelectionUtility.getStringInput("Enter response: ");
+	
+			// Respond using EnquiryStudentService
+			boolean success = enquiryCampComitteeService.respondToEnquiry(selectedEnquiry.getEnquiryID(), student.getStudentID(), MessageStatus.ACCEPTED, response);
+			MessageView.endMessage(scanner, success ? "Enquiry responded successfully" : "Error responding to suggestion", true);
+		}
     }
 
     protected void submitSuggestion() {
@@ -165,15 +170,16 @@ public class CampCommitteeController extends StudentController {
 		// Get User input
 		String campName = committeecamp.getCampInformation().getCampName();
 		String suggestionMessage = InputSelectionUtility.getStringInput("Enter suggestion: ");
-		// Prompt the user whether they'd like the suggestion to be saved as draft (1: Yes, 2: No)
-		int draftChoice = InputSelectionUtility.getIntInput("Do you want to save the suggestion as a draft? (1: Yes, 2: No): ");
+		// Prompt the user whether they'd like the suggestion to be saved as draft or submit
+		int draftChoice = InputSelectionUtility.getIntInput("Do you want to save the suggestion as a draft or submit? (1: Draft, 2: Submit): ");
 		boolean isDraft = (draftChoice == 1);
 		if (!isDraft){student.incrementStudentPoints();}
 
 		// Create a new suggestion using SuggestionStudentService
 		int suggestionID = suggestionCampComitteeService.submitSuggestion(student.getStudentID(), campName, suggestionMessage, isDraft);
-
-		System.out.println("Suggestion submitted with ID: " + suggestionID);
+		String message;
+		if (isDraft) message = "Suggestion draft saved with ID: " + suggestionID; else message = "Suggestion submitted with ID: " + suggestionID;
+		MessageView.endMessage(scanner, message, false);
 	}
 
     protected void viewSuggestions() {
@@ -191,13 +197,14 @@ public class CampCommitteeController extends StudentController {
 
 		// Display Suggestions
 		view.displaySuggestions(draftSuggestions, submittedSuggestions, acceptedSuggestions, rejectedSuggestions);
+		MessageView.endMessage(scanner, null, true);
 	}
 
 	protected boolean editSuggestion() {
 		Student student = (Student) AuthStore.getCurrentUser();
 
 		if(!campStudentService.isUserCampCommittee(student)){
-			System.out.println("Only committee members can edit suggestions!");
+			MessageView.endMessage(scanner, "Only committee members can edit suggestions!", false);
 			return false;
 		}
 		// Get Data
@@ -205,17 +212,20 @@ public class CampCommitteeController extends StudentController {
 
 		// Check if there are draft suggestions to edit
 		if (draftSuggestions.isEmpty()) {
-			System.out.println("You have no draft suggestions to edit.");
+			MessageView.endMessage(scanner, "You have no draft suggestions to edit.", false);
 			return false;
 		}
+		
+		// Display Suggestions
+		view.displaySuggestion(draftSuggestions);
 		// Get User input
 		Suggestion selectedSuggestion = InputSelectionUtility.suggestionSelector(draftSuggestions);
 
 		if (selectedSuggestion != null) {
 			String newDetails = InputSelectionUtility.getStringInput("Enter your new suggestion: ");
 
-			// Prompt the user whether they'd like the enquiry to be saved as draft (1: Yes, 2: No)
-			int draftChoice = InputSelectionUtility.getIntInput("Do you want to save the suggestion as a draft? (1: Yes, 2: No): ");
+			// Prompt the user whether they'd like the suggestion to be saved as draft or submit
+			int draftChoice = InputSelectionUtility.getIntInput("Do you want to save the suggestion as a draft or submit? (1: Draft, 2: Submit): ");
 			boolean isDraft = (draftChoice == 1);
 			if (!isDraft){student.incrementStudentPoints();}
 
@@ -229,7 +239,7 @@ public class CampCommitteeController extends StudentController {
 		Student student = (Student) AuthStore.getCurrentUser();
 
 		if(!campStudentService.isUserCampCommittee(student)){
-			System.out.println("Only committee members can delete suggestions!");
+			MessageView.endMessage(scanner, "Only committee members can delete suggestions!", false);
 			return;
 		}
 		// Get Data
@@ -237,9 +247,12 @@ public class CampCommitteeController extends StudentController {
 
 		// Check if there are draft suggestions to delete
 		if (draftSuggestions.isEmpty()) {
-			System.out.println("You have no draft suggestions to delete.");
+			MessageView.endMessage(scanner, "You have no draft suggestions to delete.", false);
 			return;
 		}
+		
+		// Display Suggestions
+		view.displaySuggestion(draftSuggestions);
 		// Get User input
 		Suggestion selectedSuggestion = InputSelectionUtility.suggestionSelector(draftSuggestions);
 
@@ -250,12 +263,12 @@ public class CampCommitteeController extends StudentController {
 				// Delete the selected draft enquiry using EnquiryStudentService
 				boolean deleted = suggestionCampComitteeService.deleteDraftSuggestion(selectedSuggestion.getSuggestionID(), student.getStudentID());
 				if (deleted) {
-					System.out.println("Suggestion deleted successfully.");
+					MessageView.endMessage(scanner, "Suggestion deleted successfully.", true);
 				} else {
-					System.out.println("Failed to delete the suggestion. Please try again.");
+					MessageView.endMessage(scanner, "Failed to delete the suggestion. Please try again.", true);
 				}
 			} else {
-				System.out.println("Suggestion deletion canceled.");
+				MessageView.endMessage(scanner, "Suggestion deletion canceled.", true);
 			}
 		}
 	}
@@ -271,6 +284,6 @@ public class CampCommitteeController extends StudentController {
 		view.showFilterInput();
         List<String> filter = InputSelectionUtility.getFilterInput();
 		boolean success = reportStudentService.generateReport(filter,camp,FilePathsUtility.csvFilePaths());
-        System.out.println(success ? "Report generated successfully" : "Error generating report ");
+		MessageView.endMessage(scanner, success ? "Report generated successfully" : "Error generating report", false);
     }
 }

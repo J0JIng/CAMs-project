@@ -433,10 +433,10 @@ public class InputSelectionUtility {
 	            if (selectedEnquiry != null) {
 	                return selectedEnquiry;
 	            } else {
-	                System.out.println("Invalid ID. Please enter a valid ID or Enter 0 to return.\n");
+	                System.out.println("Invalid ID. Please enter a valid ID or Enter 0 to return.");
 	            }
             } else {
-            	System.out.println("No enquiry selected\n");
+            	//System.out.println("No enquiry selected");
             	return null;
             }
         }
@@ -444,19 +444,24 @@ public class InputSelectionUtility {
 
     public static Suggestion suggestionSelector(Map<Integer, Suggestion> suggestions) {
         while (true) {
-            System.out.println("Select a Suggestion:");
+//            System.out.println("Select a Suggestion:");
+//
+//            for (Map.Entry<Integer, Suggestion> entry : suggestions.entrySet()) {
+//                System.out.println(entry.getKey() + ". " + entry.getValue().getSuggestionMessage());
+//            }
 
-            for (Map.Entry<Integer, Suggestion> entry : suggestions.entrySet()) {
-                System.out.println(entry.getKey() + ". " + entry.getValue().getSuggestionMessage());
-            }
-
-            int suggestionID = getIntInput("Enter the ID of the suggestion (or press Enter to return): ");
-            Suggestion selectedSuggestion = suggestions.get(suggestionID);
-
-            if (selectedSuggestion != null) {
-                return selectedSuggestion;
+            int suggestionID = getIntInput("Enter the ID of the suggestion (Enter 0 to return): ");
+            
+            if (suggestionID != 0) {
+	            Suggestion selectedSuggestion = suggestions.get(suggestionID);
+	
+	            if (selectedSuggestion != null) {
+	                return selectedSuggestion;
+	            } else {
+	                System.out.println("Invalid ID. Please enter a valid ID or Enter 0 to return.");
+	            }
             } else {
-                System.out.println("Invalid ID. Please enter a valid ID or press Enter to return.\n");
+            	return null;
             }
         }
     }

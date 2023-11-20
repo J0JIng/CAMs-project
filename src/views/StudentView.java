@@ -271,6 +271,33 @@ public class StudentView implements IMenuView{
 		}
 		System.out.println("╚════════════════════════════════════════════════════════════════════════════════════════════╝");
 	}
+	
+	public void displaySuggestion(Map<Integer, Suggestion> suggestion) {
+
+		System.out.println("╔════════════════════════════════════════════════════════════════════════════════════════════╗");
+		System.out.println("║                                                                                            ║"); 
+		System.out.println("║ ███████╗██╗   ██╗ ██████╗  ██████╗ ███████╗███████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗ ║");
+		System.out.println("║ ██╔════╝██║   ██║██╔════╝ ██╔════╝ ██╔════╝██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║██╔════╝ ║");
+		System.out.println("║ ██████╗ ██║   ██║██║  ███╗██║  ███╗█████╗  ███████╗   ██║   ██║██║   ██║██╔██╗ ██║███████╗ ║");
+		System.out.println("║ ╚════██║██║   ██║██║   ██║██║   ██║██╔══╝  ╚════██║   ██║   ██║██║   ██║██║╚██╗██║╚════██║ ║");
+		System.out.println("║ ███████║╚██████╔╝╚██████╔╝╚██████╔╝███████╗███████║   ██║   ██║╚██████╔╝██║ ╚████║███████║ ║");
+		System.out.println("║ ╚══════╝ ╚═════╝  ╚═════╝  ╚═════╝ ╚══════╝╚══════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝ ║");
+		System.out.println("║                                                                                            ║");
+		if (suggestion.isEmpty()) {
+			System.out.println("╠════════════════════════════════════════════════════════════════════════════════════════════╣");
+			System.out.println("║                                  No Suggestions to Display.                                ║");
+		} else {
+			for (Suggestion s : suggestion.values()) {
+			System.out.println("╠════════════════════════════════════════════════════════════════════════════════════════════╣");
+			ViewUtility.displayInMenuBulletLarge("Suggestion ID: " + s.getSuggestionID());
+			ViewUtility.displayInMenuBulletLarge("Camp Name: " + s.getCampName());
+			ViewUtility.displayInMenuBulletLarge("Message: " + s.getSuggestionMessage());
+			ViewUtility.displayInMenuBulletLarge("Status: " + s.getSuggestionStatus());
+			System.out.println("╠════════════════════════════════════════════════════════════════════════════════════════════╣");
+			}
+		}
+		System.out.println("╚════════════════════════════════════════════════════════════════════════════════════════════╝");
+	}
 
 	public void displaySuggestions(Map<Integer, Suggestion> draftSuggestions, Map<Integer, Suggestion> submittedSuggestions,
 									Map<Integer, Suggestion> acceptedSuggestions, Map<Integer, Suggestion> rejectedSuggestions) {

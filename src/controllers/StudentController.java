@@ -112,7 +112,7 @@ public class StudentController extends UserController {
 
 	protected void registerCamp() {
 		// Get the current student
-		scanner.nextLine();
+		//scanner.nextLine();
 		Student student = (Student) AuthStore.getCurrentUser();
 		// Get the current date
 		Date currentDate = new Date();
@@ -162,8 +162,10 @@ public class StudentController extends UserController {
 		// Register the student for the selected camp
 		String campName = camp.getCampInformation().getCampName();
 		boolean success = campStudentService.registerCamp(student, camp);
-		
-		System.out.println(success ? "Registration for " + campName + " successful!" : "Registration for " + campName + " unsuccessful!");
+		String message;
+		if (success) message = "Registration for " + campName + " successful!"; else message = "Registration for " + campName + " unsuccessful!";
+		MessageView.endMessage(scanner, message, false);
+		//System.out.println(success ? "Registration for " + campName + " successful!" : "Registration for " + campName + " unsuccessful!");
 	}
 	
 	protected void withdrawCamp() {
@@ -196,12 +198,15 @@ public class StudentController extends UserController {
 		// Withdraw the student from the selected camp
 		String campName = camp.getCampInformation().getCampName();
 		boolean success = campStudentService.withdrawCamp(student, camp);
-		System.out.println(success ? "Withdrawal from " + campName + " successful!" : "Withdrawal from " + campName + " unsuccessful!");
+		String message;
+		if (success) message = "Withdrawal from " + campName + " successful!"; else message = "Withdrawal from " + campName + " unsuccessful!";
+		MessageView.endMessage(scanner, message, false);
+		//System.out.println(success ? "Withdrawal from " + campName + " successful!" : "Withdrawal from " + campName + " unsuccessful!");
 	}
 
 
 	protected boolean registerAsCommittee(){
-		scanner.nextLine();
+		//scanner.nextLine();
 		Student student = (Student) AuthStore.getCurrentUser();
 		Date currentDate = new Date();
 
@@ -256,8 +261,12 @@ public class StudentController extends UserController {
 		// Register the student for the selected camp
 		String campName = camp.getCampInformation().getCampName();
 		boolean success = campStudentService.registerAsCommittee(student, camp);
-		System.out.println(success ? "Camp committee registration for " + campName + " successful!, Please Relogin" : 
-									 "Camp committee registration for " + campName + " unsuccessful!");
+		String message;
+		if(success) message = "Registration for " + campName + " successful!"; else message = "Registration for " + campName + " unsuccessful!";
+		MessageView.endMessage(scanner, message, false);
+		//		System.out.println(success ? "Camp committee registration for " + campName + " successful!, Please Relogin" : 
+//									 "Camp committee registration for " + campName + " unsuccessful!");
+		
 		AuthStore.getCurrentUser().setRole(UserRole.COMMITTEE);
 		return true;
 	}
@@ -296,7 +305,6 @@ public class StudentController extends UserController {
      * Shows the list of camps using user specified filter
      */
 	protected void viewAllCampsWithFilters() {
-		scanner.nextLine();
 		// Various filters for camps
     	String filterBy = null; 		// Type of filter
     	Date filterDate = null;			// Filter date
@@ -364,8 +372,7 @@ public class StudentController extends UserController {
 	        		break;
     		}
     	}
-    	System.out.println("(Press Enter to return)");
-    	scanner.nextLine();
+    	MessageView.endMessage(scanner, null, false);
 	}
 	
 	/**
@@ -373,12 +380,6 @@ public class StudentController extends UserController {
 	 */
 	protected void viewRegisteredCamps() {
 		List<Camp> list = campStudentService.getRegisteredCamps();
-//		view.viewCamps(list, " - Camps registered by " + AuthStore.getCurrentUser().getName() + " - ");
-//		if (scanner.hasNextLine()) { 
-//			scanner.nextLine();
-//		}
-//		System.out.print("(Press Enter to return) ");
-//		scanner.nextLine();
     	while (true) {
     		view.viewCamps(list," - Camps registered by " + AuthStore.getCurrentUser().getName() + " - ");
     		Camp camp = InputSelectionUtility.campSelector(list);
@@ -418,9 +419,10 @@ public class StudentController extends UserController {
         int enquiryID = enquiryStudentService.createEnquiry(student.getStudentID(), campName, enquiryMessage, isDraft);
 
         if (isDraft) {
-        	System.out.println("Saved Draft Enquiry with ID: " + enquiryID);
+        	MessageView.endMessage(scanner, "Saved Draft Enquiry with ID: " + enquiryID, false);
+        	System.out.println();
         } else {
-        	System.out.println("Enquiry submitted with ID: " + enquiryID);
+        	MessageView.endMessage(scanner, "Enquiry submitted with ID: " + enquiryID, false);
         }
     }
 
@@ -506,12 +508,12 @@ public class StudentController extends UserController {
 				// Delete the selected draft enquiry using EnquiryStudentService
 				boolean deleted = enquiryStudentService.deleteDraftEnquiry(selectedEnquiry.getEnquiryID(), student.getStudentID());
 				if (deleted) {
-					System.out.println("Enquiry deleted successfully.");
+					MessageView.endMessage(scanner, "Enquiry deleted successfully.", true);
 				} else {
-					System.out.println("Failed to delete the enquiry. Please try again.");
+					MessageView.endMessage(scanner, "Failed to delete the enquiry. Please try again.", true);
 				}
 			} else {
-				System.out.println("Enquiry deletion canceled.");
+				MessageView.endMessage(scanner, "Enquiry deletion canceled.", true);
 			}
 		}
 	}

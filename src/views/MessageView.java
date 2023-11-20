@@ -6,9 +6,8 @@ import utility.ViewUtility;
 
 public class MessageView {
     public static void endMessage(Scanner sc, String s, boolean large) {
-    	if (sc.hasNextLine()) { 
-			sc.nextLine();
-		}
+    	clearBuffer(sc);
+        sc.nextLine();
         if (s != null) {
             if (large == false) {
                 System.out.println("╔══════════════════════════════════════════════════════════╗");
@@ -25,5 +24,15 @@ public class MessageView {
         	System.out.println("(Press Enter to Return)");
         }
 		sc.nextLine();
+    }
+    
+    public static void clearBuffer(Scanner scanner) {
+    	try {
+            while (System.in.available() > 0) {
+                System.in.read();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
