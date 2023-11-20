@@ -24,7 +24,7 @@ import services.ReportStaffService;
 
 import stores.AuthStore;
 import stores.DataStore;
-
+import utility.FilePathsUtility;
 import utility.InputSelectionUtility;
 
 import views.StaffView;
@@ -444,7 +444,7 @@ public class StaffController extends UserController {
 
         int option = 0;
         boolean success = false;
-        String filter = null;
+        List<String> filter = null;
 
         do {
             if (filter != null) {
@@ -461,7 +461,7 @@ public class StaffController extends UserController {
                     if (allCreatedCamps != null && !allCreatedCamps.isEmpty()) {
                         view.showFilterInput();
                         filter = InputSelectionUtility.getFilterInput();
-                        if (filter != null) success = reportStaffService.generateReport(filter, allCreatedCamps);
+                        if (filter != null) success = reportStaffService.generateReport(filter, allCreatedCamps,FilePathsUtility.csvFilePaths());
                     }else{
                         success = false;
                         System.out.println("Error: allCreatedCamps is null or empty");
@@ -473,7 +473,7 @@ public class StaffController extends UserController {
                 	if (staffCreatedCamps != null && !staffCreatedCamps.isEmpty()) {
                         view.showFilterInput();
                         filter = InputSelectionUtility.getFilterInput();
-                        if (filter != null) success = reportStaffService.generateReport(filter, staffCreatedCamps);
+                        if (filter != null) success = reportStaffService.generateReport(filter, staffCreatedCamps,FilePathsUtility.csvFilePaths());
                     }else{
                         success = false;
                         System.out.println("Error: staffCreatedCamps is null or empty");
@@ -494,7 +494,7 @@ public class StaffController extends UserController {
                     } else {
                     	view.showFilterInput();
                         filter = InputSelectionUtility.getFilterInput();
-                        if (filter != null) success = reportStaffService.generateReport(filter,camps);
+                        if (filter != null) success = reportStaffService.generateReport(filter,camps,FilePathsUtility.csvFilePaths());
                     }
                     break;
                 
@@ -524,7 +524,7 @@ public class StaffController extends UserController {
 
         int option = 0;
         boolean success = false;
-        String filter = null;
+        List<String> filter = null;
 
         do {
             if (filter != null) {
@@ -541,7 +541,7 @@ public class StaffController extends UserController {
                     if (allCreatedCamps != null && !allCreatedCamps.isEmpty()) {
                         view.showPerformanceFilterInput();
                         filter = InputSelectionUtility.getPerformanceFilterInput();
-                        if (filter != null) success = reportStaffService.generatePerformanceReport(filter, allCreatedCamps);
+                        if (filter != null) success = reportStaffService.generatePerformanceReport(filter, allCreatedCamps,FilePathsUtility.csvFilePaths());
                     }else{
                         success = false;
                         System.out.println("Error: allCreatedCamps is null or empty");
@@ -554,7 +554,7 @@ public class StaffController extends UserController {
                     if (staffCreatedCamps != null && !staffCreatedCamps.isEmpty()) {
                         view.showPerformanceFilterInput();
                         filter = InputSelectionUtility.getPerformanceFilterInput();
-                        if (filter != null) success = reportStaffService.generatePerformanceReport(filter, staffCreatedCamps);
+                        if (filter != null) success = reportStaffService.generatePerformanceReport(filter, staffCreatedCamps,FilePathsUtility.csvFilePaths());
                     }else{
                         success = false;
                         System.out.println("Error: staffCreatedCamps is null or empty");
@@ -575,7 +575,7 @@ public class StaffController extends UserController {
                     } else {
                     	view.showFilterInput();
                         filter = InputSelectionUtility.getPerformanceFilterInput();
-                        if (filter != null) success = reportStaffService.generatePerformanceReport(filter,camps);
+                        if (filter != null) success = reportStaffService.generatePerformanceReport(filter,camps,FilePathsUtility.csvFilePaths());
                     }
                     break;
                 
@@ -604,7 +604,7 @@ public class StaffController extends UserController {
 
         int option = 0;
         boolean success = false;
-        String filter = null;
+        List<String> filter = null;
 
         do {
             if (filter != null) {
@@ -621,7 +621,7 @@ public class StaffController extends UserController {
                     if (allCreatedCamps != null && !allCreatedCamps.isEmpty()) {
                         view.showEnquiryFilterInput();
                         filter = InputSelectionUtility.getEnquiryFilterInput();
-                        if (filter != null) success = reportStaffService.generateEnquiryReport(filter, allCreatedCamps);
+                        if (filter != null) success = reportStaffService.generateEnquiryReport(filter, allCreatedCamps,FilePathsUtility.csvFilePaths());
                     }else{
                         success = false;
                         System.out.println("Error: allCreatedCamps is null or empty");
@@ -634,7 +634,7 @@ public class StaffController extends UserController {
                     if (staffCreatedCamps != null && !staffCreatedCamps.isEmpty()) {
                         view.showEnquiryFilterInput();
                         filter = InputSelectionUtility.getEnquiryFilterInput();
-                        if (filter != null) success = reportStaffService.generateEnquiryReport(filter, staffCreatedCamps);
+                        if (filter != null) success = reportStaffService.generateEnquiryReport(filter, staffCreatedCamps,FilePathsUtility.csvFilePaths());
                     }else{
                         success = false;
                         System.out.println("Error: staffCreatedCamps is null or empty");
@@ -655,7 +655,7 @@ public class StaffController extends UserController {
                     } else {
                     	view.showEnquiryFilterInput();
                         filter = InputSelectionUtility.getEnquiryFilterInput();
-                        if (filter != null) success = reportStaffService.generateEnquiryReport(filter,camps);
+                        if (filter != null) success = reportStaffService.generateEnquiryReport(filter,camps,FilePathsUtility.csvFilePaths());
                     }
                     break;
                 

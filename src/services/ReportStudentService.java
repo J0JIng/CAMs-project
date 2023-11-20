@@ -19,7 +19,7 @@ public class ReportStudentService {
 
     private CsvFileDataService csvFileDataService = new CsvFileDataService();
     // generate Report for camps
-    public boolean generateReport(String filter, Camp camp) {
+    public boolean generateReport(List<String> filter, Camp camp, Map<String, String> filePathsMap) {
 
         Map<String, List<String>> attendeeData = DataStore.getCampToRegisteredStudentData();
         Map<String, List<String>> committeeData = DataStore.getCampToRegisteredCampCommitteeData();
@@ -41,77 +41,80 @@ public class ReportStudentService {
         csvLines.add(generateReportCsvLine(filter, camp, combinedRegisteredList));
         
         // Write to CSV file
-        boolean success = csvFileDataService.writeCsvFile("report/committee_report.csv", headers,csvLines);
+        boolean success = csvFileDataService.writeCsvFile(filePathsMap.get("reportCommittee"), headers,csvLines);
         return success;
     }
 
 
-    public List<String> generateReportHeaderLine(String filter) {
+    public List<String> generateReportHeaderLine(List<String> filter) {
         List<String> headers = new ArrayList<>();
     
-        switch (filter) {
-            case "No Filter":
-                headers.addAll(List.of(
-                    "Camp Name",
-                    "Camp Start Date",
-                    "Camp End Date",
-                    "Registration Closing Date",
-                    "User Group",
-                    "Location",
-                    "Total Slots",
-                    "Camp Committee Slots",
-                    "Description",
-                    "Staff In Charge",
-                    "Student ID",
-                    "Student Name",
-                    "Student Role",
-                    "Student Faculty"));
-                break;
-    
-            case "Camp Information":
-                headers.addAll(List.of(
-                    "Camp Name",
-                    "Camp Start Date",
-                    "Camp End Date",
-                    "Registration Closing Date",
-                    "User Group",
-                    "Location",
-                    "Total Slots",
-                    "Camp Committee Slots",
-                    "Description",
-                    "Staff In Charge"));
-                break;
-    
-            case "Attendee":
-            case "Camp Committee":
-                headers.addAll(List.of(
-                    "Camp Name",
-                    "Student ID",
-                    "Student Name",
-                    "Student Role",
-                    "Student Faculty"));
-                break;
-    
-            case "Location":
-                headers.addAll(List.of(
-                    "Camp Name",
-                    "Location"));
-                break;
-    
-            case "Date":
-                headers.addAll(List.of(
-                    "Camp Name",
-                    "Date"));
-                break;
-    
-            default:
-                break;
+        if (!filter.isEmpty()) {
+            String firstFilter = filter.get(0);
+
+            switch (firstFilter) {
+                case "No Filter":
+                    headers.addAll(List.of(
+                        "Camp Name",
+                        "Camp Start Date",
+                        "Camp End Date",
+                        "Registration Closing Date",
+                        "User Group",
+                        "Location",
+                        "Total Slots",
+                        "Camp Committee Slots",
+                        "Description",
+                        "Staff In Charge",
+                        "Student ID",
+                        "Student Name",
+                        "Student Role",
+                        "Student Faculty"));
+                    break;
+        
+                case "Camp Information":
+                    headers.addAll(List.of(
+                        "Camp Name",
+                        "Camp Start Date",
+                        "Camp End Date",
+                        "Registration Closing Date",
+                        "User Group",
+                        "Location",
+                        "Total Slots",
+                        "Camp Committee Slots",
+                        "Description",
+                        "Staff In Charge"));
+                    break;
+        
+                case "Attendee":
+                case "Camp Committee":
+                    headers.addAll(List.of(
+                        "Camp Name",
+                        "Student ID",
+                        "Student Name",
+                        "Student Role",
+                        "Student Faculty"));
+                    break;
+        
+                case "Location":
+                    headers.addAll(List.of(
+                        "Camp Name",
+                        "Location"));
+                    break;
+        
+                case "Date":
+                    headers.addAll(List.of(
+                        "Camp Name",
+                        "Date"));
+                    break;
+        
+                default:
+                    break;
+            }
         }
-    
         return headers;
     }
     
-    public String generateReportCsvLine(String filter, Camp camp, List<Student> students) {
+    public String generateReportCsvLine(List<String> filter, Camp camp, List<Student> students) {
         StringBuilder csvLines = new StringBuilder();
         boolean firstStudent = true;
     
@@ -128,62 +131,80 @@ public class ReportStudentService {
                 camp.getCampInformation().getCampStaffInCharge()
         );
     
-        for (Student student : students) {
-            if (!firstStudent) {
-                csvLines.append(System.lineSeparator()); // Add a new line for each student
-            } else {
-                firstStudent = false;
-            }
+        if (!filter.isEmpty()) {
+            String firstFilter = filter.get(0);
     
-            switch (filter) {
-
-                case "No Filter":
-                    csvLines.append(String.join(",", commonFields,
-                            student.getStudentID(),
-                            student.getName(),
-                            student.getUserRole().toString(),
-                            student.getFaculty().toString()
-                    ));
-                    break;
+            for (Student student : students) {
+                if (!firstStudent) {
+                    csvLines.append(System.lineSeparator()); // Add a new line for each student
+                } else {
+                    firstStudent = false;
+                }
     
-                case "Camp Information":
-                    csvLines.append(String.join(",", commonFields));
-                    break;
-    
-                case "Attendee":
-                    if (student.getUserRole() == UserRole.STUDENT) {
-                        csvLines.append(String.join(",",
-                                camp.getCampInformation().getCampName(),
+                switch (firstFilter) {
+                    case "No Filter":
+                        csvLines.append(String.join(",", commonFields,
                                 student.getStudentID(),
                                 student.getName(),
                                 student.getUserRole().toString(),
-                                student.getFaculty().toString()));
-                    }
-                    break;
+                                student.getFaculty().toString()
+                        ));
+                        break;
     
-                case "Camp Committee":
-                    if (student.getUserRole() == UserRole.COMMITTEE) {
-                        csvLines.append(String.join(",",
-                                camp.getCampInformation().getCampName(),
-                                student.getStudentID(),
-                                student.getName(),
-                                student.getUserRole().toString(),
-                                student.getFaculty().toString()));
-                    }
-                    break;
+                    case "Camp Information":
+                        csvLines.append(String.join(",", commonFields));
+                        break;
     
-                case "Location":
-                    csvLines.append(String.join(",",camp.getCampInformation().getCampName(),camp.getCampInformation().getCampLocation()));
-                    break;
+                    case "Attendee":
+                        if (student.getUserRole() == UserRole.STUDENT && filter.size()==1) {
+                            csvLines.append(String.join(",",
+                                    camp.getCampInformation().getCampName(),
+                                    student.getStudentID(),
+                                    student.getName(),
+                                    student.getUserRole().toString(),
+                                    student.getFaculty().toString()));
+                        }else if (student.getUserRole() == UserRole.STUDENT && filter.size()>1 && student.getName().equals(filter.get(1))) {
+                            csvLines.append(String.join(",",
+                                    camp.getCampInformation().getCampName(),
+                                    student.getStudentID(),
+                                    student.getName(),
+                                    student.getUserRole().toString(),
+                                    student.getFaculty().toString()));
+                        }
+                        break;
     
-                case "Date":
-                    csvLines.append(String.join(",",camp.getCampInformation().getCampName(),String.valueOf(camp.getCampInformation().getCampStartDate())));
-                    break;
+                    case "Camp Committee":
+                        if (student.getUserRole() == UserRole.COMMITTEE && filter.size()==1) {
+                            csvLines.append(String.join(",",
+                                    camp.getCampInformation().getCampName(),
+                                    student.getStudentID(),
+                                    student.getName(),
+                                    student.getUserRole().toString(),
+                                    student.getFaculty().toString()));
+                        }else if (student.getUserRole() == UserRole.COMMITTEE && filter.size()>1 && student.getName().equals(filter.get(1))) {
+                            csvLines.append(String.join(",",
+                                    camp.getCampInformation().getCampName(),
+                                    student.getStudentID(),
+                                    student.getName(),
+                                    student.getUserRole().toString(),
+                                    student.getFaculty().toString()));
+                        }
+                        break;
     
-                default:
-                    break;
+                    case "Location":
+                        csvLines.append(String.join(",", camp.getCampInformation().getCampName(), camp.getCampInformation().getCampLocation()));
+                        break;
+    
+                    case "Date":
+                        csvLines.append(String.join(",", camp.getCampInformation().getCampName(), String.valueOf(camp.getCampInformation().getCampStartDate())));
+                        break;
+    
+                    default:
+                        break;
+                }
             }
         }
         return csvLines.toString();
     }
+    
 }

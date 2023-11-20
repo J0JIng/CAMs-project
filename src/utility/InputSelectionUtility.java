@@ -6,6 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.Map;
 import java.util.Scanner;
 import enums.FacultyGroups;
+
+import java.util.ArrayList;
 import java.util.Date;
 
 import models.Staff;
@@ -459,13 +461,16 @@ public class InputSelectionUtility {
         }
     }
 
-    public static String getFilterInput() {
-        String selectedFilter = null;
+    public static List<String> getFilterInput() {
+        List<String> selectedFilters = new ArrayList<>();
         int option;
-    
+
         do {
             option = InputSelectionUtility.getIntInput("Enter the filter option (1/2/3/4/5/6): ");
-    
+            selectedFilters.clear(); // Clear the list before processing new filters
+            boolean filterByName = false;
+            String selectedFilter = null;
+
             switch (option) {
                 case 1:
                     selectedFilter = "No Filter";
@@ -475,9 +480,11 @@ public class InputSelectionUtility {
                     break;
                 case 3:
                     selectedFilter = "Attendee";
+                    filterByName = getYesNoInput("Filter by Specific Name? (y/n): ");
                     break;
                 case 4:
                     selectedFilter = "Camp Committee";
+                    filterByName = getYesNoInput("Filter by Specific Name? (y/n): ");
                     break;
                 case 5:
                     selectedFilter = "Location";
@@ -489,28 +496,46 @@ public class InputSelectionUtility {
                     System.out.println("Invalid option. Please enter a valid filter option.");
                     continue;
             }
-    
-            // Print selected filter after each choice
-            System.out.println("Selected Filter: " + selectedFilter);
-    
-            // Ask for confirmation
-            boolean confirmed = InputSelectionUtility.getYesNoInput("Confirm your selection? (y/n): ");
-            if (confirmed) {
-                break; // Exit the loop if confirmed
+
+            // Add filter to the list
+            selectedFilters.add(selectedFilter);
+
+            // Add name if filtering by name
+            if (filterByName) {
+                String nameInput = getStringInput("Enter the Name");
+                selectedFilters.add(nameInput);
             }
-    
+
+            // Print selected filters after each choice            
+            System.out.print("Selected Filters: ");
+            for (String filter : selectedFilters) {
+                System.out.print(filter + " ");
+            }
+            System.out.println();
+
+            // Ask for confirmation
+            boolean confirmed = getYesNoInput("Confirm your selection? (y/n)? : ");
+            if (confirmed) {
+                break; 
+            }
+
         } while (true);
-    
-        return selectedFilter;
+
+        return selectedFilters;
     }
+
     
     
-    public static String getPerformanceFilterInput() {
-        String selectedFilter = null;
-    
+    public static List<String> getPerformanceFilterInput() {
+        List<String> selectedFilters = new ArrayList<>();
         int option;
+
         do {
-            option = InputSelectionUtility.getIntInput("Enter the filter option (1/2/3/4): ");
+            option = getIntInput("Enter the filter option (1/2/3/4): ");
+            selectedFilters.clear(); // Clear the list before processing new filters
+            boolean filterByName = false;
+            String selectedFilter = null;
+
             switch (option) {
                 case 1:
                     selectedFilter = "No Filter";
@@ -520,6 +545,7 @@ public class InputSelectionUtility {
                     break;
                 case 3:
                     selectedFilter = "Committee Name";
+                    filterByName = getYesNoInput("Filter by Specific Name? (y/n): ");
                     break;
                 case 4:
                     selectedFilter = "Committee Points";
@@ -528,27 +554,44 @@ public class InputSelectionUtility {
                     System.out.println("Invalid option. Please enter a valid filter option.");
                     continue;
             }
-    
-            // Print selected filter after each choice
-            System.out.println("Selected Filter: " + selectedFilter);
-    
+
+            // Add filter to the list
+            selectedFilters.add(selectedFilter);
+
+            // Add name if filtering by name
+            if (filterByName) {
+                String nameInput = getStringInput("Enter the Name");
+                selectedFilters.add(nameInput);
+            }
+
+            // Print selected filters after each choice         
+            System.out.print("Selected Filters: ");
+            for (String filter : selectedFilters) {
+                System.out.print(filter + " ");
+            }
+            System.out.println();
+
             // Ask for confirmation
-            boolean confirmed = InputSelectionUtility.getYesNoInput("Confirm your selection? (y/n): ");
+            boolean confirmed = getYesNoInput("Confirm your selection? (y/n)? : ");
             if (confirmed) {
-                break; // Exit the loop if confirmed
+                break; 
             }
     
         } while (true);
     
-        return selectedFilter;
-    }    
-
-    public static String getEnquiryFilterInput() {
-        String selectedFilter = null;
+        return selectedFilters;
+    }
     
+
+    public static List<String> getEnquiryFilterInput() {
+        List<String> selectedFilters = new ArrayList<>();
         int option;
         do {
-            option = InputSelectionUtility.getIntInput("Enter the filter option (1/2/3/4/5/6/7): ");
+            option = getIntInput("Enter the filter option (1/2/3/4/5/6/7): ");
+            selectedFilters.clear(); // Clear the list before processing new filters
+            boolean filterByName = false;
+            String selectedFilter = null;
+
             switch (option) {
                 case 1:
                     selectedFilter = "No Filter";
@@ -558,9 +601,11 @@ public class InputSelectionUtility {
                     break;
                 case 3:
                     selectedFilter = "Sender ID";
+                    filterByName = getYesNoInput("Filter by Specific Name? (y/n): ");
                     break;
                 case 4:
                     selectedFilter = "Responder ID";
+                    filterByName = getYesNoInput("Filter by Specific Name? (y/n): ");
                     break;
                 case 5:
                     selectedFilter = "Enquiry Status";
@@ -575,19 +620,32 @@ public class InputSelectionUtility {
                     System.out.println("Invalid option. Please enter a valid filter option.");
                     continue;
             }
-    
-            // Print selected filter after each choice
-            System.out.println("Selected Filter: " + selectedFilter);
-    
+
+            // Add filter to the list
+            selectedFilters.add(selectedFilter);
+
+            // Add name if filtering by name
+            if (filterByName) {
+                String nameInput = getStringInput("Enter the Name");
+                selectedFilters.add(nameInput);
+            }
+
+            // Print selected filters after each choice            
+            System.out.print("Selected Filters: ");
+            for (String filter : selectedFilters) {
+                System.out.print(filter + " ");
+            }
+            System.out.println();
+
             // Ask for confirmation
-            boolean confirmed = InputSelectionUtility.getYesNoInput("Confirm your selection? (y/n): ");
+            boolean confirmed = getYesNoInput("Confirm your selection? (y/n)? : ");
             if (confirmed) {
-                break; // Exit the loop if confirmed
+                break; 
             }
     
         } while (true);
     
-        return selectedFilter;
+        return selectedFilters;
     }
     
 

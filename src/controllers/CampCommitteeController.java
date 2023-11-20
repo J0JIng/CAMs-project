@@ -2,6 +2,7 @@ package controllers;
 
 import java.util.Scanner;
 import java.util.Map;
+import java.util.List;
 
 import interfaces.ICampStudentService;
 
@@ -23,6 +24,7 @@ import services.ReportStudentService;
 import stores.AuthStore;
 
 import utility.InputSelectionUtility;
+import utility.FilePathsUtility;
 
 
 public class CampCommitteeController extends StudentController {
@@ -267,8 +269,8 @@ public class CampCommitteeController extends StudentController {
 			return;
 		} 
         boolean success;
-        String filter = InputSelectionUtility.getFilterInput();
-		success = reportStudentService.generateReport(filter,camp);
+        List<String> filter = InputSelectionUtility.getFilterInput();
+		success = reportStudentService.generateReport(filter,camp,FilePathsUtility.csvFilePaths());
         System.out.println(success ? "Report generated successfully" : "Error generating report ");
     }
 }
