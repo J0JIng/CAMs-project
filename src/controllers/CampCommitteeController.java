@@ -91,6 +91,7 @@ public class CampCommitteeController extends StudentController {
                         break;
                     case 13:
                         // report generator 
+                    	generateReport();
                         break;
 	                case 14: 
 	                	// Change password
@@ -274,7 +275,6 @@ public class CampCommitteeController extends StudentController {
 	}
 
 	protected void generateReport() {
-        scanner.nextLine();
         Student student = (Student) AuthStore.getCurrentUser();
         Camp camp = campStudentService.getCampCommitteeCamp(student);
 		if (camp == null) {
