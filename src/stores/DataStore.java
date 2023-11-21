@@ -101,26 +101,7 @@ public class DataStore {
             return false;
         }
     }
-
-    public static boolean SaveReport(IFileDataService fileDataService, Map<String, String> filePathsMap) {
-        try {
-            // Initialize fileDataService and filePathsMap
-            DataStore.filePathsMap = filePathsMap;
-            DataStore.fileDataService = fileDataService;
-    
-            // Import data
-            DataStore.studentsData = fileDataService.importStudentData(filePathsMap.get("student"));
-            DataStore.staffData = fileDataService.importStaffData(filePathsMap.get("staff"));
-    
-            System.out.println("DataStore initialized successfully.");
-            return true; 
-        } catch (Exception e) {
-            System.out.println("Error initializing DataStore: " + e.getMessage());
-            e.printStackTrace();
-            return false;
-        }
-    }
-    
+      
 	public static boolean saveData() {
 		DataStore.setStudentsData(studentsData);
 		DataStore.setStaffData(staffData);

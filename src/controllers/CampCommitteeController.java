@@ -190,10 +190,10 @@ public class CampCommitteeController extends StudentController {
 			return;
 		}
 		// Get draft, pending and responded suggestions
-		Map<Integer, Suggestion> draftSuggestions = suggestionCampComitteeService.viewDraftSuggestion(student.getStudentID());
-		Map<Integer, Suggestion> submittedSuggestions = suggestionCampComitteeService.viewSubmittedSuggestion(student.getStudentID());
-		Map<Integer, Suggestion> acceptedSuggestions = suggestionCampComitteeService.viewAcceptedSuggestion(student.getStudentID());
-		Map<Integer, Suggestion> rejectedSuggestions = suggestionCampComitteeService.viewRejectedSuggestion(student.getStudentID());
+		Map<Integer, Suggestion> draftSuggestions = suggestionCampComitteeService.getDraftSuggestion(student.getStudentID());
+		Map<Integer, Suggestion> submittedSuggestions = suggestionCampComitteeService.getSubmittedSuggestion(student.getStudentID());
+		Map<Integer, Suggestion> acceptedSuggestions = suggestionCampComitteeService.getAcceptedSuggestion(student.getStudentID());
+		Map<Integer, Suggestion> rejectedSuggestions = suggestionCampComitteeService.getRejectedSuggestion(student.getStudentID());
 
 		// Display Suggestions
 		view.displaySuggestions(draftSuggestions, submittedSuggestions, acceptedSuggestions, rejectedSuggestions);
@@ -208,7 +208,7 @@ public class CampCommitteeController extends StudentController {
 			return false;
 		}
 		// Get Data
-		Map<Integer, Suggestion> draftSuggestions = suggestionCampComitteeService.viewDraftSuggestion(student.getStudentID());
+		Map<Integer, Suggestion> draftSuggestions = suggestionCampComitteeService.getDraftSuggestion(student.getStudentID());
 
 		// Check if there are draft suggestions to edit
 		if (draftSuggestions.isEmpty()) {
@@ -243,7 +243,7 @@ public class CampCommitteeController extends StudentController {
 			return;
 		}
 		// Get Data
-		Map<Integer, Suggestion> draftSuggestions = suggestionCampComitteeService.viewDraftSuggestion(student.getStudentID());
+		Map<Integer, Suggestion> draftSuggestions = suggestionCampComitteeService.getDraftSuggestion(student.getStudentID());
 
 		// Check if there are draft suggestions to delete
 		if (draftSuggestions.isEmpty()) {

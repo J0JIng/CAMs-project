@@ -4,32 +4,99 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import enums.FacultyGroups;
-
 import interfaces.ICampStudentService;
-
 import models.Camp;
 import models.Student;
-
 import stores.AuthStore;
 import stores.DataStore;
-
-import views.StudentView;
 
 /**
  * The {@code CampStudentService} class implements the {@link ICampStudentService} interface
  * and provides services related to camp registration and management.
  */
 public class CampStudentService implements ICampStudentService {
-	StudentView view = new StudentView();
-	Scanner scanner = new Scanner(System.in);
+	
+	
 	/**
      * Constructs an instance of the {@code CampStudentService} class.
      */
 	public CampStudentService(){
+	}
+
+	// ---------- interface method implementation ---------- //
+
+	@Override
+	public List<Camp> getAvailableCampsToRegister(){
+		Student student = (Student) AuthStore.getCurrentUser();
+		Map<String, Camp> campsData = DataStore.getCampData();
+		//Date currentDate = new Date();
+
+		List<Camp> availableCamps = campsData.values().stream()
+		.filter(camp -> (camp.getCampInformation().getFacultyGroup() == student.getFaculty()
+					  ||camp.getCampInformation().getFacultyGroup() == FacultyGroups.ALL)
+					  &&camp.getVisibility() == true
+					  &&!isCampFull(camp))
+		.collect(Collectors.toCollection(ArrayList::new));
+
+		return availableCamps;		
+	}
+	
+	@Override
+	public List<Camp> getAllCamps(){
+		Student student = (Student) AuthStore.getCurrentUser();
+		Map<String, Camp> campsData = DataStore.getCampData();
+		//Date currentDate = new Date();
+
+		List<Camp> availableCamps = campsData.values().stream()
+		.filter(camp -> (camp.getCampInformation().getFacultyGroup() == student.getFaculty()
+					  ||camp.getCampInformation().getFacultyGroup() == FacultyGroups.ALL)
+					  &&camp.getVisibility() == true)
+		.collect(Collectors.toCollection(ArrayList::new));
+
+		return availableCamps;		
+	}
+
+	@Override
+	public List<Camp> getWithdrawnCamps() {
+		Student student = (Student) AuthStore.getCurrentUser();
+		Map<String, List<String>> studentToCampsWithdrawnData = DataStore.getStudentToCampsWithdrawnData();
+	
+		List<Camp> withdrawnCamps = studentToCampsWithdrawnData.entrySet().stream()
+				.filter(entry -> entry.getValue().contains(student.getName()))
+				.map(entry -> DataStore.getCampData().get(entry.getKey()))
+				.collect(Collectors.toList());
+	
+		return withdrawnCamps;
+	}
+	
+	@Override
+	public List<Camp> getRegisteredCamps() {
+		Student student = (Student) AuthStore.getCurrentUser();
+		Map<String, List<String>> registeredCampsData = DataStore.getStudentsToCampsRegisteredData();
+	    
+	    List<Camp> registeredCamps = registeredCampsData.entrySet().stream()
+	    	    .filter(entry -> entry.getKey().equals(student.getName()))
+	    	    .flatMap(entry -> entry.getValue().stream())
+	    	    .map(campName -> DataStore.getCampData().get(campName))
+	    	    .collect(Collectors.toList());
+	
+		return registeredCamps;
+	}
+
+	@Override
+	public Camp getCampCommitteeCamp(Student student) {
+		Map<String, String> registeredCamp = DataStore.getCampCommitteeToCampRegisteredData();
+		String campID = registeredCamp.get(student.getName());
+		Map<String, Camp> campData = DataStore.getCampData();
+	
+		if (campID != null && campData.containsKey(campID)) {
+			return campData.get(campID);
+		} else {
+			return null; 
+		}
 	}
 
 	// ---------- Helper Function ---------- //
@@ -162,97 +229,6 @@ public class CampStudentService implements ICampStudentService {
 		String campName = camp.getCampInformation().getCampName();
 
 		return registeredCampData.containsKey(studentName) && registeredCampData.get(studentName).contains(campName);
-	}
-
-	// ---------- interface method implementation ---------- //
-	
-	/**
-     * Retrieves a list of available camps for the currently logged-in student.
-     *
-     * @return List of available camps.
-     */
-	@Override
-	public List<Camp> getAvailableCampsToRegister(){
-		Student student = (Student) AuthStore.getCurrentUser();
-		Map<String, Camp> campsData = DataStore.getCampData();
-		//Date currentDate = new Date();
-
-		List<Camp> availableCamps = campsData.values().stream()
-		.filter(camp -> (camp.getCampInformation().getFacultyGroup() == student.getFaculty()
-					  ||camp.getCampInformation().getFacultyGroup() == FacultyGroups.ALL)
-					  &&camp.getVisibility() == true
-					  &&!isCampFull(camp))
-		.collect(Collectors.toCollection(ArrayList::new));
-
-		return availableCamps;		
-	}
-	
-	/**
-     * Retrieves a list of available camps for the currently logged-in student.
-     *
-     * @return List of all regardless of registration requirements camps.
-     */
-	public List<Camp> getAllCamps(){
-		Student student = (Student) AuthStore.getCurrentUser();
-		Map<String, Camp> campsData = DataStore.getCampData();
-		//Date currentDate = new Date();
-
-		List<Camp> availableCamps = campsData.values().stream()
-		.filter(camp -> (camp.getCampInformation().getFacultyGroup() == student.getFaculty()
-					  ||camp.getCampInformation().getFacultyGroup() == FacultyGroups.ALL)
-					  &&camp.getVisibility() == true)
-		.collect(Collectors.toCollection(ArrayList::new));
-
-		return availableCamps;		
-	}
-
-	 /**
-     * Retrieves a list of camps from which the student has withdrawn.
-     *
-     * @return List of withdrawn camps.
-     */
-	@Override
-	public List<Camp> getWithdrawnCamps() {
-		Student student = (Student) AuthStore.getCurrentUser();
-		Map<String, List<String>> studentToCampsWithdrawnData = DataStore.getStudentToCampsWithdrawnData();
-	
-		List<Camp> withdrawnCamps = studentToCampsWithdrawnData.entrySet().stream()
-				.filter(entry -> entry.getValue().contains(student.getName()))
-				.map(entry -> DataStore.getCampData().get(entry.getKey()))
-				.collect(Collectors.toList());
-	
-		return withdrawnCamps;
-	}
-	
-	/**
-     * Retrieves a list of camps for which the student is registered.
-     *
-     * @return List of registered camps.
-     */
-	@Override
-	public List<Camp> getRegisteredCamps() {
-		Student student = (Student) AuthStore.getCurrentUser();
-		Map<String, List<String>> registeredCampsData = DataStore.getStudentsToCampsRegisteredData();
-	    
-	    List<Camp> registeredCamps = registeredCampsData.entrySet().stream()
-	    	    .filter(entry -> entry.getKey().equals(student.getName()))
-	    	    .flatMap(entry -> entry.getValue().stream())
-	    	    .map(campName -> DataStore.getCampData().get(campName))
-	    	    .collect(Collectors.toList());
-	
-		return registeredCamps;
-	}
-
-	public Camp getCampCommitteeCamp(Student student) {
-		Map<String, String> registeredCamp = DataStore.getCampCommitteeToCampRegisteredData();
-		String campID = registeredCamp.get(student.getName());
-		Map<String, Camp> campData = DataStore.getCampData();
-	
-		if (campID != null && campData.containsKey(campID)) {
-			return campData.get(campID);
-		} else {
-			return null; 
-		}
 	}
 
 	// ---------- Service method implementation ---------- //

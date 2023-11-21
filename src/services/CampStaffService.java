@@ -10,67 +10,20 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import interfaces.ICampStaffService;
-
-
 import enums.FacultyGroups;
-
 import models.Camp;
 import models.Staff;
 import models.Student;
-
 import stores.DataStore;
-
-
 import utility.InputSelectionUtility;
 
 public class CampStaffService implements ICampStaffService {
+
 	private static final int MAX_COMMITTEE_SLOTS = 10; 
-	
-	// ---------- Helper Function ---------- //
 
-	/**
-     * Toggles the visibility of the specified camp to "on" or "off".
-     *
-     * @param camp the {@link Camp} object to update
-     */
-	public void toggleCampVisibility(Camp camp){
-		if (camp != null) {
-			boolean on = InputSelectionUtility.toggleSelector(camp);	
-			if(on) {
-				camp.setVisibility(true);
-			}else if(!on && !campIsRegistered(camp)) {
-				camp.setVisibility(false);
-			}
-		} else {
-			return;
-		}
-	}
-
-	/**
-     * Checks if a camp is registered by students or camp committees.
-     *
-     * @param camp the {@link Camp} object to check
-     * @return true if the camp is registered, false otherwise
-     */
-	public boolean campIsRegistered(Camp camp) {
-		Map<String, List<String>> registeredStudents = DataStore.getCampToRegisteredStudentData();
-		Map<String, List<String>> registeredCampCommittees = DataStore.getCampToRegisteredCampCommitteeData();
-	
-		String campName = camp.getCampInformation().getCampName();
-		
-		// Check if the camp has registered students
-		List<String> registeredStudentList = registeredStudents.get(campName);
-		boolean hasRegisteredStudents = registeredStudentList != null && !registeredStudentList.isEmpty();
-	
-		// Check if the camp has registered camp committees
-		List<String> registeredCampCommitteeList = registeredCampCommittees.get(campName);
-		boolean hasRegisteredCampCommittees = registeredCampCommitteeList != null && !registeredCampCommitteeList.isEmpty();
-	
-		// Return true if the camp has either registered students or camp committees
-		return hasRegisteredStudents || hasRegisteredCampCommittees;
+	public CampStaffService(){
 	}
 	
-
 	/**
      * Retrieves a list of all camps.
      *
@@ -99,21 +52,6 @@ public class CampStaffService implements ICampStaffService {
 
 		return staffCreatedCamps;
 	}
-	
-	// Convert map keys from userID to studentName
-    public Map<String, Student> convertMapKey(Map<String, Student> inputMap) {
-        Map<String, Student> convertedMap = new HashMap<>();
-
-        // Populate the converted map using student names as keys
-        inputMap.forEach((key, student) -> {
-            // Assuming User is the superclass of Student and it has a 'name' attribute
-            String studentName = student.getName();
-            convertedMap.put(studentName, student);
-        });
-
-        // Return the converted map
-        return convertedMap;
-    }
 
 	/**
      * Retrieves a list of students attending a specific camp as an Attendee .
@@ -165,8 +103,82 @@ public class CampStaffService implements ICampStaffService {
 		return campCommitteeList;
 	}
 
+	// ---------- Helper Function ---------- //
+
+	// Convert map keys from userID to studentName
+    public Map<String, Student> convertMapKey(Map<String, Student> inputMap) {
+        Map<String, Student> convertedMap = new HashMap<>();
+
+        // Populate the converted map using student names as keys
+        inputMap.forEach((key, student) -> {
+            // Assuming User is the superclass of Student and it has a 'name' attribute
+            String studentName = student.getName();
+            convertedMap.put(studentName, student);
+        });
+
+        // Return the converted map
+        return convertedMap;
+    }
+
+	/**
+     * Checks if a camp is registered by students or camp committees.
+     *
+     * @param camp the {@link Camp} object to check
+     * @return true if the camp is registered, false otherwise
+     */
+	public boolean isCampRegistered(Camp camp) {
+		Map<String, List<String>> registeredStudents = DataStore.getCampToRegisteredStudentData();
+		Map<String, List<String>> registeredCampCommittees = DataStore.getCampToRegisteredCampCommitteeData();
+	
+		String campName = camp.getCampInformation().getCampName();
+		
+		// Check if the camp has registered students
+		List<String> registeredStudentList = registeredStudents.get(campName);
+		boolean hasRegisteredStudents = registeredStudentList != null && !registeredStudentList.isEmpty();
+	
+		// Check if the camp has registered camp committees
+		List<String> registeredCampCommitteeList = registeredCampCommittees.get(campName);
+		boolean hasRegisteredCampCommittees = registeredCampCommitteeList != null && !registeredCampCommitteeList.isEmpty();
+	
+		// Return true if the camp has either registered students or camp committees
+		return hasRegisteredStudents || hasRegisteredCampCommittees;
+	}
+
+	/**
+     * Checks if a camp name is unique among existing camps.
+     *
+     * @param existingCamps the list of existing {@link Camp} objects
+     * @param newCampName   the new camp name to check
+     * @return true if the camp name is unique, false otherwise
+     */
+	public boolean isValidName(List<Camp> existingCamps, String newCampName) {
+		for (Camp camp : existingCamps) {
+			if (camp.getCampInformation().getCampName().equalsIgnoreCase(newCampName)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	// ---------- Service method implementation ---------- //
 
+	/**
+     * Toggles the visibility of the specified camp to "on" or "off".
+     *
+     * @param camp the {@link Camp} object to update
+     */
+	public void toggleCampVisibility(Camp camp){
+		if (camp != null) {
+			boolean on = InputSelectionUtility.toggleSelector(camp);	
+			if(on) {
+				camp.setVisibility(true);
+			}else if(!on && !isCampRegistered(camp)) {
+				camp.setVisibility(false);
+			}
+		} else {
+			return;
+		}
+	}
 
 	/**
      * Creates new camps and adds them to the data store.
@@ -186,22 +198,6 @@ public class CampStaffService implements ICampStaffService {
 		DataStore.setCampData(campData);
         return true;
     }
-
-	/**
-     * Checks if a camp name is unique among existing camps.
-     *
-     * @param existingCamps the list of existing {@link Camp} objects
-     * @param newCampName   the new camp name to check
-     * @return true if the camp name is unique, false otherwise
-     */
-	public boolean isValidName(List<Camp> existingCamps, String newCampName) {
-		for (Camp camp : existingCamps) {
-			if (camp.getCampInformation().getCampName().equalsIgnoreCase(newCampName)) {
-				return false;
-			}
-		}
-		return true;
-	}
 
 	/**
      * Updates the name of a camp if the new name is unique.
@@ -374,7 +370,7 @@ public class CampStaffService implements ICampStaffService {
 		Map<String, Camp> campData = DataStore.getCampData();
 		if (camp != null) {
 			String campName = camp.getCampInformation().getCampName();
-			if(campIsRegistered(camp)){
+			if(isCampRegistered(camp)){
 				System.out.println("Students have registered for this Camp!");
 				return false;
 			}else{

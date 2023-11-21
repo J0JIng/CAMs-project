@@ -3,13 +3,18 @@ package services;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import interfaces.ISuggestionResponderService;
 import enums.MessageStatus;
 import models.Camp;
 import models.Suggestion;
 import stores.DataStore;
 
-public class SuggestionResponderService {
+public class SuggestionResponderService implements ISuggestionResponderService {
 
+    public SuggestionResponderService(){
+    }
+
+    @Override
     public Map<Integer, Suggestion> getAllSuggestionsForCamp(Camp camp) {
 		Map<Integer, Suggestion> suggestionData = DataStore.getSuggestionData();
 		String campName = camp.getCampInformation().getCampName();
@@ -22,6 +27,7 @@ public class SuggestionResponderService {
 		return suggestionsForCampMap;
 	}
 
+    @Override
     public boolean reviewSuggestion(int suggestionID, boolean suggestionStatus) {
         Map<Integer,Suggestion> suggestionData = DataStore.getSuggestionData();
         Suggestion suggestion = suggestionData.get(suggestionID);
@@ -36,5 +42,4 @@ public class SuggestionResponderService {
         }
         return false;
     }
-
 }

@@ -8,31 +8,22 @@ import java.util.List;
 import java.util.Map;
 
 import enums.UserRole;
-
-import interfaces.ICampStudentService;
-
 import models.Student;
 import models.Camp;
 import models.Enquiry;
-
 import services.CampStudentService;
 import services.EnquirySenderService;
-
 import stores.AuthStore;
-
+import utility.InputSelectionUtility;
 import views.StudentView;
 import views.MessageView;
 
-import utility.InputSelectionUtility;
-
-import views.StudentView;
-
 public class StudentController extends UserController {
 
+	private final Scanner scanner = new Scanner(System.in);
 	private final CampStudentService campStudentService = new CampStudentService();
 	private final EnquirySenderService enquiryStudentService = new EnquirySenderService();
 	private final StudentView view = new StudentView();
-	private final Scanner scanner = new Scanner(System.in);
 
 	public void start() {
         Student student = (Student) AuthStore.getCurrentUser();
@@ -112,7 +103,6 @@ public class StudentController extends UserController {
 
 	protected void registerCamp() {
 		// Get the current student
-		//scanner.nextLine();
 		Student student = (Student) AuthStore.getCurrentUser();
 		// Get the current date
 		Date currentDate = new Date();
@@ -165,7 +155,6 @@ public class StudentController extends UserController {
 		String message;
 		if (success) message = "Registration for " + campName + " successful!"; else message = "Registration for " + campName + " unsuccessful!";
 		MessageView.endMessage(scanner, message, false);
-		//System.out.println(success ? "Registration for " + campName + " successful!" : "Registration for " + campName + " unsuccessful!");
 	}
 	
 	protected void withdrawCamp() {
@@ -201,12 +190,10 @@ public class StudentController extends UserController {
 		String message;
 		if (success) message = "Withdrawal from " + campName + " successful!"; else message = "Withdrawal from " + campName + " unsuccessful!";
 		MessageView.endMessage(scanner, message, false);
-		//System.out.println(success ? "Withdrawal from " + campName + " successful!" : "Withdrawal from " + campName + " unsuccessful!");
 	}
 
 
 	protected boolean registerAsCommittee(){
-		//scanner.nextLine();
 		Student student = (Student) AuthStore.getCurrentUser();
 		Date currentDate = new Date();
 
@@ -264,9 +251,6 @@ public class StudentController extends UserController {
 		String message;
 		if(success) message = "Registration for " + campName + " successful!"; else message = "Registration for " + campName + " unsuccessful!";
 		MessageView.endMessage(scanner, message, false);
-		//		System.out.println(success ? "Camp committee registration for " + campName + " successful!, Please Relogin" : 
-//									 "Camp committee registration for " + campName + " unsuccessful!");
-		
 		AuthStore.getCurrentUser().setRole(UserRole.COMMITTEE);
 		return true;
 	}

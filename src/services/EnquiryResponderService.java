@@ -3,20 +3,18 @@ package services;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import interfaces.IEnquiryStaffService;
-
+import enums.MessageStatus;
+import interfaces.IEnquiryResponderService;
 import models.Camp;
 import models.Enquiry;
-
 import stores.DataStore;
 
-import enums.MessageStatus;
-
-public class EnquiryResponderService implements IEnquiryStaffService {
+public class EnquiryResponderService implements IEnquiryResponderService {
 
 	public EnquiryResponderService() {
-	};
+	}
 
+	@Override
 	public Map<Integer, Enquiry> getAllPendingEnquiriesForCamp(Camp camp) {
 		Map<Integer, Enquiry> enquiryData = DataStore.getEnquiryData();
 		String campName = camp.getCampInformation().getCampName();
@@ -29,6 +27,7 @@ public class EnquiryResponderService implements IEnquiryStaffService {
 		return enquiriesForCampMap;
 	}
 
+	@Override
 	public Map<Integer, Enquiry> getAllEnquiriesForCamp(Camp camp) {
 		Map<Integer, Enquiry> enquiryData = DataStore.getEnquiryData();
 		String campName = camp.getCampInformation().getCampName();
@@ -41,6 +40,7 @@ public class EnquiryResponderService implements IEnquiryStaffService {
 		return enquiriesForCampMap;
 	}
 
+	@Override
 	public boolean respondToEnquiry(int enquiryID, String responderID, MessageStatus status, String response) {
 		Map<Integer, Enquiry> enquiryData = DataStore.getEnquiryData();
 	    if (enquiryData.containsKey(enquiryID)) {

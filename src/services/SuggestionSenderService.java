@@ -1,20 +1,54 @@
 package services;
 
-import models.Suggestion;
-import stores.DataStore;
-import enums.MessageStatus;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class SuggestionSenderService {
-    private Map<Integer, Suggestion> suggestionData;
+import interfaces.ISuggestionSenderService;
+import enums.MessageStatus;
+import models.Suggestion;
+import stores.DataStore;
+
+public class SuggestionSenderService implements ISuggestionSenderService {
 
     public SuggestionSenderService() {
-        suggestionData = DataStore.getSuggestionData(); 
     }
 
+    @Override
+    public Map<Integer, Suggestion> getDraftSuggestion(String studentID) {
+        Map<Integer, Suggestion> suggestionData = DataStore.getSuggestionData(); 
+    	return suggestionData.values().stream()
+                .filter(suggestion -> suggestion.getSenderID().equals(studentID) && suggestion.getSuggestionStatus() == MessageStatus.DRAFT)
+                .collect(Collectors.toMap(Suggestion::getSuggestionID, suggestion -> suggestion));
+    }
+
+    @Override
+    public Map<Integer, Suggestion> getSubmittedSuggestion(String studentID) {
+        Map<Integer, Suggestion> suggestionData = DataStore.getSuggestionData(); 
+        return suggestionData.values().stream()
+                .filter(suggestion -> suggestion.getSenderID().equals(studentID) && suggestion.getSuggestionStatus() == MessageStatus.PENDING)
+                .collect(Collectors.toMap(Suggestion::getSuggestionID, suggestion -> suggestion));
+    }
+
+    @Override
+    public Map<Integer, Suggestion> getAcceptedSuggestion(String studentID) {
+        Map<Integer, Suggestion> suggestionData = DataStore.getSuggestionData(); 
+        return suggestionData.values().stream()
+                .filter(suggestion -> suggestion.getSenderID().equals(studentID) && suggestion.getSuggestionStatus() == MessageStatus.ACCEPTED)
+                .collect(Collectors.toMap(Suggestion::getSuggestionID, suggestion -> suggestion));
+    }
+
+    @Override
+    public Map<Integer, Suggestion> getRejectedSuggestion(String studentID) {
+        Map<Integer, Suggestion> suggestionData = DataStore.getSuggestionData(); 
+        return suggestionData.values().stream()
+                .filter(suggestion -> suggestion.getSenderID().equals(studentID) && suggestion.getSuggestionStatus() == MessageStatus.REJECTED)
+                .collect(Collectors.toMap(Suggestion::getSuggestionID, suggestion -> suggestion));
+    }
+
+    @Override
     public int submitSuggestion(String senderID, String campName, String suggestionDetails, boolean isDraft) {
+        Map<Integer, Suggestion> suggestionData = DataStore.getSuggestionData(); 
         int suggestionID = Math.abs(UUID.randomUUID().hashCode());
         Suggestion suggestion = new Suggestion(suggestionID, campName, senderID, suggestionDetails);
         if (isDraft) {
@@ -29,28 +63,9 @@ public class SuggestionSenderService {
         return suggestionID;
     }
 
-    public Map<Integer, Suggestion> viewDraftSuggestion(String studentID) {
-    	return suggestionData.values().stream()
-                .filter(suggestion -> suggestion.getSenderID().equals(studentID) && suggestion.getSuggestionStatus() == MessageStatus.DRAFT)
-                .collect(Collectors.toMap(Suggestion::getSuggestionID, suggestion -> suggestion));
-    }
-    public Map<Integer, Suggestion> viewSubmittedSuggestion(String studentID) {
-        return suggestionData.values().stream()
-                .filter(suggestion -> suggestion.getSenderID().equals(studentID) && suggestion.getSuggestionStatus() == MessageStatus.PENDING)
-                .collect(Collectors.toMap(Suggestion::getSuggestionID, suggestion -> suggestion));
-    }
-    public Map<Integer, Suggestion> viewAcceptedSuggestion(String studentID) {
-        return suggestionData.values().stream()
-                .filter(suggestion -> suggestion.getSenderID().equals(studentID) && suggestion.getSuggestionStatus() == MessageStatus.ACCEPTED)
-                .collect(Collectors.toMap(Suggestion::getSuggestionID, suggestion -> suggestion));
-    }
-    public Map<Integer, Suggestion> viewRejectedSuggestion(String studentID) {
-        return suggestionData.values().stream()
-                .filter(suggestion -> suggestion.getSenderID().equals(studentID) && suggestion.getSuggestionStatus() == MessageStatus.REJECTED)
-                .collect(Collectors.toMap(Suggestion::getSuggestionID, suggestion -> suggestion));
-    }
-
+    @Override
     public boolean editSuggestion(int suggestionID, String senderID, String newDetails, boolean isDraft) {
+        Map<Integer, Suggestion> suggestionData = DataStore.getSuggestionData(); 
         if (suggestionData.containsKey(suggestionID)) {
             Suggestion suggestion = suggestionData.get(suggestionID);
             if (suggestion.getSenderID().equals(senderID) && suggestion.getSuggestionStatus() == MessageStatus.DRAFT) {
@@ -65,24 +80,12 @@ public class SuggestionSenderService {
         return false;
     }
 
+    @Override
     public boolean deleteDraftSuggestion(int suggestionID, String senderID) {
+        Map<Integer, Suggestion> suggestionData = DataStore.getSuggestionData(); 
         Suggestion suggestion = suggestionData.get(suggestionID);
         if (suggestion != null && suggestion.getSenderID().equals(senderID) && suggestion.getSuggestionStatus() == MessageStatus.DRAFT) {
             suggestionData.remove(suggestionID);
-            DataStore.setSuggestionData(suggestionData);
-            return true;
-        }
-        return false;
-    }
-
-    public boolean reviewSuggestion(int suggestionID, boolean suggestionStatus) {
-        Suggestion suggestion = suggestionData.get(suggestionID);
-        if (suggestion != null) {
-            if (suggestionStatus) {
-                suggestion.setSuggestionStatus(MessageStatus.ACCEPTED);
-            } else {
-                suggestion.setSuggestionStatus(MessageStatus.REJECTED);
-            }
             DataStore.setSuggestionData(suggestionData);
             return true;
         }

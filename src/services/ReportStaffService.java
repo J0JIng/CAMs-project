@@ -8,18 +8,23 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Map;
 
+import interfaces.IEnquiryResponderService;
+import interfaces.IReportStaffService;
 import enums.UserRole;
-
 import models.Enquiry;
 import models.Camp;
 import models.Student;
 
-public class ReportStaffService {
+public class ReportStaffService implements IReportStaffService {
     private CsvFileDataService csvFileDataService = new CsvFileDataService();
     private CampStaffService campStaffService = new CampStaffService();
-    private EnquiryResponderService enquiryResponderService = new EnquiryResponderService();
+    private IEnquiryResponderService enquiryResponderService = new EnquiryResponderService();
+
+    public ReportStaffService(){
+    }
 
     // generate Report for camps
+    @Override
     public boolean generateReport(List<String> filter,List<Camp> camps,Map<String, String> filePathsMap) {
         // Sort camps alphabetically based on their names
         camps.sort(Comparator.comparing(camp -> camp.getCampInformation().getCampName()));
@@ -45,6 +50,7 @@ public class ReportStaffService {
         return success;
     }
 
+    @Override
     public boolean generatePerformanceReport(List<String> filter,List<Camp> camps,Map<String, String> filePathsMap) {
         // Sort camps alphabetically based on their names
         camps.sort(Comparator.comparing(camp -> camp.getCampInformation().getCampName()));
@@ -70,6 +76,7 @@ public class ReportStaffService {
         return success;
     }
 
+    @Override
     public boolean generateEnquiryReport(List<String> filter,List<Camp> camps,Map<String, String> filePathsMap) {
         // Sort camps alphabetically based on their names
         camps.sort(Comparator.comparing(camp -> camp.getCampInformation().getCampName()));

@@ -9,19 +9,16 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import enums.MessageStatus;
-
 import models.Camp;
 import models.CampInformation;
 import models.Enquiry;
 import models.Student;
 import models.Suggestion;
 import models.Staff;
-
 import services.CampStaffService;
 import services.EnquiryResponderService;
 import services.SuggestionResponderService;
 import services.ReportStaffService;
-
 import stores.AuthStore;
 import stores.DataStore;
 import utility.FilePathsUtility;
@@ -116,10 +113,6 @@ public class StaffController extends UserController {
     }
 
     // ---------- Helper Methods ---------- //
-
-    protected boolean isCampRegistered(Camp camp) {
-        return campStaffService.campIsRegistered(camp);
-    }
 
     protected void toggleCampVisibility() {
         Staff staff = (Staff) AuthStore.getCurrentUser();
