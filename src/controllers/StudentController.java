@@ -249,7 +249,7 @@ public class StudentController extends UserController {
 		String campName = camp.getCampInformation().getCampName();
 		boolean success = campStudentService.registerAsCommittee(student, camp);
 		String message;
-		if(success) message = "Joined " + campName + " committee successfuly!"; else message = "Joined " + campName + " committee unsuccessful!";
+		if(success) message = "Joined " + campName + " committee successfully!"; else message = "Joined " + campName + " committee unsuccessful!";
 		MessageView.endMessage(scanner, message, false);
 		AuthStore.getCurrentUser().setRole(UserRole.COMMITTEE);
 		return true;
@@ -260,7 +260,6 @@ public class StudentController extends UserController {
      * Shows all no. of remaining slots for all the camps.
      */
     protected void viewRemainingSlots() {
-		scanner.nextLine();
 		String userInput;
         do {
             view.viewCampsSlots(campStudentService.getAllCamps());
@@ -272,17 +271,14 @@ public class StudentController extends UserController {
      * Shows all camps viewable by the student.
      */
     protected void viewAllCamps() {
-    	scanner.nextLine();
-    	while (true) {
-    		view.viewCamps(campStudentService.getAllCamps(), " - List of Camps - ");
-    		Camp c = InputSelectionUtility.campSelector(campStudentService.getAllCamps());
-    		if (c != null) {
-	    		view.viewCampInformation(c);
-	    		scanner.nextLine();
-    		} else {
-    			return;
-    		}
-    	}
+		view.viewCamps(campStudentService.getAllCamps(), " - List of Camps - ");
+		Camp c = InputSelectionUtility.campSelector(campStudentService.getAllCamps());
+		if (c != null) {
+    		view.viewCampInformation(c);
+    		MessageView.endMessage(scanner, null, false);
+		} else {
+			return;
+		}
     }
     
     /**

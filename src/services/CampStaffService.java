@@ -2,6 +2,7 @@ package services;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.HashMap;
@@ -32,7 +33,13 @@ public class CampStaffService implements ICampStaffService {
 	@Override
 	public ArrayList<Camp> getAllCamps() {
     	Map<String, Camp> campsData = DataStore.getCampData();
-    	ArrayList<Camp> allCamps = new ArrayList<>(campsData.values());
+    	
+    	ArrayList<Camp> allCamps = campsData.values().stream()
+                .sorted(Comparator.comparing(c -> c.getCampInformation().getCampName()))
+                .collect(Collectors.toCollection(ArrayList::new));
+
+    	
+    	//ArrayList<Camp> allCamps = new ArrayList<>(campsData.values());
     	return allCamps;
 	}
 	
@@ -47,8 +54,13 @@ public class CampStaffService implements ICampStaffService {
 		Map<String, Camp> campsData = DataStore.getCampData();
 
 		ArrayList<Camp> staffCreatedCamps = campsData.values().stream()
-				.filter(camp -> camp.getCampInformation().getCampStaffInCharge().equals(staff.getName()))
-				.collect(Collectors.toCollection(ArrayList::new));
+                .filter(camp -> camp.getCampInformation().getCampStaffInCharge().equals(staff.getName()))
+                .sorted(Comparator.comparing(c -> c.getCampInformation().getCampName()))
+                .collect(Collectors.toCollection(ArrayList::new));
+		
+//		ArrayList<Camp> staffCreatedCamps = campsData.values().stream()
+//				.filter(camp -> camp.getCampInformation().getCampStaffInCharge().equals(staff.getName()))
+//				.collect(Collectors.toCollection(ArrayList::new));
 
 		return staffCreatedCamps;
 	}

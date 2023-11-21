@@ -165,9 +165,9 @@ public class StaffController extends UserController {
         if (camp != null) {
 			view.editCampView();
 			boolean success = InputSelectionUtility.updateCampInput(camp,staff,dateFormat);
-			System.out.println(success ? "Camp updated successfully!" : "Camp update fail!");
+			MessageView.endMessage(scanner, success ? "Camp updated successfully!" : "Camp update fail!", false);
 		} else {
-			System.out.println("No camps updated.");;
+			System.out.println("No camps updated.");
 		}
 
     }
@@ -189,16 +189,13 @@ public class StaffController extends UserController {
      * Shows the list of all camps
      */
     protected void viewAllCamps() {
-        //scanner.nextLine();
-        while (true) {
-            view.viewCamps(campStaffService.getAllCamps(), " - List of Camps - ");
-            Camp selectedCamp = InputSelectionUtility.campSelector(campStaffService.getAllCamps());
-            if (selectedCamp != null) {
-                view.viewCampInformation(selectedCamp);
-                MessageView.endMessage(scanner, null, false);
-            } else {
-                return;
-            }
+        view.viewCamps(campStaffService.getAllCamps(), " - List of Camps - ");
+        Camp selectedCamp = InputSelectionUtility.campSelector(campStaffService.getAllCamps());
+        if (selectedCamp != null) {
+            view.viewCampInformation(selectedCamp);
+            MessageView.endMessage(scanner, null, false);
+        } else {
+            return;
         }
     }
 
@@ -226,22 +223,17 @@ public class StaffController extends UserController {
      * Shows the list of Students
      */
     protected void viewStudentList() {
-        //scanner.nextLine();
-        while (true) {
-            view.viewCamps(campStaffService.getAllCamps(), " - Choose Camp to view Student list - ");
-            Camp selectedCamp = InputSelectionUtility.campSelector(campStaffService.getAllCamps());
-            if (selectedCamp != null) {
-                List<String> students = campStaffService.getCampAttendeeList(selectedCamp).stream()
-                        .map(Student::getName)
-                        .collect(Collectors.toList());
-                List<String> committeeMembers = campStaffService.getCampCommitteeList(selectedCamp).stream()
-                        .map(Student::getName)
-                        .collect(Collectors.toList());
-                view.viewStudentList(students, committeeMembers, selectedCamp);
-                MessageView.endMessage(scanner, null, false);
-            } else {
-                return;
-            }
+        view.viewCamps(campStaffService.getAllCamps(), " - Choose Camp to view Student list - ");
+        Camp selectedCamp = InputSelectionUtility.campSelector(campStaffService.getAllCamps());
+        if (selectedCamp != null) {
+            List<String> students = campStaffService.getCampAttendeeList(selectedCamp).stream()
+                    .map(Student::getName)
+                    .collect(Collectors.toList());
+            List<String> committeeMembers = campStaffService.getCampCommitteeList(selectedCamp).stream()
+                    .map(Student::getName)
+                    .collect(Collectors.toList());
+            view.viewStudentList(students, committeeMembers, selectedCamp);
+            MessageView.endMessage(scanner, null, false);
         }
     }
 
