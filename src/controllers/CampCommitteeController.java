@@ -90,7 +90,6 @@ public class CampCommitteeController extends StudentController {
                         viewSuggestions();
                         break;
                     case 13:
-                        // report generator 
                     	generateReport();
                         break;
 	                case 14: 
