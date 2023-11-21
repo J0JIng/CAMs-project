@@ -507,7 +507,7 @@ public class InputSelectionUtility {
 
             // Add name if filtering by name
             if (filterByName) {
-                String nameInput = getStringInput("Enter the Name");
+                String nameInput = getStringInput("Enter the Name: ");
                 selectedFilters.add(nameInput);
             }
 
@@ -565,7 +565,7 @@ public class InputSelectionUtility {
 
             // Add name if filtering by name
             if (filterByName) {
-                String nameInput = getStringInput("Enter the Name");
+                String nameInput = getStringInput("Enter the Name: ");
                 selectedFilters.add(nameInput);
             }
 
@@ -631,7 +631,7 @@ public class InputSelectionUtility {
 
             // Add name if filtering by name
             if (filterByName) {
-                String nameInput = getStringInput("Enter the Name");
+                String nameInput = getStringInput("Enter the Name: ");
                 selectedFilters.add(nameInput);
             }
 

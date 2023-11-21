@@ -615,7 +615,7 @@ public class StaffController extends UserController {
     
                 case 3:
                     // Show ALL camps to select from
-                    viewAllCamps();
+                    view.viewCamps(campStaffService.getAllCamps(), " - List of Camps - ");
                     List<Camp> camps = new ArrayList<>();
                     Camp selectedCamp = InputSelectionUtility.campSelector(allCreatedCamps);
                     camps.add(selectedCamp);
