@@ -249,7 +249,7 @@ public class StudentController extends UserController {
 		String campName = camp.getCampInformation().getCampName();
 		boolean success = campStudentService.registerAsCommittee(student, camp);
 		String message;
-		if(success) message = "Registration for " + campName + " successful!"; else message = "Registration for " + campName + " unsuccessful!";
+		if(success) message = "Joined " + campName + " committee successfuly!"; else message = "Joined " + campName + " committee unsuccessful!";
 		MessageView.endMessage(scanner, message, false);
 		AuthStore.getCurrentUser().setRole(UserRole.COMMITTEE);
 		return true;

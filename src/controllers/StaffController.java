@@ -425,68 +425,61 @@ public class StaffController extends UserController {
         boolean success = false;
         List<String> filter = null;
 
+        // View report menu
+        view.viewReportMenu();
         do {
-            if (filter != null) {
-            	MessageView.endMessage(scanner, success ? "Report generated successfully" : "Error generating report", false);
-            }
-            // View report menu
-            view.viewReportMenu();
-            option = InputSelectionUtility.getIntInput("Enter the filter option (1/2/3, 4 to exit): ");
-            switch (option) {
-                case 1:
-                    // get the filters
-                    if (allCreatedCamps != null && !allCreatedCamps.isEmpty()) {
-                        view.showFilterInput();
-                        filter = InputSelectionUtility.getFilterInput();
-                        if (filter != null) success = reportStaffService.generateReport(filter, allCreatedCamps,FilePathsUtility.csvFilePaths());
-                    }else{
-                        success = false;
-                        System.out.println("Error: allCreatedCamps is null or empty");
-                    }
-                    break;
-
-                case 2:
-                    // get the filters
-                	if (staffCreatedCamps != null && !staffCreatedCamps.isEmpty()) {
-                        view.showFilterInput();
-                        filter = InputSelectionUtility.getFilterInput();
-                        if (filter != null) success = reportStaffService.generateReport(filter, staffCreatedCamps,FilePathsUtility.csvFilePaths());
-                    }else{
-                        success = false;
-                        System.out.println("Error: staffCreatedCamps is null or empty");
-                    }
-
-                    break;
-    
-                case 3:
-                    // Show ALL camps to select from
-            		view.viewCamps(allCreatedCamps, " - Choose Camp to Generate Report - ");
-                    List<Camp> camps = new ArrayList<>();
-                    Camp selectedCamp = InputSelectionUtility.campSelector(allCreatedCamps);
-                    camps.add(selectedCamp);
-
-                    if (selectedCamp == null) {
-                        System.out.println("Invalid camp selection.");
-                        success = false;
-                    } else {
-                    	view.showFilterInput();
-                        filter = InputSelectionUtility.getFilterInput();
-                        if (filter != null) success = reportStaffService.generateReport(filter,camps,FilePathsUtility.csvFilePaths());
-                    }
-                    break;
-                
-                case 4:
-                	MessageView.endMessage(scanner, "Exiting From Report Generation", false);
-                    return;
-    
-                default:
-                    System.out.println("Invalid option.");
+        	option = InputSelectionUtility.getIntInput("Enter the filter option (1/2/3, 4 to exit): ");
+        	if (option == 4) {
+        		MessageView.endMessage(scanner, "Exiting From Report Generation", false);
+        		return;
+        	}
+        } while (option <= 0 || option > 3);
+        switch (option) {
+            case 1:
+                // get the filters
+                if (allCreatedCamps != null && !allCreatedCamps.isEmpty()) {
+                    view.showFilterInput();
+                    filter = InputSelectionUtility.getFilterInput();
+                    if (filter != null) success = reportStaffService.generateReport(filter, allCreatedCamps,FilePathsUtility.csvFilePaths());
+                }else{
                     success = false;
-                    break;
-            }
-        } while (option >= 0 && option <= 3);
-        
-        MessageView.endMessage(scanner, null, false);
+                    System.out.println("Error: allCreatedCamps is null or empty");
+                }
+                break;
+
+            case 2:
+                // get the filters
+            	if (staffCreatedCamps != null && !staffCreatedCamps.isEmpty()) {
+                    view.showFilterInput();
+                    filter = InputSelectionUtility.getFilterInput();
+                    if (filter != null) success = reportStaffService.generateReport(filter, staffCreatedCamps,FilePathsUtility.csvFilePaths());
+                }else{
+                    success = false;
+                    System.out.println("Error: staffCreatedCamps is null or empty");
+                }
+
+            	break;
+
+            case 3:
+                // Show ALL camps to select from
+        		view.viewCamps(allCreatedCamps, " - Choose Camp to Generate Report - ");
+                List<Camp> camps = new ArrayList<>();
+                Camp selectedCamp = InputSelectionUtility.campSelector(allCreatedCamps);
+                camps.add(selectedCamp);
+
+                if (selectedCamp == null) {
+                    System.out.println("Invalid camp selection.");
+                    success = false;
+                } else {
+                	view.showFilterInput();
+                    filter = InputSelectionUtility.getFilterInput();
+                    if (filter != null) success = reportStaffService.generateReport(filter,camps,FilePathsUtility.csvFilePaths());
+                }
+                break;
+        	}
+        if (filter != null) {
+        	MessageView.endMessage(scanner, success ? "Report generated successfully" : "Error generating report", false);
+        }
     }
 
 
@@ -502,69 +495,62 @@ public class StaffController extends UserController {
         boolean success = false;
         List<String> filter = null;
 
+        // View report menu
+        view.viewPerformanceReportMenu();
         do {
-            if (filter != null) {
-            	MessageView.endMessage(scanner, success ? "Report generated successfully" : "Error generating report", false);
-            }
-            // View report menu
-            view.viewPerformanceReportMenu();
-            option = InputSelectionUtility.getIntInput("Enter the filter option (1/2/3, 4 to exit): ");
-            switch (option) {
-                case 1:
-                    // get the filters
-                    if (allCreatedCamps != null && !allCreatedCamps.isEmpty()) {
-                        view.showPerformanceFilterInput();
-                        filter = InputSelectionUtility.getPerformanceFilterInput();
-                        if (filter != null) success = reportStaffService.generatePerformanceReport(filter, allCreatedCamps,FilePathsUtility.csvFilePaths());
-                    }else{
-                        success = false;
-                        System.out.println("Error: allCreatedCamps is null or empty");
-                    }
-                	
-                    break;
-    
-                case 2:
-                    // get the filters
-                    if (staffCreatedCamps != null && !staffCreatedCamps.isEmpty()) {
-                        view.showPerformanceFilterInput();
-                        filter = InputSelectionUtility.getPerformanceFilterInput();
-                        if (filter != null) success = reportStaffService.generatePerformanceReport(filter, staffCreatedCamps,FilePathsUtility.csvFilePaths());
-                    }else{
-                        success = false;
-                        System.out.println("Error: staffCreatedCamps is null or empty");
-                    }
-
-                    break;
-    
-                case 3:
-                    // Show ALL camps to select from
-                    viewAllCamps();
-                    List<Camp> camps = new ArrayList<>();
-                    Camp selectedCamp = InputSelectionUtility.campSelector(allCreatedCamps);
-                    camps.add(selectedCamp);
-
-                    if (selectedCamp == null) {
-                        System.out.println("Invalid camp selection.");
-                        success = false;
-                    } else {
-                    	view.showFilterInput();
-                        filter = InputSelectionUtility.getPerformanceFilterInput();
-                        if (filter != null) success = reportStaffService.generatePerformanceReport(filter,camps,FilePathsUtility.csvFilePaths());
-                    }
-                    break;
-                
-                case 4: 
-                	MessageView.endMessage(scanner, "Exiting From Report Generation", false);
-                    return;
-    
-                default:
-                    System.out.println("Invalid option.");
+        	option = InputSelectionUtility.getIntInput("Enter the filter option (1/2/3, 4 to exit): ");
+        	if (option == 4) {
+        		MessageView.endMessage(scanner, "Exiting From Report Generation", false);
+        		return;
+        	}
+        } while (option <= 0 || option > 3);
+        switch (option) {
+            case 1:
+                // get the filters
+                if (allCreatedCamps != null && !allCreatedCamps.isEmpty()) {
+                    view.showPerformanceFilterInput();
+                    filter = InputSelectionUtility.getPerformanceFilterInput();
+                    if (filter != null) success = reportStaffService.generatePerformanceReport(filter, allCreatedCamps,FilePathsUtility.csvFilePaths());
+                }else{
                     success = false;
-                    break;
+                    System.out.println("Error: allCreatedCamps is null or empty");
+                }
+            	
+                break;
+
+            case 2:
+                // get the filters
+                if (staffCreatedCamps != null && !staffCreatedCamps.isEmpty()) {
+                    view.showPerformanceFilterInput();
+                    filter = InputSelectionUtility.getPerformanceFilterInput();
+                    if (filter != null) success = reportStaffService.generatePerformanceReport(filter, staffCreatedCamps,FilePathsUtility.csvFilePaths());
+                }else{
+                    success = false;
+                    System.out.println("Error: staffCreatedCamps is null or empty");
+                }
+
+                break;
+
+            case 3:
+                // Show ALL camps to select from
+                viewAllCamps();
+                List<Camp> camps = new ArrayList<>();
+                Camp selectedCamp = InputSelectionUtility.campSelector(allCreatedCamps);
+                camps.add(selectedCamp);
+
+                if (selectedCamp == null) {
+                    System.out.println("Invalid camp selection.");
+                    success = false;
+                } else {
+                	view.showFilterInput();
+                    filter = InputSelectionUtility.getPerformanceFilterInput();
+                    if (filter != null) success = reportStaffService.generatePerformanceReport(filter,camps,FilePathsUtility.csvFilePaths());
+                }
+                break;
             }
-        } while (option >= 0 && option <= 3);
-        
-        MessageView.endMessage(scanner, null, false);
+        if (filter != null) {
+        	MessageView.endMessage(scanner, success ? "Report generated successfully" : "Error generating report", false);
+        }
     }
 
     // Generate Enquiry report
@@ -579,69 +565,62 @@ public class StaffController extends UserController {
         boolean success = false;
         List<String> filter = null;
 
+        // View report menu
+        view.viewEnquiryReportMenu();
         do {
-            if (filter != null) {
-            	MessageView.endMessage(scanner, success ? "Report generated successfully" : "Error generating report", false);
-            }
-            // View report menu
-            view.viewEnquiryReportMenu();
-            option = InputSelectionUtility.getIntInput("Enter the filter option (1/2/3, 4 to exit): ");
-            switch (option) {
-                case 1:
-                    // get the filters
-                    if (allCreatedCamps != null && !allCreatedCamps.isEmpty()) {
-                        view.showEnquiryFilterInput();
-                        filter = InputSelectionUtility.getEnquiryFilterInput();
-                        if (filter != null) success = reportStaffService.generateEnquiryReport(filter, allCreatedCamps,FilePathsUtility.csvFilePaths());
-                    }else{
-                        success = false;
-                        System.out.println("Error: allCreatedCamps is null or empty");
-                    }
-                	
-                    break;
-    
-                case 2:
-                    // get the filters
-                    if (staffCreatedCamps != null && !staffCreatedCamps.isEmpty()) {
-                        view.showEnquiryFilterInput();
-                        filter = InputSelectionUtility.getEnquiryFilterInput();
-                        if (filter != null) success = reportStaffService.generateEnquiryReport(filter, staffCreatedCamps,FilePathsUtility.csvFilePaths());
-                    }else{
-                        success = false;
-                        System.out.println("Error: staffCreatedCamps is null or empty");
-                    }
-
-                    break;
-    
-                case 3:
-                    // Show ALL camps to select from
-                    view.viewCamps(campStaffService.getAllCamps(), " - List of Camps - ");
-                    List<Camp> camps = new ArrayList<>();
-                    Camp selectedCamp = InputSelectionUtility.campSelector(allCreatedCamps);
-                    camps.add(selectedCamp);
-
-                    if (selectedCamp == null) {
-                        System.out.println("Invalid camp selection.");
-                        success = false;
-                    } else {
-                    	view.showEnquiryFilterInput();
-                        filter = InputSelectionUtility.getEnquiryFilterInput();
-                        if (filter != null) success = reportStaffService.generateEnquiryReport(filter,camps,FilePathsUtility.csvFilePaths());
-                    }
-                    break;
-                
-                case 4: 
-                	MessageView.endMessage(scanner, "Exiting From Report Generation", false);
-                    return;
-    
-                default:
-                    System.out.println("Invalid option.");
+        	option = InputSelectionUtility.getIntInput("Enter the filter option (1/2/3, 4 to exit): ");
+        	if (option == 4) {
+        		MessageView.endMessage(scanner, "Exiting From Report Generation", false);
+        		return;
+        	}
+        } while (option <= 0 || option > 3);            
+        switch (option) {
+            case 1:
+                // get the filters
+                if (allCreatedCamps != null && !allCreatedCamps.isEmpty()) {
+                    view.showEnquiryFilterInput();
+                    filter = InputSelectionUtility.getEnquiryFilterInput();
+                    if (filter != null) success = reportStaffService.generateEnquiryReport(filter, allCreatedCamps,FilePathsUtility.csvFilePaths());
+                }else{
                     success = false;
-                    break;
-            }
-        } while (option >= 0 && option <= 3);
-        
-        MessageView.endMessage(scanner, null, false);
+                    System.out.println("Error: allCreatedCamps is null or empty");
+                }
+            	
+                break;
+
+            case 2:
+                // get the filters
+                if (staffCreatedCamps != null && !staffCreatedCamps.isEmpty()) {
+                    view.showEnquiryFilterInput();
+                    filter = InputSelectionUtility.getEnquiryFilterInput();
+                    if (filter != null) success = reportStaffService.generateEnquiryReport(filter, staffCreatedCamps,FilePathsUtility.csvFilePaths());
+                }else{
+                    success = false;
+                    System.out.println("Error: staffCreatedCamps is null or empty");
+                }
+
+                break;
+
+            case 3:
+                // Show ALL camps to select from
+                view.viewCamps(campStaffService.getAllCamps(), " - List of Camps - ");
+                List<Camp> camps = new ArrayList<>();
+                Camp selectedCamp = InputSelectionUtility.campSelector(allCreatedCamps);
+                camps.add(selectedCamp);
+
+                if (selectedCamp == null) {
+                    System.out.println("Invalid camp selection.");
+                    success = false;
+                } else {
+                	view.showEnquiryFilterInput();
+                    filter = InputSelectionUtility.getEnquiryFilterInput();
+                    if (filter != null) success = reportStaffService.generateEnquiryReport(filter,camps,FilePathsUtility.csvFilePaths());
+                }
+                break;
+        	}
+        if (filter != null) {
+        	MessageView.endMessage(scanner, success ? "Report generated successfully" : "Error generating report", false);
+        }
     }
     
     
