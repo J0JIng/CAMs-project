@@ -19,7 +19,7 @@ import utility.InputSelectionUtility;
 
 public class CampStaffService implements ICampStaffService { 
 
-	private final ICampValidationService campValidationService = new CampValidationService();
+	private final static ICampValidationService campValidationService = new CampValidationService();
 
 	public CampStaffService(){
 	}

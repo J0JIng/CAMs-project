@@ -4,15 +4,15 @@ import java.util.List;
 import java.util.Date;
 
 import enums.FacultyGroups;
-import interfaces.ICampStudentService;
+import interfaces.ICampStaffService;
 import interfaces.ICampUpdateService;
 import interfaces.ICampValidationService;
 import models.Camp;
 
 public class CampUpdateService implements ICampUpdateService {
 
-    private final ICampStudentService campStudentService = new CampStudentService();
-    private final ICampValidationService campValidationService = new CampValidationService();
+    private final static ICampStaffService campStaffService = new CampStaffService();
+    private final static ICampValidationService campValidationService = new CampValidationService();
 
     private static final int MAX_COMMITTEE_SLOTS = 10; 
 
@@ -23,7 +23,7 @@ public class CampUpdateService implements ICampUpdateService {
 	
     @Override
 	public boolean updateCampName(Camp camp, String newCampName) {
-		List<Camp> existingCamps = campStudentService.getAllCamps();
+		List<Camp> existingCamps = campStaffService.getAllCamps();
 		boolean isUniqueName = campValidationService.isValidName(existingCamps, newCampName);
 		if (isUniqueName) {
 			System.out.println("Camp name updated successfully!");

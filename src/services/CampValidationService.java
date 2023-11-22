@@ -11,7 +11,7 @@ import stores.DataStore;
 
 public class CampValidationService implements ICampValidationService {
 
-    private final ICampStudentService campStudentService = new CampStudentService();
+    private final static ICampStudentService campStudentService = new CampStudentService();
 
     public CampValidationService(){
     }
