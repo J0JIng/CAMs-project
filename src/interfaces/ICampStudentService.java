@@ -43,6 +43,12 @@ public interface ICampStudentService {
      * Return camp for which the student is currently registered as a Committee Member.
      *
      * @return a {@link Camp} representing the camp registered by Committee Member. 
-     */
+     */;
     public Camp getCampCommitteeCamp(Student student);
+
+    public boolean registerCamp(Student student,Camp camp);
+
+    public boolean withdrawCamp(Student student,Camp camp);
+
+    public boolean registerAsCommittee(Student student,Camp camp);
 }

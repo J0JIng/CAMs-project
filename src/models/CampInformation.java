@@ -1,6 +1,7 @@
 package models;
 
 import java.util.Date;
+
 import enums.FacultyGroups;
 
 public class CampInformation {

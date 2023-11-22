@@ -1,5 +1,6 @@
 package interfaces;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import models.Camp;
@@ -10,7 +11,7 @@ import models.Student;
  * The {@link IStaffCampService} interface defines a contract for managing
  * staff-related camp services.
  */
-public interface ICampStaffService {
+public interface ICampStaffService{
     /**
      * Retrieves a list of all camps.
      *
@@ -40,5 +41,13 @@ public interface ICampStaffService {
      * @return an {@link List} of {@link Student} objects representing CampCommittee
      */
 	public List<Student> getCampCommitteeList(Camp camp);
+
+    public boolean createCamp(ArrayList<Camp> camps);
+
+    public boolean deleteCamp(Camp camp);
+
+    public void toggleCampVisibility(Camp camp);
+
+    
 
 }

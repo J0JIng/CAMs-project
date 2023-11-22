@@ -5,34 +5,34 @@ import java.util.Map;
 import java.util.List;
 
 import interfaces.ICampStudentService;
-
+import interfaces.ICampValidationService;
+import interfaces.IEnquiryResponderService;
+import interfaces.ISuggestionSenderService;
+import interfaces.IReportStudentService;
 import enums.MessageStatus;
 import enums.UserRole;
-import views.MessageView;
-import views.StudentView;
-
 import models.Student;
 import models.Suggestion;
 import models.Camp;
 import models.Enquiry;
-
 import services.CampStudentService;
+import services.CampValidationService;
 import services.EnquiryResponderService;
 import services.SuggestionSenderService;
 import services.ReportStudentService;
-
 import stores.AuthStore;
-
 import utility.InputSelectionUtility;
 import utility.FilePathsUtility;
-
+import views.MessageView;
+import views.StudentView;
 
 public class CampCommitteeController extends StudentController {
 
-    private final CampStudentService campStudentService = new CampStudentService();
-    private final EnquiryResponderService enquiryCampComitteeService = new EnquiryResponderService();
-    private final SuggestionSenderService suggestionCampComitteeService = new SuggestionSenderService();
-	private final ReportStudentService reportStudentService = new ReportStudentService();
+    private final ICampStudentService campStudentService = new CampStudentService();
+	private final ICampValidationService campValidationService = new CampValidationService();
+    private final IEnquiryResponderService enquiryCampComitteeService = new EnquiryResponderService();
+    private final ISuggestionSenderService suggestionCampComitteeService = new SuggestionSenderService();
+	private final IReportStudentService reportStudentService = new ReportStudentService();
 	private final StudentView view = new StudentView();
 	private final Scanner scanner = new Scanner(System.in);
 
@@ -146,7 +146,7 @@ public class CampCommitteeController extends StudentController {
 
 		view.displayEnquiries(campEnquiries);
 		// Get User input
-		Enquiry selectedEnquiry = InputSelectionUtility.enquirySelector(campEnquiries);
+		Enquiry selectedEnquiry = InputSelectionUtility.getSelectedEnquiry(campEnquiries);
 		
 		if (selectedEnquiry != null) {
 			String response = InputSelectionUtility.getStringInput("Enter response: ");
@@ -160,7 +160,7 @@ public class CampCommitteeController extends StudentController {
     protected void submitSuggestion() {
 		Student student = (Student) AuthStore.getCurrentUser();
 
-		if(!campStudentService.isUserCampCommittee(student)){
+		if(!campValidationService.isUserCampCommittee(student)){
 			System.out.println("Only committee members can submit suggestions!");
 			return;
 		}
@@ -185,7 +185,7 @@ public class CampCommitteeController extends StudentController {
     protected void viewSuggestions() {
 		Student student = (Student) AuthStore.getCurrentUser();
 
-		if(!campStudentService.isUserCampCommittee(student)){
+		if(!campValidationService.isUserCampCommittee(student)){
 			System.out.println("Only committee members can view suggestions!");
 			return;
 		}
@@ -203,7 +203,7 @@ public class CampCommitteeController extends StudentController {
 	protected boolean editSuggestion() {
 		Student student = (Student) AuthStore.getCurrentUser();
 
-		if(!campStudentService.isUserCampCommittee(student)){
+		if(!campValidationService.isUserCampCommittee(student)){
 			MessageView.endMessage(scanner, "Only committee members can edit suggestions!", false);
 			return false;
 		}
@@ -219,7 +219,7 @@ public class CampCommitteeController extends StudentController {
 		// Display Suggestions
 		view.displaySuggestion(draftSuggestions);
 		// Get User input
-		Suggestion selectedSuggestion = InputSelectionUtility.suggestionSelector(draftSuggestions);
+		Suggestion selectedSuggestion = InputSelectionUtility.getSelectedSuggestion(draftSuggestions);
 
 		if (selectedSuggestion != null) {
 			String newDetails = InputSelectionUtility.getStringInput("Enter your new suggestion: ");
@@ -238,7 +238,7 @@ public class CampCommitteeController extends StudentController {
 	protected void deleteSuggestion() {
 		Student student = (Student) AuthStore.getCurrentUser();
 
-		if(!campStudentService.isUserCampCommittee(student)){
+		if(!campValidationService.isUserCampCommittee(student)){
 			MessageView.endMessage(scanner, "Only committee members can delete suggestions!", false);
 			return;
 		}
@@ -254,7 +254,7 @@ public class CampCommitteeController extends StudentController {
 		// Display Suggestions
 		view.displaySuggestion(draftSuggestions);
 		// Get User input
-		Suggestion selectedSuggestion = InputSelectionUtility.suggestionSelector(draftSuggestions);
+		Suggestion selectedSuggestion = InputSelectionUtility.getSelectedSuggestion(draftSuggestions);
 
 		if (selectedSuggestion != null) {
 			// Confirm deletion

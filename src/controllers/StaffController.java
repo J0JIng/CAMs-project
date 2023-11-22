@@ -9,6 +9,10 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import enums.MessageStatus;
+import interfaces.ICampStaffService;
+import interfaces.IEnquiryResponderService;
+import interfaces.ISuggestionResponderService;
+import interfaces.IReportStaffService;
 import models.Camp;
 import models.CampInformation;
 import models.Enquiry;
@@ -27,16 +31,16 @@ import views.MessageView;
 import views.StaffView;
 
 public class StaffController extends UserController {
-
     private final Scanner scanner = new Scanner(System.in);
-    private final CampStaffService campStaffService = new CampStaffService();
-    private final EnquiryResponderService enquiryStaffService = new EnquiryResponderService();
-    private final SuggestionResponderService suggestionStaffService = new SuggestionResponderService();
-    private final ReportStaffService reportStaffService = new ReportStaffService();
-    private final StaffView view = new StaffView();
+    private static final ICampStaffService campStaffService = new CampStaffService();
+    private static final IEnquiryResponderService enquiryStaffService = new EnquiryResponderService();
+    private static final ISuggestionResponderService suggestionStaffService = new SuggestionResponderService();
+    private static final IReportStaffService reportStaffService = new ReportStaffService();
+    private static final StaffView view = new StaffView();
 
     public StaffController() {
     }
+
 
     public void start() {
         while (true) {
@@ -112,7 +116,7 @@ public class StaffController extends UserController {
         }
     }
 
-    // ---------- Helper Methods ---------- //
+    
 
     protected void toggleCampVisibility() {
         Staff staff = (Staff) AuthStore.getCurrentUser();
@@ -122,7 +126,7 @@ public class StaffController extends UserController {
         	MessageView.endMessage(scanner, null, false);
             return;
         }
-        Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
+        Camp camp = InputSelectionUtility.getSelectedCamp(staffCreatedCamps);
         if (camp != null) {
 	        view.viewToggleOption(camp);
 	        campStaffService.toggleCampVisibility(camp);
@@ -157,11 +161,11 @@ public class StaffController extends UserController {
 
     protected void updateCampDetails() {
         Staff staff = (Staff) AuthStore.getCurrentUser();
-        ArrayList<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
+        List<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
         viewEditableCamps();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         
-        Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
+        Camp camp = InputSelectionUtility.getSelectedCamp(staffCreatedCamps);
         if (camp != null) {
 			view.editCampView();
 			boolean success = InputSelectionUtility.updateCampInput(camp,staff,dateFormat);
@@ -176,10 +180,9 @@ public class StaffController extends UserController {
         Staff staff = (Staff) AuthStore.getCurrentUser();
         List<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
 		view.viewCamps(staffCreatedCamps, " - Choose Camp to Delete - ");
-		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
+		Camp camp = InputSelectionUtility.getSelectedCamp(staffCreatedCamps);
 		if (camp != null) {
 	        String campName = camp.getCampInformation().getCampName();
-	        
 	        boolean success = campStaffService.deleteCamp(camp);
 	        System.out.println(success? "Deleted "+campName+" successfully" :"Error deleting " +campName);
 		}
@@ -190,7 +193,7 @@ public class StaffController extends UserController {
      */
     protected void viewAllCamps() {
         view.viewCamps(campStaffService.getAllCamps(), " - List of Camps - ");
-        Camp selectedCamp = InputSelectionUtility.campSelector(campStaffService.getAllCamps());
+        Camp selectedCamp = InputSelectionUtility.getSelectedCamp(campStaffService.getAllCamps());
         if (selectedCamp != null) {
             view.viewCampInformation(selectedCamp);
             MessageView.endMessage(scanner, null, false);
@@ -224,7 +227,7 @@ public class StaffController extends UserController {
      */
     protected void viewStudentList() {
         view.viewCamps(campStaffService.getAllCamps(), " - Choose Camp to view Student list - ");
-        Camp selectedCamp = InputSelectionUtility.campSelector(campStaffService.getAllCamps());
+        Camp selectedCamp = InputSelectionUtility.getSelectedCamp(campStaffService.getAllCamps());
         if (selectedCamp != null) {
             List<String> students = campStaffService.getCampAttendeeList(selectedCamp).stream()
                     .map(Student::getName)
@@ -317,7 +320,7 @@ public class StaffController extends UserController {
 		List<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
 		view.viewCamps(campStaffService.getStaffCreatedCamps(staff),
 	                " - Camps by " + AuthStore.getCurrentUser().getName() + " - ");
-		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
+		Camp camp = InputSelectionUtility.getSelectedCamp(staffCreatedCamps);
 		if (camp == null) {
 			// Invalid input, exit the process
 			return;
@@ -333,7 +336,7 @@ public class StaffController extends UserController {
 		List<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
 		view.viewCamps(campStaffService.getStaffCreatedCamps(staff),
                 " - Camps by " + AuthStore.getCurrentUser().getName() + " - ");
-		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
+		Camp camp = InputSelectionUtility.getSelectedCamp(staffCreatedCamps);
 		if (camp == null) {
 			// Invalid input, exit the process
 			return;
@@ -348,7 +351,7 @@ public class StaffController extends UserController {
 		}
 
 		// Get User input
-		Enquiry selectedEnquiry = InputSelectionUtility.enquirySelector(campEnquiries);
+		Enquiry selectedEnquiry = InputSelectionUtility.getSelectedEnquiry(campEnquiries);
 		String response = InputSelectionUtility.getStringInput("Enter response: ");
 
 		// Respond using EnquiryStudentService
@@ -362,7 +365,7 @@ public class StaffController extends UserController {
 		List<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
         // Display all the camps with suggestion @ToImplement 
 		view.viewCamps(staffCreatedCamps, " - Choose Camp to view Suggestions - ");
-		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
+		Camp camp = InputSelectionUtility.getSelectedCamp(staffCreatedCamps);
 		if (camp != null) {
 			Map<Integer, Suggestion> campSuggestion = suggestionStaffService.getAllSuggestionsForCamp(camp);
 			view.displaySuggestions(campSuggestion);
@@ -378,7 +381,7 @@ public class StaffController extends UserController {
 		// Get list of Staff created camps
 		List<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
 		view.viewCamps(staffCreatedCamps, " - Choose Camp to Respond to Suggestions - ");
-		Camp camp = InputSelectionUtility.campSelector(staffCreatedCamps);
+		Camp camp = InputSelectionUtility.getSelectedCamp(staffCreatedCamps);
 		
 		if (camp != null) {
 			// Get Suggestion for the selected camp
@@ -391,7 +394,7 @@ public class StaffController extends UserController {
 	
 			view.displaySuggestions(campSuggestions);
 			// Get User input
-			Suggestion selectedSuggestion = InputSelectionUtility.suggestionSelector(campSuggestions);
+			Suggestion selectedSuggestion = InputSelectionUtility.getSelectedSuggestion(campSuggestions);
 			if (selectedSuggestion != null) {
 				int reviewOption = InputSelectionUtility.getIntInput("Do you want to accept this suggestion? (1: Yes, 2: No): ");
 				boolean suggestionStatus = (reviewOption == 1);
@@ -456,7 +459,7 @@ public class StaffController extends UserController {
                 // Show ALL camps to select from
         		view.viewCamps(allCreatedCamps, " - Choose Camp to Generate Report - ");
                 List<Camp> camps = new ArrayList<>();
-                Camp selectedCamp = InputSelectionUtility.campSelector(allCreatedCamps);
+                Camp selectedCamp = InputSelectionUtility.getSelectedCamp(allCreatedCamps);
                 camps.add(selectedCamp);
 
                 if (selectedCamp == null) {
@@ -527,7 +530,7 @@ public class StaffController extends UserController {
                 // Show ALL camps to select from
                 viewAllCamps();
                 List<Camp> camps = new ArrayList<>();
-                Camp selectedCamp = InputSelectionUtility.campSelector(allCreatedCamps);
+                Camp selectedCamp = InputSelectionUtility.getSelectedCamp(allCreatedCamps);
                 camps.add(selectedCamp);
 
                 if (selectedCamp == null) {
@@ -597,7 +600,7 @@ public class StaffController extends UserController {
                 // Show ALL camps to select from
                 view.viewCamps(campStaffService.getAllCamps(), " - List of Camps - ");
                 List<Camp> camps = new ArrayList<>();
-                Camp selectedCamp = InputSelectionUtility.campSelector(allCreatedCamps);
+                Camp selectedCamp = InputSelectionUtility.getSelectedCamp(allCreatedCamps);
                 camps.add(selectedCamp);
 
                 if (selectedCamp == null) {

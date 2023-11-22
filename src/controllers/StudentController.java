@@ -8,10 +8,14 @@ import java.util.List;
 import java.util.Map;
 
 import enums.UserRole;
+import interfaces.ICampStudentService;
+import interfaces.ICampValidationService;
+import interfaces.IEnquirySenderService;
 import models.Student;
 import models.Camp;
 import models.Enquiry;
 import services.CampStudentService;
+import services.CampValidationService;
 import services.EnquirySenderService;
 import stores.AuthStore;
 import utility.InputSelectionUtility;
@@ -21,8 +25,9 @@ import views.MessageView;
 public class StudentController extends UserController {
 
 	private final Scanner scanner = new Scanner(System.in);
-	private final CampStudentService campStudentService = new CampStudentService();
-	private final EnquirySenderService enquiryStudentService = new EnquirySenderService();
+	private final ICampStudentService campStudentService = new CampStudentService();
+	private final ICampValidationService campValidationService = new CampValidationService();
+	private final IEnquirySenderService enquiryStudentService = new EnquirySenderService();
 	private final StudentView view = new StudentView();
 
 	public void start() {
@@ -111,7 +116,7 @@ public class StudentController extends UserController {
 		// Display the available camps for the student to choose
 		view.viewCamps(availableCamps, " - Choose Camp to Register - ");
 		// Select a camp for registration
-		Camp camp = InputSelectionUtility.campSelector(availableCamps);
+		Camp camp = InputSelectionUtility.getSelectedCamp(availableCamps);
 	
 		if (camp == null) {
 			// Invalid input, exit the registration process
@@ -119,31 +124,31 @@ public class StudentController extends UserController {
 			return;
 		}
 	
-		if (campStudentService.isUserWithdrawnFromCamp(student, camp)) {
+		if (campValidationService.isUserWithdrawnFromCamp(student, camp)) {
 			// The student has already withdrawn from the camp
 			System.out.println("You are not allowed to register for a camp you have withdrawn!");
 			return;
 		}
 	
-		if (campStudentService.isUserRegisteredWithCamp(student, camp)) {
+		if (campValidationService.isUserRegisteredWithCamp(student, camp)) {
 			// The student is already registered for the selected camp
 			System.out.println("You are already registered for the camp!");
 			return;
 		}
 	
-		if (campStudentService.isCampOver(currentDate, camp)) {
+		if (campValidationService.isCampOver(currentDate, camp)) {
 			// The selected camp is already over
 			System.out.println("The camp chosen is over!");
 			return;
 		}
 	
-		if (campStudentService.hasDateClash(student, camp)) {
+		if (campValidationService.hasDateClash(student, camp)) {
 			// The selected camp conflicts with a camp the student is already registered for
 			System.out.println("The camp chosen conflicts with a registered camp!");
 			return;
 		}
 	
-		if (campStudentService.isUserCampCommitteeForCamp(student, camp)) {
+		if (campValidationService.isUserCampCommitteeForCamp(student, camp)) {
 			// The student is already registered for the camp as a camp committee member
 			System.out.println("You are already registered for the camp as a camp committee member!");
 			return;
@@ -165,20 +170,20 @@ public class StudentController extends UserController {
 		// Display the registered camps for the student to choose for withdrawal
 		view.viewCamps(registeredCamps, " - Choose Camp to Withdraw - ");
 		// Select a camp for withdrawal
-		Camp camp = InputSelectionUtility.campSelector(registeredCamps);
+		Camp camp = InputSelectionUtility.getSelectedCamp(registeredCamps);
 	
 		if (camp == null) {
 			// Invalid input, exit the withdrawal process
 			return;
 		}
 	
-		if (campStudentService.isUserWithdrawnFromCamp(student, camp)) {
+		if (campValidationService.isUserWithdrawnFromCamp(student, camp)) {
 			// The student has already withdrawn from the camp
 			System.out.println("You have already withdrawn from the camp!");
 			return;
 		}
 	
-		if (campStudentService.isUserCampCommitteeForCamp(student, camp)) {
+		if (campValidationService.isUserCampCommitteeForCamp(student, camp)) {
 			// The student is not allowed to withdraw from a camp they have registered as a camp committee member
 			System.out.println("You are not allowed to withdraw from a camp you have registered as a camp committee member!");
 			return;
@@ -210,37 +215,37 @@ public class StudentController extends UserController {
 		view.viewCamps(availableCamps, " - Choose Camp to join as Committee Member - ");
 		
 		// Get User input
-		Camp camp = InputSelectionUtility.campSelector(availableCamps);
+		Camp camp = InputSelectionUtility.getSelectedCamp(availableCamps);
         if (camp == null) {
             return false;
         }
 
-		if(campStudentService.isUserRegisteredWithCamp(student,camp)){
+		if(campValidationService.isUserRegisteredWithCamp(student,camp)){
 			System.out.println("You are already registered for the camp!");
 			return false;
 		}
 
-		if(campStudentService.isUserWithdrawnFromCamp(student,camp)){
+		if(campValidationService.isUserWithdrawnFromCamp(student,camp)){
 			System.out.println("You are not allowed to register for a camp you have withdrawn!");
 			return false;
 		}
 
-		if(campStudentService.isCampOver(currentDate,camp)){
+		if(campValidationService.isCampOver(currentDate,camp)){
 			System.out.println("The camp chosen is over!");
 			return false; 
 		}
 
-		if(campStudentService.hasDateClash(student,camp)){
+		if(campValidationService.hasDateClash(student,camp)){
 			System.out.println("The camp chosen conflict with registered camp !");
 			return false;
 		}
 
-		if(campStudentService.isUserCampCommittee(student)){
+		if(campValidationService.isUserCampCommittee(student)){
 			System.out.println("You are not allowed to register as a Camp committee for more than one camp!");
 			return false;
 		}
 
-		if(campStudentService.isCampCommitteeFull(camp)){
+		if(campValidationService.isCampCommitteeFull(camp)){
 			System.out.println("You are not allowed to register as a Camp committee slots is full!");
 			return false;
 		}
@@ -272,7 +277,7 @@ public class StudentController extends UserController {
      */
     protected void viewAllCamps() {
 		view.viewCamps(campStudentService.getAllCamps(), " - List of Camps - ");
-		Camp c = InputSelectionUtility.campSelector(campStudentService.getAllCamps());
+		Camp c = InputSelectionUtility.getSelectedCamp(campStudentService.getAllCamps());
 		if (c != null) {
     		view.viewCampInformation(c);
     		MessageView.endMessage(scanner, null, false);
@@ -362,7 +367,7 @@ public class StudentController extends UserController {
 		List<Camp> list = campStudentService.getRegisteredCamps();
     	while (true) {
     		view.viewCamps(list," - Camps registered by " + AuthStore.getCurrentUser().getName() + " - ");
-    		Camp camp = InputSelectionUtility.campSelector(list);
+    		Camp camp = InputSelectionUtility.getSelectedCamp(list);
     		if (camp != null) {
 	    		view.viewCampInformation(camp);
 	    		scanner.nextLine();
@@ -378,12 +383,10 @@ public class StudentController extends UserController {
         
         //Get Data
         List<Camp> availableCamps = campStudentService.getAllCamps();
-
 		// Get User input
 		view.viewCamps(availableCamps, " - Choose Camp to send enquiry - ");
 		// Select a camp for withdrawal
-		//Camp camp = InputSelectionUtility.campSelector(registeredCamps);
-		Camp selectedCamp = InputSelectionUtility.campSelector(availableCamps);
+		Camp selectedCamp = InputSelectionUtility.getSelectedCamp(availableCamps);
         assert selectedCamp != null;
         if (selectedCamp == null) {
 			// Invalid input, exit the withdrawal process
@@ -447,7 +450,7 @@ public class StudentController extends UserController {
 		view.displayEnquiries(draftEnquiries);
 		
 		// Get User input
-		Enquiry selectedEnquiry = InputSelectionUtility.enquirySelector(draftEnquiries);
+		Enquiry selectedEnquiry = InputSelectionUtility.getSelectedEnquiry(draftEnquiries);
 
 		if (selectedEnquiry != null) {
 			String newMessage = InputSelectionUtility.getStringInput("Enter the new enquiry message: ");
@@ -479,7 +482,7 @@ public class StudentController extends UserController {
 		view.displayEnquiries(draftEnquiries);
 		
 		// Get User input
-		Enquiry selectedEnquiry = InputSelectionUtility.enquirySelector(draftEnquiries);
+		Enquiry selectedEnquiry = InputSelectionUtility.getSelectedEnquiry(draftEnquiries);
 
 		if (selectedEnquiry != null) {
 			// Confirm deletion

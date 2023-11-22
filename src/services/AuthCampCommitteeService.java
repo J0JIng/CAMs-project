@@ -3,11 +3,11 @@ package services;
 
 import java.util.Map;
 
+import enums.UserRole;
 import models.Student;
 import stores.AuthStore;
 import stores.DataStore;
 import views.AuthView;
-import enums.UserRole;
 
 /**
  * The AuthStudentService class extends AuthService and

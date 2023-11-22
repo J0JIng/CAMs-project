@@ -1,4 +1,5 @@
 package models;
+
 import enums.UserRole;
 import enums.FacultyGroups;
 
