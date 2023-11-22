@@ -13,8 +13,7 @@ public class CampUpdateService implements ICampUpdateService {
 
     private final static ICampStaffService campStaffService = new CampStaffService();
     private final static ICampValidationService campValidationService = new CampValidationService();
-
-    private static final int MAX_COMMITTEE_SLOTS = 10; 
+    private final static int MAX_COMMITTEE_SLOTS = 10; 
 
     public CampUpdateService() {
     }

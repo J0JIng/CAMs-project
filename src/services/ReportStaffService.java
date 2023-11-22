@@ -9,6 +9,7 @@ import java.util.Comparator;
 import java.util.Map;
 
 import interfaces.IEnquiryResponderService;
+import interfaces.ICampStaffService;
 import interfaces.IReportStaffService;
 import enums.UserRole;
 import models.Enquiry;
@@ -16,9 +17,10 @@ import models.Camp;
 import models.Student;
 
 public class ReportStaffService implements IReportStaffService {
-    private CsvFileDataService csvFileDataService = new CsvFileDataService();
-    private CampStaffService campStaffService = new CampStaffService();
-    private IEnquiryResponderService enquiryResponderService = new EnquiryResponderService();
+    
+    private final static CsvFileDataService csvFileDataService = new CsvFileDataService();
+    private final static ICampStaffService campStaffService = new CampStaffService();
+    private final static IEnquiryResponderService enquiryResponderService = new EnquiryResponderService();
 
     public ReportStaffService(){
     }

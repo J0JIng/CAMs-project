@@ -18,7 +18,7 @@ import stores.DataStore;
 
 public class ReportStudentService implements IReportStudentService {
 
-    private CsvFileDataService csvFileDataService = new CsvFileDataService();
+    private final static CsvFileDataService csvFileDataService = new CsvFileDataService();
 
     public ReportStudentService(){
     }
