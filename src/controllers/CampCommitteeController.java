@@ -23,8 +23,8 @@ import services.ReportStudentService;
 import stores.AuthStore;
 import utility.InputSelectionUtility;
 import utility.FilePathsUtility;
+import views.CampCommitteeView;
 import views.MessageView;
-import views.StudentView;
 
 public class CampCommitteeController extends StudentController {
 
@@ -33,13 +33,13 @@ public class CampCommitteeController extends StudentController {
     private final IEnquiryResponderService enquiryCampComitteeService = new EnquiryResponderService();
     private final ISuggestionSenderService suggestionCampComitteeService = new SuggestionSenderService();
 	private final IReportStudentService reportStudentService = new ReportStudentService();
-	private final StudentView view = new StudentView();
+	private final CampCommitteeView view = new CampCommitteeView();
 	private final Scanner scanner = new Scanner(System.in);
 
     public void start() {
         Student student = (Student) AuthStore.getCurrentUser();
         while (true) {
-            view.displayCampComitteeMenuView();
+            view.displayMenuView();
 
             // Checks for invalid inputs
             while (!scanner.hasNextInt()) {
@@ -217,7 +217,7 @@ public class CampCommitteeController extends StudentController {
 		}
 		
 		// Display Suggestions
-		view.displaySuggestion(draftSuggestions);
+		view.displaySuggestions(draftSuggestions);
 		// Get User input
 		Suggestion selectedSuggestion = InputSelectionUtility.getSelectedSuggestion(draftSuggestions);
 
@@ -252,7 +252,7 @@ public class CampCommitteeController extends StudentController {
 		}
 		
 		// Display Suggestions
-		view.displaySuggestion(draftSuggestions);
+		view.displaySuggestions(draftSuggestions);
 		// Get User input
 		Suggestion selectedSuggestion = InputSelectionUtility.getSelectedSuggestion(draftSuggestions);
 

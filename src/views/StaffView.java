@@ -5,8 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-import interfaces.IMenuView;
-
+import interfaces.IUserMenuView;
 import models.Camp;
 import models.CampInformation;
 import models.Enquiry;
@@ -17,9 +16,8 @@ import stores.AuthStore;
 import utility.ViewUtility;
 import utility.SortUtility;
 
-public class StaffView implements IMenuView {
+public class StaffView implements IUserMenuView {
 
-	@Override
 	public void displayMenuView() {
 		//ViewUtility.clearScreen();
 
@@ -58,15 +56,15 @@ public class StaffView implements IMenuView {
         System.out.print("Select an option: ");
 	}
 	
-	public void studentChoiceView() {
-		System.out.println("╔══════════════════════════════════════════════════════════╗");
-		System.out.println("║                   - Choose List Type -                   ║");
-        System.out.println("╠══════════════════════════════════════════════════════════╣");
-        ViewUtility.displayInMenuNumbered("Registered Students", 1);
-        ViewUtility.displayInMenuNumbered("Committee Members", 2);
-        System.out.println("╚══════════════════════════════════════════════════════════╝");
-        System.out.print("Select an option: ");
-	}
+//	public void studentChoiceView() {
+//		System.out.println("╔══════════════════════════════════════════════════════════╗");
+//		System.out.println("║                   - Choose List Type -                   ║");
+//        System.out.println("╠══════════════════════════════════════════════════════════╣");
+//        ViewUtility.displayInMenuNumbered("Registered Students", 1);
+//        ViewUtility.displayInMenuNumbered("Committee Members", 2);
+//        System.out.println("╚══════════════════════════════════════════════════════════╝");
+//        System.out.print("Select an option: ");
+//	}
 	
 	public void editCampView() {
 		System.out.println("╔══════════════════════════════════════════════════════════╗");
@@ -148,22 +146,18 @@ public class StaffView implements IMenuView {
 		System.out.println("╔══════════════════════════════════════════════════════════╗");
 		ViewUtility.displayInMenuCentered(" - " + c.getCampInformation().getCampName() + " - ");
 		System.out.println("╠══════════════════════════════════════════════════════════╣");
-        int i = 1;
-    	//for (Camp c : campData) {
-    		CampInformation campInfo = c.getCampInformation();
-    		ViewUtility.displayInMenuBullet("Name: " + campInfo.getCampName());
-    		ViewUtility.displayInMenuBullet("Start Date: " + campInfo.getCampStartDate());
-    		ViewUtility.displayInMenuBullet("End Date: " + campInfo.getCampEndDate());
-    		ViewUtility.displayInMenuBullet("Registration Closing Date: " + campInfo.getCampRegistrationClosingDate());
-    		ViewUtility.displayInMenuBullet("User Group: " + campInfo.getFacultyGroup());
-    		ViewUtility.displayInMenuBullet("Location: " + campInfo.getCampLocation());
-    		ViewUtility.displayInMenuBullet("Total Slots: " + campInfo.getCampTotalSlots());
-    		ViewUtility.displayInMenuBullet("Committee Slots: " + campInfo.getCampCommitteeSlots());
-    		ViewUtility.displayInMenuBullet("Description: " + campInfo.getCampDescription());
-    		ViewUtility.displayInMenuBullet("Staff In Charge: " + campInfo.getCampStaffInCharge());
-    		ViewUtility.displayInMenuBullet("Camp Visibility: " + c.getVisibility());
-        	i++;
-    	//}
+		CampInformation campInfo = c.getCampInformation();
+		ViewUtility.displayInMenuBullet("Name: " + campInfo.getCampName());
+		ViewUtility.displayInMenuBullet("Start Date: " + campInfo.getCampStartDate());
+		ViewUtility.displayInMenuBullet("End Date: " + campInfo.getCampEndDate());
+		ViewUtility.displayInMenuBullet("Registration Closing Date: " + campInfo.getCampRegistrationClosingDate());
+		ViewUtility.displayInMenuBullet("User Group: " + campInfo.getFacultyGroup());
+		ViewUtility.displayInMenuBullet("Location: " + campInfo.getCampLocation());
+		ViewUtility.displayInMenuBullet("Total Slots: " + campInfo.getCampTotalSlots());
+		ViewUtility.displayInMenuBullet("Committee Slots: " + campInfo.getCampCommitteeSlots());
+		ViewUtility.displayInMenuBullet("Description: " + campInfo.getCampDescription());
+		ViewUtility.displayInMenuBullet("Staff In Charge: " + campInfo.getCampStaffInCharge());
+		ViewUtility.displayInMenuBullet("Camp Visibility: " + c.getVisibility());
         System.out.println("╚══════════════════════════════════════════════════════════╝");
         //System.out.print("(Press Enter to return) ");
 	}
@@ -218,7 +212,7 @@ public class StaffView implements IMenuView {
 		System.out.println("╚════════════════════════════════════════════════════════════════════════════════════════════╝");
 	}
 
-	public void displaySuggestions(Map<Integer, Suggestion> suggestions) {	    
+	public void displaySuggestion(Map<Integer, Suggestion> suggestions) {	    
 	    System.out.println("╔════════════════════════════════════════════════════════════════════════════════════════════╗");
         System.out.println("║                                                                                            ║"); 
 	    System.out.println("║ ███████╗██╗   ██╗ ██████╗  ██████╗ ███████╗███████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗ ║");

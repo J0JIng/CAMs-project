@@ -265,11 +265,8 @@ public class StudentController extends UserController {
      * Shows all no. of remaining slots for all the camps.
      */
     protected void viewRemainingSlots() {
-		String userInput;
-        do {
-            view.viewCampsSlots(campStudentService.getAllCamps());
-            userInput = scanner.nextLine().trim();
-        } while (!userInput.isEmpty());
+        view.viewCampsSlots(campStudentService.getAllCamps());
+        MessageView.endMessage(scanner, null, false);
     }
 	
 	/**
@@ -423,7 +420,7 @@ public class StudentController extends UserController {
 		Map<Integer, Enquiry> respondedEnquiries = enquiryStudentService.getRespondedEnquiries(student.getStudentID());
 
 		// Display enquiries
-		view.displayStudentEnquiries(draftEnquiries, submittedEnquiries, respondedEnquiries);
+		view.displayEnquiries(draftEnquiries, submittedEnquiries, respondedEnquiries);
 
 		MessageView.endMessage(scanner, null, true);
 	}
