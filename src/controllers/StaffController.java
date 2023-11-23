@@ -319,7 +319,7 @@ public class StaffController extends UserController {
         Staff staff = (Staff) AuthStore.getCurrentUser();
 		List<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
 		view.viewCamps(campStaffService.getStaffCreatedCamps(staff),
-	                " - Camps by " + AuthStore.getCurrentUser().getName() + " - ");
+	                " - Choose Camp to View Enquiry - ");
 		Camp camp = InputSelectionUtility.getSelectedCamp(staffCreatedCamps);
 		if (camp == null) {
 			// Invalid input, exit the process
@@ -368,7 +368,7 @@ public class StaffController extends UserController {
 		Camp camp = InputSelectionUtility.getSelectedCamp(staffCreatedCamps);
 		if (camp != null) {
 			Map<Integer, Suggestion> campSuggestion = suggestionStaffService.getAllSuggestionsForCamp(camp);
-			view.displaySuggestions(campSuggestion);
+			view.displaySuggestion(campSuggestion);
 			MessageView.endMessage(scanner, null, false);
 		} else {
 			System.out.println("No camp selected");
@@ -392,7 +392,7 @@ public class StaffController extends UserController {
 				return;
 			}
 	
-			view.displaySuggestions(campSuggestions);
+			view.displaySuggestion(campSuggestions);
 			// Get User input
 			Suggestion selectedSuggestion = InputSelectionUtility.getSelectedSuggestion(campSuggestions);
 			if (selectedSuggestion != null) {

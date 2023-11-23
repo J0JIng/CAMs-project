@@ -1,12 +1,12 @@
 package interfaces;
 
 /**
- * The {@link IMenuView} interface defines a contract for displaying Camp
- * information.
+ * The {@link IMenuView} interface defines a contract for displaying main menu
+ * options.
  */
 public interface IMenuView {
 	/**
-	 * Displays information about the given Camp.
+	 * Displays the menu screen for the user.
 	 */
 	public void displayMenuView();
 }
