@@ -5,8 +5,12 @@ import java.util.Map;
 import models.Student;
 import models.Staff;
 
-
+/**
+ * The {@link IFileDataService} interface defines methods for importing data related to students and staff 
+ * from specified file paths to the login detail .csv files.
+ */
 public interface IFileDataService {
+	
 	// ---------- Student ---------- //
 	/**
 	 * Imports student data from the specified file paths.

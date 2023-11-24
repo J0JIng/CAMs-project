@@ -24,9 +24,17 @@ public interface IUserMenuView extends IMenuView {
 	 */
 	public void viewCampInformation(Camp c);
 	
-
+	/**
+     * Displays the filter options for camps.
+     */
 	public void viewFliterOption();
 
+	/**
+     * Displays a list of enquiries.
+     *
+     * @param enquiries a {@link Map} of {@link Integer} (enquiry ID) to {@link Enquiry} objects 
+     * representing the enquiries to be displayed
+     */
 	public void displayEnquiries(Map<Integer, Enquiry> enquiries);
 	
 }
