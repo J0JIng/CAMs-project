@@ -16,10 +16,22 @@ import stores.AuthStore;
 import utility.ViewUtility;
 import utility.SortUtility;
 
+/**
+ * {@link StaffView} class implements the {@link IUserMenuView} interface and is responsible for displaying the staff menu
+ * with various options. It includes options for creating, deleting, and editing camps,
+ * managing camp visibility, viewing reports, and more. Users can choose an option by entering
+ * the corresponding option number.
+ */
 public class StaffView implements IUserMenuView {
 
+	/**
+	 * Displays the staff menu with various options.
+	 * Options include creating, deleting, and editing camps,
+	 * managing camp visibility, viewing reports, and more.
+	 * The menu allows user to choose an option by entering the option number.
+	 */
 	public void displayMenuView() {
-		//ViewUtility.clearScreen();
+		ViewUtility.clearScreen();
 
 		System.out.println("╔══════════════════════════════════════════════════════════╗");
         System.out.println("║                                                          ║");   
@@ -56,16 +68,13 @@ public class StaffView implements IUserMenuView {
         System.out.print("Select an option: ");
 	}
 	
-//	public void studentChoiceView() {
-//		System.out.println("╔══════════════════════════════════════════════════════════╗");
-//		System.out.println("║                   - Choose List Type -                   ║");
-//        System.out.println("╠══════════════════════════════════════════════════════════╣");
-//        ViewUtility.displayInMenuNumbered("Registered Students", 1);
-//        ViewUtility.displayInMenuNumbered("Committee Members", 2);
-//        System.out.println("╚══════════════════════════════════════════════════════════╝");
-//        System.out.print("Select an option: ");
-//	}
-	
+	/**
+	 * Displays the menu view for editing a camp's details.
+	 * Users are prompted to select an option for the corresponding field to update.
+	 * The fields to edit are camp name, start date, end date,
+	 * registration closing date, location, total slots, committee slots,
+	 * description and user group.
+	 */
 	public void editCampView() {
 		System.out.println("╔══════════════════════════════════════════════════════════╗");
 		System.out.println("║                 Select a field to update:                ║");
@@ -83,6 +92,15 @@ public class StaffView implements IUserMenuView {
         System.out.println("╚══════════════════════════════════════════════════════════╝");
 	}
 	
+	/**
+	 * Displays the list of students and committee members registered in a camp.
+	 * If no students or committee members are registered, It returns appropriate
+	 * messages like "No Students Registered".
+	 * The list is sorted alphabetically, and each entry is numbered.
+	 * @param students List of students registered in the camp.
+	 * @param committeeMembers List of committee members registered in the camp.
+	 * @param c The camp for which the student list is displayed.
+	 */
 	public void viewStudentList(List<String> students, List<String> committeeMembers, Camp c) {
 		System.out.println("╔══════════════════════════════════════════════════════════╗");
 		ViewUtility.displayInMenuCentered(" - Students Registered in " + c.getCampInformation().getCampName() + " - ");
@@ -111,8 +129,11 @@ public class StaffView implements IUserMenuView {
 	}
 	
 	/**
-	 * Displays all camps without any filters
-	 * @param list 
+	 * Displays the list of camps provided with a specified title.
+	 * The list includes the camp names sorted alphabetically.
+	 * Each camp is numbered in the menu for easy reference.
+	 * @param campData The list of camps to be displayed.
+	 * @param title The customizable title to be centered at the top of the menu.
 	 */
 	public void viewCamps(List<Camp> campData, String title) {
     	// Print the filtered and sorted camps
@@ -137,9 +158,12 @@ public class StaffView implements IUserMenuView {
         System.out.println("╚══════════════════════════════════════════════════════════╝");
 	}
 	
+
 	/**
-	 * Displays the camp information of the camp.
-	 * @param Camp c 
+	 * Displays detailed information about a specific camp, including its name, start and end dates,
+	 * registration closing date, user group, location, total slots, committee slots, description,
+	 * staff in charge, and visibility status.
+	 * @param c The camp's information to be displayed.
 	 */
 	public void viewCampInformation(Camp c) {
     	// Print the filtered and sorted camps
@@ -162,6 +186,10 @@ public class StaffView implements IUserMenuView {
         //System.out.print("(Press Enter to return) ");
 	}
 
+	/**
+	 * Displays the filter options menu for camps, including options to filter by date,
+	 * filter by location, and sort by name in alphabetical order.
+	 */
 	public void viewFliterOption() {
     	// Print the filtered and sorted camps
 		System.out.println("╔══════════════════════════════════════════════════════════╗");
@@ -173,6 +201,11 @@ public class StaffView implements IUserMenuView {
 		System.out.println("╚══════════════════════════════════════════════════════════╝");
 	}
 
+	/**
+	 * Displays the toggle options menu for setting camp visibility, allowing the user to choose
+	 * between "On" and "Off" visibility states for a specific camp.
+	 * @param camp The camp for which visibility options are displayed.
+	 */
 	public void viewToggleOption(Camp camp) {
     	// Print menu
 		System.out.println("╔══════════════════════════════════════════════════════════╗");
@@ -185,6 +218,12 @@ public class StaffView implements IUserMenuView {
 		System.out.println("Select option: ");
 	}
 
+	/**
+	 * Displays a formatted view of the enquiries, including details such as camp name, message,
+	 * status, response, and responder ID for each enquiry. If there are no enquiries, a corresponding
+	 * message "No Enquiries to Display" is displayed.
+	 * @param enquiries A map of enquiries where the key is the enquiry ID and the value is the Enquiry object.
+	 */
 	public void displayEnquiries(Map<Integer, Enquiry> enquiries) {
 		System.out.println("╔════════════════════════════════════════════════════════════════════════════════════════════╗");
         System.out.println("║                                                                                            ║"); 
@@ -212,6 +251,12 @@ public class StaffView implements IUserMenuView {
 		System.out.println("╚════════════════════════════════════════════════════════════════════════════════════════════╝");
 	}
 
+	/**
+	 * Displays a formatted view of the suggestions, including details such as suggestion ID, camp name,
+	 * message, and status for each suggestion. If there are no suggestions, 
+	 * a corresponding message "No Suggestions to Display" is displayed.
+	 * @param suggestions A map of suggestions where the key is the suggestion ID and the value is the Suggestion object.
+	 */
 	public void displaySuggestion(Map<Integer, Suggestion> suggestions) {	    
 	    System.out.println("╔════════════════════════════════════════════════════════════════════════════════════════════╗");
         System.out.println("║                                                                                            ║"); 
@@ -238,6 +283,11 @@ public class StaffView implements IUserMenuView {
 	    System.out.println("╚════════════════════════════════════════════════════════════════════════════════════════════╝");
 	}
 
+	/**
+	 * Displays the menu for generating various types of reports, 
+	 * such as reports for all camps, the current staff user's camps,
+	 * or a selected camp.
+	 */
 	public void viewReportMenu() {
 		System.out.println("╔══════════════════════════════════════════════════════════╗");
 		System.out.println("║                                                          ║");
@@ -255,6 +305,11 @@ public class StaffView implements IUserMenuView {
 		System.out.println("╚══════════════════════════════════════════════════════════╝");
 	}
 
+	/**
+	 * Displays the filter options for report generation, choosing between
+	 * between different filtering options such as No Filter, Camp Information, Attendee, 
+	 * Camp Committee, Location, and Date of Camp.
+	 */
 	public void showFilterInput() {
 		System.out.println("╔══════════════════════════════════════════════════════════╗");
 		ViewUtility.displayInMenuCentered(" - Choose Filters - ");
@@ -268,6 +323,10 @@ public class StaffView implements IUserMenuView {
 		System.out.println("╚══════════════════════════════════════════════════════════╝");
 	}
 
+	/**
+	 * Displays the menu for generating performance reports, providing options for generating reports
+	 * for all camps, staff camps, or a selected camp.
+	 */
 	public void viewPerformanceReportMenu() {
 		System.out.println("╔══════════════════════════════════════════════════════════╗");
 		System.out.println("║                                                          ║");
@@ -285,6 +344,10 @@ public class StaffView implements IUserMenuView {
 		System.out.println("╚══════════════════════════════════════════════════════════╝");
 	}
 
+	/**
+	 * Displays the filter options for generating performance reports, allowing the user to choose
+	 * between different filtering options such as Committee ID, Committee Name, and Committee Points.
+	 */
 	public void showPerformanceFilterInput() {
 		System.out.println("╔══════════════════════════════════════════════════════════╗");
 		ViewUtility.displayInMenuCentered(" - Choose Filters - ");
@@ -296,6 +359,10 @@ public class StaffView implements IUserMenuView {
 		System.out.println("╚══════════════════════════════════════════════════════════╝");
 	}
 
+	/**
+	 * Displays the menu for generating enquiry reports, providing options for generating reports for
+	 * all camps, staff camps, or a selected camp.
+	 */
 	public void viewEnquiryReportMenu() {
 		System.out.println("╔══════════════════════════════════════════════════════════╗");
 		System.out.println("║                                                          ║");
@@ -313,6 +380,11 @@ public class StaffView implements IUserMenuView {
 		System.out.println("╚══════════════════════════════════════════════════════════╝");
 	}
 
+	/**
+	 * Displays the filter options for generating enquiry reports, allowing the user to choose between
+	 * different filtering options such as Enquiry ID, Sender Name, Responder Point, Enquiry Status,
+	 * Enquiry Message, and Enquiry Response.
+	 */
 	public void showEnquiryFilterInput() {
 		System.out.println("╔══════════════════════════════════════════════════════════╗");
 		ViewUtility.displayInMenuCentered(" - Choose Filters - ");
