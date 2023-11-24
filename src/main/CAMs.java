@@ -1,6 +1,5 @@
 package main;
 
-
 import controllers.AuthController;
 import controllers.CampCommitteeController;
 import controllers.StudentController;
