@@ -42,12 +42,27 @@ public interface ICampStaffService{
      */
 	public List<Student> getCampCommitteeList(Camp camp);
 
+	/**
+     * Creates one or more camps.
+     *
+     * @param camps an {@link ArrayList} of {@link Camp} objects to be created
+     * @return {@code true} if the creation is successful, {@code false} otherwise
+     */
     public boolean createCamp(ArrayList<Camp> camps);
 
+    /**
+     * Deletes a specific camp.
+     *
+     * @param camp the {@link Camp} object to be deleted
+     * @return {@code true} if the deletion is successful, {@code false} otherwise
+     */
     public boolean deleteCamp(Camp camp);
 
+    /**
+     * Toggles the visibility of a specific camp.
+     *
+     * @param camp the {@link Camp} object for which to toggle visibility
+     */
     public void toggleCampVisibility(Camp camp);
-
     
-
 }
