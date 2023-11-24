@@ -11,13 +11,18 @@ import stores.AuthStore;
 import stores.DataStore;
 import utility.ViewUtility;
 
+/**
+ * The {@link StudentView} class implements the {@link IUserMenuView} interface
+ * and is responsible for displaying the menu and related views for students.
+ */
 public class StudentView implements IUserMenuView {
 
-	/**
-	 * Displays the menu selection for students
-	 */
+    /**
+     * Displays the menu selection for students, including options to view camps,
+     * register for camps, submit and view enquiries, and more.
+     */
 	public void displayMenuView() {
-		//ViewUtility.clearScreen(); comment to debug
+		ViewUtility.clearScreen();
 		
 		String welcomeMessage = "Welcome " + AuthStore.getCurrentUser().getName();
 		int totalLength = welcomeMessage.length();
@@ -55,11 +60,12 @@ public class StudentView implements IUserMenuView {
 	}
 	
 	/**
-	 * Displays all camps without any filters
-	 * @param list of camps, String of title for header
-	 */
+     * Displays a list of camps specified without any filters.
+     *
+     * @param campData the list of camps to be displayed
+     * @param title    the title for the header
+     */
 	public void viewCamps(List<Camp> campData, String title) {
-    	// Print the filtered and sorted camps
 		System.out.println("╔══════════════════════════════════════════════════════════╗");
         System.out.println("║                                                          ║");   
 		System.out.println("║         ██████╗ █████╗ ███╗   ███╗██████╗ ███████╗       ║");
@@ -81,11 +87,11 @@ public class StudentView implements IUserMenuView {
 	}
 	
 	/**
-	 * Displays the camp information of the camp
-	 * @param Camp c
-	 */
+     * Displays the detailed information of a specific camp.
+     *
+     * @param c the camp for which information is to be displayed
+     */
 	public void viewCampInformation(Camp c) {
-    	// Print the filtered and sorted camps
 		System.out.println("╔══════════════════════════════════════════════════════════╗");
 		ViewUtility.displayInMenuCentered(" - " + c.getCampInformation().getCampName() + " - ");
 		System.out.println("╠══════════════════════════════════════════════════════════╣");
@@ -101,17 +107,16 @@ public class StudentView implements IUserMenuView {
 		ViewUtility.displayInMenuBullet("Description: " + campInfo.getCampDescription());
 		ViewUtility.displayInMenuBullet("Staff In Charge: " + campInfo.getCampStaffInCharge());
         System.out.println("╚══════════════════════════════════════════════════════════╝");
-        //System.out.print("(Press Enter to return) ");
 	}
 	
 	/**
-	 * Displays all camps without any filters
-	 * @param list 
-	 */
+     * Displays the number of slots taken for each camp.
+     *
+     * @param campData the list of camps to be displayed
+     */
 	public void viewCampsSlots(List<Camp> campData) {
 		Map<String , List<String>> registeredStudents = DataStore.getCampToRegisteredCampCommitteeData(); 
 		Map<String , List<String>> registeredCampCommittee = DataStore.getCampToRegisteredStudentData();
-    	// Print the filtered and sorted camps
 		System.out.println("╔══════════════════════════════════════════════════════════╗");
         System.out.println("║                                                          ║");   
 		System.out.println("║         ██████╗ █████╗ ███╗   ███╗██████╗ ███████╗       ║");
@@ -127,8 +132,6 @@ public class StudentView implements IUserMenuView {
         System.out.println("║                   Camp Name                    ║  Slots  ║");
         int i = 1;
     	for (Camp c : campData) {
-//			int filledSlots = registeredStudents.get(c.getCampInformation().getCampName()).size()+registeredCampCommittee.get(c.getCampInformation().getCampName()).size();
-//			int totalSlots = c.getCampInformation().getCampTotalSlots();
 			String campName = c.getCampInformation().getCampName();
 
 	        List<String> students = registeredStudents.get(campName);
@@ -149,8 +152,11 @@ public class StudentView implements IUserMenuView {
         System.out.println("╚════════════════════════════════════════════════╩═════════╝");
 	}
 
+	/**
+     * Displays filter options for viewing camps, including options to filter by date,
+     * location, and sort by name (alphabetical order).
+     */
 	public void viewFliterOption() {
-    	// Print the filtered and sorted camps
 		System.out.println("╔══════════════════════════════════════════════════════════╗");
 		ViewUtility.displayInMenuCentered(" - Filter Options - ");
 		System.out.println("╠══════════════════════════════════════════════════════════╣");
@@ -160,6 +166,11 @@ public class StudentView implements IUserMenuView {
 		System.out.println("╚══════════════════════════════════════════════════════════╝");
 	}
 
+	/**
+     * Displays a formatted view of draft, submitted, and responded enquiries.
+     *
+     * @param enquiries a map of draft enquiries to display
+     */
 	public void displayEnquiries(Map<Integer, Enquiry> enquiries) {
 		System.out.println("╔════════════════════════════════════════════════════════════════════════════════════════════╗");
         System.out.println("║                                                                                            ║"); 
@@ -188,6 +199,13 @@ public class StudentView implements IUserMenuView {
 		System.out.println("╚════════════════════════════════════════════════════════════════════════════════════════════╝");
 	}
 	
+	/**
+     * Displays a formatted view of draft, submitted, and responded enquiries.
+     *
+     * @param draftEnquiries      a map of draft enquiries to display
+     * @param submittedEnquiries  a map of submitted enquiries to display
+     * @param respondedEnquiries  a map of responded enquiries to display
+     */
 	public void displayEnquiries(Map<Integer, Enquiry> draftEnquiries, Map<Integer, Enquiry> submittedEnquiries, Map<Integer, Enquiry> respondedEnquiries) {
 		System.out.println("╔════════════════════════════════════════════════════════════════════════════════════════════╗");
         System.out.println("║                                                                                            ║"); 
@@ -227,6 +245,4 @@ public class StudentView implements IUserMenuView {
 		}
 		System.out.println("╚════════════════════════════════════════════════════════════════════════════════════════════╝");
 	}
-
-
 }
