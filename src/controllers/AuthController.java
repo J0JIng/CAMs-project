@@ -10,18 +10,27 @@ import views.AuthView;
 import utility.InputSelectionUtility;
 
 /**
- *  class provides utility methods for managing user authentication within the application. 
+ * AuthController class provides utility methods for managing user authentication within the application. 
  * It offers methods to start and end user sessions, as well as handle user login and logout. This
  * class utilizes the IAuthService interface for handling the
  * authentication process.
  */
 public class AuthController {
     
+	/**
+	 * Scanner object to allow input from user
+	 */
     private static final Scanner sc = new Scanner(System.in);
 
+    /**
+     * authService object that implements the IAuthService interface,
+     * allows the AuthController to perform authentication services.
+     */
     private static IAuthService authService;
-
     
+    /**
+	 * Private constructor to prevent instantiation of the class.
+	 */
     private AuthController() {};
 
     /**
