@@ -133,7 +133,6 @@ public class CsvFileDataService implements IFileDataService {
 	 *
 	 * @param staffsFilePath The file path of the CSV file containing staff data.
 	 * @return A map containing staff objects with user ID as the key.
-	 * @throws Exception          If there is an issue reading the CSV file.
 	 * @throws IllegalArgumentException If the CSV file contains invalid or missing data.
 	 */
 	@Override
@@ -198,7 +197,6 @@ public class CsvFileDataService implements IFileDataService {
 	 *
 	 * @param studentsFilePath The file path of the CSV file containing student data.
 	 * @return A map containing student objects with user ID as the key.
-	 * @throws Exception          If there is an issue reading the CSV file.
 	 * @throws IllegalArgumentException If the CSV file contains invalid or missing data.
 	 */
 	@Override

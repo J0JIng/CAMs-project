@@ -1,7 +1,7 @@
 package enums;
 
 /**
- * Enum representing different faculty group.
+ * {@link Enum} representing different faculty group.
  * Each constant represents a specific faculty group in NTU.
  */
 public enum FacultyGroups {
@@ -42,7 +42,7 @@ public enum FacultyGroups {
     NIE,
 
     /**
-     * S. Rajaratnam School of International Studies (RSIS).
+     * S Rajaratnam School of International Studies (RSIS).
      */
     RSIS,
 

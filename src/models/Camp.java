@@ -1,9 +1,9 @@
 package models;
 
 /**
- * Represents a camp with associated information and visibility status.
+ * Represents a {@link Camp} with associated information and visibility status.
  * It holds a campInformation object that stores the information details of the camp
- * It stores a boolean variable denoting its visibility to students
+ * It stores a boolean variable denoting its visibility to {@link Student}s
  * 
  */
 public class Camp {

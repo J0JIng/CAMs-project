@@ -5,7 +5,7 @@ import java.util.Date;
 import enums.FacultyGroups;
 
 /**
- * Represents information about a camp.
+ * Represents {@link CampInformation} about a camp.
  * Contains details such as its name, dates, location, slots, and other details.
  */
 public class CampInformation {

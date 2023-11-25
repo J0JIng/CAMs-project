@@ -4,7 +4,7 @@ import enums.UserRole;
 import enums.FacultyGroups;
 
 /**
- * Represents a user in the system, serving as a base class for specific user types.
+ * Represents a {@link User} in the system, serving as a base class for specific user types.
  * Abstract class prevents creation of a User object that has insufficient meaning in the system.
  */
 public abstract class User {
