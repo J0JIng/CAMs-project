@@ -9,11 +9,25 @@ import models.Camp;
 import models.Enquiry;
 import stores.DataStore;
 
+/**
+ * The {@code EnquiryResponderService} class implements the {@link IEnquiryResponderService} interface
+ * and provides services for handling enquiries to support responding to enquiries related to a camp.
+ */
+
 public class EnquiryResponderService implements IEnquiryResponderService {
 
+	/**
+     * Constructs an instance of the {@code EnquiryResponderService} class.
+     */
 	public EnquiryResponderService() {
 	}
 
+	/**
+     * Retrieves all pending enquiries for a specific camp.
+     *
+     * @param camp The {@link Camp} for which to retrieve pending enquiries.
+     * @return A {@link Map} of pending enquiries, where the key is the enquiry ID and the value is the {@link Enquiry} object.
+     */
 	@Override
 	public Map<Integer, Enquiry> getAllPendingEnquiriesForCamp(Camp camp) {
 		Map<Integer, Enquiry> enquiryData = DataStore.getEnquiryData();
@@ -27,6 +41,12 @@ public class EnquiryResponderService implements IEnquiryResponderService {
 		return enquiriesForCampMap;
 	}
 
+	/**
+     * Retrieves all enquiries for a specific camp, excluding draft enquiries.
+     *
+     * @param camp The {@link Camp} for which to retrieve enquiries.
+     * @return A {@link Map} of enquiries, where the key is the enquiry ID and the value is the {@link Enquiry} object.
+     */
 	@Override
 	public Map<Integer, Enquiry> getAllEnquiriesForCamp(Camp camp) {
 		Map<Integer, Enquiry> enquiryData = DataStore.getEnquiryData();
@@ -40,6 +60,15 @@ public class EnquiryResponderService implements IEnquiryResponderService {
 		return enquiriesForCampMap;
 	}
 
+	/**
+     * Responds to a specific enquiry with the provided details.
+     *
+     * @param enquiryID   The ID of the enquiry to respond to.
+     * @param responderID The ID of the responder.
+     * @param status      The status of the response, such as {@link MessageStatus#ACCEPTED} or {@link MessageStatus#REJECTED}.
+     * @param response    The response message to the enquiry.
+     * @return {@code true} if the response is successful, {@code false} otherwise.
+     */
 	@Override
 	public boolean respondToEnquiry(int enquiryID, String responderID, MessageStatus status, String response) {
 		Map<Integer, Enquiry> enquiryData = DataStore.getEnquiryData();

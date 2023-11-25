@@ -16,13 +16,29 @@ import models.Camp;
 import models.Student;
 import stores.DataStore;
 
+/**
+ * Service class for generating student-related reports by camp committee members.
+ */
 public class ReportStudentService implements IReportStudentService {
 
+	/**
+	 * An instance of {@link CsvFileDataService} used for handling CSV file operations in the report service.
+	 * It is kept private to ensure its use is exclusively in services that require it.
+	 */
     private final static CsvFileDataService csvFileDataService = new CsvFileDataService();
 
+    /**
+     * Default constructor for the ReportStudentService class.
+     */
     public ReportStudentService(){
     }
 
+    /**
+     * Retrieves the combined list of registered students and camp committee members for a given camp.
+     *
+     * @param camp The camp for which the combined list is generated.
+     * @return The combined list of registered students and camp committee members.
+     */
     public List<Student> getCombinedRegisteredList(Camp camp) {
         Map<String, List<String>> attendeeData = DataStore.getCampToRegisteredStudentData();
         Map<String, List<String>> committeeData = DataStore.getCampToRegisteredCampCommitteeData();
@@ -37,7 +53,14 @@ public class ReportStudentService implements IReportStudentService {
             .collect(Collectors.toList());
     }
 
-    // generate Report for camps
+    /**
+     * Generates a student report for a given camp and writes it to a CSV file.
+     *
+     * @param filter       The filter to determine the report's content.
+     * @param camp         The camp for which the report is generated.
+     * @param filePathsMap The map containing file paths for different types of reports.
+     * @return True if the report generation and writing were successful, false otherwise.
+     */
     @Override
     public boolean generateReport(List<String> filter, Camp camp, Map<String, String> filePathsMap) {
 
@@ -55,6 +78,12 @@ public class ReportStudentService implements IReportStudentService {
         return success;
     }
 
+    /**
+     * Generates the header line for a student report based on the specified filter.
+     *
+     * @param filter The filter to determine the report's content.
+     * @return The list of header fields for the student report.
+     */
     public List<String> generateReportHeaderLine(List<String> filter) {
         List<String> headers = new ArrayList<>();
     
@@ -123,6 +152,14 @@ public class ReportStudentService implements IReportStudentService {
         return headers;
     }
     
+    /**
+     * Generates a CSV line for a student report based on the specified filter, camp, and list of students.
+     *
+     * @param filter   The filter to determine the report's content.
+     * @param camp     The camp for which the student report is generated.
+     * @param students The list of students to include in the student report.
+     * @return The CSV line for the student report.
+     */
     public String generateReportCsvLine(List<String> filter, Camp camp, List<Student> students) {
         StringBuilder csvLines = new StringBuilder();
         boolean firstStudent = true;
