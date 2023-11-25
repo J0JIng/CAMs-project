@@ -4,7 +4,7 @@ import enums.UserRole;
 import enums.FacultyGroups;
 
 /**
- * Represents a user in the system, serving as a base class for specific user types.
+ * Represents a {@link User} in the system, serving as a base class for specific user types.
  * Abstract class prevents creation of a User object that has insufficient meaning in the system.
  */
 public abstract class User {
@@ -132,9 +132,9 @@ public abstract class User {
     }
 
     /**
-     * Sets the boolean variable indicating whether the user's password has been changed.
+     * Sets the boolean flag indicating whether the user's password has been changed.
      *
-     * @param isPasswordChanged The boolean variable indicating whether the password has been changed.
+     * @param isPasswordChangedFlag The boolean variable indicating whether the password has been changed.
      */
     public void setIsPasswordChanged(boolean isPasswordChangedFlag) {
         this.isPasswordChanged = isPasswordChangedFlag;

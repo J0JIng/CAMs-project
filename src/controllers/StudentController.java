@@ -23,11 +23,11 @@ import views.StudentView;
 import views.MessageView;
 
 /**
- * The {@code StudentController} class is the main controller for students.
- * It extends from the {@code UserController} class to utilize {@code UserController} password related services
- * StudentController class provides the allocation of student's desired operations to the respective methods.
+ * The {@link StudentController} class is the main controller for students.
+ * It extends from the {@link UserController} class to utilize {@link UserController} password related services
+ * {@link StudentController} class provides the allocation of student's desired operations to the respective methods.
  * Such methods include viewing camps, registering and withdrawing from camps and sending enquiries.
- * It utilizes many services such as ICampStudentService interface to run student permitted 
+ * It utilizes many services such as {@link ICampStudentService} interface to run student permitted 
  * camp related services to perform its desired action.
  */
 public class StudentController extends UserController {
@@ -487,7 +487,6 @@ public class StudentController extends UserController {
 	 */
 	public boolean editEnquiry() {
 		Student student = (Student) AuthStore.getCurrentUser();
-		
 
 		// Get Data
 		Map<Integer, Enquiry> draftEnquiries = enquiryStudentService.getStudentDraftEnquiries(student.getStudentID());

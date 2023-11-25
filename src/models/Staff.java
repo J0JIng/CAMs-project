@@ -4,9 +4,9 @@ import enums.UserRole;
 import enums.FacultyGroups;
 
 /**
- * Represents a staff member in the system, inheriting from the User class.
- * Stores fields such as the staff's ID and number of camps managed
- * Contains methods for the staff to use, such as retrieving Staff ID.
+ * Represents a {@link Staff} member in the system, inheriting from the {@link User} class.
+ * Stores fields such as the {@link Staff}'s ID and number of camps managed
+ * Contains methods for the {@link Staff} to use, such as retrieving Staff ID.
  */
 public class Staff extends User {
 	

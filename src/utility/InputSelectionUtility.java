@@ -97,7 +97,7 @@ public class InputSelectionUtility {
     /**
      * Selects a Camp from a list of Camps by getting user input.
      *
-     * @param Camps the list of available Camps
+     * @param camps the list of available Camps
      * @return the selected camp or null if no camp is selected
      */
     public static Camp getSelectedCamp(List<Camp> camps) {
@@ -294,6 +294,7 @@ public class InputSelectionUtility {
      *
      * @param camp   the {@link Camp} object to update
      * @param staff  the {@link Staff} making the update
+     * @param dateFormat The date format to be used for parsing date inputs.
      * @return true if the camp details were updated successfully, false otherwise
      */
     public static boolean updateCampInput(Camp camp, Staff staff , SimpleDateFormat dateFormat) {

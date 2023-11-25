@@ -3,7 +3,7 @@ package models;
 import enums.MessageStatus;
 
 /**
- * A class that contains the model of a suggestion made for a camp.
+ * A class that contains the model of a {@link Suggestion} made for a camp.
  */
 public class Suggestion {
 	

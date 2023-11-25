@@ -34,8 +34,8 @@ public class CampValidationService implements ICampValidationService {
 	/**
      * Checks for date clashes with other registered camps.
      *
-     * @param student The {@link student} for whom to check date clashes.
-     * @param newCamp The new {@link camp} for which to check date clashes.
+     * @param student The {@link Student} for whom to check date clashes.
+     * @param newCamp The new {@link Camp} for which to check date clashes.
      * @return {@code true} if there is a date clash, {@code false} otherwise.
      */
     @Override
@@ -47,8 +47,8 @@ public class CampValidationService implements ICampValidationService {
 	/**
      * Checks if there's a date clash between two camps.
      *
-     * @param camp1 The first {@link camp} .
-     * @param camp2 The second {@link camp} .
+     * @param camp1 The first {@link Camp} .
+     * @param camp2 The second {@link Camp} .
      * @return {@code true} if there is a date clash, {@code false} otherwise.
      */
     @Override
@@ -63,11 +63,11 @@ public class CampValidationService implements ICampValidationService {
 	}
 
 	/**
-	 * Checks if the {@link camp} is over based on the current date and the {@link camp}'s registration closing date.
+	 * Checks if the {@link Camp} is over based on the current date and the {@link Camp}'s registration closing date.
 	 *
 	 * @param currentDate The current date.
-	 * @param camp The {@link camp}  to check.
-	 * @return {@code true} if the {@link camp} is over, {@code false} otherwise.
+	 * @param camp The {@link Camp}  to check.
+	 * @return {@code true} if the {@link Camp} is over, {@code false} otherwise.
 	 */
     @Override
 	public boolean isCampOver(Date currentDate, Camp camp) {
@@ -76,10 +76,10 @@ public class CampValidationService implements ICampValidationService {
 	
 
 	/**
-	 * Checks if the {@link camp} is full by comparing the number of registered students with the maximum allowed slots.
+	 * Checks if the {@link Camp} is full by comparing the number of registered students with the maximum allowed slots.
 	 *
-	 * @param camp The {@link camp} to check.
-	 * @return {@code true} if the {@link camp} is full, {@code false} otherwise.
+	 * @param camp The {@link Camp} to check.
+	 * @return {@code true} if the {@link Camp} is full, {@code false} otherwise.
 	 */
     @Override
 	public boolean isCampFull(Camp camp) {
@@ -94,7 +94,7 @@ public class CampValidationService implements ICampValidationService {
 	 * Checks if the camp committee slots are full by comparing the number of registered committee members
 	 * with the maximum allowed committee slots.
 	 *
-	 * @param camp The {@link camp} to check.
+	 * @param camp The {@link Camp} to check.
 	 * @return {@code true} if the camp committee slots are full, {@code false} otherwise.
 	 */
     @Override
@@ -108,11 +108,11 @@ public class CampValidationService implements ICampValidationService {
 	
 
 	/**
-	 * Checks if the {@link student} is the camp committee member for the specified camp.
+	 * Checks if the {@link Student} is the camp committee member for the specified camp.
 	 *
-	 * @param student The {@link student} to check.
-	 * @param camp The {@link camp} to check.
-	 * @return {@code true} if the {@link student} is a camp committee member for the specified {@link camp}, {@code false} otherwise.
+	 * @param student The {@link Student} to check.
+	 * @param camp The {@link Camp} to check.
+	 * @return {@code true} if the {@link Student} is a camp committee member for the specified {@link Camp}, {@code false} otherwise.
 	 */
     @Override
 	public boolean isUserCampCommitteeForCamp(Student student, Camp camp) {
@@ -125,10 +125,10 @@ public class CampValidationService implements ICampValidationService {
 
 
 	/**
-	 * Checks if the {@link student} is a camp committee member for any {@link camp}.
+	 * Checks if the {@link Student} is a camp committee member for any {@link Camp}.
 	 *
-	 * @param student The {@link student} to check.
-	 * @return {@code true} if the {@link student} is a camp committee member, {@code false} otherwise.
+	 * @param student The {@link Student} to check.
+	 * @return {@code true} if the {@link Student} is a camp committee member, {@code false} otherwise.
 	 */
     @Override
 	public boolean isUserCampCommittee(Student student) {
@@ -155,11 +155,11 @@ public class CampValidationService implements ICampValidationService {
 	}
 	
 	/**
-	 * Checks if the {@link student} is registered with the specified {@link camp}.
+	 * Checks if the {@link Student} is registered with the specified {@link Camp}.
 	 *
-	 * @param student The {@link student} to check.
-	 * @param camp The {@link camp} to check.
-	 * @return {@code true} if the {@link student} is registered with the specified {@link camp}, {@code false} otherwise.
+	 * @param student The {@link Student} to check.
+	 * @param camp The {@link Camp} to check.
+	 * @return {@code true} if the {@link Student} is registered with the specified {@link Camp}, {@code false} otherwise.
  	*/
      @Override
 	public boolean isUserRegisteredWithCamp(Student student, Camp camp) {

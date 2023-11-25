@@ -3,7 +3,7 @@ package models;
 import enums.MessageStatus;
 
 /**
- * Represents an enquiry in the system, containing information about the sender, responder, message content,
+ * Represents an {@link Enquiry} in the system, containing information about the sender, responder, message content,
  * and response to the enquiry.
  */
 public class Enquiry {

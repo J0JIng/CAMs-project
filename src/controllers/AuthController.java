@@ -10,9 +10,9 @@ import views.AuthView;
 import utility.InputSelectionUtility;
 
 /**
- * AuthController class provides utility methods for managing user authentication within the application. 
+ * {@link AuthController} class provides utility methods for managing user authentication within the application. 
  * It offers methods to start and end user sessions, as well as handle user login and logout. This
- * class utilizes the IAuthService interface for handling the
+ * class utilizes the {@link IAuthService} interface for handling the
  * authentication process.
  */
 public class AuthController {
@@ -23,7 +23,7 @@ public class AuthController {
     private static final Scanner sc = new Scanner(System.in);
 
     /**
-     * authService object that implements the IAuthService interface,
+     * authService object that implements the {@link IAuthService} interface,
      * allows the AuthController to perform authentication services.
      */
     private static IAuthService authService;

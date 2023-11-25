@@ -60,7 +60,7 @@ public class CampStaffService implements ICampStaffService {
 	/**
      * Retrieves a list of camps created by the staff with the specified ID.
      *
-     * @param staffID the ID of the {@link Staff}
+     * @param staff the {@link Staff} object specified to obtain from.
      * @return an {@link List} of {@link Camp} objects representing the created camps
      */
 	@Override

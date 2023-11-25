@@ -41,9 +41,10 @@ public interface ICampStudentService {
 
     /**
      * Return camp for which the student is currently registered as a Committee Member.
-     *
+     * 
+     * @param student the {@link Student} to find the camp they are registered as a committee member.
      * @return a {@link Camp} representing the camp registered by Committee Member. 
-     */;
+     */
     public Camp getCampCommitteeCamp(Student student);
 
     /**

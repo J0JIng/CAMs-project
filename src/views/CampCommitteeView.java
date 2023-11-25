@@ -60,7 +60,7 @@ public class CampCommitteeView extends StudentView {
 	/**
      * Displays a list of suggestions.
      *
-     * @param suggestions A map of suggestions to be displayed.
+     * @param suggestion A map of suggestions to be displayed.
      */
 	public void displaySuggestions(Map<Integer, Suggestion> suggestion) {
 

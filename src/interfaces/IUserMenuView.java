@@ -14,13 +14,14 @@ public interface IUserMenuView extends IMenuView {
 	
 	/**
 	 * Displays all camps without any filters
-	 * @param list of camps, String of title for header
+	 * @param campData {@link List} of camps,
+	 * @param title String of title for header
 	 */
 	public void viewCamps(List<Camp> campData, String title);
 	
 	/**
 	 * Displays the camp information of the camp
-	 * @param Camp c
+	 * @param c Camp
 	 */
 	public void viewCampInformation(Camp c);
 	
