@@ -324,7 +324,7 @@ public class CampCommitteeController extends StudentController {
 
 		if (selectedSuggestion != null) {
 			// Confirm deletion
-			int confirmChoice = InputSelectionUtility.getIntInput("Are you sure you want to delete this enquiry? (1: Yes, 2: No): ");
+			int confirmChoice = InputSelectionUtility.getIntInput("Are you sure you want to delete this suggestion? (1: Yes, 2: No): ");
 			if (confirmChoice == 1) {
 				// Delete the selected draft enquiry using EnquiryStudentService
 				boolean deleted = suggestionCampComitteeService.deleteDraftSuggestion(selectedSuggestion.getSuggestionID(), student.getStudentID());

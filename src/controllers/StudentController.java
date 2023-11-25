@@ -487,7 +487,6 @@ public class StudentController extends UserController {
 	 */
 	public boolean editEnquiry() {
 		Student student = (Student) AuthStore.getCurrentUser();
-		
 
 		// Get Data
 		Map<Integer, Enquiry> draftEnquiries = enquiryStudentService.getStudentDraftEnquiries(student.getStudentID());
