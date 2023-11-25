@@ -4,6 +4,7 @@ package interfaces;
  * The {@link IUserService} interface defines a contract for user services.
  */
 public interface IUserService {
+	
     /**
      * Changes the password of a user if the provided old password matches the
      * current password.

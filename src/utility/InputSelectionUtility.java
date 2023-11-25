@@ -17,6 +17,11 @@ import models.CampInformation;
 import models.Enquiry;
 import services.CampUpdateService;
 
+/**
+ * The {@link InputSelectionUtility} class provides utility and helper methods for handling input of various forms.
+ * Helper functions include receiving inputs of integers, Strings and Dates.
+ * It also provides utility methods such as selecting a camp, getting enquiries and filter types.
+ */
 public class InputSelectionUtility {
 
     private static final Scanner sc = new Scanner(System.in);
@@ -120,7 +125,13 @@ public class InputSelectionUtility {
             return camps.get(campIndex);
         }
     }
-
+    
+    /**
+     * Prompts the user with a message, asking user to confirm their choice with a boolean yes or no.
+     *
+     * @param prompt The message to display as a prompt.
+     * @return {@code true} if the user enters 'y' for yes, {@code false} if the user enters 'n' for no.
+     */
     public static boolean getYesNoInput(String prompt) {
         while (true) {
             System.out.print(prompt);
@@ -136,6 +147,13 @@ public class InputSelectionUtility {
         }
     }
     
+    /**
+     * Obtains a boolean input for setting the visibility of a camp.
+     *
+     * @param selectedCamp The camp for which visibility is being set.
+     * @return {@code true} if the user selects 1 for "On," {@code false} if the user selects 0 for "Off,"
+     *         or prompts the user to enter again if an invalid choice is sent.
+     */
     public static boolean getSelectedBoolean(Camp selectedCamp) {
         while (true) {
             
@@ -195,8 +213,13 @@ public class InputSelectionUtility {
     }
  
     /**
-    * Takes in Inputs for creation of camp
-    */
+     * Collects input to create a {@code CampInformation} object.
+     *
+     * @param allCamps   The list of all existing camps to ensure the uniqueness of the camp name.
+     * @param staff      The staff in charge for the camp.
+     * @param dateFormat The date format to be used for parsing date inputs.
+     * @return A {@code CampInformation} object containing details of a new camp.
+     */
     public static CampInformation getCampInput(List<Camp> allCamps, Staff staff, SimpleDateFormat dateFormat) {
         // get Unique Camp Name
         String campName = getUniqueCampName(allCamps);
@@ -365,6 +388,13 @@ public class InputSelectionUtility {
         return true;
     }
 
+    /**
+     * Gets the selected enquiry based on user input.
+     * User either enters a valid ID or return to exit enquiry input
+     *
+     * @param enquiries A map containing enquiries with their corresponding IDs.
+     * @return The selected {@code Enquiry} object, or {@code null} if the user chooses to return.
+     */
     public static Enquiry getSelectedEnquiry(Map<Integer, Enquiry> enquiries) {
         while (true) {
             int enquiryID = getIntInput("Enter the ID of the enquiry (Enter 0 to return): ");
@@ -380,8 +410,15 @@ public class InputSelectionUtility {
             	return null;
             }
         }
-    }// Selected
+    }
 
+    /**
+     * Gets the selected suggestion based on user input.
+     * User either enters a valid ID or return to exit Suggestion input
+     *
+     * @param suggestions A map containing suggestions with their corresponding IDs.
+     * @return The selected {@code Suggestion} object, or {@code null} if the user chooses to return.
+     */
     public static Suggestion getSelectedSuggestion(Map<Integer, Suggestion> suggestions) {
         while (true) {
             int suggestionID = getIntInput("Enter the ID of the suggestion (Enter 0 to return): ");
@@ -399,6 +436,12 @@ public class InputSelectionUtility {
         }
     }
 
+    /**
+     * Gets the selected filters based on user input.
+     * Some filters include No filter, Camp Information, Attendee and Location.
+     *
+     * @return A list of selected filters, including the filter option.
+     */
     public static List<String> getFilterInput() {
         List<String> selectedFilters = new ArrayList<>();
         int option;
@@ -462,6 +505,12 @@ public class InputSelectionUtility {
         return selectedFilters;
     }
 
+    /**
+     * Gets the selected performance filters based on user input.
+     * Filters include No filter, Committee ID, Committee Name and Committee Points.
+     *
+     * @return A list of selected performance filters, including the filter option.
+     */
     public static List<String> getPerformanceFilterInput() {
         List<String> selectedFilters = new ArrayList<>();
         int option;
@@ -518,7 +567,12 @@ public class InputSelectionUtility {
         return selectedFilters;
     }
     
-
+    /**
+     * Gets the selected enquiry filters based on user input.
+     * Filters include No filter, Enquiry ID, Sender ID, Responder ID and Enquiry Status.
+     *
+     * @return A list of selected enquiry filters, including the filter option.
+     */
     public static List<String> getEnquiryFilterInput() {
         List<String> selectedFilters = new ArrayList<>();
         int option;

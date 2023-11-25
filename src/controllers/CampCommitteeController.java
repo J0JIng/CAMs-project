@@ -26,16 +26,61 @@ import utility.FilePathsUtility;
 import views.CampCommitteeView;
 import views.MessageView;
 
+/**
+ * The {@code CampCommitteeController} class is the main controller for camp committee members.
+ * It extends from the {@code UserController} class to utilize {@code UserController} password related services
+ * It also extends from the {@code StudentController} class to utilize {@code StudentController} related services,
+ * as camp committee members can also participate in a regular student's perspective in other camps.
+ * CampCommitteeController class provides the allocation of camp committee members' exclusive operations to the respective methods,
+ * on top of existing student actions that are inherited from {@code StudentController} class.
+ * Such exclusive methods include responding to enquiries and generating reports.
+ * It utilizes many services such as ICampStudentService interface to run student permitted 
+ * camp related services to perform its desired action.
+ */
 public class CampCommitteeController extends StudentController {
 
+	/**
+	 * Service for handling student-related operations specific to camps.
+	 */
     private final ICampStudentService campStudentService = new CampStudentService();
+    
+    /**
+	 * Service for validating camp-related operations for the camp committee.
+	 */
 	private final ICampValidationService campValidationService = new CampValidationService();
+	
+	/**
+	 * Service for handling enquiries for the camp committee.
+	 */
     private final IEnquiryResponderService enquiryCampComitteeService = new EnquiryResponderService();
+    
+    /**
+	 * Service for creating, editing and sending suggestions as a member of the camp committee.
+	 */
     private final ISuggestionSenderService suggestionCampComitteeService = new SuggestionSenderService();
+    
+    /**
+	 * Service for handling student-related report generation for the camp committee.
+	 */
 	private final IReportStudentService reportStudentService = new ReportStudentService();
+	
+	/**
+	 * View responsible for displaying information to the camp committee.
+	 */
 	private final CampCommitteeView view = new CampCommitteeView();
+	
+	/**
+	 * Scanner object for receiving input from the camp committee member.
+	 */
 	private final Scanner scanner = new Scanner(System.in);
 
+    /**
+     * Initiates the camp committee menu, allowing committee members to perform various operations.
+     * The method enters a loop where it repeatedly displays the camp committee menu, takes user input,
+     * and executes the corresponding operation based on the user's choice. 
+     * The loop continues until the user chooses to log out.
+     * Operations shared with students are inherited from {@code StudentController} class and called.
+     */
     public void start() {
         Student student = (Student) AuthStore.getCurrentUser();
         while (true) {
@@ -114,6 +159,9 @@ public class CampCommitteeController extends StudentController {
         }
     }
 
+    /**
+     * Displays pending enquiries for the camp committee related to their assigned camp.
+     */
     protected void viewEnquiriesForCamp() {
 		// Get list of Staff created camps
         Student student = (Student) AuthStore.getCurrentUser();
@@ -127,6 +175,9 @@ public class CampCommitteeController extends StudentController {
 		MessageView.endMessage(scanner, null, true);
 	}
 
+    /**
+     * Allows the camp committee member to respond to pending enquiries related to their assigned camp.
+     */
 	protected void respondToEnquiry() {
         Student student = (Student) AuthStore.getCurrentUser();
        
@@ -157,6 +208,10 @@ public class CampCommitteeController extends StudentController {
 		}
     }
 
+	/**
+	 * Allows the camp committee member to submit a suggestion for their assigned camp
+	 * for staff members to respond to.
+	 */
     protected void submitSuggestion() {
 		Student student = (Student) AuthStore.getCurrentUser();
 
@@ -182,6 +237,9 @@ public class CampCommitteeController extends StudentController {
 		MessageView.endMessage(scanner, message, false);
 	}
 
+    /**
+     * Displays all suggestions, including drafts, submitted, accepted, and rejected, for the camp committee member.
+     */
     protected void viewSuggestions() {
 		Student student = (Student) AuthStore.getCurrentUser();
 
@@ -200,6 +258,11 @@ public class CampCommitteeController extends StudentController {
 		MessageView.endMessage(scanner, null, true);
 	}
 
+    /**
+     * Allows the camp committee member to edit a draft suggestion.
+     *
+     * @return True if the suggestion is successfully edited, false otherwise.
+     */
 	protected boolean editSuggestion() {
 		Student student = (Student) AuthStore.getCurrentUser();
 
@@ -235,6 +298,9 @@ public class CampCommitteeController extends StudentController {
 		return false;
 	}
 
+	/**
+	 * Allows the camp committee member to delete a draft suggestion.
+	 */
 	protected void deleteSuggestion() {
 		Student student = (Student) AuthStore.getCurrentUser();
 
@@ -273,6 +339,9 @@ public class CampCommitteeController extends StudentController {
 		}
 	}
 
+	/**
+	 * Generates a report for the camp committee member based on specified filters and their assigned camp.
+	 */
 	protected void generateReport() {
         Student student = (Student) AuthStore.getCurrentUser();
         Camp camp = campStudentService.getCampCommitteeCamp(student);

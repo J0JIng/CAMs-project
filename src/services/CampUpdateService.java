@@ -9,17 +9,44 @@ import interfaces.ICampUpdateService;
 import interfaces.ICampValidationService;
 import models.Camp;
 
+/**
+ * The {@code CampUpdateService} class implements the {@link ICampUpdateService} interface
+ * and provides services for updating camp information such as its name, dates fields and availability slots.
+ */
 public class CampUpdateService implements ICampUpdateService {
 
+	/**
+     * The {@code campStaffService} field represents an instance of
+     * {@link ICampStaffService} used for running camp staff related services.
+     * It is kept private to ensure its use is exclusively in services that require it.
+     */
     private final static ICampStaffService campStaffService = new CampStaffService();
+    
+    /**
+     * The {@code campValidationService} field represents an instance of
+     * {@link ICampValidationService} used for validating camp-related operations.
+     * It is kept private to ensure its use is exclusively in services that require it.
+     */
     private final static ICampValidationService campValidationService = new CampValidationService();
+    
+    /**
+     * The {@code MAX_COMMITTEE_SLOTS} constant represents the maximum number of committee slots allowed which is set to 10.
+     */
     private final static int MAX_COMMITTEE_SLOTS = 10; 
 
+    /**
+     * Constructs an instance of the {@code CampUpdateService} class.
+     */
     public CampUpdateService() {
     }
 
     // ---------- interface Service method implementation ---------- //
 	
+    /**
+     * Updates the name of the camp. Checks for uniqueness with all camps in the system.
+     *
+     * @return {@code true} if the update is successful, {@code false} otherwise.
+     */
     @Override
 	public boolean updateCampName(Camp camp, String newCampName) {
 		List<Camp> existingCamps = campStaffService.getAllCamps();
@@ -34,6 +61,11 @@ public class CampUpdateService implements ICampUpdateService {
 		}
 	}
 	
+    /**
+     * Updates the start date of the camp. Checks for date validity with start/end/registration date.
+     *
+     * @return {@code true} if the update is successful, {@code false} otherwise.
+     */
     @Override
 	public boolean updateCampStartDate(Camp camp, Date newStartDate) {
 		if (newStartDate.after(camp.getCampInformation().getCampEndDate())) {
@@ -49,6 +81,11 @@ public class CampUpdateService implements ICampUpdateService {
 		}
 	}
 	
+    /**
+     * Updates the end date of the camp. Checks for date validity with start/end/registration date.
+     *
+     * @return {@code true} if the update is successful, {@code false} otherwise.
+     */
     @Override
 	public boolean updateCampEndDate(Camp camp, Date newEndDate) {
 		if (newEndDate.before(camp.getCampInformation().getCampStartDate())) {
@@ -64,6 +101,11 @@ public class CampUpdateService implements ICampUpdateService {
 		}
 	}
 	
+    /**
+     * Updates the registration closing date of the camp. Checks for date validity with start/end/registration date.
+     *
+     * @return {@code true} if the update is successful, {@code false} otherwise.
+     */
     @Override
 	public boolean updateRegistrationEndDate(Camp camp, Date newRegistrationClosingDate) {
 		if (newRegistrationClosingDate.after(camp.getCampInformation().getCampStartDate())) {
@@ -79,6 +121,11 @@ public class CampUpdateService implements ICampUpdateService {
 		}
 	}
 
+    /**
+     * Updates the location of the camp.
+     *
+     * @return {@code true} if the update is successful, {@code false} otherwise.
+     */
     @Override
 	public boolean updateCampLocation(Camp camp, String newLocation) {
 		// Add validation logic to check if newLocation is valid
@@ -93,6 +140,11 @@ public class CampUpdateService implements ICampUpdateService {
 		return true;
 	}
 	
+    /**
+     * Updates the total slots of the camp. Checks whether total slots is more than committee slots.
+     *
+     * @return {@code true} if the update is successful, {@code false} otherwise.
+     */
     @Override
 	public boolean updateCampTotalSlot(Camp camp, int newCampTotalSlots) {
 		if (newCampTotalSlots <= camp.getCampInformation().getCampCommitteeSlots()) {
@@ -105,6 +157,11 @@ public class CampUpdateService implements ICampUpdateService {
 		return true;
 	}
 	
+    /**
+     * Updates the committee slots of the camp. Checks that commitee slots are less than total available slots.
+     *
+     * @return {@code true} if the update is successful, {@code false} otherwise.
+     */
     @Override
 	public boolean updateCampCommitteeSlots(Camp camp, int newCommitteeSlots) {
 		if (newCommitteeSlots >= camp.getCampInformation().getCampTotalSlots()) {
@@ -122,6 +179,11 @@ public class CampUpdateService implements ICampUpdateService {
 		return true;
 	}
 	
+    /**
+     * Updates the description of the camp. Include sanity checks for null descriptions.
+     *
+     * @return {@code true} if the update is successful, {@code false} otherwise.
+     */
 	@Override
 	public boolean updateCampDescription(Camp camp, String newDescription) {
 		// Add validation logic to check if newDescription is valid
@@ -136,6 +198,11 @@ public class CampUpdateService implements ICampUpdateService {
 		return true;
 	}
 
+	/**
+     * Updates the faculty group of the camp.
+     *
+     * @return {@code true} if the update is successful, {@code false} otherwise.
+     */
     @Override
 	public boolean updateCampFacultyGroup(Camp camp, String userInput) {
 		// Add validation logic to check if userInput is valid

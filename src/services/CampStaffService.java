@@ -17,10 +17,25 @@ import models.Student;
 import stores.DataStore;
 import utility.InputSelectionUtility;
 
+/**
+ * The CampStaffService class implements the ICampStaffService interface and
+ * provides methods for managing staff-related camp services. These services aid in the overall 
+ * staffs' desired operations. Services include creating/deleting camps and toggling visibility.
+ */
 public class CampStaffService implements ICampStaffService { 
 
+	/**
+	 * The {@code campValidationService} field represents an instance of
+	 * {@link ICampValidationService} used for validating camp-related operations.
+	 * It is initialized with an instance of {@link CampValidationService}.
+	 * It is stored as a private variable to prevent direct usage of validation services
+	 * outside the scope of a service.
+	 */
 	private final static ICampValidationService campValidationService = new CampValidationService();
 
+	/**
+     * Constructs an instance of the CampStaffService class.
+     */
 	public CampStaffService(){
 	}
 
@@ -129,6 +144,12 @@ public class CampStaffService implements ICampStaffService {
 		}
 	}
 
+	/**
+     * Creates new camps and adds them to the data store.
+     *
+     * @param camps a list of {@link Camp} objects to create
+     * @return true if the creation is successful, false otherwise
+     */
 	@Override
 	public boolean createCamp(ArrayList<Camp> camps) {
         Map<String, Camp> campData = DataStore.getCampData();
@@ -143,6 +164,12 @@ public class CampStaffService implements ICampStaffService {
         return true;
     }
 	
+	/**
+     * Deletes the specified camp from the data store.
+     *
+     * @param camp the {@link Camp} object to delete
+     * @return true if the deletion is successful, false otherwise
+     */
 	@Override
     public boolean deleteCamp(Camp camp){
 		Map<String, Camp> campData = DataStore.getCampData();
@@ -162,7 +189,12 @@ public class CampStaffService implements ICampStaffService {
 
 	// ---------- Helper Method ---------- //
 
-	// Convert map keys from userID to studentName
+	/**
+     * Converts map keys from userID to studentName.
+     *
+     * @param inputMap the input {@link Map} with user IDs as keys
+     * @return a new {@link Map} with student names as keys
+     */
     public Map<String, Student> convertMapKey(Map<String, Student> inputMap) {
         Map<String, Student> convertedMap = new HashMap<>();
 

@@ -11,6 +11,13 @@ import stores.AuthStore;
  */
 public abstract class AuthService implements IAuthService {
     
+	/**
+	 * Abstract method that attempts to log in the user with the provided user ID and password.
+	 *
+	 * @param userID   The user ID of the user trying to log in.
+	 * @param password The password of the user trying to log in.
+	 * @return True if the login is successful, false otherwise.
+	 */
     public abstract boolean login(String userID, String password);
 
     /**
@@ -19,6 +26,11 @@ public abstract class AuthService implements IAuthService {
     public AuthService() {
     };
 
+    /**
+     * Logs out the current user by setting the current user in the authentication store to null.
+     *
+     * @return True if the logout is successful, false otherwise.
+     */
     @Override
     public boolean logout() {
         AuthStore.setCurrentUser(null);

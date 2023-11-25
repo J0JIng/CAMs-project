@@ -15,16 +15,45 @@ import models.Enquiry;
 import models.Camp;
 import models.Student;
 
+/**
+ * The {@code ReportStaffService} class implements the {@link IReportStaffService} interface
+ * and provides services for generating various reports related to camps, performance, and enquiries.
+ * It also contains helper functions to generate headers lines for the reports and csv.
+ */
 public class ReportStaffService implements IReportStaffService {
     
+	/**
+	 * An instance of {@link CsvFileDataService} used for handling CSV file operations in the report service.
+	 * It is kept private to ensure its use is exclusively in services that require it.
+	 */
     private final static CsvFileDataService csvFileDataService = new CsvFileDataService();
+    
+    /**
+     * An instance of {@link ICampStaffService} providing access to camp staff-related operations.
+     * It is kept private to ensure its use is exclusively in services that require it.
+     */
     private final static ICampStaffService campStaffService = new CampStaffService();
+    
+    /**
+     * An instance of {@link IEnquiryResponderService} providing access to enquiry responder-related operations.
+     * It is kept private to ensure its use is exclusively in services that require it.
+     */
     private final static IEnquiryResponderService enquiryResponderService = new EnquiryResponderService();
 
+    /**
+     * Constructs an instance of the {@code ReportStaffService} class.
+     */
     public ReportStaffService(){
     }
 
-    // generate Report for camps
+    /**
+     * Generates a report for camps based on specified filters.
+     *
+     * @param filter        The list of filters to apply to the report.
+     * @param camps         The list of camps for which to generate the report.
+     * @param filePathsMap  The map containing file paths for report generation.
+     * @return {@code true} if the report generation is successful, {@code false} otherwise.
+     */
     @Override
     public boolean generateReport(List<String> filter,List<Camp> camps,Map<String, String> filePathsMap) {
         // Sort camps alphabetically based on their names
@@ -51,6 +80,14 @@ public class ReportStaffService implements IReportStaffService {
         return success;
     }
 
+    /**
+     * Generates a performance report for camps based on specified filters.
+     *
+     * @param filter        The list of filters to apply to the report.
+     * @param camps         The list of camps for which to generate the report.
+     * @param filePathsMap  The map containing file paths for report generation.
+     * @return {@code true} if the report generation is successful, {@code false} otherwise.
+     */
     @Override
     public boolean generatePerformanceReport(List<String> filter,List<Camp> camps,Map<String, String> filePathsMap) {
         // Sort camps alphabetically based on their names
@@ -77,6 +114,14 @@ public class ReportStaffService implements IReportStaffService {
         return success;
     }
 
+    /**
+     * Generates an enquiry report for camps based on specified filters.
+     *
+     * @param filter        The list of filters to apply to the report.
+     * @param camps         The list of camps for which to generate the report.
+     * @param filePathsMap  The map containing file paths for report generation.
+     * @return {@code true} if the report generation is successful, {@code false} otherwise.
+     */
     @Override
     public boolean generateEnquiryReport(List<String> filter,List<Camp> camps,Map<String, String> filePathsMap) {
         // Sort camps alphabetically based on their names
@@ -99,6 +144,12 @@ public class ReportStaffService implements IReportStaffService {
         return success;
     }
 
+    /**
+     * Generates the header line for a report based on the specified filter.
+     *
+     * @param filter The filter to determine the report's content.
+     * @return The list of header fields for the report.
+     */
     public List<String> generateReportHeaderLine(List<String> filter) {
         List<String> headers = new ArrayList<>();
 
@@ -167,7 +218,14 @@ public class ReportStaffService implements IReportStaffService {
         return headers;
     }
     
-
+    /**
+     * Generates a CSV line for a report based on the specified filter, camp, and list of students.
+     *
+     * @param filter   The filter to determine the report's content.
+     * @param camp     The camp for which the report is generated.
+     * @param students The list of students to include in the report.
+     * @return The CSV line for the report.
+     */
     public String generateReportCsvLine(List<String> filter, Camp camp, List<Student> students) {
         StringBuilder csvLines = new StringBuilder();
         boolean firstStudent = true;
@@ -261,6 +319,12 @@ public class ReportStaffService implements IReportStaffService {
         return csvLines.toString();
     }
 
+    /**
+     * Generates the header line for a performance report based on the specified filter.
+     *
+     * @param filter The filter to determine the report's content.
+     * @return The list of header fields for the performance report.
+     */
     public List<String> generatePerformanceReportHeaderLine(List<String> filter) {
         List<String> headers = new ArrayList<>();
 
@@ -301,7 +365,14 @@ public class ReportStaffService implements IReportStaffService {
         return headers;
     }
     
-
+    /**
+     * Generates a CSV line for a performance report based on the specified filter, camp, and list of students.
+     *
+     * @param filter   The filter to determine the report's content.
+     * @param camp     The camp for which the performance report is generated.
+     * @param students The list of students to include in the performance report.
+     * @return The CSV line for the performance report.
+     */
     public String generatePerformanceReportCsvLine(List<String> filter, Camp camp, List<Student> students) {
         StringBuilder csvLines = new StringBuilder();
         boolean firstStudent = true;
@@ -364,6 +435,12 @@ public class ReportStaffService implements IReportStaffService {
         return csvLines.toString();
     }
 
+    /**
+     * Generates the header line for an enquiry report based on the specified filter.
+     *
+     * @param filter The filter to determine the report's content.
+     * @return The list of header fields for the enquiry report.
+     */
     public List<String> generateEnquiryReportHeaderLine(List<String> filter){
         List<String> headers = new ArrayList<>();
         
@@ -430,6 +507,14 @@ public class ReportStaffService implements IReportStaffService {
         return headers;
     }
 
+    /**
+     * Generates a CSV line for an enquiry report based on the specified filter, camp, and map of enquiries.
+     *
+     * @param filter    The filter to determine the report's content.
+     * @param camp      The camp for which the enquiry report is generated.
+     * @param enquiries The map of enquiries to include in the report.
+     * @return The CSV line for the enquiry report.
+     */
     public String generateEnquiryReportCsvLine(List<String> filter, Camp camp, Map<Integer, Enquiry> enquiries) {
         StringBuilder csvLines = new StringBuilder();
         boolean firstEnquiry = true;

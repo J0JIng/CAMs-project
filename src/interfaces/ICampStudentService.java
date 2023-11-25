@@ -46,9 +46,30 @@ public interface ICampStudentService {
      */;
     public Camp getCampCommitteeCamp(Student student);
 
+    /**
+     * Registers the student for a specific camp.
+     *
+     * @param student the {@link Student} to register
+     * @param camp the {@link Camp} to register for
+     * @return {@code true} if registration is successful, {@code false} otherwise
+     */
     public boolean registerCamp(Student student,Camp camp);
 
+    /**
+     * Withdraws the student from a specific camp.
+     *
+     * @param student the {@link Student} to withdraw
+     * @param camp the {@link Camp} to withdraw from
+     * @return {@code true} if withdrawal is successful, {@code false} otherwise
+     */
     public boolean withdrawCamp(Student student,Camp camp);
 
+    /**
+     * Registers the student as a Committee Member for a specific camp.
+     *
+     * @param student the {@link Student} to register as a Committee Member
+     * @param camp the {@link Camp} for which to register as a Committee Member
+     * @return {@code true} if registration as a Committee Member is successful, {@code false} otherwise
+     */
     public boolean registerAsCommittee(Student student,Camp camp);
 }

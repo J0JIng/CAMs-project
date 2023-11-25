@@ -19,7 +19,13 @@ import stores.DataStore;
  */
 public class CampStudentService implements ICampStudentService {
 	
-
+	/**
+	 * The {@code campValidationService} field represents an instance of
+	 * {@link ICampValidationService} used for validating camp-related operations.
+	 * It is initialized with an instance of {@link CampValidationService}.
+	 * It is stored as a private variable to prevent direct usage of validation services
+	 * outside the scope of a service.
+	 */
 	private final static ICampValidationService campValidationService = new CampValidationService();
 
 	/**
@@ -30,6 +36,13 @@ public class CampStudentService implements ICampStudentService {
 
 	// ---------- interface Service method implementation ---------- //
 
+	/**
+     * Retrieves a list of available camps that a student can register for.
+     * Restricted based on student's faculty group, camp's visibility to students,
+     * and whether slots are still available.
+     *
+     * @return a {@link List} of {@link Camp} objects representing the available camps
+     */
 	@Override
 	public List<Camp> getAvailableCampsToRegister(){
 		Student student = (Student) AuthStore.getCurrentUser();
@@ -46,6 +59,12 @@ public class CampStudentService implements ICampStudentService {
 		return availableCamps;		
 	}
 	
+	/**
+     * Retrieves a list of all camps visible to a student.
+     * Restricted based on student's faculty group and camp's visibility to students.
+     *
+     * @return a {@link List} of {@link Camp} objects representing all camps
+     */
 	@Override
 	public List<Camp> getAllCamps(){
 		Student student = (Student) AuthStore.getCurrentUser();
@@ -61,6 +80,11 @@ public class CampStudentService implements ICampStudentService {
 		return availableCamps;		
 	}
 
+	/**
+     * Retrieves a list of camps from which the student has withdrawn from.
+     *
+     * @return a {@link List} of {@link Camp} objects representing the withdrawn camps
+     */
 	@Override
 	public List<Camp> getWithdrawnCamps() {
 		Student student = (Student) AuthStore.getCurrentUser();
@@ -74,6 +98,11 @@ public class CampStudentService implements ICampStudentService {
 		return withdrawnCamps;
 	}
 	
+	/**
+     * Retrieves a list of camps for which the student is currently registered in.
+     *
+     * @return a {@link List} of {@link Camp} objects representing the registered camps
+     */
 	@Override
 	public List<Camp> getRegisteredCamps() {
 		Student student = (Student) AuthStore.getCurrentUser();
@@ -88,6 +117,11 @@ public class CampStudentService implements ICampStudentService {
 		return registeredCamps;
 	}
 
+	/**
+     * Return camp for which the student is currently registered as a Committee Member.
+     *
+     * @return a {@link Camp} representing the camp registered by Committee Member.
+     */
 	@Override
 	public Camp getCampCommitteeCamp(Student student) {
 		Map<String, String> registeredCamp = DataStore.getCampCommitteeToCampRegisteredData();

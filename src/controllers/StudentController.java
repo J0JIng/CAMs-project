@@ -22,14 +22,47 @@ import utility.InputSelectionUtility;
 import views.StudentView;
 import views.MessageView;
 
+/**
+ * The {@code StudentController} class is the main controller for students.
+ * It extends from the {@code UserController} class to utilize {@code UserController} password related services
+ * StudentController class provides the allocation of student's desired operations to the respective methods.
+ * Such methods include viewing camps, registering and withdrawing from camps and sending enquiries.
+ * It utilizes many services such as ICampStudentService interface to run student permitted 
+ * camp related services to perform its desired action.
+ */
 public class StudentController extends UserController {
 
+	/**
+	 * Scanner object for receiving input from the student.
+	 */
 	private final Scanner scanner = new Scanner(System.in);
+	
+	/**
+	 * Service for handling student-related operations specific to camps.
+	 */
 	private final ICampStudentService campStudentService = new CampStudentService();
+	
+	/**
+	 * Service for validating camp-related operations for the student.
+	 */
 	private final ICampValidationService campValidationService = new CampValidationService();
+	
+	/**
+	 * Service for creating, editing and sending enquiries for the student.
+	 */
 	private final IEnquirySenderService enquiryStudentService = new EnquirySenderService();
+	
+	/**
+	 * View responsible for displaying information to the student.
+	 */
 	private final StudentView view = new StudentView();
 
+    /**
+     * Initiates the student menu, allowing students to perform various operations.
+     * The method enters a loop where it repeatedly displays the student menu, takes user input,
+     * and executes the corresponding operation based on the user's choice. 
+     * The loop continues until the user chooses to log out.
+     */
 	public void start() {
         Student student = (Student) AuthStore.getCurrentUser();
 	    while (true) {
@@ -106,6 +139,11 @@ public class StudentController extends UserController {
         }
 	}
 
+	/**
+	 * Registers the current student for a selected camp. Various validations are performed before registration.
+	 * These include whether they have withdrawn previously, registered currently, date clash 
+	 * Displays available camps and allows the student to choose the camp for registration.
+	 */
 	protected void registerCamp() {
 		// Get the current student
 		Student student = (Student) AuthStore.getCurrentUser();
@@ -162,6 +200,11 @@ public class StudentController extends UserController {
 		MessageView.endMessage(scanner, message, false);
 	}
 	
+	/**
+	 * Withdraws the current student from a selected camp. Various validations are performed before withdrawal.
+	 * These include whether they have withdrawn, or are a committee member.
+	 * Displays the camps the student is registered for and allows the student to choose the camp for withdrawal.
+	 */
 	protected void withdrawCamp() {
 		// Get the current student
 		Student student = (Student) AuthStore.getCurrentUser();
@@ -197,7 +240,13 @@ public class StudentController extends UserController {
 		MessageView.endMessage(scanner, message, false);
 	}
 
-
+	/**
+	 * Registers the current student as a committee member for a selected camp. Various validations are performed before registration.
+	 * These include whether they have withdrawn previously, registered currently, date clash or is a committee member in another camp.
+	 * Displays available camps and allows the student to choose the camp for committee registration.
+	 *
+	 * @return True if the student successfully registers as a committee member, false otherwise.
+	 */
 	protected boolean registerAsCommittee(){
 		Student student = (Student) AuthStore.getCurrentUser();
 		Date currentDate = new Date();
@@ -262,7 +311,7 @@ public class StudentController extends UserController {
 	
 
 	/**
-     * Shows all no. of remaining slots for all the camps.
+     * Shows all number of remaining slots for all the camps visible to the student's user group.
      */
     protected void viewRemainingSlots() {
         view.viewCampsSlots(campStudentService.getAllCamps());
@@ -270,7 +319,7 @@ public class StudentController extends UserController {
     }
 	
 	/**
-     * Shows all camps viewable by the student.
+     * Shows all camps viewable by the student based on user group and visibility.
      */
     protected void viewAllCamps() {
 		view.viewCamps(campStudentService.getAllCamps(), " - List of Camps - ");
@@ -284,7 +333,8 @@ public class StudentController extends UserController {
     }
     
     /**
-     * Shows the list of camps using user specified filter
+     * Displays a filtered list of camps based on user-defined criteria such as date, location, or alphabetical order.
+     * Allows the user to choose a filtering option and show the resulting list of camps.
      */
 	protected void viewAllCampsWithFilters() {
 		// Various filters for camps
@@ -358,7 +408,8 @@ public class StudentController extends UserController {
 	}
 	
 	/**
-	 * Shows the camps that the student is registered in.
+	 * Displays a list of camps that the current student is registered in. 
+	 * Allows the user to view detailed information about a selected camp.
 	 */
 	protected void viewRegisteredCamps() {
 		List<Camp> list = campStudentService.getRegisteredCamps();
@@ -375,6 +426,10 @@ public class StudentController extends UserController {
     	}
 	}
 
+	/**
+	 * Submits an enquiry for a selected camp. 
+	 * Allows the user to choose a camp, enter an enquiry message, and decide whether to save the enquiry as a draft or submit it.
+	 */
 	public void submitEnquiry() {
     	Student student = (Student) AuthStore.getCurrentUser();
         
@@ -463,6 +518,11 @@ public class StudentController extends UserController {
 		return false;
 	}
 
+	/**
+	 * Allows the student to delete a draft enquiry. Displays a list of draft enquiries,
+	 * prompts the user to select an enquiry for deletion, and confirms the deletion.
+	 * If confirmed, the selected draft enquiry is deleted using EnquiryStudentService.
+	 */
 	public void deleteEnquiry() {
 		Student student = (Student) AuthStore.getCurrentUser();
 

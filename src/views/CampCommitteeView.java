@@ -6,6 +6,11 @@ import models.Suggestion;
 import stores.AuthStore;
 import utility.ViewUtility;
 
+/**
+ * The {@link CampCommitteeView} class extends {@link StudentView} and is responsible for displaying
+ * the menu and related views for camp committee members. Methods shared by both student and camp committee members
+ * are already implemented in parent class {@link StudentView}
+ */
 public class CampCommitteeView extends StudentView {
 
 	/**
@@ -13,7 +18,7 @@ public class CampCommitteeView extends StudentView {
 	 */
 	@Override
 	public void displayMenuView() {
-		//ViewUtility.clearScreen();
+		ViewUtility.clearScreen();
 		
 		String welcomeMessage = "Welcome " + AuthStore.getCurrentUser().getName();
 		int totalLength = welcomeMessage.length();
@@ -52,6 +57,11 @@ public class CampCommitteeView extends StudentView {
         System.out.print("Select an option: ");
 	}
 
+	/**
+     * Displays a list of suggestions.
+     *
+     * @param suggestions A map of suggestions to be displayed.
+     */
 	public void displaySuggestions(Map<Integer, Suggestion> suggestion) {
 
 		System.out.println("╔════════════════════════════════════════════════════════════════════════════════════════════╗");
@@ -79,6 +89,14 @@ public class CampCommitteeView extends StudentView {
 		System.out.println("╚════════════════════════════════════════════════════════════════════════════════════════════╝");
 	}
 
+	/**
+     * Displays categorized lists of suggestions based on their status.
+     *
+     * @param draftSuggestions     Draft suggestions to be displayed.
+     * @param submittedSuggestions Submitted suggestions to be displayed.
+     * @param acceptedSuggestions  Accepted suggestions to be displayed.
+     * @param rejectedSuggestions  Rejected suggestions to be displayed.
+     */
 	public void displaySuggestions(Map<Integer, Suggestion> draftSuggestions, Map<Integer, Suggestion> submittedSuggestions,
 									Map<Integer, Suggestion> acceptedSuggestions, Map<Integer, Suggestion> rejectedSuggestions) {
 		
@@ -121,6 +139,9 @@ public class CampCommitteeView extends StudentView {
 	    System.out.println("╚════════════════════════════════════════════════════════════════════════════════════════════╝");
 	}
 
+	 /**
+     * Displays the input options for applying filters.
+     */
 	public void showFilterInput() {
 		System.out.println("╔══════════════════════════════════════════════════════════╗");
 		System.out.println("║                                                          ║");

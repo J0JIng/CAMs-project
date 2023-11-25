@@ -30,18 +30,56 @@ import utility.InputSelectionUtility;
 import views.MessageView;
 import views.StaffView;
 
+/**
+ * The {@code StaffController} class is the main controller for staff members.
+ * It extends from the {@code UserController} class to utilize {@code UserController} password related services
+ * StaffController class provides the allocation of staff's desired operations to the respective methods.
+ * Such methods include creating camps, deleting camps, viewing camps, handling enquiries and suggestions
+ * It utilizes many services such as ICampStaffService interface to run camp related services to perform
+ * its desired action.
+ */
 public class StaffController extends UserController {
-    private final Scanner scanner = new Scanner(System.in);
+	
+	/** The {@code Scanner} object for reading user input. */
+	private final Scanner scanner = new Scanner(System.in);
+    
+    /**
+     * Service for handling operations related to camp staff.
+     */
     private static final ICampStaffService campStaffService = new CampStaffService();
+    
+    /**
+     * Service for responding to enquiries as a staff member.
+     */
     private static final IEnquiryResponderService enquiryStaffService = new EnquiryResponderService();
+    
+    /**
+     * Service for responding to suggestions as a staff member.
+     */
     private static final ISuggestionResponderService suggestionStaffService = new SuggestionResponderService();
+    
+    /**
+     * Service for generating reports as a staff member.
+     */
     private static final IReportStaffService reportStaffService = new ReportStaffService();
+    
+    /**
+     * View class responsible for displaying staff-related operations.
+     */
     private static final StaffView view = new StaffView();
 
+    /**
+     * Constructs a new {@code StaffController}.
+     */
     public StaffController() {
     }
 
-
+    /**
+     * Initiates the staff menu, allowing staff members to perform various operations.
+     * The method enters a loop where it repeatedly displays the staff menu, takes user input,
+     * and executes the corresponding operation based on the user's choice. 
+     * The loop continues until the user chooses to log out.
+     */
     public void start() {
         while (true) {
             view.displayMenuView();
@@ -116,8 +154,13 @@ public class StaffController extends UserController {
         }
     }
 
-    
-
+    /**
+     * Toggles the visibility of a camp created by the staff member.
+     * The staff member is prompted to choose a camp from the list of camps they created.
+     * The chosen camp's visibility is then toggled.
+     * If the staff member has not created any camps, a blank list is displayed,
+     * asking for them to press 'Return' and end the method.
+     */
     protected void toggleCampVisibility() {
         Staff staff = (Staff) AuthStore.getCurrentUser();
         List<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
@@ -133,6 +176,12 @@ public class StaffController extends UserController {
         }
     }
 
+    /**
+     * Creates a specified number of camps based on user input.
+     * The staff member is prompted to enter the number of camps to create.
+     * For each camp, the staff member provides information, and new camps are created.
+     * An acknowledgement message is shown to indicate success or error.
+     */
     protected void createCamp() {
         // Get number of projects to create from user
         Staff staff = (Staff) AuthStore.getCurrentUser();
@@ -159,6 +208,13 @@ public class StaffController extends UserController {
 
     }
 
+    /**
+     * Updates details of a camp created by the staff member.
+     * The staff member is prompted to choose a camp from the list of camps they created.
+     * The staff member then updates the chosen camp's details.
+     * If the staff member has not created any camps, a blank list is displayed,
+     * asking for them to press 'Return' and end the method.
+     */
     protected void updateCampDetails() {
         Staff staff = (Staff) AuthStore.getCurrentUser();
         List<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
@@ -176,6 +232,13 @@ public class StaffController extends UserController {
 
     }
 
+    /**
+     * Deletes a camp created by the staff member.
+     * The staff member is prompted to choose a camp from the list of camps they created.
+     * The chosen camp is deleted, and a success or error message is displayed.
+     * If the staff member has not created any camps, a blank list is displayed,
+     * asking for them to press 'Return' and end the method.
+     */
     protected void deleteCamp() {
         Staff staff = (Staff) AuthStore.getCurrentUser();
         List<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
@@ -189,7 +252,8 @@ public class StaffController extends UserController {
     }
     
     /**
-     * Shows the list of all camps
+     * Displays a list of all camps regardless of camp's visibility
+     * Staff member can choose to select a camp to display its information.
      */
     protected void viewAllCamps() {
         view.viewCamps(campStaffService.getAllCamps(), " - List of Camps - ");
@@ -203,7 +267,9 @@ public class StaffController extends UserController {
     }
 
     /**
-     * Shows the list of camps created
+     * Displays a list of camps created by the current staff member.
+     * If the staff member has not created any camps, a blank list is displayed,
+     * asking for them to press 'Return' and end the method.
      */
     protected void viewCreatedCamps() {
         Staff staff = (Staff) AuthStore.getCurrentUser();
@@ -213,17 +279,19 @@ public class StaffController extends UserController {
     }
     
     /**
-     * Shows the list of camps editable by staff
+     * Displays a list of camps editable by the current staff member.
+     * The staff member is prompted to choose a camp from the list.
      */
     protected void viewEditableCamps() {
-        //scanner.nextLine();
         Staff staff = (Staff) AuthStore.getCurrentUser();
         view.viewCamps(campStaffService.getStaffCreatedCamps(staff),
                 " - Choose camp to edit - ");
     }
 
     /**
-     * Shows the list of Students
+     * Displays a list of students registered for a selected camp.
+     * The staff member chooses a camp, and the list of students and committee members is displayed
+     * using the viewStudentList service of StaffView.
      */
     protected void viewStudentList() {
         view.viewCamps(campStaffService.getAllCamps(), " - Choose Camp to view Student list - ");
@@ -241,10 +309,11 @@ public class StaffController extends UserController {
     }
 
     /**
-     * Shows the list of camps using user specified filter
+     * Displays a list of all camps with optional user-specified filters.
+     * The staff member can filter camps by start date, location, or view all camps alphabetically.
+     * The filtered list is displayed with additional information based on the chosen filter.
      */
 	protected void viewAllCampsWithFilters() {
-		//scanner.nextLine();
 		// Various filters for camps
     	String filterBy = null; 		// Type of filter
     	Date filterDate = null;			// Filter date
@@ -314,6 +383,10 @@ public class StaffController extends UserController {
     	MessageView.endMessage(scanner, null, false);
 	}
 
+	/**
+	 * Displays a list of enquiries for a selected camp that is created by the current staff member.
+	 * The staff member chooses a camp, and the list of pending enquiries is displayed.
+	 */
 	protected void viewEnquiriesForCamp() {
 		// Get list of Staff created camps
         Staff staff = (Staff) AuthStore.getCurrentUser();
@@ -330,6 +403,12 @@ public class StaffController extends UserController {
 		MessageView.endMessage(scanner, null, false);
 	}
 
+	/**
+	 * Allows the staff member to respond to an enquiry for a selected camp.
+	 * The staff member chooses a camp, selects an enquiry, and enters a response.
+	 * The response is processed using the EnquiryResponderService.
+     * An acknowledgement message is shown to indicate success or error.
+	 */
 	protected void respondToEnquiry() {
         Staff staff = (Staff) AuthStore.getCurrentUser();
 		// Get list of Staff created camps
@@ -359,6 +438,11 @@ public class StaffController extends UserController {
 		MessageView.endMessage(scanner, success ? "Enquiry responded successfully" : "Error responding to suggestion", true);
     }
 
+	/**
+	 * Displays a list of suggestions for a selected camp created by the current staff member.
+	 * The staff member chooses a camp, and the list of suggestions is displayed.
+	 * Otherwise, a message indicating no camp is shown and method ends.
+	 */
     protected void viewSuggestionForCamp() {
 		// Get list of Staff created camps
         Staff staff = (Staff) AuthStore.getCurrentUser();
@@ -375,7 +459,11 @@ public class StaffController extends UserController {
 		}
 	}
 
-  
+    /**
+     * Allows the staff member to respond to a suggestion for a selected camp.
+     * The staff member chooses a camp, selects a suggestion, and decides to accept or reject it.
+     * The suggestion is processed using the SuggestionResponderService.
+     */
     protected void respondToSuggestion() {
         Staff staff = (Staff) AuthStore.getCurrentUser();
 		// Get list of Staff created camps
@@ -409,8 +497,11 @@ public class StaffController extends UserController {
 		}
 	}
 
-    // Generate report
-
+    /**
+     * Generates a report based on user-specified filters. The staff member can choose to generate
+     * a report for all camps, camps created by the staff member, or a specific camp. The report can
+     * be filtered by various criteria, and the resulting report is saved to a CSV file.
+     */
     protected void generateReport() {
         Staff staff = (Staff) AuthStore.getCurrentUser();
         List<Camp> allCreatedCamps = campStaffService.getAllCamps();
@@ -478,10 +569,12 @@ public class StaffController extends UserController {
     }
 
 
-    // Generate Performance report
-
+    /**
+     * Generates a performance report based on user-specified filters. A menu is shown for user to choose the type of report desired. 
+     * The staff member can choose to generate a performance report for all camps, camps created by the staff member, or a specific camp.
+     * The performance report can be filtered by various criteria, and the resulting report is saved to a CSV file.
+     */
     protected void generatePerformanceReport() {
-        //scanner.nextLine();
         Staff staff = (Staff) AuthStore.getCurrentUser();
         List<Camp> allCreatedCamps = campStaffService.getAllCamps();
         List<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
@@ -548,10 +641,13 @@ public class StaffController extends UserController {
         }
     }
 
-    // Generate Enquiry report
-
+    /**
+     * Generates an enquiry report based on user-specified filters.
+     * A menu is shown for user to choose the type of report desired. The staff member can choose to generate
+     * an enquiry report for all camps, camps created by the staff member, or a specific camp. The report can
+     * be filtered by various criteria, and the resulting report is saved to a CSV file.
+     */
     protected void generateEnquiryReport() {
-        //scanner.nextLine();
         Staff staff = (Staff) AuthStore.getCurrentUser();
         List<Camp> allCreatedCamps = campStaffService.getAllCamps();
         List<Camp> staffCreatedCamps = campStaffService.getStaffCreatedCamps(staff);
