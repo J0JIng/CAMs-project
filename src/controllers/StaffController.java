@@ -31,11 +31,11 @@ import views.MessageView;
 import views.StaffView;
 
 /**
- * The {@code StaffController} class is the main controller for staff members.
- * It extends from the {@code UserController} class to utilize {@code UserController} password related services
- * StaffController class provides the allocation of staff's desired operations to the respective methods.
+ * The {@link StaffController} class is the main controller for staff members.
+ * It extends from the {@link UserController} class to utilize {@link UserController} password related services
+ * {@link StaffController} class provides the allocation of {@link Staff}'s desired operations to the respective methods.
  * Such methods include creating camps, deleting camps, viewing camps, handling enquiries and suggestions
- * It utilizes many services such as ICampStaffService interface to run camp related services to perform
+ * It utilizes many services such as {@link ICampStaffService} interface to run camp related services to perform
  * its desired action.
  */
 public class StaffController extends UserController {

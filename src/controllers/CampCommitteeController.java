@@ -27,12 +27,12 @@ import views.CampCommitteeView;
 import views.MessageView;
 
 /**
- * The {@code CampCommitteeController} class is the main controller for camp committee members.
- * It extends from the {@code UserController} class to utilize {@code UserController} password related services
- * It also extends from the {@code StudentController} class to utilize {@code StudentController} related services,
+ * The {@link CampCommitteeController} class is the main controller for camp committee members.
+ * It extends from the {@link UserController} class to utilize {@link UserController} password related services
+ * It also extends from the {@link StudentController} class to utilize {@link StudentController} related services,
  * as camp committee members can also participate in a regular student's perspective in other camps.
- * CampCommitteeController class provides the allocation of camp committee members' exclusive operations to the respective methods,
- * on top of existing student actions that are inherited from {@code StudentController} class.
+ * {@link CampCommitteeController} class provides the allocation of camp committee members' exclusive operations to the respective methods,
+ * on top of existing student actions that are inherited from {@link StudentController} class.
  * Such exclusive methods include responding to enquiries and generating reports.
  * It utilizes many services such as ICampStudentService interface to run student permitted 
  * camp related services to perform its desired action.

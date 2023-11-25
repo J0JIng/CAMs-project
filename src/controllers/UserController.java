@@ -6,7 +6,7 @@ import interfaces.IUserService;
 import services.UserService;
 
 /**
- * The {@code UserController} class provides methods to interact with user accounts and passwords.
+ * The {@link UserController} class provides methods to interact with user accounts and passwords.
  */
 public class UserController {
 
