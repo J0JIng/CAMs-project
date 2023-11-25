@@ -8,7 +8,7 @@ import models.Staff;
 import models.Student;
 
 /**
- * The {@link IStaffCampService} interface defines a contract for managing
+ * The {@link ICampStaffService} interface defines a contract for managing
  * staff-related camp services.
  */
 public interface ICampStaffService{
@@ -21,7 +21,8 @@ public interface ICampStaffService{
 
     /**
      * Retrieves a list of camps created by the staff with the specified ID.
-     *
+     * 
+     * @param staff the {@link Staff} object specified to obtain from.
      * @return an {@link List} of {@link Camp} objects representing the created camps
      */
     public List<Camp> getStaffCreatedCamps(Staff staff);

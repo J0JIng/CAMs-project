@@ -24,7 +24,6 @@ public interface IFileDataService {
 	/**
 	 * Imports Staff data from the specified file paths.
 	 *
-	 * @param usersFilePath      the file path of the users file
 	 * @param StaffFilePath the file path of the Staffs file
 	 * @return a {@link Map} of {@link Staff} objects with their IDs as keys
 	 */
