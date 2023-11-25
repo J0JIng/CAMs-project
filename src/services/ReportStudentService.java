@@ -5,16 +5,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Map;
-import java.util.Objects;
 
 import enums.UserRole;
 import interfaces.IReportStudentService;
+import interfaces.ICampCommitteeService;
 import models.Camp;
 import models.Student;
-import stores.DataStore;
 
 /**
  * Service class for generating student-related reports by camp committee members.
@@ -28,29 +25,15 @@ public class ReportStudentService implements IReportStudentService {
     private final static CsvFileDataService csvFileDataService = new CsvFileDataService();
 
     /**
+     * An instance of {@link ICampCommitteeService} providing access to camp staff-related operations.
+     * It is kept private to ensure its use is exclusively in services that require it.
+     */
+    private final static ICampCommitteeService campCommitteeService = new CampCommitteeService();
+
+    /**
      * Default constructor for the ReportStudentService class.
      */
     public ReportStudentService(){
-    }
-
-    /**
-     * Retrieves the combined list of registered students and camp committee members for a given camp.
-     *
-     * @param camp The camp for which the combined list is generated.
-     * @return The combined list of registered students and camp committee members.
-     */
-    public List<Student> getCombinedRegisteredList(Camp camp) {
-        Map<String, List<String>> attendeeData = DataStore.getCampToRegisteredStudentData();
-        Map<String, List<String>> committeeData = DataStore.getCampToRegisteredCampCommitteeData();
-        Map<String, Student> studentData = DataStore.getStudentData();
-    
-        return Stream.concat(
-                attendeeData.getOrDefault(camp.getCampInformation().getCampName(), Collections.emptyList()).stream(),
-                committeeData.getOrDefault(camp.getCampInformation().getCampName(), Collections.emptyList()).stream()
-            )
-            .map(studentId -> studentData.get(studentId))
-            .filter(Objects::nonNull) // Filter out null entries using Objects::nonNull
-            .collect(Collectors.toList());
     }
 
     /**
@@ -64,14 +47,17 @@ public class ReportStudentService implements IReportStudentService {
     @Override
     public boolean generateReport(List<String> filter, Camp camp, Map<String, String> filePathsMap) {
 
-        List<Student> combinedRegisteredList = getCombinedRegisteredList(camp);
+        ArrayList<Student> combinedStudentList = Stream.concat(
+            campCommitteeService.getCampAttendeeList(camp).stream(),
+            campCommitteeService.getCampCommitteeList(camp).stream())
+            .collect(Collectors.toCollection(ArrayList::new));
 
         // Get headers for CSV file
         List<String> headers = generateReportHeaderLine(filter);
     
         // Get CSV line for CSV file
         List<String> csvLines = new ArrayList<>();
-        csvLines.add(generateReportCsvLine(filter, camp, combinedRegisteredList));
+        csvLines.add(generateReportCsvLine(filter, camp, combinedStudentList));
         
         // Write to CSV file
         boolean success = csvFileDataService.writeCsvFile(filePathsMap.get("reportCommittee"),headers,csvLines);
@@ -181,7 +167,7 @@ public class ReportStudentService implements IReportStudentService {
             String firstFilter = filter.get(0);
 
             // Sort students based on their names
-            students.sort(Comparator.comparing(Student::getName));
+            //students.sort(Comparator.comparing(Student::getName));
     
             for (Student student : students) {
                 if (!firstStudent) {
@@ -205,14 +191,8 @@ public class ReportStudentService implements IReportStudentService {
                         break;
     
                     case "Attendee":
-                        if (student.getUserRole() == UserRole.STUDENT && filter.size()==1) {
-                            csvLines.append(String.join(",",
-                                    camp.getCampInformation().getCampName(),
-                                    student.getStudentID(),
-                                    student.getName(),
-                                    student.getUserRole().toString(),
-                                    student.getFaculty().toString()));
-                        }else if (student.getUserRole() == UserRole.STUDENT && filter.size()>1 && student.getName().equals(filter.get(1))) {
+                    if (student.getUserRole() == UserRole.STUDENT) {
+                        if (filter.size() == 1 || (filter.size() > 1 && student.getName().equals(filter.get(1)))) {
                             csvLines.append(String.join(",",
                                     camp.getCampInformation().getCampName(),
                                     student.getStudentID(),
@@ -220,8 +200,9 @@ public class ReportStudentService implements IReportStudentService {
                                     student.getUserRole().toString(),
                                     student.getFaculty().toString()));
                         }
-                        break;
-    
+                    }
+                    break;
+                    
                     case "Camp Committee":
                         if (student.getUserRole() == UserRole.COMMITTEE && filter.size()==1) {
                             csvLines.append(String.join(",",
