@@ -116,28 +116,40 @@ public class CampCommitteeController extends StudentController {
 	                case 6:
 	                	viewRegisteredCamps();
 	                    break;
-	                case 7: 
-	                	viewEnquiriesForCamp();
-	                	break;
-	                case 8: 
-	                	respondToEnquiry();
-	                	break;
+	                case 7:
+	                	submitEnquiry();
+	                    break;
+	                case 8:
+	                	viewEnquiries();
+	                    break;
 	                case 9: 
-	                	submitSuggestion();
+	                	editEnquiry();
 	                	break;
 	                case 10: 
+	                	deleteEnquiry();
+	                	break;
+	                case 11: 
+	                	viewEnquiriesForCamp();
+	                	break;
+	                case 12: 
+	                	respondToEnquiry();
+	                	break;
+	                case 13: 
+	                	submitSuggestion();
+	                	break;
+	                case 14: 
 	                	editSuggestion();
 	                	break;
-                    case 11:
+                    case 15:
                         deleteSuggestion();
                         break;
-                    case 12:
+                    case 16:
                         viewSuggestions();
                         break;
-                    case 13:
+                    case 17:
                     	generateReport();
                         break;
-	                case 14: 
+	                case 18: 
 	                	// Change password
 						if (changePassword()) {
                             // Restart session by logging out
