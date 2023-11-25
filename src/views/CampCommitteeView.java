@@ -44,15 +44,19 @@ public class CampCommitteeView extends StudentView {
         ViewUtility.displayInMenuNumbered("Withdraw from Camp", 4);
         ViewUtility.displayInMenuNumbered("View Registered Slots of Camp", 5);
         ViewUtility.displayInMenuNumbered("View Registered Camps", 6);
-        ViewUtility.displayInMenuNumbered("View Enquiries For Camp", 7);
-        ViewUtility.displayInMenuNumbered("Respond to Enquiry", 8);
-        ViewUtility.displayInMenuNumbered("Submit Suggestion", 9);
-        ViewUtility.displayInMenuNumbered("Edit Suggestion", 10);
-        ViewUtility.displayInMenuNumbered("Delete Suggestion", 11);
-        ViewUtility.displayInMenuNumbered("View Suggestion", 12);
-        ViewUtility.displayInMenuNumbered("Generate Report", 13);
-        ViewUtility.displayInMenuNumbered("Change Password", 14);
-        ViewUtility.displayInMenuNumbered("Logout", 15);
+        ViewUtility.displayInMenuNumbered("Submit Enquiry", 7);
+        ViewUtility.displayInMenuNumbered("View Enquiry", 8);
+        ViewUtility.displayInMenuNumbered("Edit Enquiry", 9);
+        ViewUtility.displayInMenuNumbered("Delete Enquiry", 10);
+        ViewUtility.displayInMenuNumbered("View Enquiries For Camp", 11);
+        ViewUtility.displayInMenuNumbered("Respond to Enquiry", 12);
+        ViewUtility.displayInMenuNumbered("Submit Suggestion", 13);
+        ViewUtility.displayInMenuNumbered("Edit Suggestion", 14);
+        ViewUtility.displayInMenuNumbered("Delete Suggestion", 15);
+        ViewUtility.displayInMenuNumbered("View Suggestion", 16);
+        ViewUtility.displayInMenuNumbered("Generate Report", 17);
+        ViewUtility.displayInMenuNumbered("Change Password", 18);
+        ViewUtility.displayInMenuNumbered("Logout", 19);
         System.out.println("╚══════════════════════════════════════════════════════════╝");
         System.out.print("Select an option: ");
 	}

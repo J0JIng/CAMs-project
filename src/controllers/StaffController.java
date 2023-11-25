@@ -427,15 +427,19 @@ public class StaffController extends UserController {
 		if (campEnquiries.isEmpty()) {
 			MessageView.endMessage(scanner, "You have no student enquiries to reply to.", false);
 			return;
+		} else {
+			view.displayEnquiries(campEnquiries);
 		}
 
 		// Get User input
 		Enquiry selectedEnquiry = InputSelectionUtility.getSelectedEnquiry(campEnquiries);
-		String response = InputSelectionUtility.getStringInput("Enter response: ");
-
-		// Respond using EnquiryStudentService
-		boolean success = enquiryStaffService.respondToEnquiry(selectedEnquiry.getEnquiryID(), staff.getStaffID(), MessageStatus.ACCEPTED, response);
-		MessageView.endMessage(scanner, success ? "Enquiry responded successfully" : "Error responding to suggestion", true);
+		if (selectedEnquiry != null) {
+			String response = InputSelectionUtility.getStringInput("Enter response: ");
+	
+			// Respond using EnquiryStudentService
+			boolean success = enquiryStaffService.respondToEnquiry(selectedEnquiry.getEnquiryID(), staff.getStaffID(), MessageStatus.ACCEPTED, response);
+			MessageView.endMessage(scanner, success ? "Enquiry responded successfully" : "Error responding to suggestion", true);
+		}
     }
 
 	/**

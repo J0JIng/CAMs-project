@@ -240,6 +240,7 @@ public class StaffView implements IUserMenuView {
 		} else {
 			System.out.println("╠════════════════════════════════════════════════════════════════════════════════════════════╣");
 			for (Enquiry enquiry : enquiries.values()) {
+				ViewUtility.displayInMenuBulletLarge("Enquiry ID: " + enquiry.getEnquiryID());
 				ViewUtility.displayInMenuBulletLarge("Camp Name: " + enquiry.getCampName());
 				ViewUtility.displayInMenuBulletLarge("Message: " + enquiry.getEnquiryMessage());
 				ViewUtility.displayInMenuBulletLarge("Status: " + enquiry.getEnquiryStatus());

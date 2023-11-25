@@ -510,7 +510,12 @@ public class StudentController extends UserController {
 			int draftChoice = InputSelectionUtility.getIntInput("Do you want to save the enquiry as a draft or submit? (1: Draft, 2: Submit): ");
 			boolean isDraft = (draftChoice == 1);
 
-			MessageView.endMessage(scanner, null, true);
+			if (isDraft) {
+	        	MessageView.endMessage(scanner, "Saved Draft Enquiry with ID: " + selectedEnquiry.getEnquiryID(), true);
+	        	System.out.println();
+	        } else {
+	        	MessageView.endMessage(scanner, "Enquiry submitted with ID: " + selectedEnquiry.getEnquiryID(), true);
+	        }
 			// Edit the selected draft enquiry using EnquiryStudentService
 			return enquiryStudentService.editDraftEnquiry(selectedEnquiry.getEnquiryID(), student.getStudentID(), newMessage, isDraft);
 		}
