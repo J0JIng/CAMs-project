@@ -160,10 +160,11 @@ public class StudentController extends UserController {
 			// Invalid input, exit the registration process
 			return;
 		}
-	
+
+		
 		else if (campValidationService.isUserWithdrawnFromCamp(student, camp)) {
 			// The student has already withdrawn from the camp
-			MessageView.endMessage(scanner,"You are not allowed to register for a camp you have withdrawn!", false);
+			MessageView.endMessage(scanner,"You have withdrawn from Camp!", false);
 			return;
 		}
 	
@@ -187,7 +188,7 @@ public class StudentController extends UserController {
 	
 		else if (campValidationService.isUserCampCommitteeForCamp(student, camp)) {
 			// The student is already registered for the camp as a camp committee member
-			MessageView.endMessage(scanner,"You are already registered for the camp as a camp committee member!", false);
+			MessageView.endMessage(scanner,"You can only be a committee of one camp!!", false);
 			return;
 		}
 	
@@ -227,7 +228,7 @@ public class StudentController extends UserController {
 	
 		else if (campValidationService.isUserCampCommitteeForCamp(student, camp)) {
 			// The student is not allowed to withdraw from a camp they have registered as a camp committee member
-			MessageView.endMessage(scanner, "You are not allowed to withdraw from a camp you have registered as a camp committee member!", false);
+			MessageView.endMessage(scanner, "You are not allowed to withdraw!", false);
 			return;
 		}
 	
@@ -274,7 +275,7 @@ public class StudentController extends UserController {
 		}
 
 		else if(campValidationService.isUserWithdrawnFromCamp(student,camp)){
-			MessageView.endMessage(scanner, "You are not allowed to register for a camp you have withdrawn!", false);
+			MessageView.endMessage(scanner, "You have withdrawn from Camp!", false);
 			return false;
 		}
 
