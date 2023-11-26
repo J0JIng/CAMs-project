@@ -3,12 +3,14 @@ package controllers;
 import java.util.Scanner;
 
 import interfaces.IAuthService;
+import models.User;
 import services.AuthStudentService;
 import services.AuthCampCommitteeService;
 import services.AuthStaffService;
-import views.AuthView;
-import views.MessageView;
+import stores.AuthStore;
 import utility.InputSelectionUtility;
+import views.AuthView;
+
 
 /**
  * {@link AuthController} class provides utility methods for managing user authentication within the application. 
@@ -73,18 +75,16 @@ public class AuthController {
 
             authenticated = authService.login(userID, password);
             if (!authenticated) {
-                // We do not specify whether the userID or password is incorrect to make it more
-                // secure
+                // We do not specify the source of error to make it more secure
                 System.out.println("Credentials invalid! Note that UserID and Password are case-sensitive.\n");
-                System.out.println("(Press Enter to Return)");
+                System.out.println("(Please press enter to return)");
                 sc.nextLine();
             }
 
-            //debug remove when done
-            /*
             if(authenticated){
                 User user = (User) AuthStore.getCurrentUser();
                 if(!user.getIsPasswordChanged()){
+                    // // Change default password once
                     System.out.println("Please Change the Default Password.\n");
                     if(!UserController.changePassword()){
                        System.out.println("Password change cancelled. Returning to main menu");
@@ -93,7 +93,7 @@ public class AuthController {
                     }
                 }
             }
-            */
+            
         } while (!authenticated);
     }
 

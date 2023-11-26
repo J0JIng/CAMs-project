@@ -158,37 +158,36 @@ public class StudentController extends UserController {
 	
 		if (camp == null) {
 			// Invalid input, exit the registration process
-			System.out.println("Input Invalid.");
 			return;
 		}
 	
 		if (campValidationService.isUserWithdrawnFromCamp(student, camp)) {
 			// The student has already withdrawn from the camp
-			System.out.println("You are not allowed to register for a camp you have withdrawn!");
+			MessageView.endMessage(scanner,"You are not allowed to register for a camp you have withdrawn!", false);
 			return;
 		}
 	
 		if (campValidationService.isUserRegisteredWithCamp(student, camp)) {
 			// The student is already registered for the selected camp
-			System.out.println("You are already registered for the camp!");
+			MessageView.endMessage(scanner,"You are already registered for the camp!", false);
 			return;
 		}
 	
 		if (campValidationService.isCampOver(currentDate, camp)) {
 			// The selected camp is already over
-			System.out.println("The camp chosen is over!");
+			MessageView.endMessage(scanner,"The camp chosen is over!", false);
 			return;
 		}
 	
 		if (campValidationService.hasDateClash(student, camp)) {
 			// The selected camp conflicts with a camp the student is already registered for
-			System.out.println("The camp chosen conflicts with a registered camp!");
+			MessageView.endMessage(scanner,"The camp chosen conflicts with a registered camp!", false);
 			return;
 		}
 	
 		if (campValidationService.isUserCampCommitteeForCamp(student, camp)) {
 			// The student is already registered for the camp as a camp committee member
-			System.out.println("You are already registered for the camp as a camp committee member!");
+			MessageView.endMessage(scanner,"You are already registered for the camp as a camp committee member!", false);
 			return;
 		}
 	
@@ -222,13 +221,13 @@ public class StudentController extends UserController {
 	
 		if (campValidationService.isUserWithdrawnFromCamp(student, camp)) {
 			// The student has already withdrawn from the camp
-			System.out.println("You have already withdrawn from the camp!");
+			MessageView.endMessage(scanner,"You have already withdrawn from the camp!", false);
 			return;
 		}
 	
 		if (campValidationService.isUserCampCommitteeForCamp(student, camp)) {
 			// The student is not allowed to withdraw from a camp they have registered as a camp committee member
-			System.out.println("You are not allowed to withdraw from a camp you have registered as a camp committee member!");
+			MessageView.endMessage(scanner, "You are not allowed to withdraw from a camp you have registered as a camp committee member!", false);
 			return;
 		}
 	
@@ -256,7 +255,7 @@ public class StudentController extends UserController {
 
 		// check no camps
 		if (availableCamps.isEmpty()) {
-			System.out.println("There are currently no available camps to join");
+			MessageView.endMessage(scanner, "There are currently no available camps to join", false);
 			return false;
 		}
 
@@ -270,32 +269,32 @@ public class StudentController extends UserController {
         }
 
 		if(campValidationService.isUserRegisteredWithCamp(student,camp)){
-			System.out.println("You are already registered for the camp!");
+			MessageView.endMessage(scanner, "You are already registered for the camp!", false);
 			return false;
 		}
 
 		if(campValidationService.isUserWithdrawnFromCamp(student,camp)){
-			System.out.println("You are not allowed to register for a camp you have withdrawn!");
+			MessageView.endMessage(scanner, "You are not allowed to register for a camp you have withdrawn!", false);
 			return false;
 		}
 
 		if(campValidationService.isCampOver(currentDate,camp)){
-			System.out.println("The camp chosen is over!");
+			MessageView.endMessage(scanner, "The camp chosen is over!", false);
 			return false; 
 		}
 
 		if(campValidationService.hasDateClash(student,camp)){
-			System.out.println("The camp chosen conflict with registered camp !");
+			MessageView.endMessage(scanner, "The camp chosen conflict with registered camp!", false);
 			return false;
 		}
 
 		if(campValidationService.isUserCampCommittee(student)){
-			System.out.println("You are not allowed to register as a Camp committee for more than one camp!");
+			MessageView.endMessage(scanner, "You are not allowed to register as a Camp committee for more than one camp!", false);
 			return false;
 		}
 
 		if(campValidationService.isCampCommitteeFull(camp)){
-			System.out.println("You are not allowed to register as a Camp committee slots is full!");
+			MessageView.endMessage(scanner, "You are not allowed to register as a Camp committee slots is full!", false);
 			return false;
 		}
 		
@@ -430,7 +429,7 @@ public class StudentController extends UserController {
 	 * Submits an enquiry for a selected camp. 
 	 * Allows the user to choose a camp, enter an enquiry message, and decide whether to save the enquiry as a draft or submit it.
 	 */
-	public void submitEnquiry() {
+	protected void submitEnquiry() {
     	Student student = (Student) AuthStore.getCurrentUser();
         
         //Get Data
@@ -466,7 +465,7 @@ public class StudentController extends UserController {
 	 * Draft enquiries are those that have not been submitted, and responded enquiries
 	 * are those that have received a response.
 	 */
-	public void viewEnquiries() {
+	protected void viewEnquiries() {
 		Student student = (Student) AuthStore.getCurrentUser();
 
 		// Get draft, pending and responded enquiries
@@ -485,7 +484,7 @@ public class StudentController extends UserController {
 	 *
 	 * @return {@code true} if editing is successful, {@code false} otherwise.
 	 */
-	public boolean editEnquiry() {
+	protected boolean editEnquiry() {
 		Student student = (Student) AuthStore.getCurrentUser();
 
 		// Get Data
@@ -527,7 +526,7 @@ public class StudentController extends UserController {
 	 * prompts the user to select an enquiry for deletion, and confirms the deletion.
 	 * If confirmed, the selected draft enquiry is deleted using EnquiryStudentService.
 	 */
-	public void deleteEnquiry() {
+	protected void deleteEnquiry() {
 		Student student = (Student) AuthStore.getCurrentUser();
 
 		// Get Data
@@ -535,7 +534,7 @@ public class StudentController extends UserController {
 
 		// Check if there are draft enquiries to delete
 		if (draftEnquiries.isEmpty()) {
-			System.out.println("You have no draft enquiries to delete.");
+			MessageView.endMessage(scanner, "You have no draft enquiries to delete.", false);
 			return;
 		}
 
