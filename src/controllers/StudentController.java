@@ -430,7 +430,7 @@ public class StudentController extends UserController {
 	 * Submits an enquiry for a selected camp. 
 	 * Allows the user to choose a camp, enter an enquiry message, and decide whether to save the enquiry as a draft or submit it.
 	 */
-	public void submitEnquiry() {
+	protected void submitEnquiry() {
     	Student student = (Student) AuthStore.getCurrentUser();
         
         //Get Data
@@ -466,7 +466,7 @@ public class StudentController extends UserController {
 	 * Draft enquiries are those that have not been submitted, and responded enquiries
 	 * are those that have received a response.
 	 */
-	public void viewEnquiries() {
+	protected void viewEnquiries() {
 		Student student = (Student) AuthStore.getCurrentUser();
 
 		// Get draft, pending and responded enquiries
@@ -485,7 +485,7 @@ public class StudentController extends UserController {
 	 *
 	 * @return {@code true} if editing is successful, {@code false} otherwise.
 	 */
-	public boolean editEnquiry() {
+	protected boolean editEnquiry() {
 		Student student = (Student) AuthStore.getCurrentUser();
 
 		// Get Data
@@ -527,7 +527,7 @@ public class StudentController extends UserController {
 	 * prompts the user to select an enquiry for deletion, and confirms the deletion.
 	 * If confirmed, the selected draft enquiry is deleted using EnquiryStudentService.
 	 */
-	public void deleteEnquiry() {
+	protected void deleteEnquiry() {
 		Student student = (Student) AuthStore.getCurrentUser();
 
 		// Get Data
