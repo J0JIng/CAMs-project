@@ -129,19 +129,31 @@ public class CampStaffService implements ICampStaffService {
      * Toggles the visibility of the specified camp to "on" or "off".
      *
      * @param camp the {@link Camp} object to update
+	 * @return true if the toggle is successful, false otherwise
      */
 	@Override
-	public void toggleCampVisibility(Camp camp){
+	public boolean toggleCampVisibility(Camp camp){
 		if (camp != null) {
 			boolean on = InputSelectionUtility.getSelectedBoolean(camp);	
 			if(on) {
+				// Turn on visibility
 				camp.setVisibility(true);
+				System.out.println("Camp visibility set to On.");
+				return true ;
 			}else if(!on && !campValidationService.isCampRegistered(camp)) {
+				// Turn off visibility if No students are registered 
 				camp.setVisibility(false);
+				System.out.println("Camp visibility set to Off.");
+				return true ;
+			}else {
+				System.out.println("Operation Unavailable.");
+				return false ;
 			}
-		} else {
-			return;
-		}
+		}else {
+			// Handle when camp is null
+			System.out.println("Invalid Camp.");
+			return false;
+		} 
 	}
 
 	/**
@@ -180,6 +192,7 @@ public class CampStaffService implements ICampStaffService {
 				return false;
 			}else{
 				campData.remove(campName);
+				DataStore.setCampData(campData);
 				return true;
 			}
 		} else {
