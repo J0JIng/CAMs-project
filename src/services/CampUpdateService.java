@@ -10,7 +10,7 @@ import interfaces.ICampValidationService;
 import models.Camp;
 
 /**
- * The {@code CampUpdateService} class implements the {@link ICampUpdateService} interface
+ * The {@link CampUpdateService} class implements the {@link ICampUpdateService} interface
  * and provides services for updating camp information such as its name, dates fields and availability slots.
  */
 public class CampUpdateService implements ICampUpdateService {
@@ -44,6 +44,8 @@ public class CampUpdateService implements ICampUpdateService {
 	
     /**
      * Updates the name of the camp. Checks for uniqueness with all camps in the system.
+     * @param newCampName the new camp name
+     * @param camp the camp to update
      *
      * @return {@code true} if the update is successful, {@code false} otherwise.
      */
@@ -63,6 +65,8 @@ public class CampUpdateService implements ICampUpdateService {
 	
     /**
      * Updates the start date of the camp. Checks for date validity with start/end/registration date.
+     * @param newStartDate the new start date of the camp.
+     * @param camp the camp to update.
      *
      * @return {@code true} if the update is successful, {@code false} otherwise.
      */
@@ -83,6 +87,8 @@ public class CampUpdateService implements ICampUpdateService {
 	
     /**
      * Updates the end date of the camp. Checks for date validity with start/end/registration date.
+     * @param newEndDate the new end date of the camp.
+     * @param camp the camp to update.
      *
      * @return {@code true} if the update is successful, {@code false} otherwise.
      */
@@ -103,6 +109,8 @@ public class CampUpdateService implements ICampUpdateService {
 	
     /**
      * Updates the registration closing date of the camp. Checks for date validity with start/end/registration date.
+     * @param newRegistrationClosingDate the new registration closing date.
+     * @param camp the camp to update.
      *
      * @return {@code true} if the update is successful, {@code false} otherwise.
      */
@@ -123,6 +131,8 @@ public class CampUpdateService implements ICampUpdateService {
 
     /**
      * Updates the location of the camp.
+     * @param newLocation the new location of the camp.
+     * @param camp the camp to update.
      *
      * @return {@code true} if the update is successful, {@code false} otherwise.
      */
@@ -142,6 +152,8 @@ public class CampUpdateService implements ICampUpdateService {
 	
     /**
      * Updates the total slots of the camp. Checks whether total slots is more than committee slots.
+     * @param newCampTotalSlots the total camp slots.
+     * @param camp the camp to update.
      *
      * @return {@code true} if the update is successful, {@code false} otherwise.
      */
@@ -159,6 +171,8 @@ public class CampUpdateService implements ICampUpdateService {
 	
     /**
      * Updates the committee slots of the camp. Checks that commitee slots are less than total available slots.
+     * @param newCommitteeSlots the new committee member slots.
+     * @param camp the camp to update.
      *
      * @return {@code true} if the update is successful, {@code false} otherwise.
      */
@@ -181,6 +195,8 @@ public class CampUpdateService implements ICampUpdateService {
 	
     /**
      * Updates the description of the camp. Include sanity checks for null descriptions.
+     * @param newDescription the new description for the camp.
+     * @param camp the camp to update.
      *
      * @return {@code true} if the update is successful, {@code false} otherwise.
      */
@@ -200,6 +216,8 @@ public class CampUpdateService implements ICampUpdateService {
 
 	/**
      * Updates the faculty group of the camp.
+     * @param userInput the new faculty access for the camp.
+     * @param camp the camp to update.
      *
      * @return {@code true} if the update is successful, {@code false} otherwise.
      */

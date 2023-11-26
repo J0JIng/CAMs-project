@@ -10,7 +10,7 @@ import models.Student;
 import stores.DataStore;
 
 /**
- * The {@code CampValidationService} class implements the {@link ICampValidationService} interface
+ * The {@link CampValidationService} class implements the {@link ICampValidationService} interface
  * and provides services for validating camp-related operations.
  */
 public class CampValidationService implements ICampValidationService {

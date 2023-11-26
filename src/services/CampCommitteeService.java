@@ -13,6 +13,11 @@ import models.Camp;
 import models.Student;
 import stores.DataStore;
 
+/**
+ * The {@link CampCommitteeService} class implements the {@link ICampCommitteeService} interface and
+ * provides methods for managing committee-related camp services. These services aid in the overall 
+ * committees' desired operations.
+ */
 public class CampCommitteeService implements ICampCommitteeService  {
 
     /**

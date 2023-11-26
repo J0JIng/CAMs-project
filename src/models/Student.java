@@ -4,7 +4,7 @@ import enums.UserRole;
 import enums.FacultyGroups;
 
 /**
- * Represents a {@link Student} in the system, inheriting from the User class.
+ * Represents a {@link Student} in the system, inheriting from the {@link User} class.
  * Stores fields such as the student's ID and committee status to any specific camp
  * Contains methods for the student to use, such as retrieving Student ID.
  */

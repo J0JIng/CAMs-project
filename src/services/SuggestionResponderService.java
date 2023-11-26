@@ -11,7 +11,7 @@ import stores.DataStore;
 
 /**
  * Service class for managing and responding to suggestions related to a camp.
- * Implements the ISuggestionResponderService interface.
+ * Implements the {@link ISuggestionResponderService} interface.
  */
 public class SuggestionResponderService implements ISuggestionResponderService {
 

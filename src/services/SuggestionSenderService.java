@@ -11,7 +11,7 @@ import stores.DataStore;
 
 /**
  * Service class for managing the sending, editing, and retrieval of suggestions.
- * Implements the ISuggestionSenderService interface.
+ * Implements the {@link ISuggestionSenderService} interface.
  */
 public class SuggestionSenderService implements ISuggestionSenderService {
 

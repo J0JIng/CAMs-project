@@ -9,12 +9,12 @@ import stores.DataStore;
 import views.AuthView;
 
 /**
- * The AuthSupervisorService class extends AuthService and
- * provides the login functionality for supervisors.
+ * The {@link AuthStaffService} class extends {@link AuthService} and
+ * provides the login functionality for staff members.
  */
 public class AuthStaffService extends AuthService {
     /**
-     * Constructs an instance of the AuthSupervisorService class.
+     * Constructs an instance of the AuthStaffService class.
      */
     public AuthStaffService() {
         AuthView.staffLoginView();

@@ -14,7 +14,7 @@ import stores.AuthStore;
 import stores.DataStore;
 
 /**
- * The {@code CampStudentService} class implements the {@link ICampStudentService} interface
+ * The {@link CampStudentService} class implements the {@link ICampStudentService} interface
  * and provides services related to camp registration and management.
  */
 public class CampStudentService implements ICampStudentService {
@@ -29,7 +29,7 @@ public class CampStudentService implements ICampStudentService {
 	private final static ICampValidationService campValidationService = new CampValidationService();
 
 	/**
-     * Constructs an instance of the {@code CampStudentService} class.
+     * Constructs an instance of the {@link CampStudentService} class.
      */
 	public CampStudentService(){
 	}
