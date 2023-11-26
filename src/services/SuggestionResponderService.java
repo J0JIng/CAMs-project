@@ -34,7 +34,7 @@ public class SuggestionResponderService implements ISuggestionResponderService {
 
 		// Returns a Map<Integer, Enquiry> with Enquiries having the specified Camp name.
 		Map<Integer, Suggestion> suggestionsForCampMap = suggestionData.values().stream()
-				.filter(suggestion -> campName.equals(suggestion.getCampName()))
+				.filter(suggestion -> campName.equals(suggestion.getCampName()) && suggestion.getSuggestionStatus() != MessageStatus.DRAFT)
 				.collect(Collectors.toMap(Suggestion::getSuggestionID, suggestion -> suggestion));
 
 		return suggestionsForCampMap;

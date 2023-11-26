@@ -248,7 +248,10 @@ public class StaffController extends UserController {
 	        String campName = camp.getCampInformation().getCampName();
 	        boolean success = campStaffService.deleteCamp(camp);
 	        System.out.println(success? "Deleted "+campName+" successfully" :"Error deleting " +campName);
+		}else {
+			System.out.println("No camps selected.");
 		}
+
     }
     
     /**

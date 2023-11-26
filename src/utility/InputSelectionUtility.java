@@ -172,11 +172,9 @@ public class InputSelectionUtility {
     
             switch (choice) {
                 case 0:
-                    System.out.println("Camp visibility set to Off.");
                     return false;
     
                 case 1:
-                    System.out.println("Camp visibility set to On.");
                     return true;
     
                 default:

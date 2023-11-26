@@ -63,7 +63,8 @@ public interface ICampStaffService{
      * Toggles the visibility of a specific camp.
      *
      * @param camp the {@link Camp} object for which to toggle visibility
+     * @return true if the toggle is successful, false otherwise
      */
-    public void toggleCampVisibility(Camp camp);
+    public boolean toggleCampVisibility(Camp camp);
     
 }
