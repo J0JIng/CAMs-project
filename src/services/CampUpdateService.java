@@ -54,6 +54,10 @@ public class CampUpdateService implements ICampUpdateService {
 		List<Camp> existingCamps = campStaffService.getAllCamps();
 		boolean isUniqueName = campValidationService.isValidName(existingCamps, newCampName);
 		if (isUniqueName) {
+			if (newCampName.length() > 20) {
+            	System.out.println("Name is above 20 character limit. Please pick a shorter name.");
+            	return false;
+            }
 			System.out.println("Camp name updated successfully!");
 			camp.getCampInformation().setCampName(newCampName);
 			return true;

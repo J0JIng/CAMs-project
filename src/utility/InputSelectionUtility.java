@@ -209,12 +209,17 @@ public class InputSelectionUtility {
         String campName = "";
 
         while (!isUniqueName) {
-            String campNameCheck = getStringInput("Enter camp name: ");
+            String campNameCheck = getStringInput("Enter camp name (20 characters limit): ");
             campName = campNameCheck;
 
             boolean nameExists = existingCamps.stream()
                     .anyMatch(existingCamp -> existingCamp.getCampInformation().getCampName().equalsIgnoreCase(campNameCheck));
 
+            if (campName.length() > 20) {
+            	System.out.println("Name is above 20 character limit. Please pick a shorter name.");
+            	continue;
+            }
+            
             if (!nameExists) {
                 isUniqueName = true;
             } else {
