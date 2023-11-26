@@ -16,6 +16,8 @@ CAMs is a Java-based Command Line Interface (CLI) application for staff and stud
 
 # Usage
 
+Ensure you have Java 11 or above installed on your Computer. You can check by opening a command terminal and typing java -version.
+
 ## Compiling and Running the project
 ### Using the terminal
 
@@ -73,6 +75,7 @@ That's it! You should now have the project up and running in Eclipse.
 ## Login Credentials
 
 This section contains some login credentials for users with different access levels. The full list is available in `data/staff_list.csv` and `data/student_list.csv` files. The default password is `password`.
+User ID will be the NTU network user ID, that is the part before @ in email address
 
 **Staff:**
 
@@ -84,7 +87,7 @@ Faculty: NBS
 
 # Staff 2
 Name: Alexei
-USERID: OURIN@ntu.edu.sg
+Email: OURIN@ntu.edu.sg
 Faculty: ADM
 ```
 
@@ -98,6 +101,6 @@ Faculty: SCSE
 
 # Student 2
 Name: KOH
-Email: 	KOH1@e.ntu.edu.sg
+Email: KOH1@e.ntu.edu.sg
 Faculty: ADM
 ```
