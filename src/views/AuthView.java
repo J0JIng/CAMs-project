@@ -18,23 +18,23 @@ public class AuthView implements IMenuView {
 	@Override
 	public void displayMenuView() {
 	   //ViewUtility.clearScreen(); // comment out to debug
-	   System.out.println("╔══════════════════════════════════════════════════════════╗");
-        System.out.println("║                                                          ║");   
-	   System.out.println("║             ██████╗ █████╗ ███╗   ███╗███████╗           ║");
-	   System.out.println("║            ██╔════╝██╔══██╗████╗ ████║██╔════╝           ║");
-	   System.out.println("║            ██║     ███████║██╔████╔██║███████╗           ║");
-        System.out.println("║            ██║     ██╔══██║██║╚██╔╝██║╚════██║           ║");
-	   System.out.println("║            ╚██████╗██║  ██║██║ ╚═╝ ██║███████║           ║");
-	   System.out.println("║             ╚═════╝╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝           ║");
-        System.out.println("║                                                          ║");                                      
-        System.out.println("╠══════════════════════════════════════════════════════════╣");
-        System.out.println("║                    - User Selection -                    ║");
-        System.out.println("╠══════════════════════════════════════════════════════════╣");
-        ViewUtility.displayInMenuNumbered("Staff Login", 1);
-        ViewUtility.displayInMenuNumbered("Student Login", 2);
-        ViewUtility.displayInMenuNumbered("Camp Committee Login", 3);
-        ViewUtility.displayInMenuNumbered("Quit", 4);
-        System.out.println("╚══════════════════════════════════════════════════════════╝");
+		System.out.println("╔══════════════════════════════════════════════════════════╗");
+		System.out.println("║                                                          ║");   
+		System.out.println("║             ██████╗ █████╗ ███╗   ███╗███████╗           ║");
+		System.out.println("║            ██╔════╝██╔══██╗████╗ ████║██╔════╝           ║");
+		System.out.println("║            ██║     ███████║██╔████╔██║███████╗           ║");
+		System.out.println("║            ██║     ██╔══██║██║╚██╔╝██║╚════██║           ║");
+		System.out.println("║            ╚██████╗██║  ██║██║ ╚═╝ ██║███████║           ║");
+		System.out.println("║             ╚═════╝╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝           ║");
+		System.out.println("║                                                          ║");                                      
+		System.out.println("╠══════════════════════════════════════════════════════════╣");
+		System.out.println("║                    - User Selection -                    ║");
+		System.out.println("╠══════════════════════════════════════════════════════════╣");
+		ViewUtility.displayInMenuNumbered("Staff Login", 1);
+		ViewUtility.displayInMenuNumbered("Student Login", 2);
+		ViewUtility.displayInMenuNumbered("Camp Committee Login", 3);
+		ViewUtility.displayInMenuNumbered("Quit", 4);
+		System.out.println("╚══════════════════════════════════════════════════════════╝");
 	}
 	
 	/**
