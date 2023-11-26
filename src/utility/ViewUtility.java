@@ -21,6 +21,14 @@ public class ViewUtility {
      * @param index The numbered index.
      */
     public static void displayInMenuNumbered(String s, int index) {
+    	if (53- s.length() < 0) {
+            if (index > 9) {
+                System.out.println("║[" + (index) + "] " + s + "║");
+            } else {
+                System.out.println("║[" + (index) + "] " + s + "║");
+            }
+            return;
+        }
     	if (index > 9) {
     		System.out.println("║[" + (index) + "] " + s + " ".repeat(53- s.length()) + "║");
     	} else {
@@ -34,6 +42,10 @@ public class ViewUtility {
      * @param s The string in the entry.
      */
     public static void displayInMenuBullet(String s) {
+    	if (56- s.length() < 0) {
+    		System.out.println("║- " + s + "║");
+            return;
+        }
     	System.out.println("║- " + s + " ".repeat(56- s.length()) + "║");
     }
     
@@ -43,6 +55,10 @@ public class ViewUtility {
      * @param s The string in the entry.
      */
     public static void displayInMenuBulletLarge(String s) {
+    	if (90- s.length() < 0) {
+    		System.out.println("║- " + s + "║");
+            return;
+        }
     	System.out.println("║- " + s + " ".repeat(90- s.length()) + "║");
     }
     
@@ -54,6 +70,10 @@ public class ViewUtility {
     public static void displayInMenuCentered(String s) {
 		int totalLength = s.length();
 		int spaces = (58 - totalLength) / 2;
+		if ((58 - totalLength - spaces) < 0) {
+			System.out.println("║" + s + "║");
+			return;
+		}
     	System.out.println("║" + " ".repeat(spaces) + s + " ".repeat(58 - totalLength - spaces) + "║");
     }
     
@@ -65,6 +85,10 @@ public class ViewUtility {
     public static void displayInLargeMenuCentered(String s) {
 		int totalLength = s.length();
 		int spaces = (92 - totalLength) / 2;
+		if ((92 - totalLength - spaces) < 0) {
+			System.out.println("║" + s + "║");
+			return;
+		}
     	System.out.println("║" + " ".repeat(spaces) + s + " ".repeat(92 - totalLength - spaces) + "║");
     }
     
@@ -79,6 +103,10 @@ public class ViewUtility {
     public static void displayInMenuNumberedTwoColumns(String s, int index, int colValue1 , int colValue2) {
     	System.out.println("╠════════════════════════════════════════════════╬═════════╣");
     	String val = colValue1 + "/" + colValue2;
+    	if ((40- s.length() < 0) || (8-val.length() < 0)) {
+    		System.out.println("║[" + (index) + "] " + s + "║ " + val + "║");
+    		return;
+    	}
     	System.out.println("║[" + (index) + "] " + s + " ".repeat(44- s.length()) + "║ " + val + " ".repeat(8-val.length()) + "║");
     }
 }
