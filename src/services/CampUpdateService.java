@@ -1,5 +1,6 @@
 package services;
 
+import java.util.Map;
 import java.util.List;
 import java.util.Date;
 
@@ -8,6 +9,7 @@ import interfaces.ICampStaffService;
 import interfaces.ICampUpdateService;
 import interfaces.ICampValidationService;
 import models.Camp;
+import stores.DataStore;
 
 /**
  * The {@link CampUpdateService} class implements the {@link ICampUpdateService} interface
@@ -58,8 +60,16 @@ public class CampUpdateService implements ICampUpdateService {
             	System.out.println("Name is above 20 character limit. Please pick a shorter name.");
             	return false;
             }
-			System.out.println("Camp name updated successfully!");
+			Map <String, Camp> campData = DataStore.getCampData();
+			String oldCampName = camp.getCampInformation().getCampName();
+			// Remove the camp from the map with the old name
+			campData.remove(oldCampName);
+			// Set the new name for the camp
 			camp.getCampInformation().setCampName(newCampName);
+			// Add the camp back to the map with the new name
+			campData.put(newCampName, camp);
+			// Save into DataStore
+			DataStore.setCampData(campData);
 			return true;
 		}else{
 			System.out.println("Error updating camp name: Camp with the same name already exists. Please choose a different name.");
