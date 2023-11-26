@@ -4,10 +4,10 @@ import interfaces.IAuthService;
 import models.User;
 import stores.AuthStore;
 
-/**  
- * The {@link AuthService}  class is an abstract class that implements the
- * {@link IAuthService} interface. It provides basic authentication functionalities 
- * for user login and logout.
+/**
+ * The {@link AuthService} class is an abstract class that implements the
+ * {@link IAuthService} interface.
+ * It provides basic authentication functionalities for user login and logout.
  */
 public abstract class AuthService implements IAuthService {
     

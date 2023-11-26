@@ -34,7 +34,7 @@ import views.MessageView;
  * {@link CampCommitteeController} class provides the allocation of camp committee members' exclusive operations 
  * to the respective methods, on top of existing student actions that are inherited from {@link StudentController} class.
  * Such exclusive methods include responding to enquiries and generating reports.
- * It utilizes many services such as ICampStudentService interface to run student permitted 
+ * It utilizes many services such as {@link ICampStudentService} interface to run student permitted 
  * camp related services to perform its desired action.
  */
 public class CampCommitteeController extends StudentController {
