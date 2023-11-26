@@ -161,31 +161,31 @@ public class StudentController extends UserController {
 			return;
 		}
 	
-		if (campValidationService.isUserWithdrawnFromCamp(student, camp)) {
+		else if (campValidationService.isUserWithdrawnFromCamp(student, camp)) {
 			// The student has already withdrawn from the camp
 			MessageView.endMessage(scanner,"You are not allowed to register for a camp you have withdrawn!", false);
 			return;
 		}
 	
-		if (campValidationService.isUserRegisteredWithCamp(student, camp)) {
+		else if (campValidationService.isUserRegisteredWithCamp(student, camp)) {
 			// The student is already registered for the selected camp
 			MessageView.endMessage(scanner,"You are already registered for the camp!", false);
 			return;
 		}
 	
-		if (campValidationService.isCampOver(currentDate, camp)) {
+		else if (campValidationService.isCampOver(currentDate, camp)) {
 			// The selected camp is already over
 			MessageView.endMessage(scanner,"The camp chosen is over!", false);
 			return;
 		}
 	
-		if (campValidationService.hasDateClash(student, camp)) {
+		else if (campValidationService.hasDateClash(student, camp)) {
 			// The selected camp conflicts with a camp the student is already registered for
 			MessageView.endMessage(scanner,"The camp chosen conflicts with a registered camp!", false);
 			return;
 		}
 	
-		if (campValidationService.isUserCampCommitteeForCamp(student, camp)) {
+		else if (campValidationService.isUserCampCommitteeForCamp(student, camp)) {
 			// The student is already registered for the camp as a camp committee member
 			MessageView.endMessage(scanner,"You are already registered for the camp as a camp committee member!", false);
 			return;
@@ -219,13 +219,13 @@ public class StudentController extends UserController {
 			return;
 		}
 	
-		if (campValidationService.isUserWithdrawnFromCamp(student, camp)) {
+		else if (campValidationService.isUserWithdrawnFromCamp(student, camp)) {
 			// The student has already withdrawn from the camp
 			MessageView.endMessage(scanner,"You have already withdrawn from the camp!", false);
 			return;
 		}
 	
-		if (campValidationService.isUserCampCommitteeForCamp(student, camp)) {
+		else if (campValidationService.isUserCampCommitteeForCamp(student, camp)) {
 			// The student is not allowed to withdraw from a camp they have registered as a camp committee member
 			MessageView.endMessage(scanner, "You are not allowed to withdraw from a camp you have registered as a camp committee member!", false);
 			return;
@@ -268,32 +268,32 @@ public class StudentController extends UserController {
             return false;
         }
 
-		if(campValidationService.isUserRegisteredWithCamp(student,camp)){
+		else if(campValidationService.isUserRegisteredWithCamp(student,camp)){
 			MessageView.endMessage(scanner, "You are already registered for the camp!", false);
 			return false;
 		}
 
-		if(campValidationService.isUserWithdrawnFromCamp(student,camp)){
+		else if(campValidationService.isUserWithdrawnFromCamp(student,camp)){
 			MessageView.endMessage(scanner, "You are not allowed to register for a camp you have withdrawn!", false);
 			return false;
 		}
 
-		if(campValidationService.isCampOver(currentDate,camp)){
+		else if(campValidationService.isCampOver(currentDate,camp)){
 			MessageView.endMessage(scanner, "The camp chosen is over!", false);
 			return false; 
 		}
 
-		if(campValidationService.hasDateClash(student,camp)){
+		else if(campValidationService.hasDateClash(student,camp)){
 			MessageView.endMessage(scanner, "The camp chosen conflict with registered camp!", false);
 			return false;
 		}
 
-		if(campValidationService.isUserCampCommittee(student)){
+		else if(campValidationService.isUserCampCommittee(student)){
 			MessageView.endMessage(scanner, "You are not allowed to register as a Camp committee for more than one camp!", false);
 			return false;
 		}
 
-		if(campValidationService.isCampCommitteeFull(camp)){
+		else if(campValidationService.isCampCommitteeFull(camp)){
 			MessageView.endMessage(scanner, "You are not allowed to register as a Camp committee slots is full!", false);
 			return false;
 		}

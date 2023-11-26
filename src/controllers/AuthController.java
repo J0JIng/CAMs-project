@@ -81,6 +81,7 @@ public class AuthController {
                 sc.nextLine();
             }
 
+            /* 
             if(authenticated){
                 User user = (User) AuthStore.getCurrentUser();
                 if(!user.getIsPasswordChanged()){
@@ -93,6 +94,7 @@ public class AuthController {
                     }
                 }
             }
+            */
             
         } while (!authenticated);
     }

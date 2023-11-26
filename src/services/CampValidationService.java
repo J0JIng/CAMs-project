@@ -40,7 +40,15 @@ public class CampValidationService implements ICampValidationService {
     @Override
 	public boolean hasDateClash(Student student, Camp newCamp) {
 		List<Camp> registeredCamps = campStudentService.getRegisteredCamps();
-		return registeredCamps.stream().anyMatch(camp -> dateClashExists(camp, newCamp));
+		//System.out.println("Number of registered camps: " + registeredCamps.size());
+	
+		boolean hasClash = registeredCamps.stream().anyMatch(camp -> {
+			boolean clash = dateClashExists(camp, newCamp);
+			System.out.println("Date clash with " + camp.getCampInformation().getCampName() + ": " + clash);
+			return clash;
+		});
+	
+		return hasClash;
 	}
 
 	/**
@@ -52,14 +60,20 @@ public class CampValidationService implements ICampValidationService {
      */
     @Override
 	public boolean dateClashExists(Camp camp1, Camp camp2) {
-    	Date camp1StartDate = camp1.getCampInformation().getCampStartDate();
-    	Date camp1EndDate = camp1.getCampInformation().getCampEndDate();
-    	Date camp2StartDate = camp2.getCampInformation().getCampStartDate();
-    	Date camp2EndDate = camp2.getCampInformation().getCampEndDate();
+		Date camp1StartDate = camp1.getCampInformation().getCampStartDate();
+		Date camp1EndDate = camp1.getCampInformation().getCampEndDate();
+		Date camp2StartDate = camp2.getCampInformation().getCampStartDate();
+		Date camp2EndDate = camp2.getCampInformation().getCampEndDate();
 
-    	// Check if camp1 ends before camp2 starts or camp1 starts after camp2 ends
-    	return camp1StartDate.before(camp2EndDate) && camp1EndDate.after(camp2StartDate);
+		// debug
+		//System.out.println("Camp1: " + camp1.getCampInformation().getCampName() + " StartDate: " + camp1StartDate + " EndDate: " + camp1EndDate);
+		//System.out.println("Camp2: " + camp2.getCampInformation().getCampName() + " StartDate: " + camp2StartDate + " EndDate: " + camp2EndDate);
+
+		// Check if camp1 ends before camp2 starts or camp1 starts after camp2 ends
+		return (camp1EndDate.equals(camp2StartDate) || camp1EndDate.after(camp2StartDate)) ||
+		(camp1StartDate.equals(camp2EndDate) || camp1StartDate.before(camp2EndDate));
 	}
+
 
 	/**
 	 * Checks if the {@link Camp} is over based on the current date and the {@link Camp}'s registration closing date.
