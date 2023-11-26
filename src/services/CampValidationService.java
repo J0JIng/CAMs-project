@@ -10,20 +10,20 @@ import models.Student;
 import stores.DataStore;
 
 /**
- * The {@code CampValidationService} class implements the {@link ICampValidationService} interface
+ * The {@link CampValidationService} class implements the {@link ICampValidationService} interface
  * and provides services for validating camp-related operations.
  */
 public class CampValidationService implements ICampValidationService {
 
 	/**
-     * The {@code campStudentService} field represents an instance of
+     * The {@link campStudentService} field represents an instance of
      * {@link ICampStudentService} used for running camp student related services.
      * It is kept private to ensure its use is exclusively in services that require it.
      */
     private final static ICampStudentService campStudentService = new CampStudentService();
 
     /**
-     * Constructs an instance of the {@code CampValidationService} class.
+     * Constructs an instance of the {@link CampValidationService} class.
      */
     public CampValidationService(){
     }

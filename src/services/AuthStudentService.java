@@ -9,12 +9,12 @@ import views.AuthView;
 import enums.UserRole;
 
 /**
- * The {@code AuthStudentService} class extends {@link AuthService} and
+ * The {@link AuthStudentService} class extends {@link AuthService} and
  * provides the login functionality for students.
  */
 public class AuthStudentService extends AuthService {
     /**
-     * Constructs an instance of the {@code AuthStudentService} class.
+     * Constructs an instance of the {@link AuthStudentService} class.
      */
     public AuthStudentService() {
         AuthView.studentLoginView();

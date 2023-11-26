@@ -14,13 +14,13 @@ import stores.AuthStore;
 import stores.DataStore;
 
 /**
- * The {@code CampStudentService} class implements the {@link ICampStudentService} interface
+ * The {@link CampStudentService} class implements the {@link ICampStudentService} interface
  * and provides services related to camp registration and management.
  */
 public class CampStudentService implements ICampStudentService {
 	
 	/**
-	 * The {@code campValidationService} field represents an instance of
+	 * The {@link campValidationService} field represents an instance of
 	 * {@link ICampValidationService} used for validating camp-related operations.
 	 * It is initialized with an instance of {@link CampValidationService}.
 	 * It is stored as a private variable to prevent direct usage of validation services
@@ -29,7 +29,7 @@ public class CampStudentService implements ICampStudentService {
 	private final static ICampValidationService campValidationService = new CampValidationService();
 
 	/**
-     * Constructs an instance of the {@code CampStudentService} class.
+     * Constructs an instance of the {@link CampStudentService} class.
      */
 	public CampStudentService(){
 	}

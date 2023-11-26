@@ -10,13 +10,13 @@ import models.Enquiry;
 import stores.DataStore;
 
 /**
- * The {@code EnquirySenderService} class implements the {@link IEnquirySenderService} interface
+ * The {@link EnquirySenderService} class implements the {@link IEnquirySenderService} interface
  * and provides services for retrieving enquiries on varying statuses, creating, editing, and deleting enquiries.
  */
 public class EnquirySenderService implements IEnquirySenderService {
 
 	/**
-     * Constructs an instance of the {@code EnquirySenderService} class.
+     * Constructs an instance of the {@link EnquirySenderService} class.
      */
     public EnquirySenderService(){
     }

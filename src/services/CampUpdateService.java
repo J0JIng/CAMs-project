@@ -10,32 +10,32 @@ import interfaces.ICampValidationService;
 import models.Camp;
 
 /**
- * The {@code CampUpdateService} class implements the {@link ICampUpdateService} interface
+ * The {@link CampUpdateService} class implements the {@link ICampUpdateService} interface
  * and provides services for updating camp information such as its name, dates fields and availability slots.
  */
 public class CampUpdateService implements ICampUpdateService {
 
 	/**
-     * The {@code campStaffService} field represents an instance of
+     * The {@link campStaffService} field represents an instance of
      * {@link ICampStaffService} used for running camp staff related services.
      * It is kept private to ensure its use is exclusively in services that require it.
      */
     private final static ICampStaffService campStaffService = new CampStaffService();
     
     /**
-     * The {@code campValidationService} field represents an instance of
+     * The {@link campValidationService} field represents an instance of
      * {@link ICampValidationService} used for validating camp-related operations.
      * It is kept private to ensure its use is exclusively in services that require it.
      */
     private final static ICampValidationService campValidationService = new CampValidationService();
     
     /**
-     * The {@code MAX_COMMITTEE_SLOTS} constant represents the maximum number of committee slots allowed which is set to 10.
+     * The {@link MAX_COMMITTEE_SLOTS} constant represents the maximum number of committee slots allowed which is set to 10.
      */
     private final static int MAX_COMMITTEE_SLOTS = 10; 
 
     /**
-     * Constructs an instance of the {@code CampUpdateService} class.
+     * Constructs an instance of the {@link CampUpdateService} class.
      */
     public CampUpdateService() {
     }

@@ -18,7 +18,7 @@ import stores.DataStore;
 import utility.InputSelectionUtility;
 
 /**
- * The {@code CampStaffService} class implements the {@link ICampStaffService} interface and
+ * The {@link CampStaffService} class implements the {@link ICampStaffService} interface and
  * provides methods for managing staff-related camp services. These services aid in the overall 
  * staffs' desired operations. Services include creating/deleting camps and toggling visibility.
  */
@@ -34,7 +34,7 @@ public class CampStaffService implements ICampStaffService {
 	private final static ICampValidationService campValidationService = new CampValidationService();
 
 	/**
-     * Constructs an instance of the {@code CampStaffService} class.
+     * Constructs an instance of the {@link CampStaffService} class.
      */
 	public CampStaffService(){
 	}

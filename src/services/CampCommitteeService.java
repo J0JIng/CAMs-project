@@ -14,14 +14,14 @@ import models.Student;
 import stores.DataStore;
 
 /**
- * The {@code CampCommitteeService} class implements the {@link ICampCommitteeService} interface and
+ * The {@link CampCommitteeService} class implements the {@link ICampCommitteeService} interface and
  * provides methods for managing Camp Committee-related camp services. These services aid in the overall 
  * Camp Committee' desired operations.
  */
 public class CampCommitteeService implements ICampCommitteeService  {
 
     /**
-     * Constructs an instance of the {@code CampCommitteeService} class.
+     * Constructs an instance of the {@link CampCommitteeService} class.
      */
     public CampCommitteeService(){
 	}

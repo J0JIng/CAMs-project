@@ -10,12 +10,12 @@ import stores.DataStore;
 import views.AuthView;
 
 /**
- * The {@code AuthStudentService} class extends {@link AuthService} and
+ * The {@link AuthStudentService} class extends {@link AuthService} and
  * provides the login functionality for students.
  */
 public class AuthCampCommitteeService extends AuthService {
     /**
-     * Constructs an instance of the {@code AuthStudentService} class.
+     * Constructs an instance of the {@link AuthStudentService} class.
      */
     public AuthCampCommitteeService() {
         AuthView.campCommitteeLoginView();

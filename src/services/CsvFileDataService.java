@@ -16,7 +16,7 @@ import models.Student;
 import models.Staff;
 
 /**
- * The {@code CsvFileDataService} class implements the {@link IFileDataService}
+ * The {@link CsvFileDataService} class implements the {@link IFileDataService}
  * interface and provides
  * methods for reading and writing data from/to CSV files.
  */
@@ -34,7 +34,7 @@ public class CsvFileDataService implements IFileDataService {
 
 
 	/**
-	 * Constructs an instance of the {@code CsvFileDataService} class.
+	 * Constructs an instance of the {@link CsvFileDataService} class.
 	 */
     public CsvFileDataService() {}
 

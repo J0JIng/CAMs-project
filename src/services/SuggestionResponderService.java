@@ -10,13 +10,13 @@ import models.Suggestion;
 import stores.DataStore;
 
 /**
- * {@code SuggestionResponderService} class for managing and responding to suggestions related to a camp.
+ * {@link SuggestionResponderService} class for managing and responding to suggestions related to a camp.
  * Implements the {@link ISuggestionResponderService} interface.
  */
 public class SuggestionResponderService implements ISuggestionResponderService {
 
 	/**
-     * Default constructor for the {@code SuggestionResponderService} class.
+     * Default constructor for the {@link SuggestionResponderService} class.
      */
     public SuggestionResponderService(){
     }

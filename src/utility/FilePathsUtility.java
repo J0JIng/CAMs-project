@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * The FilePathsUtils class provides utility methods for managing file
+ * The {@link FilePathsUtils} class provides utility methods for managing file
  * paths within the application. It contains a method to return a mapping of CSV
  * file paths for various data types.
  */
@@ -15,7 +15,11 @@ public class FilePathsUtility {
      */ 
 	private static Map<String, String> filePathsMap = new HashMap<String, String>();
 
-    private FilePathsUtility(){}
+	/**
+	 * Private constructor {@link FilePathsUtils} to prevent instantiation of the class.
+	 */
+    private FilePathsUtility(){
+	}
 
 	/**
 	 * Returns a mapping of CSV file paths for various data types used in the

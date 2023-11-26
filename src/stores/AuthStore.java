@@ -3,7 +3,7 @@ package stores;
 import models.User;
 
 /**
- * The {@code AuthStore} class provides utility methods for managing the current
+ * The {@link AuthStore} class provides utility methods for managing the current
  * authenticated user within the application. It offers methods to set and get
  * the current user, as well as check if the user is logged in.
  */
@@ -14,7 +14,7 @@ public class AuthStore {
 	private static User currentUser;
 
 	/**
-	 * Private constructor {@code AuthStore} to prevent instantiation of the class.
+	 * Private constructor {@link AuthStore} to prevent instantiation of the class.
 	 */
 	private AuthStore() {
 	}

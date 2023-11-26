@@ -16,7 +16,7 @@ import models.Camp;
 import models.Student;
 
 /**
- * The {@code ReportStaffService} class implements the {@link IReportStaffService} interface
+ * The {@link ReportStaffService} class implements the {@link IReportStaffService} interface
  * and provides services for generating various reports related to camps, performance, and enquiries.
  * It also contains helper functions to generate headers lines for the reports and csv.
  */
@@ -41,7 +41,7 @@ public class ReportStaffService implements IReportStaffService {
     private final static IEnquiryResponderService enquiryResponderService = new EnquiryResponderService();
 
     /**
-     * Constructs an instance of the {@code ReportStaffService} class.
+     * Constructs an instance of the {@link ReportStaffService} class.
      */
     public ReportStaffService(){
     }

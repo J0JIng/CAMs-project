@@ -6,14 +6,14 @@ import stores.AuthStore;
 import stores.DataStore;
 
 /**
- * The {@code UserService} class implements the {@link IUserService} interface
+ * The {@link UserService} class implements the {@link IUserService} interface
  * and provides functionality related to user management, such as changing
  * passwords.
  */
 public class UserService implements IUserService {
 
     /**
-     * Constructs an instance of the {@code UserService} class.
+     * Constructs an instance of the {@link UserService} class.
      */
     public UserService() {
     };

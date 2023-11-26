@@ -24,10 +24,25 @@ import services.CampUpdateService;
  */
 public class InputSelectionUtility {
 
+
+    /**
+	 * Scanner object for receiving input from the camp committee member.
+	 */
     private static final Scanner sc = new Scanner(System.in);
+
+    /**
+     * The {@link MAX_COMMITTEE_SLOTS} constant represents the maximum number of committee slots allowed which is set to 10.
+     */
     private static final int MAX_COMMITTEE_SLOTS = 10;  
+
+    /**
+	 * Service for validating camp-related operations for the camp committee.
+	 */
     private static final ICampUpdateService campUpdateService = new CampUpdateService();
 
+    /**
+	 * Private constructor  {@link InputSelectionUtility} to prevent instantiation of the class.
+	 */
     public InputSelectionUtility() {
     };
 

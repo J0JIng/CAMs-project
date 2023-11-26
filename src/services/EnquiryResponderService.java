@@ -10,14 +10,14 @@ import models.Enquiry;
 import stores.DataStore;
 
 /**
- * The {@code EnquiryResponderService} class implements the {@link IEnquiryResponderService} interface
+ * The {@link EnquiryResponderService} class implements the {@link IEnquiryResponderService} interface
  * and provides services for handling enquiries to support responding to enquiries related to a camp.
  */
 
 public class EnquiryResponderService implements IEnquiryResponderService {
 
 	/**
-     * Constructs an instance of the {@code EnquiryResponderService} class.
+     * Constructs an instance of the {@link EnquiryResponderService} class.
      */
 	public EnquiryResponderService() {
 	}

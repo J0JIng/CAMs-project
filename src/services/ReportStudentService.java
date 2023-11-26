@@ -14,7 +14,7 @@ import models.Camp;
 import models.Student;
 
 /**
- * {@code ReportStudentService} class for generating student-related reports by camp committee members.
+ * {@link ReportStudentService} class for generating student-related reports by camp committee members.
  * implents the {@link IReportStudentService} interface.
  */
 public class ReportStudentService implements IReportStudentService {
@@ -32,7 +32,7 @@ public class ReportStudentService implements IReportStudentService {
     private final static ICampCommitteeService campCommitteeService = new CampCommitteeService();
 
     /**
-     * Default constructor for the {@code ReportStudentService} class.
+     * Default constructor for the {@link ReportStudentService} class.
      */
     public ReportStudentService(){
     }
