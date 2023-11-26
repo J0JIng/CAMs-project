@@ -12,7 +12,7 @@ import models.Enquiry;
 import models.Suggestion; 
 
 /**
- * The {@link DataStore} class is responsible for storing and managing various types of data related to the application.
+ * The {@code DataStore} class is responsible for storing and managing various types of data related to the application.
  * Data range from student, staff objects, camp registration/withdrawal data, enquiry and suggestion data
  * It provides methods to initialize, save, and retrieve data.
  */
@@ -84,7 +84,7 @@ public class DataStore {
     private static Map<String, List<String>> campToRegisteredCampCommitteeData = new HashMap<>();
 
 	/**
-	 * Private constructor to prevent instantiation of the class.
+	 * Private constructor  {@code DataStore} to prevent instantiation of the class.
 	 */
 	private DataStore() {}
 
