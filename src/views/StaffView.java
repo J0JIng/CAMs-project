@@ -31,7 +31,7 @@ public class StaffView implements IUserMenuView {
 	 * The menu allows user to choose an option by entering the option number.
 	 */
 	public void displayMenuView() {
-		ViewUtility.clearScreen();
+		//ViewUtility.clearScreen();
 
 		System.out.println("╔══════════════════════════════════════════════════════════╗");
         System.out.println("║                                                          ║");   

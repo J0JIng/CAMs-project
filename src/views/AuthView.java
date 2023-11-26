@@ -17,7 +17,7 @@ public class AuthView implements IMenuView {
      */
 	@Override
 	public void displayMenuView() {
-	   ViewUtility.clearScreen(); // comment out to debug
+	   //ViewUtility.clearScreen(); // comment out to debug
 	   System.out.println("╔══════════════════════════════════════════════════════════╗");
         System.out.println("║                                                          ║");   
 	   System.out.println("║             ██████╗ █████╗ ███╗   ███╗███████╗           ║");
