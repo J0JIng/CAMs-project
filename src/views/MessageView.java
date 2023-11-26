@@ -36,6 +36,7 @@ public class MessageView {
         	System.out.println("(Press Enter to Return)");
         }
 		sc.nextLine();
+		ViewUtility.clearScreen();
     }
     
     /**

@@ -7,6 +7,7 @@ import services.AuthStudentService;
 import services.AuthCampCommitteeService;
 import services.AuthStaffService;
 import views.AuthView;
+import views.MessageView;
 import utility.InputSelectionUtility;
 
 /**
@@ -75,6 +76,8 @@ public class AuthController {
                 // We do not specify whether the userID or password is incorrect to make it more
                 // secure
                 System.out.println("Credentials invalid! Note that UserID and Password are case-sensitive.\n");
+                System.out.println("(Press Enter to Return)");
+                sc.nextLine();
             }
 
             //debug remove when done
