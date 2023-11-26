@@ -16,6 +16,60 @@ CAMs is a Java-based Command Line Interface (CLI) application for staff and stud
 
 # Usage
 
+## Compiling and Running the project
+### Using the terminal
+
+These setup instructions will guide you through the process of cloning the repository, navigating to the cloned repository, compiling the project, and running the project in your terminal.
+
+1. Open your terminal
+
+2. Clone the repository by entering the following command:
+
+   ```bash
+   git clone https://github.com/J0JIng/SC2002-Project.git
+   
+   ```
+
+3. Navigate to the cloned repository by entering the following command:
+
+   ```bash
+   cd SC2002-Project
+   ```
+
+4. Compile the project by entering the following command:
+
+   ```bash
+   javac -encoding UTF-8 -cp src -d bin src/main/CAMs.java
+   ```
+
+5. Run the project by entering the following command:
+
+   ```bash
+   java -cp bin main.CAMs
+   ```
+
+Congratulations, you have successfully cloned, compiled, and run the CAMs Application!
+
+### Using Eclipse
+
+If you prefer to use Eclipse as your IDE, you can also set up the project there. Here are the steps you need to follow:
+
+1. Open Eclipse
+2. Click on `File` > `Import` > `Git` > `Projects from Git` > `Clone URI`
+3. In the `Clone URI` window, paste the following URL:
+
+   ```bash
+   https://github.com/J0JIng/SC2002-Project.git
+   ```
+
+4. Click `Next` and follow the prompts to finish the cloning process
+5. Once the project is cloned, right-click on the project folder and select `Properties`
+6. In the `Properties` window, click on `Java Build Path` > `Source` > `Add Folder`
+7. Select the `src` folder from the project directory and click `OK`
+8. Now you can run the project by right-clicking on `CAMs.java` in the `src/main` folder and selecting `Run As` > `Java Application`
+
+That's it! You should now have the project up and running in Eclipse.
+
 ## Login Credentials
 
 This section contains some login credentials for users with different access levels. The full list is available in `data/staff_list.csv` and `data/student_list.csv` files. The default password is `password`.
