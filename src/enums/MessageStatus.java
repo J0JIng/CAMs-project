@@ -1,7 +1,7 @@
 package enums;
 
 /**
- * {@link Enum} representing different Message Status for {@link Enquiry} and {@link Suggestion}s.
+ * {@link Enum} representing different Message Status for Enquiry and Suggestions.
  * Each constant represents a state of the message.
  */
 public enum MessageStatus{
