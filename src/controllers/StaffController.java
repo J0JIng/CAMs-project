@@ -69,7 +69,7 @@ public class StaffController extends UserController {
     private static final StaffView view = new StaffView();
 
     /**
-     * Constructs a new {@code StaffController}.
+     * Constructs a new {@link StaffController}.
      */
     public StaffController() {
     }

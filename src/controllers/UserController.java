@@ -10,11 +10,11 @@ import services.UserService;
  */
 public class UserController {
 
-    /** The {@code Scanner} object for reading user input. */
+    /** The {@link Scanner} object for reading user input. */
     private static final Scanner sc = new Scanner(System.in);
 
     /**
-     * Constructs a new {@code UserController}.
+     * Constructs a new {@link UserController}.
      */
     public UserController() {}
 
