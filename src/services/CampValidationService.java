@@ -85,6 +85,10 @@ public class CampValidationService implements ICampValidationService {
 		Map<String, List<String>> registeredStudentData = DataStore.getCampToRegisteredStudentData();
 		String campName = camp.getCampInformation().getCampName();
 		int maxCampSlots = camp.getCampInformation().getCampTotalSlots();
+		
+		if (maxCampSlots == 0) {
+			return true;
+		}
 
 		return registeredStudentData.containsKey(campName) && registeredStudentData.get(campName).size() >= maxCampSlots;
 	}
@@ -102,6 +106,10 @@ public class CampValidationService implements ICampValidationService {
 		String campName = camp.getCampInformation().getCampName();
 		int maxCampCommitteeSlots = camp.getCampInformation().getCampCommitteeSlots();
 
+		if (maxCampCommitteeSlots == 0) {
+			return true;
+		}
+		
 		return registeredCampCommitteeData.containsKey(campName) && registeredCampCommitteeData.get(campName).size() >= maxCampCommitteeSlots;
 	}
 	
