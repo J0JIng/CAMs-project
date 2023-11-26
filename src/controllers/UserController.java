@@ -34,7 +34,7 @@ public class UserController {
             System.out.print("Enter old password (Enter X to quit): ");
             oldPassword = sc.next();
             if (oldPassword.equalsIgnoreCase("X")) {
-                System.out.println("Exiting change password...");
+                System.out.println("Exiting change password");
                 return false;
             }
 
