@@ -289,15 +289,15 @@ public class StudentController extends UserController {
 		}
 
 		else if(campValidationService.isUserCampCommittee(student)){
-			MessageView.endMessage(scanner, "You are not allowed to register as a Camp committee for more than one camp!", false);
+			MessageView.endMessage(scanner, "You can only be a committee of one camp!", false);
 			return false;
 		}
 
 		else if(campValidationService.isCampCommitteeFull(camp)){
-			MessageView.endMessage(scanner, "You are not allowed to register as a Camp committee slots is full!", false);
+			MessageView.endMessage(scanner, "There are no committee slots available to join!", false);
 			return false;
 		}
-		
+				
 		// Register the student for the selected camp
 		String campName = camp.getCampInformation().getCampName();
 		boolean success = campStudentService.registerAsCommittee(student, camp);
