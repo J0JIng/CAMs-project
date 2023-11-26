@@ -77,6 +77,8 @@ public class AuthController {
             if (!authenticated) {
                 // We do not specify the source of error to make it more secure
                 System.out.println("Credentials invalid! Note that UserID and Password are case-sensitive.\n");
+                System.out.println("(Please press enter to return)");
+                sc.nextLine();
             }
 
             if(authenticated){
