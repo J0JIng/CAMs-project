@@ -10,13 +10,13 @@ import models.Suggestion;
 import stores.DataStore;
 
 /**
- * Service class for managing the sending, editing, and retrieval of suggestions.
- * Implements the ISuggestionSenderService interface.
+ * {@code SuggestionSenderService} class for managing the sending, editing, and retrieval of suggestions.
+ * Implements the {@link ISuggestionSenderService} interface.
  */
 public class SuggestionSenderService implements ISuggestionSenderService {
 
 	/**
-     * Default constructor for the SuggestionSenderService class.
+     * Default constructor for the {@code SuggestionSenderService} class.
      */
     public SuggestionSenderService() {
     }

@@ -132,8 +132,7 @@ public class StudentController extends UserController {
 	            }
             } 
 			else{
-				// REMOVE ONCE DONE 
-				System.out.println("Error Debug");
+				System.out.println("Error! Exiting CCM menu");
 				AuthController.endSession();
 			}
         }
