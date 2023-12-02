@@ -6,15 +6,21 @@
 ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=java&logoColor=white)
 ![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white)
 
-**Team:** 
+## **Team:** 
+
 [<img src="https://github.com/J0JIng.png" height="20" width="20" /> O Jing ](https://github.com/J0JIng)
 [<img src="https://github.com/Zaiqin.png" height="20" width="20" /> Zai Qin](https://github.com/Zaiqin) |
 [<img src="https://github.com/kyew003.png" height="20" width="20" /> Kenneth](https://github.com/kyew003) |
 [<img src="https://github.com/sharpwoofer.png" height="20" width="20" /> Hongqi](https://github.com/sharpwoofer)
 
+## Overview 
+
+![image](https://github.com/J0JIng/SC2002-Project/assets/111691710/a532c631-bd91-4bbd-b0d2-58ab7e92f2a2)
+
+
 CAMs is a Java-based Command Line Interface (CLI) application for staff and students to manage, view and register for camps within NTU. The application will act as a centralized hub for all staff and students
 
-# Usage
+## Usage
 
 Ensure you have Java 11 or above installed on your Computer. You can check by opening a command terminal and typing java -version.
 
