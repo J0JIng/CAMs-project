@@ -1,17 +1,10 @@
-# SC2002-Project: Camp Application and Management System (CAMs)
+## SC2002-Project: Camp Application and Management System (CAMs)
 
 ![UML Class Diagram](https://img.shields.io/badge/UML%20Class%20Diagram-1976D2?style=for-the-badge&logoColor=white)
 ![Solid Design Principles](https://img.shields.io/badge/SOLID%20Design%20Principles-C71A36?style=for-the-badge&logoColor=white)
 ![OOP Concepts](https://img.shields.io/badge/OOP%20Concepts-C71A36?style=for-the-badge&logoColor=white)
 ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=java&logoColor=white)
 ![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white)
-
-## **Team:** 
-
-[<img src="https://github.com/J0JIng.png" height="20" width="20" /> O Jing ](https://github.com/J0JIng)
-[<img src="https://github.com/Zaiqin.png" height="20" width="20" /> Zai Qin](https://github.com/Zaiqin) |
-[<img src="https://github.com/kyew003.png" height="20" width="20" /> Kenneth](https://github.com/kyew003) |
-[<img src="https://github.com/sharpwoofer.png" height="20" width="20" /> Hongqi](https://github.com/sharpwoofer)
 
 ## Overview 
 
@@ -110,3 +103,14 @@ Name: KOH
 Email: KOH1@e.ntu.edu.sg
 Faculty: ADM
 ```
+
+### Example of successful login
+
+![image](https://github.com/J0JIng/SC2002-Project/assets/111691710/8d842779-7431-46cf-b928-15563c463508)
+
+## **Team:** 
+
+[<img src="https://github.com/J0JIng.png" height="20" width="20" /> O Jing ](https://github.com/J0JIng)
+[<img src="https://github.com/Zaiqin.png" height="20" width="20" /> Zai Qin](https://github.com/Zaiqin) |
+[<img src="https://github.com/kyew003.png" height="20" width="20" /> Kenneth](https://github.com/kyew003) |
+[<img src="https://github.com/sharpwoofer.png" height="20" width="20" /> Hongqi](https://github.com/sharpwoofer)
