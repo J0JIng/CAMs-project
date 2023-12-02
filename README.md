@@ -107,10 +107,3 @@ Faculty: ADM
 ### Example of successful login
 
 ![image](https://github.com/J0JIng/SC2002-Project/assets/111691710/8d842779-7431-46cf-b928-15563c463508)
-
-## **Team:** 
-
-[<img src="https://github.com/J0JIng.png" height="20" width="20" /> O Jing ](https://github.com/J0JIng)
-[<img src="https://github.com/Zaiqin.png" height="20" width="20" /> Zai Qin](https://github.com/Zaiqin) |
-[<img src="https://github.com/kyew003.png" height="20" width="20" /> Kenneth](https://github.com/kyew003) |
-[<img src="https://github.com/sharpwoofer.png" height="20" width="20" /> Hongqi](https://github.com/sharpwoofer)
